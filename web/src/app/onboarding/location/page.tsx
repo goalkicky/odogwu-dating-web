@@ -10,10 +10,13 @@ export default function LocationPage() {
   const router = useRouter();
   const { data, updateData } = useOnboarding();
   const [loading, setLoading] = useState(false);
+  const [ipLoading, setIpLoading] = useState(false);
   const [permissionDenied, setPermissionDenied] = useState(false);
+  const [manualCity, setManualCity] = useState('');
 
   const requestLocation = async () => {
     setLoading(true);
+    setPermissionDenied(false);
     try {
       if (!navigator.geolocation) {
         setPermissionDenied(true);
@@ -21,7 +24,7 @@ export default function LocationPage() {
         return;
       }
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
+        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 });
       });
       const { latitude, longitude } = position.coords;
       try {
@@ -34,12 +37,37 @@ export default function LocationPage() {
       }
     } catch {
       setPermissionDenied(true);
+      tryIpGeolocation();
     }
     setLoading(false);
   };
 
+  const tryIpGeolocation = async () => {
+    setIpLoading(true);
+    try {
+      const res = await fetch('https://ipapi.co/json/');
+      if (!res.ok) throw new Error('IP geolocation failed');
+      const geo = await res.json();
+      if (geo.city) {
+        updateData({ latitude: geo.latitude, longitude: geo.longitude, city: geo.city });
+        setPermissionDenied(false);
+      }
+    } catch {
+      // IP geolocation also failed, user can enter manually
+    }
+    setIpLoading(false);
+  };
+
+  const handleManualSubmit = () => {
+    if (manualCity.trim()) {
+      updateData({ city: manualCity.trim(), latitude: 0, longitude: 0 });
+    }
+  };
+
   useEffect(() => {
-    requestLocation();
+    if (!data.city) {
+      requestLocation();
+    }
   }, []);
 
   return (
@@ -65,10 +93,17 @@ export default function LocationPage() {
           <>
             <CheckmarkCircleIcon size={40} color="#34C759" />
             <span style={{ color: 'white', fontSize: 22, fontWeight: 700, marginTop: 12 }}>{data.city}</span>
-            <span style={{ color: '#6B6B6B', fontSize: 13, marginTop: 4 }}>{data.latitude.toFixed(4)}, {data.longitude.toFixed(4)}</span>
+            {data.latitude !== 0 && (
+              <span style={{ color: '#6B6B6B', fontSize: 13, marginTop: 4 }}>{data.latitude.toFixed(4)}, {data.longitude.toFixed(4)}</span>
+            )}
           </>
-        ) : (
+        ) : ipLoading ? (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+            <LocateIcon size={40} color="#6B6B6B" />
+            <span style={{ color: '#6B6B6B', fontSize: 15 }}>Detecting location via IP...</span>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, width: '100%' }}>
             <LocationIcon size={40} color="#FF3B30" />
             <span style={{ color: '#FF3B30', fontSize: 15 }}>Location access denied</span>
             <button
@@ -77,6 +112,38 @@ export default function LocationPage() {
             >
               Try Again
             </button>
+
+            <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, marginTop: 8 }}>
+              <div style={{ flex: 1, height: 1, background: '#2A2A2A' }} />
+              <span style={{ color: '#6B6B6B', fontSize: 12 }}>or enter manually</span>
+              <div style={{ flex: 1, height: 1, background: '#2A2A2A' }} />
+            </div>
+
+            <div style={{ display: 'flex', gap: 8, width: '100%', marginTop: 8 }}>
+              <input
+                type="text"
+                placeholder="Enter your city..."
+                value={manualCity}
+                onChange={e => setManualCity(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleManualSubmit()}
+                style={{
+                  flex: 1, padding: '12px 16px', borderRadius: 12, border: '1px solid #2A2A2A',
+                  background: '#242424', color: 'white', fontSize: 15, outline: 'none',
+                }}
+              />
+              <button
+                onClick={handleManualSubmit}
+                disabled={!manualCity.trim()}
+                style={{
+                  padding: '12px 16px', borderRadius: 12, border: 'none',
+                  background: manualCity.trim() ? 'linear-gradient(135deg, #007AFF, #00D4FF)' : '#2A2A2A',
+                  color: 'white', cursor: manualCity.trim() ? 'pointer' : 'not-allowed',
+                  fontSize: 14, fontWeight: 600, opacity: manualCity.trim() ? 1 : 0.5,
+                }}
+              >
+                Set
+              </button>
+            </div>
           </div>
         )}
       </div>
