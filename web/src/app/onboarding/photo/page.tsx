@@ -14,37 +14,48 @@ export default function PhotoPage() {
   const { data, updateData } = useOnboarding();
   const { setOnboarded } = useAuth();
   const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const filesRef = useRef<File[]>([]);
 
   const handleFilePick = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files?.length) return;
-    const newPhotos = [...data.photos];
-    for (let i = 0; i < files.length && newPhotos.length < MAX_PHOTOS; i++) {
-      newPhotos.push(URL.createObjectURL(files[i]));
+    const newUrls = [...data.photos];
+    const newFiles = [...filesRef.current];
+    for (let i = 0; i < files.length && newUrls.length < MAX_PHOTOS; i++) {
+      newUrls.push(URL.createObjectURL(files[i]));
+      newFiles.push(files[i]);
     }
-    updateData({ photos: newPhotos });
+    updateData({ photos: newUrls });
+    filesRef.current = newFiles;
     e.target.value = '';
   };
 
   const removePhoto = (index: number) => {
-    const newPhotos = data.photos.filter((_, i) => i !== index);
-    updateData({ photos: newPhotos });
+    const newUrls = data.photos.filter((_, i) => i !== index);
+    const newFiles = filesRef.current.filter((_, i) => i !== index);
+    updateData({ photos: newUrls });
+    filesRef.current = newFiles;
   };
 
   const handleComplete = async () => {
+    setError('');
     if (data.photos.length === 0) {
-      alert('Please upload at least one photo');
+      setError('Please upload at least one photo');
       return;
     }
     setUploading(true);
     try {
       const { userService, storageService } = await import('@/lib/appwrite/services');
-      const { account: acct } = await import('@/lib/appwrite/config');
+      const { account: acct, APPWRITE_CONFIG } = await import('@/lib/appwrite/config');
       if (!acct) throw new Error('Appwrite not configured');
+      if (!APPWRITE_CONFIG.databaseId) throw new Error('Missing NEXT_PUBLIC_APPWRITE_DATABASE_ID');
+      if (!APPWRITE_CONFIG.storageBucketId) throw new Error('Missing NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID');
       const user = await acct.get();
-      const uploadedUrls = await Promise.all(
-        data.photos.map((uri) => storageService.uploadPhoto(uri).then((f: any) => f.$id))
+      const files = filesRef.current;
+      const uploadedIds = await Promise.all(
+        files.map((file) => storageService.uploadFile(file))
       );
       const age = data.dateOfBirth
         ? new Date().getFullYear() - new Date(data.dateOfBirth).getFullYear()
@@ -55,7 +66,7 @@ export default function PhotoPage() {
         dateOfBirth: data.dateOfBirth,
         gender: data.gender!,
         interestedIn: data.interestedIn!,
-        photos: uploadedUrls,
+        photos: uploadedIds,
         latitude: data.latitude,
         longitude: data.longitude,
         city: data.city,
@@ -66,8 +77,20 @@ export default function PhotoPage() {
       } as any);
       setOnboarded();
       router.push('/discover');
-    } catch (err) {
-      alert('Failed to save profile. Please try again.');
+    } catch (err: any) {
+      console.error('Profile save error:', err);
+      const msg = err?.message || '';
+      if (msg.includes('Missing')) {
+        setError(msg + '. Add it in Vercel dashboard → Settings → Environment Variables.');
+      } else if (msg.includes('Appwrite not initialized')) {
+        setError('Appwrite is not configured. Check your environment variables.');
+      } else if (msg.includes('storage') || msg.includes('bucket')) {
+        setError('Failed to upload photos. Check Appwrite storage bucket configuration.');
+      } else if (msg.includes('database')) {
+        setError('Failed to save profile. Check Appwrite database configuration.');
+      } else {
+        setError('Failed to save profile. Please try again.');
+      }
     }
     setUploading(false);
   };
@@ -135,6 +158,8 @@ export default function PhotoPage() {
       </div>
 
       <p style={{ color: '#6B6B6B', fontSize: 12, textAlign: 'center', marginTop: 12 }}>Tap to add • Tap again to remove</p>
+
+      {error && <p style={{ color: '#FF3B30', fontSize: 13, textAlign: 'center', marginTop: 12, padding: '8px 12px', background: 'rgba(255,59,48,0.1)', borderRadius: 8 }}>{error}</p>}
 
       <div style={{ flex: 1 }} />
       <Button

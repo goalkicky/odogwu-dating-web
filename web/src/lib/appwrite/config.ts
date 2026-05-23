@@ -17,9 +17,9 @@ export const realtime = client ? new Realtime(client) : null;
 
 export const APPWRITE_CONFIG = {
   databaseId: process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '',
-  usersCollectionId: 'users',
-  matchesCollectionId: 'matches',
-  messagesCollectionId: 'messages',
+  usersCollectionId: process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID || 'users',
+  matchesCollectionId: process.env.NEXT_PUBLIC_APPWRITE_MATCHES_COLLECTION_ID || 'matches',
+  messagesCollectionId: process.env.NEXT_PUBLIC_APPWRITE_MESSAGES_COLLECTION_ID || 'messages',
   storageBucketId: process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID || '',
 };
 

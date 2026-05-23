@@ -170,6 +170,15 @@ export const messageService = {
 };
 
 export const storageService = {
+  uploadFile: async (file: File) => {
+    checkInit();
+    return storage!.createFile(
+      APPWRITE_CONFIG.storageBucketId,
+      ID.unique(),
+      file
+    );
+  },
+
   uploadPhoto: async (uri: string) => {
     checkInit();
     const response = await fetch(uri);
