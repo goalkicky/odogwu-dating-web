@@ -2,7 +2,10 @@
 import React, { useState } from 'react';
 import MarketingNav from '@/components/MarketingNav';
 import MarketingFooter from '@/components/MarketingFooter';
+import { useMobile } from '@/lib/useMediaQuery';
 import { HelpIcon, ChevronForwardIcon } from '@/components/Icons';
+
+const ACCENT = '#FF3B30';
 
 const faqs = [
   {
@@ -48,16 +51,16 @@ const faqs = [
   },
 ];
 
-function Accordion({ items }: { items: { q: string; a: string }[] }) {
+function Accordion({ items, isMobile }: { items: { q: string; a: string }[]; isMobile: boolean }) {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
       {items.map((item, i) => {
         const isOpen = openIdx === i;
         return (
           <div key={i} style={{
-            borderRadius: 16,
+            borderRadius: 14,
             background: 'rgba(255,255,255,0.03)',
             border: isOpen ? '1px solid rgba(255,55,95,0.2)' : '1px solid rgba(255,255,255,0.06)',
             overflow: 'hidden',
@@ -66,22 +69,23 @@ function Accordion({ items }: { items: { q: string; a: string }[] }) {
             <button
               onClick={() => setOpenIdx(isOpen ? null : i)}
               style={{
-                width: '100%', padding: '20px 24px', background: 'none', border: 'none',
-                color: 'white', fontSize: 16, fontWeight: 600, cursor: 'pointer',
+                width: '100%', padding: isMobile ? '16px 18px' : '20px 24px',
+                background: 'none', border: 'none', color: 'white',
+                fontSize: isMobile ? 14 : 16, fontWeight: 600, cursor: 'pointer',
                 display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                textAlign: 'left',
+                textAlign: 'left', gap: 12,
               }}
             >
               <span>{item.q}</span>
               <div style={{
-                width: 28, height: 28, borderRadius: 8,
+                width: 26, height: 26, borderRadius: 8,
                 background: isOpen ? 'rgba(255,55,95,0.15)' : 'rgba(255,255,255,0.06)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                flexShrink: 0, marginLeft: 12,
+                flexShrink: 0,
                 transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)',
                 transition: 'transform 0.3s, background 0.3s',
               }}>
-                <ChevronForwardIcon size={16} color={isOpen ? '#FF375F' : '#6B6B6B'} />
+                <ChevronForwardIcon size={14} color={isOpen ? '#FF375F' : '#6B6B6B'} />
               </div>
             </button>
             <div style={{
@@ -89,7 +93,7 @@ function Accordion({ items }: { items: { q: string; a: string }[] }) {
               overflow: 'hidden',
               transition: 'max-height 0.3s ease',
             }}>
-              <div style={{ padding: '0 24px 20px', color: '#ABABAB', fontSize: 15, lineHeight: '24px' }}>
+              <div style={{ padding: isMobile ? '0 18px 16px' : '0 24px 20px', color: '#ABABAB', fontSize: isMobile ? 13 : 15, lineHeight: '22px' }}>
                 {item.a}
               </div>
             </div>
@@ -101,35 +105,45 @@ function Accordion({ items }: { items: { q: string; a: string }[] }) {
 }
 
 export default function FAQPage() {
+  const isMobile = useMobile();
+
   return (
     <div style={{ background: '#0D0D0D', color: 'white' }}>
       <MarketingNav />
 
-      <section style={{ padding: '140px 24px 80px', maxWidth: 800, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 56 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '8px 20px', borderRadius: 9999, background: 'rgba(108,99,255,0.1)', border: '1px solid rgba(108,99,255,0.2)', marginBottom: 24, fontSize: 13, color: '#6C63FF', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1 }}>
-            <HelpIcon size={16} color="#6C63FF" /> FAQ
+      <section style={{ padding: isMobile ? '100px 16px 60px' : '140px 24px 80px', maxWidth: 800, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: isMobile ? 36 : 56 }}>
+          <div className="badge" style={{ background: `rgba(255,59,48,0.1)`, border: `1px solid rgba(255,59,48,0.2)`, color: ACCENT, marginBottom: 20, display: 'inline-flex' }}>
+            <HelpIcon size={16} color={ACCENT} /> FAQ
           </div>
-          <h1 style={{ fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 800, margin: '0 0 16px' }}>
-            Frequently Asked <span style={{ background: 'linear-gradient(135deg, #FF375F, #6C63FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Questions</span>
+          <h1 style={{ fontSize: isMobile ? 28 : 'clamp(36px, 5vw, 52px)', fontWeight: 800, margin: '0 0 12px' }}>
+            Frequently Asked <span className="gradient-text">Questions</span>
           </h1>
-          <p style={{ color: '#ABABAB', fontSize: 18 }}>Everything you need to know about Odogwu.</p>
+          <p style={{ color: '#ABABAB', fontSize: isMobile ? 14 : 18 }}>Everything you need to know about Odogwu.</p>
         </div>
 
         {faqs.map((group, i) => (
-          <div key={i} style={{ marginBottom: 40 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: '#FF375F', marginBottom: 16 }}>{group.category}</h2>
-            <Accordion items={group.items} />
+          <div key={i} style={{ marginBottom: isMobile ? 28 : 40 }}>
+            <h2 style={{ fontSize: isMobile ? 15 : 18, fontWeight: 700, color: '#FF375F', marginBottom: isMobile ? 12 : 16 }}>{group.category}</h2>
+            <Accordion items={group.items} isMobile={isMobile} />
           </div>
         ))}
 
-        <div style={{ textAlign: 'center', marginTop: 64, padding: '48px 32px', borderRadius: 24, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
-          <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Still have questions?</h3>
-          <p style={{ color: '#ABABAB', fontSize: 15, marginBottom: 24 }}>We&apos;re here to help. Reach out to our support team.</p>
+        <div style={{
+          textAlign: 'center', marginTop: isMobile ? 40 : 64,
+          padding: isMobile ? '32px 20px' : '48px 32px',
+          borderRadius: 20,
+          background: 'rgba(255,255,255,0.03)',
+          border: '1px solid rgba(255,255,255,0.06)',
+        }}>
+          <h3 style={{ fontSize: isMobile ? 17 : 20, fontWeight: 700, marginBottom: 8 }}>Still have questions?</h3>
+          <p style={{ color: '#ABABAB', fontSize: isMobile ? 13 : 15, marginBottom: 20 }}>We&apos;re here to help. Reach out to our support team.</p>
           <a href="mailto:support@odogwu.com" style={{
-            padding: '14px 32px', borderRadius: 9999, fontSize: 15, fontWeight: 600,
-            background: 'linear-gradient(135deg, #FF375F, #6C63FF)',
+            padding: isMobile ? '12px 28px' : '14px 32px', borderRadius: 9999,
+            fontSize: isMobile ? 14 : 15, fontWeight: 600,
+            background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
             color: 'white', textDecoration: 'none', display: 'inline-block',
+            width: isMobile ? '100%' : 'auto',
           }}>Contact Support</a>
         </div>
       </section>
