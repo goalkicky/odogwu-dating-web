@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { HeartIcon, ManIcon, WomanIcon, PeopleIcon, EllipsisIcon, CheckmarkCircleIcon } from '@/components/Icons';
 import Button from '@/components/Button';
@@ -16,9 +16,15 @@ const interests = [
 export default function InterestPage() {
   const router = useRouter();
   const { data, updateData } = useOnboarding();
+  const [selected, setSelected] = useState(data.interestedIn);
+
+  const handleSelect = (value: string) => {
+    setSelected(value);
+    updateData({ interestedIn: value });
+  };
 
   const handleNext = () => {
-    if (!data.interestedIn) return;
+    if (!selected) return;
     router.push('/onboarding/location');
   };
 
@@ -37,11 +43,11 @@ export default function InterestPage() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {interests.map((item) => {
-          const selected = data.interestedIn === item.value;
+          const isSelected = selected === item.value;
           return (
             <button
               key={item.value}
-              onClick={() => updateData({ interestedIn: item.value })}
+              onClick={() => handleSelect(item.value)}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -50,22 +56,22 @@ export default function InterestPage() {
                 borderRadius: 16,
                 border: 'none',
                 cursor: 'pointer',
-                background: selected
+                background: isSelected
                   ? 'linear-gradient(135deg, #34C759, #30D158)'
                   : 'linear-gradient(135deg, #1A1A1A, #242424)',
-                color: selected ? 'white' : '#ABABAB',
+                color: isSelected ? 'white' : '#ABABAB',
               }}
             >
-              {React.cloneElement(item.icon, { color: selected ? 'white' : '#ABABAB' })}
+              {React.cloneElement(item.icon, { color: isSelected ? 'white' : '#ABABAB' })}
               <span style={{ flex: 1, fontSize: 17, fontWeight: 600, textAlign: 'left' }}>{item.label}</span>
-              {selected && <CheckmarkCircleIcon size={22} color="white" />}
+              {isSelected && <CheckmarkCircleIcon size={22} color="white" />}
             </button>
           );
         })}
       </div>
 
       <div style={{ flex: 1 }} />
-      <Button title="Continue" onPress={handleNext} variant="gradient" size="lg" style={{ width: '100%', marginBottom: 40 }} disabled={!data.interestedIn} />
+      <Button title="Continue" onPress={handleNext} variant="gradient" size="lg" style={{ width: '100%', marginBottom: 40 }} disabled={!selected} />
     </div>
   );
 }

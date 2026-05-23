@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { TransgenderIcon, ManIcon, WomanIcon, PeopleIcon, EllipsisIcon, CheckmarkCircleIcon } from '@/components/Icons';
 import Button from '@/components/Button';
@@ -16,9 +16,15 @@ const genders = [
 export default function GenderPage() {
   const router = useRouter();
   const { data, updateData } = useOnboarding();
+  const [selected, setSelected] = useState(data.gender);
+
+  const handleSelect = (value: string) => {
+    setSelected(value);
+    updateData({ gender: value });
+  };
 
   const handleNext = () => {
-    if (!data.gender) return;
+    if (!selected) return;
     router.push('/onboarding/interest');
   };
 
@@ -37,11 +43,11 @@ export default function GenderPage() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {genders.map((g) => {
-          const selected = data.gender === g.value;
+          const isSelected = selected === g.value;
           return (
             <button
               key={g.value}
-              onClick={() => updateData({ gender: g.value })}
+              onClick={() => handleSelect(g.value)}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -50,22 +56,22 @@ export default function GenderPage() {
                 borderRadius: 16,
                 border: 'none',
                 cursor: 'pointer',
-                background: selected
+                background: isSelected
                   ? 'linear-gradient(135deg, #FF375F, #6C63FF)'
                   : 'linear-gradient(135deg, #1A1A1A, #242424)',
-                color: selected ? 'white' : '#ABABAB',
+                color: isSelected ? 'white' : '#ABABAB',
               }}
             >
-              {React.cloneElement(g.icon, { color: selected ? 'white' : '#ABABAB' })}
+              {React.cloneElement(g.icon, { color: isSelected ? 'white' : '#ABABAB' })}
               <span style={{ flex: 1, fontSize: 17, fontWeight: 600, textAlign: 'left' }}>{g.label}</span>
-              {selected && <CheckmarkCircleIcon size={22} color="white" />}
+              {isSelected && <CheckmarkCircleIcon size={22} color="white" />}
             </button>
           );
         })}
       </div>
 
       <div style={{ flex: 1 }} />
-      <Button title="Continue" onPress={handleNext} variant="gradient" size="lg" style={{ width: '100%', marginBottom: 40 }} disabled={!data.gender} />
+      <Button title="Continue" onPress={handleNext} variant="gradient" size="lg" style={{ width: '100%', marginBottom: 40 }} disabled={!selected} />
     </div>
   );
 }
