@@ -14,7 +14,7 @@ interface InputProps {
   className?: string;
 }
 
-export default function Input({ label, error, prefix, className = '', ...props }: InputProps) {
+export default function Input({ label, error, prefix, ...props }: InputProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
       {label && <label style={{ color: '#ABABAB', fontSize: '14px', fontWeight: 600, marginLeft: '4px' }}>{label}</label>}

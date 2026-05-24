@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import { FlameIcon, FilterIcon, CheckmarkCircleIcon } from '@/components/Icons';
+import { FlameIcon, FilterIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 

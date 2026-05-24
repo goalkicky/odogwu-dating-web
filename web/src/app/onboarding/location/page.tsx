@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { LocationIcon, LocateIcon, CheckmarkCircleIcon } from '@/components/Icons';
 import Button from '@/components/Button';
@@ -11,15 +11,13 @@ export default function LocationPage() {
   const { data, updateData } = useOnboarding();
   const [loading, setLoading] = useState(false);
   const [ipLoading, setIpLoading] = useState(false);
-  const [permissionDenied, setPermissionDenied] = useState(false);
   const [manualCity, setManualCity] = useState('');
+  const requestedRef = useRef(false);
 
   const requestLocation = async () => {
     setLoading(true);
-    setPermissionDenied(false);
     try {
       if (!navigator.geolocation) {
-        setPermissionDenied(true);
         setLoading(false);
         return;
       }
@@ -36,7 +34,6 @@ export default function LocationPage() {
         updateData({ latitude, longitude, city: 'Unknown' });
       }
     } catch {
-      setPermissionDenied(true);
       tryIpGeolocation();
     }
     setLoading(false);
@@ -50,7 +47,6 @@ export default function LocationPage() {
       const geo = await res.json();
       if (geo.city) {
         updateData({ latitude: geo.latitude, longitude: geo.longitude, city: geo.city });
-        setPermissionDenied(false);
       }
     } catch {
       // IP geolocation also failed, user can enter manually
@@ -65,10 +61,11 @@ export default function LocationPage() {
   };
 
   useEffect(() => {
-    if (!data.city) {
+    if (!data.city && !requestedRef.current) {
+      requestedRef.current = true;
       requestLocation();
     }
-  }, []);
+  }, [data.city]);
 
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0D0D0D, #0A0A1A, #0D0D0D)', display: 'flex', flexDirection: 'column', padding: '60px 24px 0' }}>

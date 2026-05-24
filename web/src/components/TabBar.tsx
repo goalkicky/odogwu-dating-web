@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FlameIcon, HeartIcon, ChatIcon, DiamondIcon, PersonIcon } from './Icons';
+import { FlameIcon, ChatIcon, DiamondIcon, PersonIcon } from './Icons';
 
 export default function TabBar() {
   const pathname = usePathname();

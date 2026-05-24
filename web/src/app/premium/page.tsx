@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { DiamondIcon, CheckmarkCircleIcon, InfiniteIcon, StarIcon, FlashIcon, GlobeIcon, EyeIcon, ChatIcon, SparklesIcon } from '@/components/Icons';
+import { DiamondIcon, CheckmarkCircleIcon, InfiniteIcon, StarIcon, FlashIcon, GlobeIcon, EyeIcon, ChatIcon } from '@/components/Icons';
 import Button from '@/components/Button';
 import TabBar from '@/components/TabBar';
 
