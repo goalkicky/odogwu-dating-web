@@ -11,7 +11,7 @@ export const authService = {
     checkInit();
     account!.createOAuth2Token({
       provider: OAuthProvider.Google,
-      success: `${window.location.origin}/oauth`,
+      success: `${window.location.origin}/api/auth/callback`,
       failure: `${window.location.origin}/oauth`
     });
   },
