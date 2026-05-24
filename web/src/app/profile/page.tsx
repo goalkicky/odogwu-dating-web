@@ -47,9 +47,6 @@ export default function ProfilePage() {
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
               </svg>
             )}
-            <div style={{ marginTop: 8, fontSize: 10, color: '#6B6B6B', textAlign: 'center' }}>
-              profile: {profile ? 'loaded' : 'null'} | photos: {profile?.photos?.length ?? 0}
-            </div>
           </div>
         </div>
         <h1 style={{ fontSize: 28, fontWeight: 800, color: 'white', margin: 0 }}>{profile?.fullName || user?.name || 'User'}</h1>
@@ -87,13 +84,14 @@ export default function ProfilePage() {
       <div style={{ padding: '24px 24px 0' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {[
-            { icon: <SettingsIcon size={22} color="#ABABAB" />, label: 'Settings' },
-            { icon: <BellIcon size={22} color="#ABABAB" />, label: 'Notifications' },
-            { icon: <ShieldIcon size={22} color="#ABABAB" />, label: 'Privacy' },
-            { icon: <HelpIcon size={22} color="#ABABAB" />, label: 'Help & Support' },
+            { icon: <SettingsIcon size={22} color="#ABABAB" />, label: 'Settings', onClick: () => router.push('/settings') },
+            { icon: <BellIcon size={22} color="#ABABAB" />, label: 'Notifications', onClick: () => router.push('/notifications') },
+            { icon: <ShieldIcon size={22} color="#ABABAB" />, label: 'Privacy', onClick: () => router.push('/privacy') },
+            { icon: <HelpIcon size={22} color="#ABABAB" />, label: 'Help & Support', onClick: () => router.push('/faq') },
           ].map((item, i) => (
             <button
               key={i}
+              onClick={item.onClick}
               style={{
                 display: 'flex',
                 alignItems: 'center',
