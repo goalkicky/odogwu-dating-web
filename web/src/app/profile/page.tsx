@@ -17,7 +17,9 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!account) return;
-    account.createJWT().then(res => setJwt(res.jwt)).catch(() => {});
+    account.createJWT()
+      .then(res => { setJwt(res.jwt); setImgError(false); })
+      .catch(() => {});
   }, []);
 
   const handleLogout = () => {
