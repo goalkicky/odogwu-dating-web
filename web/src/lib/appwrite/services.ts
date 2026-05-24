@@ -178,7 +178,8 @@ export const storageService = {
     return storage!.createFile(
       APPWRITE_CONFIG.storageBucketId,
       ID.unique(),
-      file
+      file,
+      [Permission.read(Role.any())]
     );
   },
 
@@ -190,7 +191,8 @@ export const storageService = {
     return storage!.createFile(
       APPWRITE_CONFIG.storageBucketId,
       ID.unique(),
-      file
+      file,
+      [Permission.read(Role.any())]
     );
   },
 
@@ -202,7 +204,8 @@ export const storageService = {
     return storage!.createFile(
       APPWRITE_CONFIG.storageBucketId,
       ID.unique(),
-      file
+      file,
+      [Permission.read(Role.any())]
     );
   },
 

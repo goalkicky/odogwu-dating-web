@@ -71,7 +71,7 @@ export default function OAuthCallback() {
       }
     }
     handleCallback();
-  }, [router]);
+  }, [router, refreshUser]);
 
   if (error) {
     return (
