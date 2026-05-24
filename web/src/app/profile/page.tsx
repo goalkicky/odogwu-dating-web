@@ -1,15 +1,17 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { DiamondIcon, SettingsIcon, BellIcon, ShieldIcon, HelpIcon, ChevronForwardIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import Button from '@/components/Button';
 import TabBar from '@/components/TabBar';
 import { useAuth } from '@/store/AuthContext';
+import { storageService } from '@/lib/appwrite/services';
 
 export default function ProfilePage() {
   const router = useRouter();
   const { profile, user, logout } = useAuth();
+  const [imgError, setImgError] = useState(false);
 
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to logout?')) {
@@ -23,13 +25,22 @@ export default function ProfilePage() {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 80, paddingBottom: 24 }}>
         <div style={{ width: 120, height: 120, borderRadius: '50%', padding: 4, background: 'linear-gradient(135deg, #FF375F, #6C63FF)', marginBottom: 16 }}>
           <div style={{ width: 112, height: 112, borderRadius: '50%', backgroundColor: '#1A1A1A', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-            {profile?.photos?.[0] ? (
-              <img src={`${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID}/files/${profile.photos[0]}/preview?width=200&height=200&project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID}`} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            {profile?.photos?.[0] && !imgError ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={storageService.getFilePreview(profile.photos[0])}
+                alt="Profile"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                onError={() => setImgError(true)}
+              />
             ) : (
               <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ABABAB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
               </svg>
             )}
+            <div style={{ marginTop: 8, fontSize: 10, color: '#6B6B6B', textAlign: 'center' }}>
+              profile: {profile ? 'loaded' : 'null'} | photos: {profile?.photos?.length ?? 0}
+            </div>
           </div>
         </div>
         <h1 style={{ fontSize: 28, fontWeight: 800, color: 'white', margin: 0 }}>{profile?.fullName || user?.name || 'User'}</h1>
