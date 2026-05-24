@@ -7,6 +7,7 @@ import Button from '@/components/Button';
 import TabBar from '@/components/TabBar';
 import { useAuth } from '@/store/AuthContext';
 import { storageService } from '@/lib/appwrite/services';
+import { account } from '@/lib/appwrite/config';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -16,10 +17,11 @@ export default function ProfilePage() {
   const photoId = profile?.photos?.[0];
 
   useEffect(() => {
-    if (!photoId) return;
+    if (!photoId || !account) return;
     setPhotoUrl('');
-    storageService.ensurePublicRead(photoId)
-      .then(() => setPhotoUrl(storageService.getFilePreview(photoId)))
+    storageService.ensurePublicRead(photoId).catch(() => {});
+    account.createJWT()
+      .then(res => setPhotoUrl(storageService.getFilePreview(photoId, res.jwt)))
       .catch(() => setPhotoUrl(storageService.getFilePreview(photoId)));
   }, [photoId]);
 

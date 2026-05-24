@@ -49,13 +49,14 @@ export default function EditProfilePage() {
   const [interest, setInterest] = useState(profile?.interestedIn || '');
   const [photos, setPhotos] = useState<string[]>(profile?.photos || []);
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
+  const [jwt, setJwt] = useState<string>('');
   const [showGender, setShowGender] = useState(false);
   const [showInterest, setShowInterest] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!profile) return;
+    if (!profile || !account) return;
     setName(profile.fullName || '');
     setBio(profile.bio || '');
     setCity(profile.city || '');
@@ -64,8 +65,12 @@ export default function EditProfilePage() {
     setInterest(profile.interestedIn || '');
     const p = profile.photos || [];
     setPhotos(p);
-    Promise.all(p.map(id => storageService.ensurePublicRead(id).catch(() => {})))
-      .then(() => setPhotoUrls(p.map(id => storageService.getFilePreview(id))))
+    Promise.all(p.map(id => storageService.ensurePublicRead(id).catch(() => {}))).catch(() => {});
+    account.createJWT()
+      .then(res => {
+        setJwt(res.jwt);
+        setPhotoUrls(p.map(id => storageService.getFilePreview(id, res.jwt)));
+      })
       .catch(() => setPhotoUrls(p.map(id => storageService.getFilePreview(id))));
   }, [profile]);
 
@@ -76,7 +81,7 @@ export default function EditProfilePage() {
     const result = await storageService.uploadFile(file);
     const newPhotos = [...photos, result.$id];
     setPhotos(newPhotos);
-    setPhotoUrls([...photoUrls, storageService.getFilePreview(result.$id)]);
+    setPhotoUrls([...photoUrls, storageService.getFilePreview(result.$id, jwt || undefined)]);
     const user = await account!.get();
     await userService.updateProfile(user.$id, { photos: newPhotos } as any);
     e.target.value = '';
