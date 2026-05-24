@@ -60,36 +60,50 @@ export default function PhotoPage() {
       const age = data.dateOfBirth
         ? new Date().getFullYear() - new Date(data.dateOfBirth).getFullYear()
         : 0;
-      await userService.createProfile(user.$id, {
-        email: user.email,
-        fullName: data.fullName,
-        dateOfBirth: data.dateOfBirth,
-        gender: data.gender!,
-        interestedIn: data.interestedIn!,
-        photos: uploadedIds,
-        latitude: data.latitude,
-        longitude: data.longitude,
-        city: data.city,
-        bio: data.bio,
-        age,
-        isPremium: false,
-        verified: false,
-      } as any);
+      try {
+        await userService.createProfile(user.$id, {
+          email: user.email,
+          fullName: data.fullName,
+          dateOfBirth: data.dateOfBirth,
+          gender: data.gender!,
+          interestedIn: data.interestedIn!,
+          photos: uploadedIds,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          city: data.city,
+          bio: data.bio,
+          age,
+          isPremium: false,
+          verified: false,
+        } as any);
+      } catch (profileErr: any) {
+        if (profileErr?.message?.includes('already exists') || profileErr?.type === 'document_already_exists') {
+          await userService.updateProfile(user.$id, {
+            photos: uploadedIds,
+            isPremium: false,
+            verified: false,
+          } as any);
+        } else {
+          throw profileErr;
+        }
+      }
       setOnboarded();
       router.push('/discover');
     } catch (err: any) {
       console.error('Profile save error:', err);
-      const msg = err?.message || '';
+      const msg = err?.message || err?.type || '';
       if (msg.includes('Missing')) {
         setError(msg + '. Add it in Vercel dashboard → Settings → Environment Variables.');
       } else if (msg.includes('Appwrite not initialized')) {
         setError('Appwrite is not configured. Check your environment variables.');
       } else if (msg.includes('storage') || msg.includes('bucket')) {
         setError('Failed to upload photos. Check Appwrite storage bucket configuration.');
-      } else if (msg.includes('database')) {
+      } else if (msg.includes('database') || msg.includes('collection') || msg.includes('document')) {
         setError('Failed to save profile. Check Appwrite database configuration.');
+      } else if (msg.includes('missing scopes') || msg.includes('unauthorized') || msg.includes('403')) {
+        setError('Authentication error. Please try logging in again.');
       } else {
-        setError('Failed to save profile. Please try again.');
+        setError(`Failed to save profile: ${msg || 'Please try again.'}`);
       }
     }
     setUploading(false);
