@@ -1,5 +1,5 @@
 import { account, databases, storage, realtime, APPWRITE_CONFIG } from './config';
-import { ID, Query, OAuthProvider } from 'appwrite';
+import { ID, Query, OAuthProvider, Permission, Role } from 'appwrite';
 import { UserProfile, Match, Message } from '../types';
 
 function checkInit() {
@@ -34,7 +34,13 @@ export const userService = {
       APPWRITE_CONFIG.databaseId,
       APPWRITE_CONFIG.usersCollectionId,
       userId,
-      data
+      data,
+      [
+        Permission.read(Role.any()),
+        Permission.create(Role.user(userId)),
+        Permission.update(Role.user(userId)),
+        Permission.delete(Role.user(userId)),
+      ]
     );
   },
 
@@ -44,7 +50,12 @@ export const userService = {
       APPWRITE_CONFIG.databaseId,
       APPWRITE_CONFIG.usersCollectionId,
       userId,
-      data
+      data,
+      [
+        Permission.read(Role.any()),
+        Permission.update(Role.user(userId)),
+        Permission.delete(Role.user(userId)),
+      ]
     );
   },
 
