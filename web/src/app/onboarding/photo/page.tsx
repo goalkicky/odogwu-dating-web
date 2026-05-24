@@ -92,19 +92,8 @@ export default function PhotoPage() {
     } catch (err: any) {
       console.error('Profile save error:', err);
       const msg = err?.message || err?.type || '';
-      if (msg.includes('Missing')) {
-        setError(msg + '. Add it in Vercel dashboard → Settings → Environment Variables.');
-      } else if (msg.includes('Appwrite not initialized')) {
-        setError('Appwrite is not configured. Check your environment variables.');
-      } else if (msg.includes('storage') || msg.includes('bucket')) {
-        setError('Failed to upload photos. Check Appwrite storage bucket configuration.');
-      } else if (msg.includes('database') || msg.includes('collection') || msg.includes('document')) {
-        setError('Failed to save profile. Check Appwrite database configuration.');
-      } else if (msg.includes('missing scopes') || msg.includes('unauthorized') || msg.includes('403')) {
-        setError('Authentication error. Please try logging in again.');
-      } else {
-        setError(`Failed to save profile: ${msg || 'Please try again.'}`);
-      }
+      const fullErr = err?.response ? JSON.stringify(err.response) : msg;
+      setError(`Error: ${fullErr.substring(0, 300)}`);
     }
     setUploading(false);
   };
