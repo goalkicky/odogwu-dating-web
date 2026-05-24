@@ -3,9 +3,11 @@ import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { account } from '@/lib/appwrite/config';
 import { userService } from '@/lib/appwrite/services';
+import { useAuth } from '@/store/AuthContext';
 
 export default function OAuthCallback() {
   const router = useRouter();
+  const { refreshUser } = useAuth();
   const [error, setError] = useState('');
   const retries = useRef(0);
 
@@ -16,6 +18,7 @@ export default function OAuthCallback() {
         return;
       }
       const user = await account.get();
+      await refreshUser();
       let hasProfile = false;
       try {
         await userService.getProfile(user.$id);
