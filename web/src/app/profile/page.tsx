@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { DiamondIcon, SettingsIcon, BellIcon, ShieldIcon, HelpIcon, ChevronForwardIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
@@ -7,11 +7,18 @@ import Button from '@/components/Button';
 import TabBar from '@/components/TabBar';
 import { useAuth } from '@/store/AuthContext';
 import { storageService } from '@/lib/appwrite/services';
+import { account } from '@/lib/appwrite/config';
 
 export default function ProfilePage() {
   const router = useRouter();
   const { profile, user, logout } = useAuth();
   const [imgError, setImgError] = useState(false);
+  const [jwt, setJwt] = useState<string>('');
+
+  useEffect(() => {
+    if (!account) return;
+    account.createJWT().then(res => setJwt(res.jwt)).catch(() => {});
+  }, []);
 
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to logout?')) {
@@ -26,9 +33,8 @@ export default function ProfilePage() {
         <div style={{ width: 120, height: 120, borderRadius: '50%', padding: 4, background: 'linear-gradient(135deg, #FF375F, #6C63FF)', marginBottom: 16 }}>
           <div style={{ width: 112, height: 112, borderRadius: '50%', backgroundColor: '#1A1A1A', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
             {profile?.photos?.[0] && !imgError ? (
-              // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={storageService.getFilePreview(profile.photos[0])}
+                src={storageService.getFilePreview(profile.photos[0], jwt || undefined)}
                 alt="Profile"
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 onError={() => setImgError(true)}
