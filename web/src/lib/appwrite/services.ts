@@ -37,9 +37,7 @@ export const userService = {
       data,
       [
         Permission.read(Role.any()),
-        Permission.create(Role.user(userId)),
-        Permission.update(Role.user(userId)),
-        Permission.delete(Role.user(userId)),
+        Permission.write(Role.user(userId)),
       ]
     );
   },
@@ -50,12 +48,7 @@ export const userService = {
       APPWRITE_CONFIG.databaseId,
       APPWRITE_CONFIG.usersCollectionId,
       userId,
-      data,
-      [
-        Permission.read(Role.any()),
-        Permission.update(Role.user(userId)),
-        Permission.delete(Role.user(userId)),
-      ]
+      data
     );
   },
 
