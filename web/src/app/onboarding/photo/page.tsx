@@ -54,9 +54,10 @@ export default function PhotoPage() {
       if (!APPWRITE_CONFIG.storageBucketId) throw new Error('Missing NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID');
       const user = await acct.get();
       const files = filesRef.current;
-      const uploadedIds = await Promise.all(
+      const uploadResults = await Promise.all(
         files.map((file) => storageService.uploadFile(file))
       );
+      const uploadedIds = uploadResults.map(r => r.$id);
       const age = data.dateOfBirth
         ? new Date().getFullYear() - new Date(data.dateOfBirth).getFullYear()
         : 0;
@@ -92,8 +93,7 @@ export default function PhotoPage() {
     } catch (err: any) {
       console.error('Profile save error:', err);
       const msg = err?.message || err?.type || '';
-      const fullErr = err?.response ? JSON.stringify(err.response) : msg;
-      setError(`Error: ${fullErr.substring(0, 300)}`);
+      setError(msg.substring(0, 300));
     }
     setUploading(false);
   };
