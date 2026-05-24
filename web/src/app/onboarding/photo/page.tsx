@@ -12,7 +12,7 @@ const MAX_PHOTOS = 6;
 export default function PhotoPage() {
   const router = useRouter();
   const { data, updateData } = useOnboarding();
-  const { setOnboarded } = useAuth();
+  const { setOnboarded, refreshUser } = useAuth();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -88,6 +88,7 @@ export default function PhotoPage() {
           throw profileErr;
         }
       }
+      await refreshUser();
       setOnboarded();
       router.push('/discover');
     } catch (err: any) {
