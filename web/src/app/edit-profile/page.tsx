@@ -48,6 +48,7 @@ export default function EditProfilePage() {
   const [gender, setGender] = useState(profile?.gender || '');
   const [interest, setInterest] = useState(profile?.interestedIn || '');
   const [photos, setPhotos] = useState<string[]>(profile?.photos || []);
+  const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [showGender, setShowGender] = useState(false);
   const [showInterest, setShowInterest] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -61,7 +62,11 @@ export default function EditProfilePage() {
     setDob(profile.dateOfBirth || '');
     setGender(profile.gender || '');
     setInterest(profile.interestedIn || '');
-    setPhotos(profile.photos || []);
+    const p = profile.photos || [];
+    setPhotos(p);
+    Promise.all(p.map(id => storageService.ensurePublicRead(id).catch(() => {})))
+      .then(() => setPhotoUrls(p.map(id => storageService.getFilePreview(id))))
+      .catch(() => setPhotoUrls(p.map(id => storageService.getFilePreview(id))));
   }, [profile]);
 
   const handlePhotoPick = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,6 +76,7 @@ export default function EditProfilePage() {
     const result = await storageService.uploadFile(file);
     const newPhotos = [...photos, result.$id];
     setPhotos(newPhotos);
+    setPhotoUrls([...photoUrls, storageService.getFilePreview(result.$id)]);
     const user = await account!.get();
     await userService.updateProfile(user.$id, { photos: newPhotos } as any);
     e.target.value = '';
@@ -79,6 +85,7 @@ export default function EditProfilePage() {
   const removePhoto = async (index: number) => {
     const newPhotos = photos.filter((_, i) => i !== index);
     setPhotos(newPhotos);
+    setPhotoUrls(prev => prev.filter((_, i) => i !== index));
     const user = await account!.get();
     await userService.updateProfile(user.$id, { photos: newPhotos } as any);
   };
@@ -132,7 +139,7 @@ export default function EditProfilePage() {
               >
                 {hasPhoto ? (
                   <>
-                    <img src={storageService.getFilePreview(photos[i])} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={photoUrls[i] || storageService.getFilePreview(photos[i])} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     <div style={{ position: 'absolute', top: 4, right: 4, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 12, padding: 2, display: 'flex' }}>
                       <CloseCircleIcon size={18} color="white" />
                     </div>
