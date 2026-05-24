@@ -9,12 +9,11 @@ function checkInit() {
 export const authService = {
   loginWithGoogle: async () => {
     checkInit();
-    const loginUrl: string = await account!.createOAuth2Session(
+    account!.createOAuth2Session(
       OAuthProvider.Google,
       `${window.location.origin}/oauth`,
       `${window.location.origin}/oauth`
-    ) as unknown as string;
-    window.location.href = loginUrl;
+    );
   },
 
   getCurrentUser: async () => {

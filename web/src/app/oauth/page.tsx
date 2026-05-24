@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { account } from '@/lib/appwrite/config';
 import { FlameIcon } from '@/components/Icons';
@@ -7,20 +7,30 @@ import { FlameIcon } from '@/components/Icons';
 export default function OAuthCallback() {
   const router = useRouter();
   const [error, setError] = useState('');
+  const retries = useRef(0);
 
   useEffect(() => {
     async function handleCallback() {
       try {
-        await new Promise(r => setTimeout(r, 1500));
         if (!account) throw new Error('Appwrite not configured');
         const user = await account.get();
         if (user) {
           router.replace('/onboarding/name');
-        } else {
-          setError('No user session found.');
+          return;
         }
+        if (retries.current < 5) {
+          retries.current++;
+          setTimeout(handleCallback, 400);
+          return;
+        }
+        setError('No user session found.');
       } catch (err) {
         console.error('OAuth callback error:', err);
+        if (retries.current < 5) {
+          retries.current++;
+          setTimeout(handleCallback, 400);
+          return;
+        }
         setError('Authentication failed. Please try again.');
       }
     }
