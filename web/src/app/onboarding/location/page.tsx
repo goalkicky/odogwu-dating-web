@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { LocationIcon, LocateIcon, CheckmarkCircleIcon } from '@/components/Icons';
 import Button from '@/components/Button';
@@ -14,7 +14,22 @@ export default function LocationPage() {
   const [manualCity, setManualCity] = useState('');
   const requestedRef = useRef(false);
 
-  const requestLocation = async () => {
+  const tryIpGeolocation = useCallback(async () => {
+    setIpLoading(true);
+    try {
+      const res = await fetch('https://ipapi.co/json/');
+      if (!res.ok) throw new Error('IP geolocation failed');
+      const geo = await res.json();
+      if (geo.city) {
+        updateData({ latitude: geo.latitude, longitude: geo.longitude, city: geo.city });
+      }
+    } catch {
+      // IP geolocation also failed, user can enter manually
+    }
+    setIpLoading(false);
+  }, [updateData]);
+
+  const requestLocation = useCallback(async () => {
     setLoading(true);
     try {
       if (!navigator.geolocation) {
@@ -37,22 +52,7 @@ export default function LocationPage() {
       tryIpGeolocation();
     }
     setLoading(false);
-  };
-
-  const tryIpGeolocation = async () => {
-    setIpLoading(true);
-    try {
-      const res = await fetch('https://ipapi.co/json/');
-      if (!res.ok) throw new Error('IP geolocation failed');
-      const geo = await res.json();
-      if (geo.city) {
-        updateData({ latitude: geo.latitude, longitude: geo.longitude, city: geo.city });
-      }
-    } catch {
-      // IP geolocation also failed, user can enter manually
-    }
-    setIpLoading(false);
-  };
+  }, [updateData, tryIpGeolocation]);
 
   const handleManualSubmit = () => {
     if (manualCity.trim()) {
@@ -65,7 +65,7 @@ export default function LocationPage() {
       requestedRef.current = true;
       requestLocation();
     }
-  }, [data.city]);
+    }, [data.city, requestLocation]);
 
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0D0D0D, #0A0A1A, #0D0D0D)', display: 'flex', flexDirection: 'column', padding: '60px 24px 0' }}>

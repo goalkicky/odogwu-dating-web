@@ -5,7 +5,7 @@ import { MicIcon, MicOffIcon, VolumeIcon, VideoIcon, CallIcon } from '@/componen
 
 export default function CallPage() {
   const router = useRouter();
-  const params = useParams();
+  useParams();
   const searchParams = useSearchParams();
   const callTypeParam = searchParams.get('type');
 

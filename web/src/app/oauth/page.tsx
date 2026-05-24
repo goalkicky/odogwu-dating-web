@@ -15,12 +15,24 @@ export default function OAuthCallback() {
       try {
         if (!account) throw new Error('Appwrite not configured');
 
-        setDebug(`URL: ${window.location.href.substring(0, 200)}`);
+        const href = window.location.href;
+        setDebug(`URL: ${href.substring(0, 600)}`);
 
-        const params = new URLSearchParams(window.location.hash.replace('#', '?'));
-        const userId = params.get('userId');
-        const secret = params.get('secret');
-        const sessionId = params.get('sessionId');
+        const qParams = new URLSearchParams(window.location.search);
+        const hParams = new URLSearchParams(window.location.hash.replace('#', '?'));
+
+        const userId = qParams.get('userId') || hParams.get('userId');
+        const secret = qParams.get('secret') || hParams.get('secret');
+        const jwt = qParams.get('jwt');
+
+        if (jwt && account.client) {
+          account.client.setJWT(jwt);
+          const user = await account.get();
+          if (user) {
+            router.replace('/onboarding/name');
+            return;
+          }
+        }
 
         if (userId && secret) {
           await account.createSession(userId, secret);
