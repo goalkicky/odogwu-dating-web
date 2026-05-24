@@ -209,6 +209,18 @@ export const storageService = {
     );
   },
 
+  ensurePublicRead: async (fileId: string) => {
+    checkInit();
+    const file = await storage!.getFile(APPWRITE_CONFIG.storageBucketId, fileId);
+    if (file.$permissions.includes(Permission.read(Role.any()))) return file;
+    return storage!.updateFile(
+      APPWRITE_CONFIG.storageBucketId,
+      fileId,
+      undefined,
+      [...file.$permissions, Permission.read(Role.any())]
+    );
+  },
+
   getFilePreview: (fileId: string, token?: string) => {
     checkInit();
     if (token) {

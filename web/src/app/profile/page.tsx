@@ -7,20 +7,21 @@ import Button from '@/components/Button';
 import TabBar from '@/components/TabBar';
 import { useAuth } from '@/store/AuthContext';
 import { storageService } from '@/lib/appwrite/services';
-import { account } from '@/lib/appwrite/config';
 
 export default function ProfilePage() {
   const router = useRouter();
   const { profile, user, logout } = useAuth();
-  const [imgError, setImgError] = useState(false);
-  const [jwt, setJwt] = useState<string>('');
+  const [photoUrl, setPhotoUrl] = useState<string>('');
+
+  const photoId = profile?.photos?.[0];
 
   useEffect(() => {
-    if (!account) return;
-    account.createJWT()
-      .then(res => { setJwt(res.jwt); setImgError(false); })
-      .catch(() => {});
-  }, []);
+    if (!photoId) return;
+    setPhotoUrl('');
+    storageService.ensurePublicRead(photoId)
+      .then(() => setPhotoUrl(storageService.getFilePreview(photoId)))
+      .catch(() => setPhotoUrl(storageService.getFilePreview(photoId)));
+  }, [photoId]);
 
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to logout?')) {
@@ -34,12 +35,12 @@ export default function ProfilePage() {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 80, paddingBottom: 24 }}>
         <div style={{ width: 120, height: 120, borderRadius: '50%', padding: 4, background: 'linear-gradient(135deg, #FF375F, #6C63FF)', marginBottom: 16 }}>
           <div style={{ width: 112, height: 112, borderRadius: '50%', backgroundColor: '#1A1A1A', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-            {profile?.photos?.[0] && !imgError ? (
+            {profile?.photos?.[0] && photoUrl ? (
               <img
-                src={storageService.getFilePreview(profile.photos[0], jwt || undefined)}
+                src={photoUrl}
                 alt="Profile"
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                onError={() => setImgError(true)}
+                onError={() => setPhotoUrl('')}
               />
             ) : (
               <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ABABAB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
