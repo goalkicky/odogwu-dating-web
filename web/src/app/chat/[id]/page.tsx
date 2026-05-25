@@ -4,7 +4,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { ChevronBackIcon, CallIcon, VideoIcon, MicIcon, SendIcon, PencilIcon, CloseCircleIcon, HappyIcon, KeypadIcon, StopIcon, CheckmarkDoneIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import { useAuth } from '@/store/AuthContext';
-import { messageService, storageService } from '@/lib/appwrite/services';
+import { messageService, storageService, matchService, userService } from '@/lib/appwrite/services';
 import { account } from '@/lib/appwrite/config';
 import type { Message } from '@/lib/types';
 
@@ -23,6 +23,7 @@ export default function ChatPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [matchName, setMatchName] = useState('User');
+  const [otherUserId, setOtherUserId] = useState('');
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -33,6 +34,13 @@ export default function ChatPage() {
 
   useEffect(() => {
     if (!matchId || !userId) return;
+    matchService.getMatch(matchId).then(doc => {
+      const other = (doc as any).userId === userId ? (doc as any).matchedUserId : (doc as any).userId;
+      setOtherUserId(other);
+      userService.getProfile(other).then(p => {
+        setMatchName((p as any).displayName || (p as any).fullName || 'User');
+      }).catch(() => {});
+    }).catch(() => {});
     messageService.getMessages(matchId).then(res => {
       const msgs = res.documents.map(d => ({
         id: d.$id,
@@ -143,10 +151,10 @@ export default function ChatPage() {
           </div>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button onClick={() => router.push(`/call/${matchId}?type=audio`)} style={{ width: 38, height: 38, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.08)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <button onClick={() => router.push(`/call/${matchId}?type=audio&otherId=${otherUserId}`)} style={{ width: 38, height: 38, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.08)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <CallIcon size={22} color="#34C759" />
           </button>
-          <button onClick={() => router.push(`/call/${matchId}?type=video`)} style={{ width: 38, height: 38, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.08)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <button onClick={() => router.push(`/call/${matchId}?type=video&otherId=${otherUserId}`)} style={{ width: 38, height: 38, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.08)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <VideoIcon size={22} color="#FF375F" />
           </button>
         </div>

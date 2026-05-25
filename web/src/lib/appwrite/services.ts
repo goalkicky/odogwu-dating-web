@@ -106,6 +106,15 @@ export const userService = {
 };
 
 export const matchService = {
+  getMatch: async (matchId: string) => {
+    checkInit();
+    return databases!.getDocument(
+      APPWRITE_CONFIG.databaseId,
+      APPWRITE_CONFIG.matchesCollectionId,
+      matchId
+    );
+  },
+
   createMatch: async (userId: string, matchedUserId: string) => {
     checkInit();
     return databases!.createDocument(
@@ -202,6 +211,57 @@ export const messageService = {
       }
     );
     return sub;
+  },
+};
+
+export const callService = {
+  sendSignal: async (data: {
+    from: string;
+    to: string;
+    matchId: string;
+    type: 'offer' | 'answer' | 'ice-candidate' | 'end';
+    callType?: 'audio' | 'video';
+    data: string;
+  }) => {
+    checkInit();
+    return databases!.createDocument(
+      APPWRITE_CONFIG.databaseId,
+      APPWRITE_CONFIG.callSignalsCollectionId,
+      ID.unique(),
+      {
+        from: data.from,
+        to: data.to,
+        matchId: data.matchId,
+        type: data.type,
+        callType: data.callType || 'audio',
+        data: data.data,
+        createdAt: new Date().toISOString(),
+      },
+      [Permission.read(Role.any())]
+    );
+  },
+
+  subscribeToSignals: async (userId: string, callback: (signal: any) => void) => {
+    checkInit();
+    const sub = await realtime!.subscribe(
+      `databases.${APPWRITE_CONFIG.databaseId}.collections.${APPWRITE_CONFIG.callSignalsCollectionId}.documents`,
+      (response: any) => {
+        const p = response.payload;
+        if (p.to === userId) {
+          callback(p);
+        }
+      }
+    );
+    return sub;
+  },
+
+  getSignals: async (userId: string) => {
+    checkInit();
+    return databases!.listDocuments(
+      APPWRITE_CONFIG.databaseId,
+      APPWRITE_CONFIG.callSignalsCollectionId,
+      [Query.equal('to', userId), Query.orderDesc('createdAt'), Query.limit(50)]
+    );
   },
 };
 

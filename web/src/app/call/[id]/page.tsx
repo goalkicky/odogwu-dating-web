@@ -1,20 +1,56 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
+import { useAuth } from '@/store/AuthContext';
+import { callService, userService } from '@/lib/appwrite/services';
 import { MicIcon, MicOffIcon, VolumeIcon, VideoIcon, CallIcon } from '@/components/Icons';
+
+const RTC_CONFIG = {
+  iceServers: [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun1.l.google.com:19302' },
+  ],
+};
 
 export default function CallPage() {
   const router = useRouter();
-  useParams();
+  const params = useParams();
   const searchParams = useSearchParams();
-  const callTypeParam = searchParams.get('type');
+  const { user } = useAuth();
 
-  const [callType, setCallType] = useState<'audio' | 'video'>(callTypeParam === 'video' ? 'video' : 'audio');
+  const callType = searchParams.get('type') === 'video' ? 'video' : 'audio';
+  const mode = searchParams.get('mode') || 'outgoing';
+  const otherId = searchParams.get('otherId') || '';
+  const matchId = params.id as string || '';
+
   const [isMuted, setIsMuted] = useState(false);
   const [isSpeakerOn, setIsSpeakerOn] = useState(false);
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [callDuration, setCallDuration] = useState(0);
   const [isCallActive, setIsCallActive] = useState(true);
+  const [statusText, setStatusText] = useState(mode === 'outgoing' ? 'Calling...' : 'Connecting...');
+  const [otherName, setOtherName] = useState('User');
+  const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
+
+  const localVideoRef = useRef<HTMLVideoElement>(null);
+  const remoteVideoRef = useRef<HTMLVideoElement>(null);
+  const pcRef = useRef<RTCPeerConnection | null>(null);
+  const localStreamRef = useRef<MediaStream | null>(null);
+  const unsubRef = useRef<{ unsubscribe: () => Promise<void> } | null>(null);
+
+  const getOtherUserId = useCallback(() => {
+    return otherId;
+  }, [otherId]);
+
+  useEffect(() => {
+    if (!user?.$id) return;
+    const uid = getOtherUserId();
+    if (uid) {
+      userService.getProfile(uid).then(p => {
+        setOtherName((p as any)?.displayName || 'User');
+      }).catch(() => {});
+    }
+  }, [user?.$id, getOtherUserId]);
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
@@ -24,49 +60,234 @@ export default function CallPage() {
     return () => clearInterval(interval);
   }, [isCallActive]);
 
+  useEffect(() => {
+    if (!user?.$id) return;
+
+    const uid = user.$id;
+    const constraints: MediaStreamConstraints = {
+      audio: true,
+      video: callType === 'video' ? { width: { ideal: 640 }, height: { ideal: 480 } } : false,
+    };
+
+    async function setup() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        localStreamRef.current = stream;
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = stream;
+        }
+
+        const pc = new RTCPeerConnection(RTC_CONFIG);
+        pcRef.current = pc;
+
+        stream.getTracks().forEach(track => {
+          pc.addTrack(track, stream);
+        });
+
+        pc.ontrack = (event) => {
+          setRemoteStream(event.streams[0]);
+          if (remoteVideoRef.current) {
+            remoteVideoRef.current.srcObject = event.streams[0];
+          }
+          setStatusText('Connected');
+          setIsCallActive(true);
+        };
+
+        pc.onicecandidate = (event) => {
+          if (event.candidate) {
+            const targetId = otherId;
+            if (targetId) {
+              callService.sendSignal({
+                from: uid,
+                to: targetId,
+                matchId,
+                type: 'ice-candidate',
+                callType,
+                data: JSON.stringify(event.candidate),
+              });
+            }
+          }
+        };
+
+        pc.onconnectionstatechange = () => {
+          if (pc.connectionState === 'failed' || pc.connectionState === 'disconnected') {
+            setStatusText('Call ended');
+            setIsCallActive(false);
+          }
+        };
+
+        if (mode === 'outgoing') {
+          const offer = await pc.createOffer();
+          await pc.setLocalDescription(offer);
+          const targetId = otherId;
+          if (targetId) {
+            await callService.sendSignal({
+              from: uid,
+              to: targetId,
+              matchId,
+              type: 'offer',
+              callType,
+              data: JSON.stringify(offer),
+            });
+          }
+        } else if (mode === 'incoming') {
+          const offerId = searchParams.get('offerId') || '';
+          if (offerId) {
+            try {
+              const offerDoc = await callService.getSignals(uid);
+              const found = offerDoc.documents.find(d => d.$id === offerId);
+              if (found) {
+                const offer = JSON.parse(found.data);
+                await pc.setRemoteDescription(new RTCSessionDescription(offer));
+                const answer = await pc.createAnswer();
+                await pc.setLocalDescription(answer);
+                await callService.sendSignal({
+                  from: uid,
+                  to: otherId,
+                  matchId,
+                  type: 'answer',
+                  callType,
+                  data: JSON.stringify(answer),
+                });
+                setStatusText('Connected');
+              }
+            } catch {
+              setStatusText('Connection failed');
+            }
+          }
+        }
+
+        callService.subscribeToSignals(uid, async (signal: any) => {
+          if (signal.type === 'answer' && signal.from === targetId) {
+            try {
+              const answer = JSON.parse(signal.data);
+              if (answer.sdp) {
+                await pc.setRemoteDescription(new RTCSessionDescription(answer));
+              }
+            } catch {}
+          } else if (signal.type === 'ice-candidate' && signal.from === targetId) {
+            try {
+              const candidate = JSON.parse(signal.data);
+              if (candidate.candidate) {
+                await pc.addIceCandidate(new RTCIceCandidate(candidate));
+              }
+            } catch {}
+          } else if (signal.type === 'end' && signal.from === targetId) {
+            handleEndCall();
+          }
+        }).then(sub => { unsubRef.current = sub; });
+      } catch (err: any) {
+        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+          setStatusText('Microphone permission denied');
+        } else {
+          setStatusText('Failed to start call');
+        }
+      }
+    }
+
+    const targetId = otherId;
+    setup();
+
+    return () => {
+      if (unsubRef.current) unsubRef.current.unsubscribe();
+      if (localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach(t => t.stop());
+      }
+      if (pcRef.current) {
+        pcRef.current.close();
+      }
+    };
+  }, [user?.$id, callType, mode, otherId, matchId, getOtherUserId]);
+
+  useEffect(() => {
+    if (localStreamRef.current) {
+      const audioTracks = localStreamRef.current.getAudioTracks();
+      audioTracks.forEach(t => t.enabled = !isMuted);
+    }
+  }, [isMuted]);
+
+  useEffect(() => {
+    if (localStreamRef.current) {
+      const videoTracks = localStreamRef.current.getVideoTracks();
+      videoTracks.forEach(t => t.enabled = isCameraOn);
+    }
+  }, [isCameraOn]);
+
   const formatDuration = (seconds: number) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  const handleEndCall = () => {
+  const handleEndCall = async () => {
     setIsCallActive(false);
+    if (user?.$id && otherId) {
+      await callService.sendSignal({
+        from: user.$id,
+        to: otherId,
+        matchId,
+        type: 'end',
+        data: JSON.stringify({ reason: 'ended' }),
+      });
+    }
+    if (localStreamRef.current) {
+      localStreamRef.current.getTracks().forEach(t => t.stop());
+    }
+    if (pcRef.current) pcRef.current.close();
     router.back();
   };
 
-  const matchName = 'Sarah Johnson';
-
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0D0D0D, #1A0000, #0D0D0D)', display: 'flex', flexDirection: 'column' }}>
-      {callType === 'video' && (
-        <div style={{ flex: 1, position: 'relative' }}>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#1A1A1A', minHeight: '300px' }}>
-            <span style={{ fontSize: 80, fontWeight: 800, color: 'white', opacity: 0.3 }}>{matchName[0]}</span>
+      <div style={{ flex: 1, position: 'relative' }}>
+        {/* Remote video */}
+        {callType === 'video' && (
+          <div style={{ position: 'absolute', inset: 0 }}>
+            <video ref={remoteVideoRef} autoPlay playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            {!remoteStream && (
+              <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#1A1A1A' }}>
+                <span style={{ fontSize: 80, fontWeight: 800, color: 'white', opacity: 0.3 }}>{otherName[0]}</span>
+              </div>
+            )}
           </div>
-          <div style={{ position: 'absolute', top: 60, right: 16, width: 100, height: 160, borderRadius: 16, overflow: 'hidden', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        )}
+
+        {/* Local video (PiP) */}
+        {callType === 'video' && (
+          <div style={{ position: 'absolute', top: 60, right: 16, width: 100, height: 160, borderRadius: 16, overflow: 'hidden', border: '2px solid rgba(255,255,255,0.2)' }}>
+            <video ref={localVideoRef} autoPlay playsInline muted style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: 60 }}>
-        <div style={{ width: 100, height: 100, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
-          <span style={{ fontSize: 40, fontWeight: 800, color: 'white' }}>{matchName[0]}</span>
-        </div>
-        <h1 style={{ fontSize: 28, fontWeight: 700, color: 'white', margin: 0 }}>{matchName}</h1>
-        <p style={{ fontSize: 16, color: '#ABABAB', marginTop: 8, fontVariant: 'tabular-nums' }}>
-          {isCallActive ? formatDuration(callDuration) : 'Call ended'}
-        </p>
+      {/* Audio-only UI */}
+      {callType === 'audio' && (
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: 60 }}>
+          <div style={{ width: 100, height: 100, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+            <span style={{ fontSize: 40, fontWeight: 800, color: 'white' }}>{otherName[0]}</span>
+          </div>
+          <h1 style={{ fontSize: 28, fontWeight: 700, color: 'white', margin: 0 }}>{otherName}</h1>
+          <p style={{ fontSize: 16, color: '#ABABAB', marginTop: 8, fontVariant: 'tabular-nums' }}>
+            {isCallActive ? (statusText === 'Connected' ? formatDuration(callDuration) : statusText) : 'Call ended'}
+          </p>
 
-        {callType === 'audio' && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 3, height: 40, marginTop: 40 }}>
             {Array.from({ length: 30 }).map((_, i) => (
               <div key={i} style={{ width: 3, height: Math.random() * 30 + 5, backgroundColor: i % 2 === 0 ? '#FF375F' : '#FF3B30', borderRadius: 2 }} />
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* Video + status text overlay */}
+      {callType === 'video' && (
+        <div style={{ position: 'absolute', top: 120, left: 0, right: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <h1 style={{ fontSize: 28, fontWeight: 700, color: 'white', margin: 0, textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>{otherName}</h1>
+          <p style={{ fontSize: 16, color: '#ccc', marginTop: 8, fontVariant: 'tabular-nums', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>
+            {isCallActive ? (statusText === 'Connected' ? formatDuration(callDuration) : statusText) : 'Call ended'}
+          </p>
+        </div>
+      )}
 
       <div style={{ padding: '0 24px 60px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 32 }}>
         <div style={{ display: 'flex', gap: 20, justifyContent: 'center' }}>
@@ -75,7 +296,7 @@ export default function CallPage() {
               onClick={() => setIsCameraOn(!isCameraOn)}
               style={{ width: 64, height: 64, borderRadius: '50%', backgroundColor: !isCameraOn ? '#FF375F' : 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}
             >
-              {isCameraOn ? <VideoIcon size={24} color="white" /> : <VideoOffIcon size={24} color="white" />}
+              {isCameraOn ? <VideoIcon size={24} color="white" /> : <VideoIcon size={24} color="white" />}
               <span style={{ position: 'absolute', bottom: -18, fontSize: 10, color: '#ABABAB', fontWeight: 500 }}>{isCameraOn ? 'Camera' : 'Off'}</span>
             </button>
           )}
@@ -98,7 +319,7 @@ export default function CallPage() {
 
           {callType === 'audio' && (
             <button
-              onClick={() => setCallType('video')}
+              onClick={() => router.replace(`/call/${matchId}?type=video&mode=${mode}&otherId=${otherId}`)}
               style={{ width: 64, height: 64, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}
             >
               <VideoIcon size={24} color="white" />
@@ -116,13 +337,5 @@ export default function CallPage() {
         </button>
       </div>
     </div>
-  );
-}
-
-function VideoOffIcon({ size, color }: { size?: number; color?: string }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={size || 24} height={size || 24} viewBox="0 0 24 24" fill="none" stroke={color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/><line x1="1" y1="1" x2="23" y2="23"/>
-    </svg>
   );
 }

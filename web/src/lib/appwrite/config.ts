@@ -20,6 +20,7 @@ export const APPWRITE_CONFIG = {
   usersCollectionId: process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID || 'users',
   matchesCollectionId: process.env.NEXT_PUBLIC_APPWRITE_MATCHES_COLLECTION_ID || 'matches',
   messagesCollectionId: process.env.NEXT_PUBLIC_APPWRITE_MESSAGES_COLLECTION_ID || 'messages',
+  callSignalsCollectionId: process.env.NEXT_PUBLIC_APPWRITE_CALL_SIGNALS_COLLECTION_ID || 'callSignals',
   storageBucketId: process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID || '',
 };
 
