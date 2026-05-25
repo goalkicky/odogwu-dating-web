@@ -5,6 +5,7 @@ import MarketingNav from '@/components/MarketingNav';
 import MarketingFooter from '@/components/MarketingFooter';
 import { useMobile } from '@/lib/useMediaQuery';
 import { ChatIcon, StarIcon, ShieldIcon, SparklesIcon, GlobeIcon, EyeIcon } from '@/components/Icons';
+import VideoCarouselBackground from '@/components/VideoCarouselBackground';
 
 const ACCENT = '#FF3B30';
 
@@ -80,8 +81,7 @@ export default function LandingPage() {
         padding: isMobile ? '100px 16px 60px' : '120px 24px 80px',
         overflow: 'hidden',
       }}>
-        <div style={{ position: 'absolute', top: '20%', left: '10%', width: isMobile ? 250 : 400, height: isMobile ? 250 : 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,55,95,0.15), transparent 70%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: '10%', right: '5%', width: isMobile ? 300 : 500, height: isMobile ? 300 : 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,59,48,0.12), transparent 70%)', pointerEvents: 'none' }} />
+        <VideoCarouselBackground />
 
         <div style={{ maxWidth: isMobile ? '100%' : 900, textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <div style={{
