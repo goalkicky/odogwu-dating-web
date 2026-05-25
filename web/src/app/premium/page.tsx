@@ -1,8 +1,12 @@
 'use client';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { DiamondIcon, CheckmarkCircleIcon, InfiniteIcon, StarIcon, FlashIcon, GlobeIcon, EyeIcon, ChatIcon } from '@/components/Icons';
 import Button from '@/components/Button';
 import TabBar from '@/components/TabBar';
+import { useAuth } from '@/store/AuthContext';
+import { userService } from '@/lib/appwrite/services';
+import { account } from '@/lib/appwrite/config';
 
 const PLANS = [
   { id: 'plus', name: 'Odogwu Plus', price: '$9.99', period: '/month', color: ['#FF375F', '#FF6B8A'], features: ['Unlimited Likes', '5 Super Likes per day', '1 Boost per month', 'Passport (any location)', 'Hide Ads'] },
@@ -20,7 +24,28 @@ const FEATURES = [
 ];
 
 export default function PremiumPage() {
+  const router = useRouter();
+  const { profile, refreshUser } = useAuth();
   const [selectedPlan, setSelectedPlan] = useState('gold');
+  const [subscribing, setSubscribing] = useState(false);
+
+  const handleSubscribe = async () => {
+    if (!account || !profile) return;
+    setSubscribing(true);
+    try {
+      const user = await account.get();
+      await userService.updateProfile(user.$id, {
+        isPremium: true,
+        premiumPlan: selectedPlan,
+      } as any);
+      await refreshUser();
+      alert('Welcome to Odogwu Premium!');
+      router.push('/discover');
+    } catch (err: any) {
+      alert(err?.message || 'Subscription failed. Please try again.');
+    }
+    setSubscribing(false);
+  };
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#0D0D0D', display: 'flex', flexDirection: 'column', paddingBottom: '85px', overflowY: 'auto' }}>
@@ -89,11 +114,13 @@ export default function PremiumPage() {
                 </div>
                 <div style={{ margin: 16 }}>
                   <Button
-                    title={selected ? 'Subscribe Now' : `Get ${plan.name.split(' ')[1]}`}
-                    onPress={() => setSelectedPlan(plan.id)}
+                    title={subscribing ? 'Processing...' : selected ? 'Subscribe Now' : `Get ${plan.name.split(' ')[1]}`}
+                    onPress={selected ? handleSubscribe : () => setSelectedPlan(plan.id)}
                     variant={selected ? 'gradient' : 'outline'}
                     size="md"
                     style={{ width: '100%' }}
+                    loading={subscribing && selected}
+                    disabled={subscribing}
                   />
                 </div>
               </button>

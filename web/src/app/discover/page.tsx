@@ -1,65 +1,106 @@
 'use client';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { FlameIcon, HeartIcon, CloseIcon, StarIcon, FlashIcon, RefreshIcon } from '@/components/Icons';
 import AnimatedCard from '@/components/AnimatedCard';
 import ActionButton from '@/components/ActionButton';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
-
-const MOCK_USERS = [
-  { id: '1', photos: ['https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400'], fullName: 'Sarah Johnson', age: 26, bio: 'Adventure seeker & coffee addict ☕️', city: 'Lagos, Nigeria' },
-  { id: '2', photos: ['https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400'], fullName: 'Michael Chen', age: 28, bio: 'Software engineer by day, chef by night', city: 'Abuja, Nigeria' },
-  { id: '3', photos: ['https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400'], fullName: 'Emily Davis', age: 24, bio: 'Music lover & yoga enthusiast 🧘‍♀️', city: 'Port Harcourt, Nigeria' },
-  { id: '4', photos: ['https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400'], fullName: 'James Wilson', age: 30, bio: 'Traveling the world 🌍', city: 'Nairobi, Kenya' },
-];
+import { useAuth } from '@/store/AuthContext';
+import { userService, storageService } from '@/lib/appwrite/services';
+import { account } from '@/lib/appwrite/config';
 
 export default function DiscoverPage() {
-  const [users, setUsers] = useState(MOCK_USERS);
+  const { profile } = useAuth();
+  const [users, setUsers] = useState<any[]>([]);
+  const [jwt, setJwt] = useState('');
   const [lastAction, setLastAction] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleSwipeLeft = useCallback(() => {
+  const loadUsers = useCallback(async () => {
+    if (!profile || !account) return;
+    setLoading(true);
+    try {
+      const token = await account.createJWT().then(r => r.jwt).catch(() => '');
+      setJwt(token);
+      const docs = await userService.getDiscoverUsers((profile as any).$id, {
+        gender: profile.interestedIn || 'both',
+        minAge: 18,
+        maxAge: 60,
+      });
+      const mapped = docs.map((d: any) => ({
+        id: d.$id,
+        photos: (d.photos || []).map((fid: string) => storageService.getFilePreview(fid, token || undefined)),
+        fullName: d.fullName || '',
+        age: d.age || 0,
+        bio: d.bio || '',
+        city: d.city || '',
+      })).filter((u: any) => u.photos.length > 0);
+      setUsers(mapped);
+    } catch {}
+    setLoading(false);
+  }, [profile]);
+
+  useEffect(() => { loadUsers(); }, [loadUsers]);
+
+  const nextUser = useCallback(() => {
+    setUsers(prev => {
+      const next = prev.slice(1);
+      if (next.length === 0) loadUsers();
+      return next;
+    });
+  }, [loadUsers]);
+
+  const handleSwipeLeft = useCallback(async () => {
     setLastAction('dislike');
-    setTimeout(() => {
-      setUsers(prev => {
-        const next = prev.slice(1);
-        if (next.length === 0) return MOCK_USERS;
-        return next;
-      });
-      setLastAction(null);
-    }, 300);
-  }, []);
+    const rejected = users[0];
+    if (rejected && account) {
+      try { await userService.likeExists((profile as any).$id, rejected.id); } catch {}
+    }
+    setTimeout(() => { setLastAction(null); nextUser(); }, 300);
+  }, [users, profile, nextUser]);
 
-  const handleSwipeRight = useCallback(() => {
+  const handleSwipeRight = useCallback(async () => {
     setLastAction('like');
-    setTimeout(() => {
-      setUsers(prev => {
-        const next = prev.slice(1);
-        if (next.length === 0) return MOCK_USERS;
-        return next;
-      });
-      setLastAction(null);
-    }, 300);
-  }, []);
+    const liked = users[0];
+    if (liked && account) {
+      try {
+        await userService.likeUser((profile as any).$id, liked.id);
+        const mutual = await userService.isMutualMatch((profile as any).$id, liked.id);
+        if (mutual) setLastAction('match');
+      } catch {}
+    }
+    setTimeout(() => { setLastAction(null); nextUser(); }, 300);
+  }, [users, profile, nextUser]);
 
-  const handleSuperLike = useCallback(() => {
+  const handleSuperLike = useCallback(async () => {
     setLastAction('superlike');
-    setTimeout(() => {
-      setUsers(prev => {
-        const next = prev.slice(1);
-        if (next.length === 0) return MOCK_USERS;
-        return next;
-      });
-      setLastAction(null);
-    }, 300);
-  }, []);
+    const liked = users[0];
+    if (liked && account) {
+      try {
+        await userService.likeUser((profile as any).$id, liked.id);
+      } catch {}
+    }
+    setTimeout(() => { setLastAction(null); nextUser(); }, 300);
+  }, [users, profile, nextUser]);
 
   const handleReload = useCallback(() => {
-    setUsers([...MOCK_USERS].sort(() => Math.random() - 0.5));
-  }, []);
+    loadUsers();
+  }, [loadUsers]);
 
   const handleInfo = useCallback((user: any) => {
     alert(`${user.fullName}\n${user.bio}\n\n📍 ${user.city}`);
   }, []);
+
+  if (loading) {
+    return (
+      <GradientBackground style={{ minHeight: '100vh' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+          <span style={{ color: '#ABABAB', fontSize: 16 }}>Loading profiles...</span>
+        </div>
+        <TabBar />
+      </GradientBackground>
+    );
+  }
 
   return (
     <GradientBackground style={{ minHeight: '100vh' }}>
@@ -68,9 +109,7 @@ export default function DiscoverPage() {
           <FlameIcon size={22} color="white" />
         </div>
         <span style={{ fontSize: 20, fontWeight: 700, color: 'white' }}>Discover</span>
-        <div style={{ width: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <OptionsIcon size={24} color="#ABABAB" />
-        </div>
+        <div style={{ width: 36 }} />
       </div>
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px 0', position: 'relative', minHeight: '520px' }}>
@@ -80,7 +119,7 @@ export default function DiscoverPage() {
               <path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 1 0 0-8c-2 0-4 1.33-6 4Z"/>
             </svg>
             <span style={{ fontSize: 22, fontWeight: 700, color: 'white' }}>No more profiles</span>
-            <span style={{ fontSize: 16, color: '#ABABAB' }}>Check back later for new people</span>
+            <button onClick={loadUsers} style={{ background: 'none', border: 'none', color: '#FF375F', fontSize: 15, fontWeight: 600, cursor: 'pointer', marginTop: 8 }}>Refresh</button>
           </div>
         ) : (
           <div style={{ position: 'relative', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '520px' }}>
@@ -112,28 +151,20 @@ export default function DiscoverPage() {
         <ActionButton variant="primary" size={60} onPress={handleSwipeRight}>
           <HeartIcon size={30} color="white" />
         </ActionButton>
-        <ActionButton variant="boost" size={50} onPress={() => alert('Boost! Get seen by more people!')}>
+        <ActionButton variant="boost" size={50} onPress={() => {}}>
           <FlashIcon size={24} color="white" />
         </ActionButton>
       </div>
 
       {lastAction && (
-        <div style={{ position: 'fixed', bottom: 100, left: '50%', transform: 'translateX(-50%)', backgroundColor: 'rgba(255,255,255,0.08)', padding: '8px 20px', borderRadius: 9999 }}>
+        <div style={{ position: 'fixed', bottom: 100, left: '50%', transform: 'translateX(-50%)', backgroundColor: lastAction === 'match' ? 'linear-gradient(135deg, #FF375F, #6C63FF)' : 'rgba(255,255,255,0.08)', padding: '8px 20px', borderRadius: 9999 }}>
           <span style={{ color: 'white', fontWeight: 600, fontSize: 14 }}>
-            {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : 'Super Like!'}
+            {lastAction === 'match' ? "It's a Match!" : lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : 'Super Like!'}
           </span>
         </div>
       )}
 
       <TabBar />
     </GradientBackground>
-  );
-}
-
-function OptionsIcon({ size, color }: { size?: number; color?: string }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={size || 24} height={size || 24} viewBox="0 0 24 24" fill="none" stroke={color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>
-    </svg>
   );
 }

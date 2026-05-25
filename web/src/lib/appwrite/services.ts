@@ -27,6 +27,15 @@ export const authService = {
   },
 };
 
+async function getProfileDoc(userId: string) {
+  checkInit();
+  return databases!.getDocument(
+    APPWRITE_CONFIG.databaseId,
+    APPWRITE_CONFIG.usersCollectionId,
+    userId
+  );
+}
+
 export const userService = {
   createProfile: async (userId: string, data: Partial<UserProfile>) => {
     checkInit();
@@ -35,10 +44,7 @@ export const userService = {
       APPWRITE_CONFIG.usersCollectionId,
       userId,
       data,
-      [
-        Permission.read(Role.any()),
-        Permission.write(Role.user(userId)),
-      ]
+      [Permission.read(Role.any()), Permission.write(Role.user(userId))]
     );
   },
 
@@ -52,28 +58,45 @@ export const userService = {
     );
   },
 
-  getProfile: async (userId: string) => {
-    checkInit();
-    return databases!.getDocument(
-      APPWRITE_CONFIG.databaseId,
-      APPWRITE_CONFIG.usersCollectionId,
-      userId
-    );
-  },
+  getProfile: async (userId: string) => getProfileDoc(userId),
 
   getDiscoverUsers: async (currentUserId: string, preferences: { gender: string; minAge: number; maxAge: number }) => {
     checkInit();
-    const queries = [
-      Query.notEqual('$id', currentUserId),
-      Query.equal('gender', preferences.gender),
-      Query.greaterThanEqual('age', preferences.minAge),
-      Query.lessThanEqual('age', preferences.maxAge),
-    ];
-    return databases!.listDocuments(
-      APPWRITE_CONFIG.databaseId,
-      APPWRITE_CONFIG.usersCollectionId,
-      queries
+    const base = [Query.notEqual('$id', currentUserId), Query.greaterThanEqual('age', preferences.minAge), Query.lessThanEqual('age', preferences.maxAge)];
+    if (preferences.gender === 'both') {
+      const [male, female] = await Promise.all([
+        databases!.listDocuments(APPWRITE_CONFIG.databaseId, APPWRITE_CONFIG.usersCollectionId, [...base, Query.equal('gender', 'male')]),
+        databases!.listDocuments(APPWRITE_CONFIG.databaseId, APPWRITE_CONFIG.usersCollectionId, [...base, Query.equal('gender', 'female')]),
+      ]);
+      return [...male.documents, ...female.documents];
+    }
+    return (await databases!.listDocuments(APPWRITE_CONFIG.databaseId, APPWRITE_CONFIG.usersCollectionId, [...base, Query.equal('gender', preferences.gender)])).documents;
+  },
+
+  likeUser: async (userId: string, likedUserId: string) => {
+    checkInit();
+    return databases!.createDocument(
+      APPWRITE_CONFIG.databaseId, APPWRITE_CONFIG.matchesCollectionId, ID.unique(),
+      { userId, matchedUserId: likedUserId, matchedAt: new Date().toISOString() }
     );
+  },
+
+  likeExists: async (fromUserId: string, toUserId: string) => {
+    checkInit();
+    const r = await databases!.listDocuments(
+      APPWRITE_CONFIG.databaseId, APPWRITE_CONFIG.matchesCollectionId,
+      [Query.equal('userId', fromUserId), Query.equal('matchedUserId', toUserId)]
+    );
+    return r.documents.length > 0;
+  },
+
+  isMutualMatch: async (userId: string, otherUserId: string) => {
+    checkInit();
+    const [a, b] = await Promise.all([
+      databases!.listDocuments(APPWRITE_CONFIG.databaseId, APPWRITE_CONFIG.matchesCollectionId, [Query.equal('userId', userId), Query.equal('matchedUserId', otherUserId)]),
+      databases!.listDocuments(APPWRITE_CONFIG.databaseId, APPWRITE_CONFIG.matchesCollectionId, [Query.equal('userId', otherUserId), Query.equal('matchedUserId', userId)]),
+    ]);
+    return a.documents.length > 0 && b.documents.length > 0;
   },
 };
 
@@ -90,19 +113,19 @@ export const matchService = {
 
   getUserMatches: async (userId: string) => {
     checkInit();
-    const [matches1, matches2] = await Promise.all([
-      databases!.listDocuments(
-        APPWRITE_CONFIG.databaseId,
-        APPWRITE_CONFIG.matchesCollectionId,
-        [Query.equal('userId', userId)]
-      ),
-      databases!.listDocuments(
-        APPWRITE_CONFIG.databaseId,
-        APPWRITE_CONFIG.matchesCollectionId,
-        [Query.equal('matchedUserId', userId)]
-      ),
+    const [m1, m2] = await Promise.all([
+      databases!.listDocuments(APPWRITE_CONFIG.databaseId, APPWRITE_CONFIG.matchesCollectionId, [Query.equal('userId', userId)]),
+      databases!.listDocuments(APPWRITE_CONFIG.databaseId, APPWRITE_CONFIG.matchesCollectionId, [Query.equal('matchedUserId', userId)]),
     ]);
-    return [...matches1.documents, ...matches2.documents] as unknown as Match[];
+    const docs = [...m1.documents, ...m2.documents];
+    const otherIds = [...new Set(docs.map(d => d.userId === userId ? d.matchedUserId : d.userId))];
+    const profiles = await Promise.all(otherIds.map(id => getProfileDoc(id).catch(() => null)));
+    const profileMap: Record<string, any> = {};
+    otherIds.forEach((id, i) => { profileMap[id] = profiles[i]; });
+    return docs.map(d => {
+      const otherId = d.userId === userId ? d.matchedUserId : d.userId;
+      return { ...d, matchedUser: profileMap[otherId] || null };
+    }) as unknown as Match[];
   },
 
   checkMatch: async (userId: string, likedUserId: string) => {
@@ -110,10 +133,7 @@ export const matchService = {
     const result = await databases!.listDocuments(
       APPWRITE_CONFIG.databaseId,
       APPWRITE_CONFIG.matchesCollectionId,
-      [
-        Query.equal('userId', likedUserId),
-        Query.equal('matchedUserId', userId),
-      ]
+      [Query.equal('userId', likedUserId), Query.equal('matchedUserId', userId)]
     );
     return result.documents.length > 0;
   },
