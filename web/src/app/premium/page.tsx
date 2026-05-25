@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { DiamondIcon, CheckmarkCircleIcon, InfiniteIcon, StarIcon, FlashIcon, GlobeIcon, EyeIcon, ChatIcon } from '@/components/Icons';
 import Button from '@/components/Button';
+import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import { useAuth } from '@/store/AuthContext';
 import { userService } from '@/lib/appwrite/services';
@@ -11,7 +12,7 @@ import { account } from '@/lib/appwrite/config';
 const PLANS = [
   { id: 'plus', name: 'Odogwu Plus', price: '$9.99', period: '/month', color: ['#FF375F', '#FF6B8A'], features: ['Unlimited Likes', '5 Super Likes per day', '1 Boost per month', 'Passport (any location)', 'Hide Ads'] },
   { id: 'gold', name: 'Odogwu Gold', price: '$19.99', period: '/month', color: ['#FFD700', '#FFA500'], features: ['All Plus features', '10 Super Likes per day', '3 Boosts per month', 'See who likes you', 'Top Picks daily', 'Message before matching'], popular: true },
-  { id: 'platinum', name: 'Odogwu Platinum', price: '$29.99', period: '/month', color: ['#AF52DE', '#6C63FF'], features: ['All Gold features', 'Unlimited Super Likes', 'Unlimited Boosts', 'Priority likes', 'Verified badge', 'Read receipts', 'Premium support'] },
+  { id: 'platinum', name: 'Odogwu Platinum', price: '$29.99', period: '/month', color: ['#FF375F', '#FF3B30'], features: ['All Gold features', 'Unlimited Super Likes', 'Unlimited Boosts', 'Priority likes', 'Verified badge', 'Read receipts', 'Premium support'] },
 ];
 
 const FEATURES = [
@@ -48,8 +49,9 @@ export default function PremiumPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#0D0D0D', display: 'flex', flexDirection: 'column', paddingBottom: '85px', overflowY: 'auto' }}>
-      <div style={{ background: 'linear-gradient(135deg, #0D0D0D, #1A0A1A, #0D0D0D)' }}>
+    <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', paddingBottom: '85px', overflowY: 'auto' }}>
+      <div style={{ background: 'linear-gradient(135deg, #0D0D0D, #1A0000, #0D0D0D)' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '80px 24px 32px' }}>
           <div style={{ width: 72, height: 72, borderRadius: 24, background: 'linear-gradient(135deg, #FFD700, #FF375F)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, boxShadow: '0 0 20px rgba(255,55,95,0.5)' }}>
             <DiamondIcon size={32} color="white" />
@@ -62,7 +64,7 @@ export default function PremiumPage() {
           <div style={{ display: 'flex', gap: 12, padding: '0 20px' }}>
             {FEATURES.map((f, i) => (
               <div key={i} style={{ minWidth: 140, padding: 16, borderRadius: 16, border: '1px solid #2A2A2A', background: 'linear-gradient(135deg, #1A1A1A, #242424)', display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <div style={{ width: 40, height: 40, borderRadius: 12, background: 'linear-gradient(135deg, #FF375F, #6C63FF)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 40, height: 40, borderRadius: 12, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {f.icon}
                 </div>
                 <span style={{ fontSize: 14, fontWeight: 700, color: 'white' }}>{f.title}</span>
@@ -137,6 +139,7 @@ export default function PremiumPage() {
       </div>
 
       <TabBar />
-    </div>
+      </div>
+    </GradientBackground>
   );
 }

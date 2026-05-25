@@ -38,20 +38,20 @@ export default function CallPage() {
   const matchName = 'Sarah Johnson';
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0D0D0D, #1A0A0A, #0D0D0D)', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0D0D0D, #1A0000, #0D0D0D)', display: 'flex', flexDirection: 'column' }}>
       {callType === 'video' && (
         <div style={{ flex: 1, position: 'relative' }}>
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#1A1A1A', minHeight: '300px' }}>
             <span style={{ fontSize: 80, fontWeight: 800, color: 'white', opacity: 0.3 }}>{matchName[0]}</span>
           </div>
-          <div style={{ position: 'absolute', top: 60, right: 16, width: 100, height: 160, borderRadius: 16, overflow: 'hidden', background: 'linear-gradient(135deg, #FF375F, #6C63FF)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ position: 'absolute', top: 60, right: 16, width: 100, height: 160, borderRadius: 16, overflow: 'hidden', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           </div>
         </div>
       )}
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: 60 }}>
-        <div style={{ width: 100, height: 100, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #6C63FF)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+        <div style={{ width: 100, height: 100, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
           <span style={{ fontSize: 40, fontWeight: 800, color: 'white' }}>{matchName[0]}</span>
         </div>
         <h1 style={{ fontSize: 28, fontWeight: 700, color: 'white', margin: 0 }}>{matchName}</h1>
@@ -62,7 +62,7 @@ export default function CallPage() {
         {callType === 'audio' && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 3, height: 40, marginTop: 40 }}>
             {Array.from({ length: 30 }).map((_, i) => (
-              <div key={i} style={{ width: 3, height: Math.random() * 30 + 5, backgroundColor: i % 2 === 0 ? '#FF375F' : '#6B6B6B', borderRadius: 2 }} />
+              <div key={i} style={{ width: 3, height: Math.random() * 30 + 5, backgroundColor: i % 2 === 0 ? '#FF375F' : '#FF3B30', borderRadius: 2 }} />
             ))}
           </div>
         )}

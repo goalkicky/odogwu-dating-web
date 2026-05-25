@@ -72,7 +72,7 @@ export default function Button({
             paddingLeft: '28px',
             paddingRight: '28px',
             borderRadius: '9999px',
-            background: 'linear-gradient(135deg, #FF375F, #6C63FF)',
+            background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

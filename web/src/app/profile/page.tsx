@@ -35,7 +35,7 @@ export default function ProfilePage() {
   return (
     <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px', overflowY: 'auto' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 80, paddingBottom: 24 }}>
-        <div style={{ width: 120, height: 120, borderRadius: '50%', padding: 4, background: 'linear-gradient(135deg, #FF375F, #6C63FF)', marginBottom: 16 }}>
+        <div style={{ width: 120, height: 120, borderRadius: '50%', padding: 4, background: 'linear-gradient(135deg, #FF3B30, #FF375F)', marginBottom: 16 }}>
           <div style={{ width: 112, height: 112, borderRadius: '50%', backgroundColor: '#1A1A1A', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
             {profile?.photos?.[0] && photoUrl ? (
               <img

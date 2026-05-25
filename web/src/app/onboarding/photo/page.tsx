@@ -100,11 +100,11 @@ export default function PhotoPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0D0D0D, #0D0A1A, #0D0D0D)', display: 'flex', flexDirection: 'column', padding: '60px 24px 0' }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0D0D0D, #0D0000, #0D0D0D)', display: 'flex', flexDirection: 'column', padding: '60px 24px 0' }}>
       <OnboardingProgress currentStep={5} totalSteps={6} />
 
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
-        <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, #AF52DE, #FF375F)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, #FF3B30, #FF375F)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <CameraIcon size={36} color="white" />
         </div>
       </div>

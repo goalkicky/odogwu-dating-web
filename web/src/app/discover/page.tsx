@@ -105,7 +105,7 @@ export default function DiscoverPage() {
   return (
     <GradientBackground style={{ minHeight: '100vh' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '60px 20px 12px' }}>
-        <div style={{ width: 36, height: 36, borderRadius: 12, background: 'linear-gradient(135deg, #FF375F, #6C63FF)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 36, height: 36, borderRadius: 12, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <FlameIcon size={22} color="white" />
         </div>
         <span style={{ fontSize: 20, fontWeight: 700, color: 'white' }}>Discover</span>
@@ -157,7 +157,7 @@ export default function DiscoverPage() {
       </div>
 
       {lastAction && (
-        <div style={{ position: 'fixed', bottom: 100, left: '50%', transform: 'translateX(-50%)', backgroundColor: lastAction === 'match' ? 'linear-gradient(135deg, #FF375F, #6C63FF)' : 'rgba(255,255,255,0.08)', padding: '8px 20px', borderRadius: 9999 }}>
+        <div style={{ position: 'fixed', bottom: 100, left: '50%', transform: 'translateX(-50%)', background: lastAction === 'match' ? 'linear-gradient(135deg, #FF375F, #FF3B30)' : 'rgba(255,255,255,0.08)', padding: '8px 20px', borderRadius: 9999 }}>
           <span style={{ color: 'white', fontWeight: 600, fontSize: 14 }}>
             {lastAction === 'match' ? "It's a Match!" : lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : 'Super Like!'}
           </span>

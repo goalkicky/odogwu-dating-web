@@ -41,8 +41,8 @@ const features = [
   { icon: <ShieldIcon size={28} color={ACCENT} />, title: 'Verified Profiles', desc: 'Every profile is verified to ensure authentic connections. No catfish, no bots.' },
   { icon: <ChatIcon size={28} color="#34C759" />, title: 'Real-time Chat', desc: 'Break the ice with instant messaging, voice notes, and video calls.' },
   { icon: <StarIcon size={28} color="#FFD700" />, title: 'Super Likes & Boosts', desc: 'Stand out with Super Likes and get 10x more visibility with Boosts.' },
-  { icon: <GlobeIcon size={28} color="#007AFF" />, title: 'Global Passport', desc: 'Match with people anywhere in the world. Love knows no borders.' },
-  { icon: <EyeIcon size={28} color="#AF52DE" />, title: 'See Who Likes You', desc: 'Know exactly who\'s interested before you swipe. No more guessing.' },
+  { icon: <GlobeIcon size={28} color="#FF3B30" />, title: 'Global Passport', desc: 'Match with people anywhere in the world. Love knows no borders.' },
+  { icon: <EyeIcon size={28} color="#FF375F" />, title: 'See Who Likes You', desc: 'Know exactly who\'s interested before you swipe. No more guessing.' },
 ];
 
 const steps = [

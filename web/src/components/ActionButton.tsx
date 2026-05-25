@@ -11,17 +11,17 @@ interface ActionButtonProps {
 
 const gradientColors: Record<string, string> = {
   danger: 'linear-gradient(135deg, #FF3B30, #FF6B6B)',
-  superlike: 'linear-gradient(135deg, #007AFF, #00D4FF)',
-  boost: 'linear-gradient(135deg, #AF52DE, #FF375F)',
-  primary: 'linear-gradient(135deg, #FF375F, #6C63FF)',
+  superlike: 'linear-gradient(135deg, #FF3B30, #FF6B6B)',
+  boost: 'linear-gradient(135deg, #FF3B30, #FF6B6B)',
+  primary: 'linear-gradient(135deg, #FF375F, #FF3B30)',
   secondary: 'linear-gradient(135deg, #1A1A1A, #242424)',
 };
 
 const borderColors: Record<string, string> = {
   danger: '#FF3B30',
-  superlike: '#007AFF',
-  boost: '#AF52DE',
-  primary: '#FF375F',
+  superlike: '#FF3B30',
+  boost: '#FF375F',
+  primary: '#FF3B30',
   secondary: '#2A2A2A',
 };
 

@@ -173,7 +173,7 @@ export default function AnimatedCard({
         )}
         {superLikeOpacity > 0.1 && (
           <div style={{ position: 'absolute', top: '120px', alignSelf: 'center', left: '50%', transform: 'translateX(-50%)', opacity: superLikeOpacity }}>
-            <div style={{ padding: '8px 16px', borderRadius: '8px', border: '3px solid white', background: 'linear-gradient(135deg, #007AFF, #00D4FF)' }}>
+            <div style={{ padding: '8px 16px', borderRadius: '8px', border: '3px solid white', background: 'linear-gradient(135deg, #FF3B30, #FF6B6B)' }}>
               <span style={{ color: 'white', fontWeight: 800, fontSize: '24px', letterSpacing: '2px' }}>SUPER LIKE</span>
             </div>
           </div>

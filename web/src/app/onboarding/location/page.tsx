@@ -68,11 +68,11 @@ export default function LocationPage() {
     }, [data.city, requestLocation]);
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0D0D0D, #0A0A1A, #0D0D0D)', display: 'flex', flexDirection: 'column', padding: '60px 24px 0' }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0D0D0D, #0D0000, #0D0D0D)', display: 'flex', flexDirection: 'column', padding: '60px 24px 0' }}>
       <OnboardingProgress currentStep={4} totalSteps={6} />
 
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
-        <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, #007AFF, #00D4FF)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, #FF3B30, #FF6B6B)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <LocationIcon size={36} color="white" />
         </div>
       </div>
@@ -133,7 +133,7 @@ export default function LocationPage() {
                 disabled={!manualCity.trim()}
                 style={{
                   padding: '12px 16px', borderRadius: 12, border: 'none',
-                  background: manualCity.trim() ? 'linear-gradient(135deg, #007AFF, #00D4FF)' : '#2A2A2A',
+                  background: manualCity.trim() ? 'linear-gradient(135deg, #FF3B30, #FF6B6B)' : '#2A2A2A',
                   color: 'white', cursor: manualCity.trim() ? 'pointer' : 'not-allowed',
                   fontSize: 14, fontWeight: 600, opacity: manualCity.trim() ? 1 : 0.5,
                 }}

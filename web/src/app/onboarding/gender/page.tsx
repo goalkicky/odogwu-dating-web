@@ -29,7 +29,7 @@ export default function GenderPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0D0D0D, #1A0A0A, #0D0D0D)', display: 'flex', flexDirection: 'column', padding: '60px 24px 0' }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0D0D0D, #1A0000, #0D0D0D)', display: 'flex', flexDirection: 'column', padding: '60px 24px 0' }}>
       <OnboardingProgress currentStep={2} totalSteps={6} />
 
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
@@ -57,7 +57,7 @@ export default function GenderPage() {
                 border: 'none',
                 cursor: 'pointer',
                 background: isSelected
-                  ? 'linear-gradient(135deg, #FF375F, #6C63FF)'
+                   ? 'linear-gradient(135deg, #FF375F, #FF3B30)'
                   : 'linear-gradient(135deg, #1A1A1A, #242424)',
                 color: isSelected ? 'white' : '#ABABAB',
               }}

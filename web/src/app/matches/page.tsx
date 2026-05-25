@@ -45,7 +45,7 @@ export default function MatchesPage() {
   return (
     <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '60px 20px 12px' }}>
-        <div style={{ width: 36, height: 36, borderRadius: 12, background: 'linear-gradient(135deg, #FF375F, #6C63FF)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 36, height: 36, borderRadius: 12, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <FlameIcon size={22} color="white" />
         </div>
         <span style={{ fontSize: 20, fontWeight: 700, color: 'white' }}>Matches</span>
@@ -72,7 +72,7 @@ export default function MatchesPage() {
                   const name = mp.fullName || 'User';
                   return (
                     <div key={item.$id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, minWidth: 80 }}>
-                      <div style={{ width: 76, height: 76, borderRadius: '50%', padding: 3, background: 'linear-gradient(135deg, #FF375F, #6C63FF)' }}>
+                      <div style={{ width: 76, height: 76, borderRadius: '50%', padding: 3, background: 'linear-gradient(135deg, #FF375F, #FF3B30)' }}>
                         {photoUrl ? (
                           <img src={photoUrl} alt={name} style={{ width: 70, height: 70, borderRadius: '50%', objectFit: 'cover' }} />
                         ) : (

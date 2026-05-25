@@ -56,7 +56,7 @@ export default function TabBar() {
                   width: 36,
                   height: 36,
                   borderRadius: 12,
-                  background: 'linear-gradient(135deg, #FF375F, #6C63FF)',
+                  background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',

@@ -27,7 +27,7 @@ export default function LoginPage() {
     <div
       style={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0D0D0D, #1A0A0A, #0D0D0D)',
+        background: 'linear-gradient(135deg, #0D0D0D, #1A0000, #0D0D0D)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -42,7 +42,7 @@ export default function LoginPage() {
             width: 120,
             height: 120,
             borderRadius: 40,
-            background: 'linear-gradient(135deg, #FF375F, #6C63FF)',
+            background: 'linear-gradient(135deg, #FF3B30, #FF375F)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -86,8 +86,8 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <div style={{ position: 'absolute', width: 200, height: 200, borderRadius: '50%', opacity: 0.08, top: -50, right: -80, backgroundColor: '#FF375F', pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', width: 200, height: 200, borderRadius: '50%', opacity: 0.08, bottom: 100, left: -100, backgroundColor: '#6C63FF', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', width: 250, height: 250, borderRadius: '50%', opacity: 0.12, top: -80, right: -100, background: 'radial-gradient(circle, #FF3B30, transparent)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', width: 250, height: 250, borderRadius: '50%', opacity: 0.1, bottom: 80, left: -120, background: 'radial-gradient(circle, #FF375F, transparent)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', width: 150, height: 150, borderRadius: '50%', opacity: 0.08, top: '40%', right: -60, backgroundColor: '#FFD700', pointerEvents: 'none' }} />
     </div>
   );

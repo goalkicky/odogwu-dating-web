@@ -57,9 +57,9 @@ const featureGroups = [
     ],
   },
   {
-    title: 'Global Passport', color: '#007AFF',
+    title: 'Global Passport', color: '#FF3B30',
     desc: 'Love knows no borders. Use Passport to match with people anywhere in the world before you travel.',
-    icon: <GlobeIcon size={28} color="#007AFF" />,
+    icon: <GlobeIcon size={28} color="#FF3B30" />,
     items: [
       'Match in any city or country worldwide',
       'See where your matches are located on a map',
@@ -69,9 +69,9 @@ const featureGroups = [
     ],
   },
   {
-    title: 'Safety First', color: '#AF52DE',
+    title: 'Safety First', color: '#FF375F',
     desc: 'Your safety is our top priority. We use cutting-edge technology and human moderators to keep you safe.',
-    icon: <EyeIcon size={28} color="#AF52DE" />,
+    icon: <EyeIcon size={28} color="#FF375F" />,
     items: [
       'AI-powered content moderation and spam detection',
       '24/7 human moderation team for reported accounts',
@@ -119,7 +119,7 @@ export default function FeaturesPage() {
             <div style={{ order: isMobile ? 1 : (i % 2 === 0 ? 1 : 2) }}>
               <div style={{
                 width: 52, height: 52, borderRadius: 14,
-                background: `rgba(${fg.color === '#FF375F' ? '255,55,95' : fg.color === ACCENT ? '255,59,48' : fg.color === '#34C759' ? '52,199,89' : fg.color === '#FFD700' ? '255,215,0' : fg.color === '#007AFF' ? '0,122,255' : '175,82,222'},0.1)`,
+                background: `rgba(${fg.color === '#FF375F' ? '255,55,95' : fg.color === ACCENT ? '255,59,48' : fg.color === '#34C759' ? '52,199,89' : fg.color === '#FFD700' ? '255,215,0' : fg.color === '#FF3B30' ? '255,59,48' : '255,55,95'},0.1)`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 marginBottom: 20,
               }}>{fg.icon}</div>

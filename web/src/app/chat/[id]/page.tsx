@@ -79,7 +79,7 @@ export default function ChatPage() {
           <ChevronBackIcon size={28} color="white" />
         </button>
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #6C63FF)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <span style={{ color: 'white', fontWeight: 700, fontSize: 18 }}>{matchName[0]}</span>
           </div>
           <div>
@@ -92,7 +92,7 @@ export default function ChatPage() {
             <CallIcon size={22} color="#34C759" />
           </button>
           <button onClick={() => router.push(`/call/${params.id}?type=video`)} style={{ width: 38, height: 38, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.08)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <VideoIcon size={22} color="#6C63FF" />
+            <VideoIcon size={22} color="#FF375F" />
           </button>
         </div>
       </div>
@@ -193,7 +193,7 @@ export default function ChatPage() {
           )}
         </div>
         {inputText.trim() ? (
-          <button onClick={handleSend} style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #6C63FF)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <button onClick={handleSend} style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <SendIcon size={18} color="white" />
           </button>
         ) : (
