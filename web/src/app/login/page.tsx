@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FlameIcon, SparklesIcon, ShieldIcon, ChatIcon, GoogleIcon } from '@/components/Icons';
 import Button from '@/components/Button';
+import VideoCarouselBackground from '@/components/VideoCarouselBackground';
 import { useAuth } from '@/store/AuthContext';
 
 export default function LoginPage() {
@@ -27,7 +28,6 @@ export default function LoginPage() {
     <div
       style={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0D0D0D, #1A0000, #0D0D0D)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -36,7 +36,8 @@ export default function LoginPage() {
         overflow: 'hidden',
       }}
     >
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: '80px' }}>
+      <VideoCarouselBackground />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: '80px', position: 'relative', zIndex: 1 }}>
         <div
           style={{
             width: 120,
@@ -58,7 +59,7 @@ export default function LoginPage() {
         <p style={{ fontSize: 18, color: '#ABABAB', marginTop: 8 }}>Find your perfect match</p>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', paddingBottom: 32 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', paddingBottom: 32, position: 'relative', zIndex: 1 }}>
         {[
           { icon: <SparklesIcon size={20} color="#FF375F" />, text: 'Smart Matching Algorithm' },
           { icon: <ShieldIcon size={20} color="#FF375F" />, text: 'Verified Profiles Only' },
@@ -71,7 +72,7 @@ export default function LoginPage() {
         ))}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: 60 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: 60, position: 'relative', zIndex: 1 }}>
         <Button
           title="Continue with Google"
           onPress={handleGoogleLogin}
@@ -86,9 +87,7 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <div style={{ position: 'absolute', width: 250, height: 250, borderRadius: '50%', opacity: 0.12, top: -80, right: -100, background: 'radial-gradient(circle, #FF3B30, transparent)', pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', width: 250, height: 250, borderRadius: '50%', opacity: 0.1, bottom: 80, left: -120, background: 'radial-gradient(circle, #FF375F, transparent)', pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', width: 150, height: 150, borderRadius: '50%', opacity: 0.08, top: '40%', right: -60, backgroundColor: '#FFD700', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', width: 150, height: 150, borderRadius: '50%', opacity: 0.08, top: '40%', right: -60, backgroundColor: '#FFD700', pointerEvents: 'none', zIndex: 1 }} />
     </div>
   );
 }
