@@ -190,9 +190,9 @@ export const messageService = {
     );
   },
 
-  subscribeToMessages: (matchId: string, callback: (message: Message) => void) => {
+  subscribeToMessages: async (matchId: string, callback: (message: Message) => void) => {
     checkInit();
-    return realtime!.subscribe(
+    const sub = await realtime!.subscribe(
       `databases.${APPWRITE_CONFIG.databaseId}.collections.${APPWRITE_CONFIG.messagesCollectionId}.documents`,
       (response: any) => {
         const payload = response.payload as any;
@@ -201,6 +201,7 @@ export const messageService = {
         }
       }
     );
+    return sub;
   },
 };
 

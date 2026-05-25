@@ -1,75 +1,130 @@
 'use client';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { ChevronBackIcon, CallIcon, VideoIcon, MicIcon, SendIcon, PencilIcon, CloseCircleIcon, HappyIcon, KeypadIcon, StopIcon, CheckmarkDoneIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
-
-interface ChatMessage {
-  id: string;
-  text: string;
-  senderId: string;
-  type: 'text' | 'voice' | 'image';
-  mediaUrl?: string;
-  replyTo?: { id: string; text: string; senderId: string };
-  editedAt?: string;
-  createdAt: string;
-}
-
-const MOCK_MESSAGES: ChatMessage[] = [
-  { id: '1', text: 'Hey there! How are you?', senderId: 'them', type: 'text', createdAt: '10:30 AM' },
-  { id: '2', text: "I'm doing great! How about you?", senderId: 'me', type: 'text', createdAt: '10:31 AM' },
-  { id: '3', text: 'Would you like to grab coffee sometime?', senderId: 'them', type: 'text', createdAt: '10:32 AM' },
-  { id: '4', text: "I'd love that! 😊", senderId: 'me', type: 'text', createdAt: '10:33 AM' },
-];
+import { useAuth } from '@/store/AuthContext';
+import { messageService, storageService } from '@/lib/appwrite/services';
+import { account } from '@/lib/appwrite/config';
+import type { Message } from '@/lib/types';
 
 const EMOJIS = ['😀', '😂', '❤️', '🔥', '😍', '🥰', '😘', '💕', '😊', '😎', '🙌', '👋', '💪', '✨', '🌟', '🎉', '🎂', '🍕', '☕', '🌮'];
 
 export default function ChatPage() {
   const router = useRouter();
   const params = useParams();
-  const [messages, setMessages] = useState<ChatMessage[]>(MOCK_MESSAGES);
+  const { profile, user } = useAuth();
+  const matchId = params.id as string;
+
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [showEmoji, setShowEmoji] = useState(false);
   const [replyTo, setReplyTo] = useState<{ id: string; text: string; senderId: string } | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
+  const [matchName, setMatchName] = useState('User');
+  const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const unsubRef = useRef<{ unsubscribe: () => Promise<void> } | null>(null);
 
-  const matchName = 'Sarah Johnson';
+  const userId = (profile as any)?.$id || user?.$id;
 
-  const handleSend = () => {
+  useEffect(() => {
+    if (!matchId || !userId) return;
+    messageService.getMessages(matchId).then(res => {
+      const msgs = res.documents.map(d => ({
+        id: d.$id,
+        matchId: d.matchId,
+        senderId: d.senderId,
+        text: d.text,
+        type: d.type,
+        mediaUrl: d.mediaUrl,
+        replyTo: d.replyTo ? (typeof d.replyTo === 'string' ? JSON.parse(d.replyTo) : d.replyTo) : undefined,
+        editedAt: d.editedAt,
+        createdAt: d.createdAt,
+        readAt: d.readAt,
+      })) as Message[];
+      setMessages(msgs);
+    }).catch(() => {});
+
+    messageService.subscribeToMessages(matchId, (msg) => {
+      setMessages(prev => {
+        if (prev.some(m => m.id === msg.id)) return prev;
+        return [...prev, msg];
+      });
+    }).then(sub => { unsubRef.current = sub; });
+    return () => { if (unsubRef.current) unsubRef.current.unsubscribe(); };
+  }, [matchId, userId]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleSend = async () => {
     const text = inputText.trim();
-    if (!text) return;
-    if (editingId) {
-      setMessages(prev => prev.map(m => m.id === editingId ? { ...m, text, editedAt: new Date().toLocaleTimeString() } : m));
-      setEditingId(null);
-    } else {
-      const newMsg: ChatMessage = {
-        id: Date.now().toString(),
-        text,
-        senderId: 'me',
-        type: 'text',
-        createdAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        replyTo: replyTo || undefined,
+    if (!text || !userId || sending) return;
+    setSending(true);
+    try {
+      if (editingId) {
+        await messageService.editMessage(editingId, text);
+        setMessages(prev => prev.map(m => m.id === editingId ? { ...m, text, editedAt: new Date().toISOString() } : m));
+        setEditingId(null);
+      } else {
+        await messageService.sendMessage(matchId, userId, { text, type: 'text', replyTo: replyTo || undefined });
+      }
+      setInputText('');
+      setReplyTo(null);
+      setShowEmoji(false);
+    } catch {}
+    setSending(false);
+  };
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+      audioChunksRef.current = [];
+      recorder.ondataavailable = e => { if (e.data.size > 0) audioChunksRef.current.push(e.data); };
+      recorder.onstop = async () => {
+        stream.getTracks().forEach(t => t.stop());
+        const blob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        if (blob.size < 100 || !userId) return;
+        try {
+          const file = new File([blob], `voice_${Date.now()}.webm`, { type: 'audio/webm' });
+          const uploaded = await storageService.uploadFile(file);
+          await messageService.sendMessage(matchId, userId, { type: 'voice', mediaUrl: uploaded.$id });
+        } catch {}
       };
-      setMessages(prev => [...prev, newMsg]);
+      mediaRecorderRef.current = recorder;
+      recorder.start();
+      setIsRecording(true);
+    } catch {}
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
     }
-    setInputText('');
-    setReplyTo(null);
-    setShowEmoji(false);
+    setIsRecording(false);
   };
 
   const handleEmojiPick = (emoji: string) => {
     setInputText(prev => prev + emoji);
   };
 
-  const handleReply = (msg: ChatMessage) => {
+  const handleReply = (msg: Message) => {
     setReplyTo({ id: msg.id, text: msg.text, senderId: msg.senderId });
   };
 
-  const handleEdit = (msg: ChatMessage) => {
+  const handleEdit = (msg: Message) => {
     setEditingId(msg.id);
     setInputText(msg.text);
+  };
+
+  const formatTime = (iso: string) => {
+    try { return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); } catch { return iso; }
   };
 
   return (
@@ -88,10 +143,10 @@ export default function ChatPage() {
           </div>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button onClick={() => router.push(`/call/${params.id}?type=audio`)} style={{ width: 38, height: 38, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.08)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <button onClick={() => router.push(`/call/${matchId}?type=audio`)} style={{ width: 38, height: 38, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.08)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <CallIcon size={22} color="#34C759" />
           </button>
-          <button onClick={() => router.push(`/call/${params.id}?type=video`)} style={{ width: 38, height: 38, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.08)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <button onClick={() => router.push(`/call/${matchId}?type=video`)} style={{ width: 38, height: 38, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.08)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <VideoIcon size={22} color="#FF375F" />
           </button>
         </div>
@@ -99,42 +154,29 @@ export default function ChatPage() {
 
       <div style={{ flex: 1, overflowY: 'auto', padding: '12px 16px' }}>
         {messages.map((msg) => {
-          const isMe = msg.senderId === 'me';
+          const isMe = msg.senderId === userId;
           return (
-            <div
-              key={msg.id}
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'flex-end',
-                gap: 4,
-                marginBottom: 4,
-                justifyContent: isMe ? 'flex-end' : 'flex-start',
-              }}
-            >
-              <div
-                onDoubleClick={() => handleReply(msg)}
-                style={{
-                  maxWidth: '78%',
-                  padding: '10px 14px',
-                  borderRadius: 20,
-                  backgroundColor: isMe ? '#FF375F' : '#1A1A1A',
-                  borderBottomRightRadius: isMe ? 4 : 20,
-                  borderBottomLeftRadius: isMe ? 20 : 4,
-                }}
-              >
+            <div key={msg.id} style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 4, marginBottom: 4, justifyContent: isMe ? 'flex-end' : 'flex-start' }}>
+              <div onDoubleClick={() => handleReply(msg)} style={{ maxWidth: '78%', padding: '10px 14px', borderRadius: 20, backgroundColor: isMe ? '#FF375F' : '#1A1A1A', borderBottomRightRadius: isMe ? 4 : 20, borderBottomLeftRadius: isMe ? 20 : 4 }}>
                 {msg.replyTo && (
                   <div style={{ borderLeft: '2px solid rgba(255,255,255,0.4)', paddingLeft: 8, marginBottom: 6 }}>
-                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', fontWeight: 600 }}>
-                      Replying to {msg.replyTo.senderId === 'me' ? 'yourself' : 'them'}
-                    </div>
+                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', fontWeight: 600 }}>Replying to {msg.replyTo.senderId === userId ? 'yourself' : 'them'}</div>
                     <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', marginTop: 2 }}>{msg.replyTo.text}</div>
                   </div>
                 )}
-                <div style={{ fontSize: 15, color: isMe ? 'white' : '#ABABAB', lineHeight: '20px' }}>{msg.text}</div>
+                {msg.type === 'voice' ? (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <MicIcon size={18} color={isMe ? 'white' : '#FF375F'} />
+                    <span style={{ fontSize: 13, color: isMe ? 'rgba(255,255,255,0.7)' : '#ABABAB' }}>Voice message</span>
+                  </div>
+                ) : msg.type === 'image' ? (
+                  msg.mediaUrl && <img src={storageService.getFilePreview(msg.mediaUrl)} alt="" style={{ maxWidth: 200, borderRadius: 8 }} />
+                ) : (
+                  <div style={{ fontSize: 15, color: isMe ? 'white' : '#ABABAB', lineHeight: '20px' }}>{msg.text}</div>
+                )}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 4, alignSelf: 'flex-end', justifyContent: 'flex-end' }}>
                   {msg.editedAt && <span style={{ fontSize: 10, color: isMe ? 'rgba(255,255,255,0.5)' : '#6B6B6B', fontStyle: 'italic' }}>edited</span>}
-                  <span style={{ fontSize: 10, color: isMe ? 'rgba(255,255,255,0.5)' : '#6B6B6B' }}>{msg.createdAt}</span>
+                  <span style={{ fontSize: 10, color: isMe ? 'rgba(255,255,255,0.5)' : '#6B6B6B' }}>{formatTime(msg.createdAt)}</span>
                   {isMe && <CheckmarkDoneIcon size={14} color="rgba(255,255,255,0.5)" />}
                 </div>
               </div>
@@ -193,12 +235,12 @@ export default function ChatPage() {
           )}
         </div>
         {inputText.trim() ? (
-          <button onClick={handleSend} style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <button onClick={handleSend} style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: sending ? 0.5 : 1 }} disabled={sending}>
             <SendIcon size={18} color="white" />
           </button>
         ) : (
           <button
-            onClick={() => setIsRecording(!isRecording)}
+            onClick={isRecording ? stopRecording : startRecording}
             style={{ width: 40, height: 40, borderRadius: '50%', background: isRecording ? 'linear-gradient(135deg, #FF3B30, #FF6B6B)' : 'linear-gradient(135deg, #242424, #1A1A1A)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
             {isRecording ? <StopIcon size={18} color="white" /> : <MicIcon size={18} color="#ABABAB" />}
