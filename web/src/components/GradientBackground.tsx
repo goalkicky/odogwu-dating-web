@@ -9,7 +9,7 @@ interface GradientBackgroundProps {
 
 export default function GradientBackground({
   children,
-  colors = 'linear-gradient(135deg, #0D0D0D, #0A0A1A, #0D0D0D)',
+  colors = 'linear-gradient(135deg, #1A0000, #2D0000, #1A0000)',
   style,
   className,
 }: GradientBackgroundProps) {
