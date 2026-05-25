@@ -33,6 +33,8 @@ export default function OAuthCallback() {
 
         const qParams = new URLSearchParams(window.location.search);
         const hParams = new URLSearchParams(window.location.hash.replace('#', '?'));
+        const errorParam = qParams.get('error') || hParams.get('error');
+        if (errorParam) { setError(errorParam === 'access_denied' ? 'Sign-in cancelled. Please try again.' : errorParam); return; }
         const userId = qParams.get('userId') || hParams.get('userId');
         const secret = qParams.get('secret') || hParams.get('secret');
         const jwt = qParams.get('jwt');

@@ -8,12 +8,17 @@ function checkInit() {
 
 export const authService = {
   loginWithGoogle: async () => {
-    checkInit();
-    account!.createOAuth2Token({
-      provider: OAuthProvider.Google,
-      success: `${window.location.origin}/api/auth/callback`,
-      failure: `${window.location.origin}/oauth`
-    });
+    const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    if (googleClientId) {
+      window.location.href = '/api/auth/google';
+    } else {
+      checkInit();
+      account!.createOAuth2Token({
+        provider: OAuthProvider.Google,
+        success: `${window.location.origin}/api/auth/callback`,
+        failure: `${window.location.origin}/oauth`
+      });
+    }
   },
 
   getCurrentUser: async () => {
