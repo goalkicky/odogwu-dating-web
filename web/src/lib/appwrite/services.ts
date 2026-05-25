@@ -118,19 +118,14 @@ export const matchService = {
 
   getUserMatches: async (userId: string) => {
     checkInit();
-    const [m1, m2] = await Promise.all([
+    const [likedByMe, likedMe] = await Promise.all([
       databases!.listDocuments(APPWRITE_CONFIG.databaseId, APPWRITE_CONFIG.matchesCollectionId, [Query.equal('userId', userId)]),
       databases!.listDocuments(APPWRITE_CONFIG.databaseId, APPWRITE_CONFIG.matchesCollectionId, [Query.equal('matchedUserId', userId)]),
     ]);
-    const docs = [...m1.documents, ...m2.documents];
-    const otherIds = [...new Set(docs.map(d => d.userId === userId ? d.matchedUserId : d.userId))];
-    const profiles = await Promise.all(otherIds.map(id => getProfileDoc(id).catch(() => null)));
-    const profileMap: Record<string, any> = {};
-    otherIds.forEach((id, i) => { profileMap[id] = profiles[i]; });
-    return docs.map(d => {
-      const otherId = d.userId === userId ? d.matchedUserId : d.userId;
-      return { ...d, matchedUser: profileMap[otherId] || null };
-    }) as unknown as Match[];
+    const iLiked = new Set(likedByMe.documents.map(d => d.matchedUserId));
+    const likedBack = likedMe.documents.filter(d => iLiked.has(d.userId));
+    const profiles = await Promise.all(likedBack.map(d => getProfileDoc(d.userId).catch(() => null)));
+    return likedBack.map((d, i) => ({ ...d, matchedUser: profiles[i] || null })) as unknown as Match[];
   },
 
   checkMatch: async (userId: string, likedUserId: string) => {
