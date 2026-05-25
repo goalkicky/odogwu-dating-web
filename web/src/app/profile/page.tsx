@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { DiamondIcon, SettingsIcon, BellIcon, ShieldIcon, HelpIcon, ChevronForwardIcon } from '@/components/Icons';
+import { DiamondIcon, SettingsIcon, BellIcon, ShieldIcon, HelpIcon, ChevronForwardIcon, EyeIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import Button from '@/components/Button';
 import TabBar from '@/components/TabBar';
@@ -86,6 +86,7 @@ export default function ProfilePage() {
       <div style={{ padding: '24px 24px 0' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {[
+            { icon: <EyeIcon size={22} color="#ABABAB" />, label: 'Who Likes You', onClick: () => router.push('/likes') },
             { icon: <SettingsIcon size={22} color="#ABABAB" />, label: 'Settings', onClick: () => router.push('/settings') },
             { icon: <BellIcon size={22} color="#ABABAB" />, label: 'Notifications', onClick: () => router.push('/notifications') },
             { icon: <ShieldIcon size={22} color="#ABABAB" />, label: 'Privacy', onClick: () => router.push('/privacy') },
