@@ -8,6 +8,11 @@ function checkInit() {
 
 export const authService = {
   loginWithGoogle: async () => {
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    if (clientId) {
+      window.location.href = '/api/auth/google';
+      return;
+    }
     checkInit();
     account!.createOAuth2Token({
       provider: OAuthProvider.Google,
