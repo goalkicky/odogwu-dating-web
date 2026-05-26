@@ -118,11 +118,7 @@ export default function DiscoverPage() {
   }
 
   return (
-    <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', background: 'linear-gradient(135deg, #1A0000, #2D0000, #1A0000)', overflow: 'hidden' }}>
-      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '52px 20px 4px', position: 'relative' }}>
-        <span style={{ fontSize: 18, fontWeight: 700, color: 'white' }}>Discover</span>
-      </div>
-
+    <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', background: 'linear-gradient(135deg, #1A0000, #2D0000, #1A0000)', overflow: 'hidden', paddingTop: '50px' }}>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 0, overflow: 'hidden' }}>
         <div style={{ position: 'relative', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', maxHeight: '100%', overflow: 'hidden' }}>
           {users.slice(0, 3).reverse().map((user, index) => (
