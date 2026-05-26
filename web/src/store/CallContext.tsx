@@ -70,14 +70,6 @@ function IncomingCallOverlay({ call, onDismiss }: { call: IncomingCall; onDismis
   const router = useRouter();
 
   const handleAccept = async () => {
-    await callService.sendSignal({
-      from: user!.$id,
-      to: call.from,
-      matchId: call.matchId,
-      type: 'answer',
-      callType: call.callType,
-      data: JSON.stringify({ accepted: true }),
-    });
     onDismiss();
     router.push(`/call/${call.matchId}?type=${call.callType}&mode=incoming&otherId=${call.from}&offerId=${call.signalDocId}`);
   };

@@ -116,10 +116,32 @@ export default function CallPage() {
           }
         };
 
+        const targetId = otherId;
+
+        callService.subscribeToSignals(uid, async (signal: any) => {
+          if (signal.from !== targetId) return;
+          if (signal.type === 'answer') {
+            try {
+              const answer = JSON.parse(signal.data);
+              if (answer.sdp) {
+                await pc.setRemoteDescription(new RTCSessionDescription(answer));
+              }
+            } catch {}
+          } else if (signal.type === 'ice-candidate') {
+            try {
+              const candidate = JSON.parse(signal.data);
+              if (candidate.candidate) {
+                await pc.addIceCandidate(new RTCIceCandidate(candidate));
+              }
+            } catch {}
+          } else if (signal.type === 'end') {
+            handleEndCall();
+          }
+        }).then(sub => { unsubRef.current = sub; });
+
         if (mode === 'outgoing') {
           const offer = await pc.createOffer();
           await pc.setLocalDescription(offer);
-          const targetId = otherId;
           if (targetId) {
             await callService.sendSignal({
               from: uid,
@@ -156,36 +178,22 @@ export default function CallPage() {
             }
           }
         }
-
-        callService.subscribeToSignals(uid, async (signal: any) => {
-          if (signal.type === 'answer' && signal.from === targetId) {
-            try {
-              const answer = JSON.parse(signal.data);
-              if (answer.sdp) {
-                await pc.setRemoteDescription(new RTCSessionDescription(answer));
-              }
-            } catch {}
-          } else if (signal.type === 'ice-candidate' && signal.from === targetId) {
-            try {
-              const candidate = JSON.parse(signal.data);
-              if (candidate.candidate) {
-                await pc.addIceCandidate(new RTCIceCandidate(candidate));
-              }
-            } catch {}
-          } else if (signal.type === 'end' && signal.from === targetId) {
-            handleEndCall();
-          }
-        }).then(sub => { unsubRef.current = sub; });
       } catch (err: any) {
+        const msg = err?.message || '';
+        const type = err?.type || '';
         if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
           setStatusText('Microphone permission denied');
+        } else if (msg.includes('collection') || msg.includes('not found') || err.code === 404) {
+          setStatusText('Missing callSignals collection in Appwrite');
+        } else if (msg.includes('permission') || type === 'permission' || err.code === 401) {
+          setStatusText('Appwrite permission error');
         } else {
           setStatusText('Failed to start call');
         }
+        console.error('[Call] setup error:', err);
       }
     }
 
-    const targetId = otherId;
     setup();
 
     return () => {
