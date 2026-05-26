@@ -27,6 +27,7 @@ export default function ChatPage() {
   const [swipeToCancel, setSwipeToCancel] = useState(false);
   const [matchName, setMatchName] = useState('User');
   const [otherUserId, setOtherUserId] = useState('');
+  const [otherOnline, setOtherOnline] = useState(false);
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -43,6 +44,8 @@ export default function ChatPage() {
       setOtherUserId(other);
       userService.getProfile(other).then(p => {
         setMatchName((p as any).displayName || (p as any).fullName || 'User');
+        const lastActive = (p as any).lastActive;
+        setOtherOnline(!!lastActive && Date.now() - new Date(lastActive).getTime() < 120000);
       }).catch(() => {});
     }).catch(() => {});
     messageService.getMessages(matchId).then(res => {
@@ -69,6 +72,18 @@ export default function ChatPage() {
     }).then(sub => { unsubRef.current = sub; });
     return () => { if (unsubRef.current) unsubRef.current.unsubscribe(); };
   }, [matchId, userId]);
+
+  useEffect(() => {
+    if (!otherUserId) return;
+    const checkOnline = () => {
+      userService.getProfile(otherUserId).then(p => {
+        const lastActive = (p as any).lastActive;
+        setOtherOnline(!!lastActive && Date.now() - new Date(lastActive).getTime() < 120000);
+      }).catch(() => {});
+    };
+    const id = setInterval(checkOnline, 30000);
+    return () => clearInterval(id);
+  }, [otherUserId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -204,7 +219,7 @@ export default function ChatPage() {
           </div>
           <div>
             <div style={{ fontSize: 17, fontWeight: 700, color: 'white' }}>{matchName}</div>
-            <div style={{ fontSize: 12, color: '#34C759' }}>Online</div>
+            <div style={{ fontSize: 12, color: otherOnline ? '#34C759' : '#6B6B6B' }}>{otherOnline ? 'Online' : 'Offline'}</div>
           </div>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>

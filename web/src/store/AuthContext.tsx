@@ -73,6 +73,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     refreshUser();
   }, [refreshUser]);
 
+  useEffect(() => {
+    if (!state.user?.$id || !state.isAuthenticated) return;
+    const update = () => userService.updateProfile(state.user.$id, { lastActive: new Date().toISOString() }).catch(() => {});
+    update();
+    const id = setInterval(update, 30000);
+    return () => clearInterval(id);
+  }, [state.user?.$id, state.isAuthenticated]);
+
   return (
     <AuthContext.Provider value={{ ...state, refreshUser, logout, setOnboarded }}>
       {children}

@@ -13,6 +13,7 @@ export interface UserProfile {
   isPremium: boolean;
   verified: boolean;
   age: number;
+  lastActive?: string;
 }
 
 export interface Match {
