@@ -20,13 +20,23 @@ export default function DiscoverPage() {
     if (!profile || !account) return;
     setLoading(true);
     try {
-      const token = await account.createJWT().then(r => r.jwt).catch(() => '');
-      setJwt(token);
       const docs = await userService.getDiscoverUsers((profile as any).$id, {
         gender: profile.interestedIn || 'both',
         minAge: 18,
         maxAge: 60,
       });
+      const photoIds = [...new Set(docs.flatMap((d: any) => d.photos || []))];
+      if (photoIds.length > 0) {
+        try {
+          await fetch('/api/storage/ensure-public-read/batch', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fileIds: photoIds }),
+          });
+        } catch {}
+      }
+      const token = await account.createJWT().then(r => r.jwt).catch(() => '');
+      setJwt(token);
       const mapped = docs.map((d: any) => ({
         id: d.$id,
         photos: (d.photos || []).map((fid: string) => storageService.getFilePreview(fid, token || undefined)),
