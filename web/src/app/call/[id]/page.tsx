@@ -47,7 +47,7 @@ export default function CallPage() {
     const uid = getOtherUserId();
     if (uid) {
       userService.getProfile(uid).then(p => {
-        setOtherName((p as any)?.displayName || 'User');
+        setOtherName((p as any)?.displayName || (p as any)?.fullName || 'User');
       }).catch(() => {});
     }
   }, [user?.$id, getOtherUserId]);

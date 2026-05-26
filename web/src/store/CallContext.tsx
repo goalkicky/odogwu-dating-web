@@ -39,7 +39,7 @@ export function CallProvider({ children }: { children: React.ReactNode }) {
         let name = 'Someone';
         try {
           const profile = await userService.getProfile(signal.from);
-          name = (profile as any).displayName || 'Someone';
+          name = (profile as any).displayName || (profile as any).fullName || 'Someone';
         } catch {}
         setIncomingCall({
           from: signal.from,
