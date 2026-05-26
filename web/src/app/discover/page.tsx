@@ -118,16 +118,16 @@ export default function DiscoverPage() {
   }
 
   return (
-    <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', background: 'linear-gradient(135deg, #1A0000, #2D0000, #1A0000)', overflow: 'hidden', paddingBottom: 85 }}>
-      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '56px 20px 8px' }}>
-        <div style={{ width: 36, height: 36, borderRadius: 12, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <FlameIcon size={22} color="white" />
+    <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', background: 'linear-gradient(135deg, #1A0000, #2D0000, #1A0000)', overflow: 'hidden' }}>
+      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '48px 20px 6px' }}>
+        <div style={{ width: 32, height: 32, borderRadius: 10, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <FlameIcon size={18} color="white" />
         </div>
-        <span style={{ fontSize: 20, fontWeight: 700, color: 'white' }}>Discover</span>
-        <div style={{ width: 36 }} />
+        <span style={{ fontSize: 18, fontWeight: 700, color: 'white' }}>Discover</span>
+        <div style={{ width: 32 }} />
       </div>
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', minHeight: 0 }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 0, padding: '4px 0' }}>
         <div style={{ position: 'relative', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
           {users.slice(0, 3).reverse().map((user, index) => (
             <AnimatedCard
@@ -143,21 +143,21 @@ export default function DiscoverPage() {
         </div>
       </div>
 
-      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, padding: '8px 20px 24px' }}>
+      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '6px 20px 100px' }}>
         <ActionButton variant="secondary" size={48} onPress={handleReload}>
-          <RefreshIcon size={22} color="#FFD700" />
+          <RefreshIcon size={20} color="#FFD700" />
         </ActionButton>
-        <ActionButton variant="danger" size={56} onPress={handleSwipeLeft}>
+        <ActionButton variant="danger" size={60} onPress={handleSwipeLeft}>
           <CloseIcon size={28} color="white" />
         </ActionButton>
         <ActionButton variant="superlike" size={48} onPress={handleSuperLike}>
-          <StarIcon size={22} color="white" />
+          <StarIcon size={20} color="white" />
         </ActionButton>
-        <ActionButton variant="primary" size={56} onPress={handleSwipeRight}>
+        <ActionButton variant="primary" size={60} onPress={handleSwipeRight}>
           <HeartIcon size={28} color="white" />
         </ActionButton>
         <ActionButton variant="boost" size={48} onPress={() => {}}>
-          <FlashIcon size={22} color="white" />
+          <FlashIcon size={20} color="white" />
         </ActionButton>
       </div>
 
