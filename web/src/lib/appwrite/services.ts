@@ -265,6 +265,53 @@ export const callService = {
   },
 };
 
+export const callLogService = {
+  createCallLog: async (data: {
+    from: string;
+    to: string;
+    matchId: string;
+    callType: 'audio' | 'video';
+    status: 'answered' | 'missed' | 'declined';
+    duration: number;
+  }) => {
+    checkInit();
+    return databases!.createDocument(
+      APPWRITE_CONFIG.databaseId,
+      APPWRITE_CONFIG.callLogsCollectionId,
+      ID.unique(),
+      {
+        from: data.from,
+        to: data.to,
+        matchId: data.matchId,
+        callType: data.callType,
+        status: data.status,
+        duration: data.duration,
+        createdAt: new Date().toISOString(),
+      },
+      [Permission.read(Role.any())]
+    );
+  },
+
+  getCallLogs: async (userId: string) => {
+    checkInit();
+    const [outgoing, incoming] = await Promise.all([
+      databases!.listDocuments(
+        APPWRITE_CONFIG.databaseId,
+        APPWRITE_CONFIG.callLogsCollectionId,
+        [Query.equal('from', userId), Query.orderDesc('createdAt'), Query.limit(100)]
+      ),
+      databases!.listDocuments(
+        APPWRITE_CONFIG.databaseId,
+        APPWRITE_CONFIG.callLogsCollectionId,
+        [Query.equal('to', userId), Query.orderDesc('createdAt'), Query.limit(100)]
+      ),
+    ]);
+    const all = [...outgoing.documents, ...incoming.documents];
+    all.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    return all;
+  },
+};
+
 export const storageService = {
   uploadFile: async (file: File) => {
     checkInit();

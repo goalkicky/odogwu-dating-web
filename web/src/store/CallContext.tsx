@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from './AuthContext';
-import { callService, userService } from '@/lib/appwrite/services';
+import { callService, userService, callLogService } from '@/lib/appwrite/services';
 
 interface IncomingCall {
   from: string;
@@ -82,6 +82,14 @@ function IncomingCallOverlay({ call, onDismiss }: { call: IncomingCall; onDismis
       type: 'end',
       data: JSON.stringify({ reason: 'declined' }),
     });
+    callLogService.createCallLog({
+      from: call.from,
+      to: user!.$id,
+      matchId: call.matchId,
+      callType: call.callType,
+      status: 'declined',
+      duration: 0,
+    }).catch(() => {});
     onDismiss();
   };
 

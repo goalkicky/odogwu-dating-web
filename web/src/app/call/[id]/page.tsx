@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/store/AuthContext';
-import { callService, userService } from '@/lib/appwrite/services';
+import { callService, userService, callLogService } from '@/lib/appwrite/services';
 import { MicIcon, MicOffIcon, VolumeIcon, VideoIcon, CallIcon } from '@/components/Icons';
 
 const RTC_CONFIG = {
@@ -29,6 +29,7 @@ export default function CallPage() {
   const [callDuration, setCallDuration] = useState(0);
   const [isCallActive, setIsCallActive] = useState(true);
   const [statusText, setStatusText] = useState(mode === 'outgoing' ? 'Calling...' : 'Connecting...');
+  const answeredRef = useRef(false);
   const [otherName, setOtherName] = useState('User');
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
 
@@ -84,7 +85,14 @@ export default function CallPage() {
           pc.addTrack(track, stream);
         });
 
+        let answered = false;
+        const handleAnswered = () => {
+          answeredRef.current = true;
+          answered = true;
+        };
+
         pc.ontrack = (event) => {
+          handleAnswered();
           setRemoteStream(event.streams[0]);
           if (remoteVideoRef.current) {
             remoteVideoRef.current.srcObject = event.streams[0];
@@ -121,6 +129,7 @@ export default function CallPage() {
         callService.subscribeToSignals(uid, async (signal: any) => {
           if (signal.from !== targetId) return;
           if (signal.type === 'answer') {
+            answeredRef.current = true;
             try {
               const answer = JSON.parse(signal.data);
               if (answer.sdp) {
@@ -151,6 +160,22 @@ export default function CallPage() {
               callType,
               data: JSON.stringify(offer),
             });
+            setTimeout(() => {
+              if (!answeredRef.current) {
+                setStatusText('Missed call');
+                setIsCallActive(false);
+                callLogService.createCallLog({
+                  from: uid,
+                  to: targetId,
+                  matchId,
+                  callType,
+                  status: 'missed',
+                  duration: 0,
+                }).catch(() => {});
+                if (localStreamRef.current) localStreamRef.current.getTracks().forEach(t => t.stop());
+                if (pcRef.current) pcRef.current.close();
+              }
+            }, 30000);
           }
         } else if (mode === 'incoming') {
           const offerId = searchParams.get('offerId') || '';
@@ -237,6 +262,14 @@ export default function CallPage() {
         type: 'end',
         data: JSON.stringify({ reason: 'ended' }),
       });
+      callLogService.createCallLog({
+        from: user.$id,
+        to: otherId,
+        matchId,
+        callType,
+        status: callDuration > 0 ? 'answered' : 'missed',
+        duration: callDuration,
+      }).catch(() => {});
     }
     if (localStreamRef.current) {
       localStreamRef.current.getTracks().forEach(t => t.stop());
