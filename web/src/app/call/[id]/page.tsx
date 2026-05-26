@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/store/AuthContext';
+import { useCall } from '@/store/CallContext';
 import { callService, userService, callLogService } from '@/lib/appwrite/services';
 import { MicIcon, MicOffIcon, VolumeIcon, VideoIcon, CallIcon } from '@/components/Icons';
 
@@ -33,11 +34,12 @@ export default function CallPage() {
   const [otherName, setOtherName] = useState('User');
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
 
+  const { onSignal } = useCall();
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const pcRef = useRef<RTCPeerConnection | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
-  const unsubRef = useRef<{ unsubscribe: () => Promise<void> } | null>(null);
+  const unsubRef = useRef<{ unsubscribe: () => void } | null>(null);
 
   const getOtherUserId = useCallback(() => {
     return otherId;
@@ -126,9 +128,9 @@ export default function CallPage() {
 
         const targetId = otherId;
 
-        callService.subscribeToSignals(uid, async (signal: any) => {
+        const unsubFn = onSignal(async (signal: any) => {
           if (signal.from !== targetId) return;
-          if (signal.type === 'answer') {
+          if (signal.type === 'answer' && signal.from === targetId) {
             answeredRef.current = true;
             try {
               const answer = JSON.parse(signal.data);
@@ -143,10 +145,11 @@ export default function CallPage() {
                 await pc.addIceCandidate(new RTCIceCandidate(candidate));
               }
             } catch {}
-          } else if (signal.type === 'end') {
+          } else if (signal.type === 'end' && signal.from === targetId) {
             handleEndCall();
           }
-        }).then(sub => { unsubRef.current = sub; });
+        });
+        unsubRef.current = { unsubscribe: unsubFn };
 
         if (mode === 'outgoing') {
           const offer = await pc.createOffer();
@@ -230,7 +233,7 @@ export default function CallPage() {
         pcRef.current.close();
       }
     };
-  }, [user?.$id, callType, mode, otherId, matchId, getOtherUserId]);
+  }, [user?.$id, callType, mode, otherId, matchId, getOtherUserId, onSignal]);
 
   useEffect(() => {
     if (localStreamRef.current) {

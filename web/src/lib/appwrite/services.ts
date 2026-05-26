@@ -34,11 +34,11 @@ export const authService = {
 
 async function getProfileDoc(userId: string) {
   checkInit();
-  return databases!.getDocument(
+  return retryOnRateLimit(() => databases!.getDocument(
     APPWRITE_CONFIG.databaseId,
     APPWRITE_CONFIG.usersCollectionId,
     userId
-  );
+  ));
 }
 
 export const userService = {
@@ -214,6 +214,21 @@ export const messageService = {
   },
 };
 
+async function retryOnRateLimit<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T> {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (err: any) {
+      if (err?.message?.includes('Rate limit') && i < maxRetries - 1) {
+        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
+        continue;
+      }
+      throw err;
+    }
+  }
+  return fn();
+}
+
 export const callService = {
   sendSignal: async (data: {
     from: string;
@@ -224,7 +239,7 @@ export const callService = {
     data: string;
   }) => {
     checkInit();
-    return databases!.createDocument(
+    return retryOnRateLimit(() => databases!.createDocument(
       APPWRITE_CONFIG.databaseId,
       APPWRITE_CONFIG.callSignalsCollectionId,
       ID.unique(),
@@ -238,7 +253,7 @@ export const callService = {
         createdAt: new Date().toISOString(),
       },
       [Permission.read(Role.any())]
-    );
+    ));
   },
 
   subscribeToSignals: async (userId: string, callback: (signal: any) => void) => {
@@ -275,7 +290,7 @@ export const callLogService = {
     duration: number;
   }) => {
     checkInit();
-    return databases!.createDocument(
+    return retryOnRateLimit(() => databases!.createDocument(
       APPWRITE_CONFIG.databaseId,
       APPWRITE_CONFIG.callLogsCollectionId,
       ID.unique(),
@@ -289,7 +304,7 @@ export const callLogService = {
         createdAt: new Date().toISOString(),
       },
       [Permission.read(Role.any())]
-    );
+    ));
   },
 
   getCallLogs: async (userId: string) => {

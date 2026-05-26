@@ -13,14 +13,18 @@ interface IncomingCall {
   offerData: string;
 }
 
+type SignalCallback = (signal: any) => void;
+
 interface CallContextType {
   incomingCall: IncomingCall | null;
   dismissCall: () => void;
+  onSignal: (cb: SignalCallback) => () => void;
 }
 
 const CallContext = createContext<CallContextType>({
   incomingCall: null,
   dismissCall: () => {},
+  onSignal: () => () => {},
 });
 
 export const useCall = () => useContext(CallContext);
@@ -30,11 +34,18 @@ export function CallProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [incomingCall, setIncomingCall] = useState<IncomingCall | null>(null);
   const unsubRef = useRef<{ unsubscribe: () => Promise<void> } | null>(null);
+  const listenersRef = useRef<Set<SignalCallback>>(new Set());
+
+  const onSignal = useCallback((cb: SignalCallback) => {
+    listenersRef.current.add(cb);
+    return () => { listenersRef.current.delete(cb); };
+  }, []);
 
   useEffect(() => {
     if (!user?.$id) return;
 
     callService.subscribeToSignals(user.$id, async (signal: any) => {
+      listenersRef.current.forEach(cb => cb(signal));
       if (signal.type === 'offer') {
         let name = 'Someone';
         try {
@@ -58,7 +69,7 @@ export function CallProvider({ children }: { children: React.ReactNode }) {
   const dismissCall = useCallback(() => setIncomingCall(null), []);
 
   return (
-    <CallContext.Provider value={{ incomingCall, dismissCall }}>
+    <CallContext.Provider value={{ incomingCall, dismissCall, onSignal }}>
       {children}
       {incomingCall && <IncomingCallOverlay call={incomingCall} onDismiss={dismissCall} />}
     </CallContext.Provider>
