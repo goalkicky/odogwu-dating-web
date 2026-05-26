@@ -208,7 +208,7 @@ export default function ChatPage() {
   };
 
   return (
-    <GradientBackground style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <GradientBackground style={{ height: '100dvh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       <div style={{ display: 'flex', alignItems: 'center', padding: '56px 12px 12px', gap: 12, borderBottom: '1px solid #2A2A2A' }}>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
           <ChevronBackIcon size={28} color="white" />
@@ -232,7 +232,7 @@ export default function ChatPage() {
         </div>
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto', padding: '12px 16px' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '12px 16px', minHeight: 0 }}>
         {messages.map((msg) => {
           const isMe = msg.senderId === userId;
           return (
@@ -271,123 +271,125 @@ export default function ChatPage() {
         <div ref={messagesEndRef} />
       </div>
 
-      {replyTo && (
-        <div style={{ display: 'flex', alignItems: 'center', padding: '8px 16px', backgroundColor: '#1A1A1A', borderTop: '1px solid #2A2A2A', gap: 12 }}>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 11, color: '#FF375F', fontWeight: 600 }}>Replying</div>
-            <div style={{ fontSize: 13, color: '#ABABAB', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{replyTo.text}</div>
-          </div>
-          <button onClick={() => setReplyTo(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-            <CloseCircleIcon size={20} color="#ABABAB" />
-          </button>
-        </div>
-      )}
-
-      {showEmoji && (
-        <div style={{ backgroundColor: '#1A1A1A', borderTop: '1px solid #2A2A2A', paddingBottom: 12 }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', padding: 8, gap: 4 }}>
-            {EMOJIS.map((emoji, i) => (
-              <button key={i} onClick={() => handleEmojiPick(emoji)} style={{ width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', cursor: 'pointer', fontSize: 26 }}>
-                {emoji}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {isRecording ? (
-        <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: 8, borderTop: '1px solid #2A2A2A', backgroundColor: '#0D0D0D' }}>
-          <button onClick={() => setShowEmoji(!showEmoji)} style={{ background: 'none', border: 'none', cursor: 'pointer', visibility: 'hidden' }}>
-            <HappyIcon size={26} color="#ABABAB" />
-          </button>
-          <div
-            onPointerDown={toggleRecordingLock}
-            style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, padding: '10px 16px' }}
-          >
-            <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#FF3B30', animation: 'pulse 1s infinite' }} />
-            <span style={{ fontSize: 15, color: '#ABABAB', fontVariant: 'tabular-nums' }}>{formatDuration(recordingDuration)}</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 2, height: 24 }}>
-              {Array.from({ length: 20 }).map((_, i) => (
-                <div
-                  key={i}
-                  style={{
-                    width: 3,
-                    height: Math.random() * 20 + 4,
-                    backgroundColor: i % 3 === 0 ? '#FF375F' : '#FF3B30',
-                    borderRadius: 2,
-                    opacity: 0.7 + Math.random() * 0.3,
-                  }}
-                />
-              ))}
+      <div style={{ flexShrink: 0 }}>
+        {replyTo && (
+          <div style={{ display: 'flex', alignItems: 'center', padding: '8px 16px', backgroundColor: '#1A1A1A', borderTop: '1px solid #2A2A2A', gap: 12 }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 11, color: '#FF375F', fontWeight: 600 }}>Replying</div>
+              <div style={{ fontSize: 13, color: '#ABABAB', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{replyTo.text}</div>
             </div>
-            {!recordingLocked && (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ABABAB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="18 15 12 9 6 15"/>
-                </svg>
-                <span style={{ fontSize: 9, color: '#6B6B6B' }}>Lock</span>
-              </div>
-            )}
-            {recordingLocked && (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF375F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                </svg>
-                <span style={{ fontSize: 9, color: '#FF375F' }}>Locked</span>
-              </div>
-            )}
-          </div>
-          {recordingLocked ? (
-            <>
-              <button onClick={() => cancelRecording()} style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,59,48,0.15)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <CloseCircleIcon size={20} color="#FF3B30" />
-              </button>
-              <button onClick={() => stopRecording(true)} style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <SendIcon size={18} color="white" />
-              </button>
-            </>
-          ) : (
-            <button onClick={() => stopRecording(false)} style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <button onClick={() => setReplyTo(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
               <CloseCircleIcon size={20} color="#ABABAB" />
             </button>
-          )}
-        </div>
-      ) : (
-        <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: 8, borderTop: '1px solid #2A2A2A', backgroundColor: '#0D0D0D' }}>
-          <button onClick={() => setShowEmoji(!showEmoji)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-            {showEmoji ? <KeypadIcon size={26} color="#ABABAB" /> : <HappyIcon size={26} color="#ABABAB" />}
-          </button>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', backgroundColor: '#1A1A1A', borderRadius: 9999, padding: '0 16px' }}>
-            <input
-              style={{ flex: 1, color: 'white', fontSize: 15, background: 'none', border: 'none', outline: 'none', padding: '10px 0' }}
-              placeholder="Type a message..."
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-              maxLength={1000}
-            />
-            {inputText.length > 0 && (
-              <button onClick={() => setInputText('')} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-                <CloseCircleIcon size={16} color="#6B6B6B" />
+          </div>
+        )}
+
+        {showEmoji && (
+          <div style={{ backgroundColor: '#1A1A1A', borderTop: '1px solid #2A2A2A', maxHeight: '40vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', padding: 8, gap: 4 }}>
+              {EMOJIS.map((emoji, i) => (
+                <button key={i} onClick={() => handleEmojiPick(emoji)} style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', cursor: 'pointer', fontSize: 28 }}>
+                  {emoji}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {isRecording ? (
+          <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: 8, borderTop: '1px solid #2A2A2A', backgroundColor: '#0D0D0D' }}>
+            <button onClick={() => setShowEmoji(!showEmoji)} style={{ background: 'none', border: 'none', cursor: 'pointer', visibility: 'hidden' }}>
+              <HappyIcon size={26} color="#ABABAB" />
+            </button>
+            <div
+              onPointerDown={toggleRecordingLock}
+              style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, padding: '10px 16px' }}
+            >
+              <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#FF3B30', animation: 'pulse 1s infinite' }} />
+              <span style={{ fontSize: 15, color: '#ABABAB', fontVariant: 'tabular-nums' }}>{formatDuration(recordingDuration)}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 2, height: 24 }}>
+                {Array.from({ length: 20 }).map((_, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      width: 3,
+                      height: Math.random() * 20 + 4,
+                      backgroundColor: i % 3 === 0 ? '#FF375F' : '#FF3B30',
+                      borderRadius: 2,
+                      opacity: 0.7 + Math.random() * 0.3,
+                    }}
+                  />
+                ))}
+              </div>
+              {!recordingLocked && (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ABABAB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="18 15 12 9 6 15"/>
+                  </svg>
+                  <span style={{ fontSize: 9, color: '#6B6B6B' }}>Lock</span>
+                </div>
+              )}
+              {recordingLocked && (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF375F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                  <span style={{ fontSize: 9, color: '#FF375F' }}>Locked</span>
+                </div>
+              )}
+            </div>
+            {recordingLocked ? (
+              <>
+                <button onClick={() => cancelRecording()} style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,59,48,0.15)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <CloseCircleIcon size={20} color="#FF3B30" />
+                </button>
+                <button onClick={() => stopRecording(true)} style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <SendIcon size={18} color="white" />
+                </button>
+              </>
+            ) : (
+              <button onClick={() => stopRecording(false)} style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <CloseCircleIcon size={20} color="#ABABAB" />
               </button>
             )}
           </div>
-          {inputText.trim() ? (
-            <button onClick={handleSend} style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: sending ? 0.5 : 1 }} disabled={sending}>
-              <SendIcon size={18} color="white" />
+        ) : (
+          <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: 8, borderTop: '1px solid #2A2A2A', backgroundColor: '#0D0D0D' }}>
+            <button onClick={() => setShowEmoji(!showEmoji)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+              {showEmoji ? <KeypadIcon size={26} color="#ABABAB" /> : <HappyIcon size={26} color="#ABABAB" />}
             </button>
-          ) : (
-            <button
-              onPointerDown={handleMicPointerDown}
-              onPointerUp={handleMicPointerUp}
-              onPointerLeave={handleMicPointerLeave}
-              style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #242424, #1A1A1A)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', userSelect: 'none', touchAction: 'none' }}
-            >
-              <MicIcon size={18} color="#ABABAB" />
-            </button>
-          )}
-        </div>
-      )}
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', backgroundColor: '#1A1A1A', borderRadius: 9999, padding: '0 16px' }}>
+              <input
+                style={{ flex: 1, color: 'white', fontSize: 15, background: 'none', border: 'none', outline: 'none', padding: '10px 0' }}
+                placeholder="Type a message..."
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
+                maxLength={1000}
+              />
+              {inputText.length > 0 && (
+                <button onClick={() => setInputText('')} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                  <CloseCircleIcon size={16} color="#6B6B6B" />
+                </button>
+              )}
+            </div>
+            {inputText.trim() ? (
+              <button onClick={handleSend} style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: sending ? 0.5 : 1 }} disabled={sending}>
+                <SendIcon size={18} color="white" />
+              </button>
+            ) : (
+              <button
+                onPointerDown={handleMicPointerDown}
+                onPointerUp={handleMicPointerUp}
+                onPointerLeave={handleMicPointerLeave}
+                style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #242424, #1A1A1A)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', userSelect: 'none', touchAction: 'none' }}
+              >
+                <MicIcon size={18} color="#ABABAB" />
+              </button>
+            )}
+          </div>
+        )}
+      </div>
     </GradientBackground>
   );
 }
