@@ -22,12 +22,16 @@ export default function ChatPage() {
   const [replyTo, setReplyTo] = useState<{ id: string; text: string; senderId: string } | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
+  const [recordingLocked, setRecordingLocked] = useState(false);
+  const [recordingDuration, setRecordingDuration] = useState(0);
+  const [swipeToCancel, setSwipeToCancel] = useState(false);
   const [matchName, setMatchName] = useState('User');
   const [otherUserId, setOtherUserId] = useState('');
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  const recordingTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const unsubRef = useRef<{ unsubscribe: () => Promise<void> } | null>(null);
 
   const userId = (profile as any)?.$id || user?.$id;
@@ -90,32 +94,85 @@ export default function ChatPage() {
   };
 
   const startRecording = async () => {
+    if (mediaRecorderRef.current) return;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
       audioChunksRef.current = [];
       recorder.ondataavailable = e => { if (e.data.size > 0) audioChunksRef.current.push(e.data); };
-      recorder.onstop = async () => {
-        stream.getTracks().forEach(t => t.stop());
-        const blob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-        if (blob.size < 100 || !userId) return;
-        try {
-          const file = new File([blob], `voice_${Date.now()}.webm`, { type: 'audio/webm' });
-          const uploaded = await storageService.uploadFile(file);
-          await messageService.sendMessage(matchId, userId, { type: 'voice', mediaUrl: uploaded.$id });
-        } catch {}
-      };
       mediaRecorderRef.current = recorder;
       recorder.start();
       setIsRecording(true);
+      setSwipeToCancel(false);
+      setRecordingDuration(0);
+      recordingTimerRef.current = setInterval(() => {
+        setRecordingDuration(prev => prev + 1);
+      }, 1000);
     } catch {}
   };
 
-  const stopRecording = () => {
+  const stopRecording = (send = true) => {
+    if (recordingTimerRef.current) {
+      clearInterval(recordingTimerRef.current);
+      recordingTimerRef.current = null;
+    }
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       mediaRecorderRef.current.stop();
+      mediaRecorderRef.current.onstop = async () => {
+        const stream = mediaRecorderRef.current?.stream;
+        if (stream) stream.getTracks().forEach(t => t.stop());
+        const blob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        if (send && blob.size >= 100 && userId) {
+          try {
+            const file = new File([blob], `voice_${Date.now()}.webm`, { type: 'audio/webm' });
+            const uploaded = await storageService.uploadFile(file);
+            await messageService.sendMessage(matchId, userId, { type: 'voice', mediaUrl: uploaded.$id });
+          } catch {}
+        }
+      };
+      mediaRecorderRef.current.stop();
     }
+    mediaRecorderRef.current = null;
     setIsRecording(false);
+    setRecordingLocked(false);
+    setSwipeToCancel(false);
+    setRecordingDuration(0);
+  };
+
+  const cancelRecording = () => {
+    stopRecording(false);
+  };
+
+  const formatDuration = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  };
+
+  const handleMicPointerDown = async () => {
+    await startRecording();
+  };
+
+  const handleMicPointerUp = () => {
+    if (!recordingLocked && isRecording) {
+      stopRecording(true);
+    }
+  };
+
+  const handleMicPointerLeave = () => {
+    if (!recordingLocked && isRecording) {
+      stopRecording(false);
+    }
+  };
+
+  const handleRecordingSwipe = (clientY: number, clientX: number) => {
+    if (!isRecording || !recordingLocked) return;
+  };
+
+  const toggleRecordingLock = () => {
+    if (isRecording && !recordingLocked) {
+      setRecordingLocked(true);
+    }
   };
 
   const handleEmojiPick = (emoji: string) => {
@@ -223,38 +280,99 @@ export default function ChatPage() {
         </div>
       )}
 
-      <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: 8, borderTop: '1px solid #2A2A2A', backgroundColor: '#0D0D0D' }}>
-        <button onClick={() => setShowEmoji(!showEmoji)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-          {showEmoji ? <KeypadIcon size={26} color="#ABABAB" /> : <HappyIcon size={26} color="#ABABAB" />}
-        </button>
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', backgroundColor: '#1A1A1A', borderRadius: 9999, padding: '0 16px' }}>
-          <input
-            style={{ flex: 1, color: 'white', fontSize: 15, background: 'none', border: 'none', outline: 'none', padding: '10px 0' }}
-            placeholder={isRecording ? 'Recording...' : 'Type a message...'}
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-            maxLength={1000}
-          />
-          {inputText.length > 0 && (
-            <button onClick={() => setInputText('')} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-              <CloseCircleIcon size={16} color="#6B6B6B" />
+      {isRecording ? (
+        <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: 8, borderTop: '1px solid #2A2A2A', backgroundColor: '#0D0D0D' }}>
+          <button onClick={() => setShowEmoji(!showEmoji)} style={{ background: 'none', border: 'none', cursor: 'pointer', visibility: 'hidden' }}>
+            <HappyIcon size={26} color="#ABABAB" />
+          </button>
+          <div
+            onPointerDown={toggleRecordingLock}
+            style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, padding: '10px 16px' }}
+          >
+            <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#FF3B30', animation: 'pulse 1s infinite' }} />
+            <span style={{ fontSize: 15, color: '#ABABAB', fontVariant: 'tabular-nums' }}>{formatDuration(recordingDuration)}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 2, height: 24 }}>
+              {Array.from({ length: 20 }).map((_, i) => (
+                <div
+                  key={i}
+                  style={{
+                    width: 3,
+                    height: Math.random() * 20 + 4,
+                    backgroundColor: i % 3 === 0 ? '#FF375F' : '#FF3B30',
+                    borderRadius: 2,
+                    opacity: 0.7 + Math.random() * 0.3,
+                  }}
+                />
+              ))}
+            </div>
+            {!recordingLocked && (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ABABAB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="18 15 12 9 6 15"/>
+                </svg>
+                <span style={{ fontSize: 9, color: '#6B6B6B' }}>Lock</span>
+              </div>
+            )}
+            {recordingLocked && (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF375F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <span style={{ fontSize: 9, color: '#FF375F' }}>Locked</span>
+              </div>
+            )}
+          </div>
+          {recordingLocked ? (
+            <>
+              <button onClick={() => cancelRecording()} style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,59,48,0.15)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <CloseCircleIcon size={20} color="#FF3B30" />
+              </button>
+              <button onClick={() => stopRecording(true)} style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <SendIcon size={18} color="white" />
+              </button>
+            </>
+          ) : (
+            <button onClick={() => stopRecording(false)} style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <CloseCircleIcon size={20} color="#ABABAB" />
             </button>
           )}
         </div>
-        {inputText.trim() ? (
-          <button onClick={handleSend} style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: sending ? 0.5 : 1 }} disabled={sending}>
-            <SendIcon size={18} color="white" />
+      ) : (
+        <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: 8, borderTop: '1px solid #2A2A2A', backgroundColor: '#0D0D0D' }}>
+          <button onClick={() => setShowEmoji(!showEmoji)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+            {showEmoji ? <KeypadIcon size={26} color="#ABABAB" /> : <HappyIcon size={26} color="#ABABAB" />}
           </button>
-        ) : (
-          <button
-            onClick={isRecording ? stopRecording : startRecording}
-            style={{ width: 40, height: 40, borderRadius: '50%', background: isRecording ? 'linear-gradient(135deg, #FF3B30, #FF6B6B)' : 'linear-gradient(135deg, #242424, #1A1A1A)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            {isRecording ? <StopIcon size={18} color="white" /> : <MicIcon size={18} color="#ABABAB" />}
-          </button>
-        )}
-      </div>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', backgroundColor: '#1A1A1A', borderRadius: 9999, padding: '0 16px' }}>
+            <input
+              style={{ flex: 1, color: 'white', fontSize: 15, background: 'none', border: 'none', outline: 'none', padding: '10px 0' }}
+              placeholder="Type a message..."
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
+              maxLength={1000}
+            />
+            {inputText.length > 0 && (
+              <button onClick={() => setInputText('')} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                <CloseCircleIcon size={16} color="#6B6B6B" />
+              </button>
+            )}
+          </div>
+          {inputText.trim() ? (
+            <button onClick={handleSend} style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: sending ? 0.5 : 1 }} disabled={sending}>
+              <SendIcon size={18} color="white" />
+            </button>
+          ) : (
+            <button
+              onPointerDown={handleMicPointerDown}
+              onPointerUp={handleMicPointerUp}
+              onPointerLeave={handleMicPointerLeave}
+              style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #242424, #1A1A1A)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', userSelect: 'none', touchAction: 'none' }}
+            >
+              <MicIcon size={18} color="#ABABAB" />
+            </button>
+          )}
+        </div>
+      )}
     </GradientBackground>
   );
 }
