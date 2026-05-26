@@ -6,13 +6,13 @@ import ActionButton from '@/components/ActionButton';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import { useAuth } from '@/store/AuthContext';
-import { userService, storageService } from '@/lib/appwrite/services';
+import { userService } from '@/lib/appwrite/services';
 import { account } from '@/lib/appwrite/config';
 
 export default function DiscoverPage() {
   const { profile } = useAuth();
   const [users, setUsers] = useState<any[]>([]);
-  const [jwt, setJwt] = useState('');
+
   const [lastAction, setLastAction] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -35,11 +35,9 @@ export default function DiscoverPage() {
           });
         } catch {}
       }
-      const token = await account.createJWT().then(r => r.jwt).catch(() => '');
-      setJwt(token);
       const mapped = docs.map((d: any) => ({
         id: d.$id,
-        photos: (d.photos || []).map((fid: string) => storageService.getFilePreview(fid, token || undefined)),
+        photos: (d.photos || []).map((fid: string) => `/api/storage/image/${fid}`),
         fullName: d.fullName || '',
         age: d.age || 0,
         bio: d.bio || '',

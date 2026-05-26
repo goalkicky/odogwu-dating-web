@@ -376,12 +376,8 @@ export const storageService = {
     );
   },
 
-  getFilePreview: (fileId: string, token?: string) => {
-    checkInit();
-    if (token) {
-      return storage!.getFilePreview({ bucketId: APPWRITE_CONFIG.storageBucketId, fileId, width: 400, height: 600, token });
-    }
-    return storage!.getFilePreview(APPWRITE_CONFIG.storageBucketId, fileId, 400, 600);
+  getFilePreview: (fileId: string, _token?: string) => {
+    return `/api/storage/image/${fileId}`;
   },
 
   getFileView: (bucketId: string, fileId: string) => {
