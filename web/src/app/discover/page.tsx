@@ -119,16 +119,12 @@ export default function DiscoverPage() {
 
   return (
     <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', background: 'linear-gradient(135deg, #1A0000, #2D0000, #1A0000)', overflow: 'hidden' }}>
-      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '48px 20px 6px' }}>
-        <div style={{ width: 32, height: 32, borderRadius: 10, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <FlameIcon size={18} color="white" />
-        </div>
+      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '52px 20px 4px', position: 'relative' }}>
         <span style={{ fontSize: 18, fontWeight: 700, color: 'white' }}>Discover</span>
-        <div style={{ width: 32 }} />
       </div>
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 0, padding: '4px 0' }}>
-        <div style={{ position: 'relative', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 0, overflow: 'hidden' }}>
+        <div style={{ position: 'relative', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', maxHeight: '100%', overflow: 'hidden' }}>
           {users.slice(0, 3).reverse().map((user, index) => (
             <AnimatedCard
               key={user.id}
@@ -143,18 +139,18 @@ export default function DiscoverPage() {
         </div>
       </div>
 
-      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '6px 20px 100px' }}>
+      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, padding: '8px 20px 100px' }}>
         <ActionButton variant="secondary" size={48} onPress={handleReload}>
           <RefreshIcon size={20} color="#FFD700" />
         </ActionButton>
-        <ActionButton variant="danger" size={60} onPress={handleSwipeLeft}>
-          <CloseIcon size={28} color="white" />
+        <ActionButton variant="danger" size={62} onPress={handleSwipeLeft}>
+          <CloseIcon size={30} color="white" />
         </ActionButton>
         <ActionButton variant="superlike" size={48} onPress={handleSuperLike}>
           <StarIcon size={20} color="white" />
         </ActionButton>
-        <ActionButton variant="primary" size={60} onPress={handleSwipeRight}>
-          <HeartIcon size={28} color="white" />
+        <ActionButton variant="primary" size={62} onPress={handleSwipeRight}>
+          <HeartIcon size={30} color="white" />
         </ActionButton>
         <ActionButton variant="boost" size={48} onPress={() => {}}>
           <FlashIcon size={20} color="white" />
@@ -162,7 +158,7 @@ export default function DiscoverPage() {
       </div>
 
       {lastAction && (
-        <div style={{ position: 'fixed', bottom: 100, left: '50%', transform: 'translateX(-50%)', background: lastAction === 'match' ? 'linear-gradient(135deg, #FF375F, #FF3B30)' : 'rgba(255,255,255,0.08)', padding: '8px 20px', borderRadius: 9999, zIndex: 100 }}>
+        <div style={{ position: 'fixed', bottom: 100, left: '50%', transform: 'translateX(-50%)', background: lastAction === 'match' ? 'linear-gradient(135deg, #FF375F, #FF3B30)' : 'rgba(255,255,255,0.08)', padding: '8px 20px', borderRadius: 9999, zIndex: 100, whiteSpace: 'nowrap' }}>
           <span style={{ color: 'white', fontWeight: 600, fontSize: 14 }}>
             {lastAction === 'match' ? "It's a Match!" : lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : 'Super Like!'}
           </span>
