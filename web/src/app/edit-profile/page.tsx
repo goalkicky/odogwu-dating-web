@@ -69,7 +69,7 @@ export default function EditProfilePage() {
     account.createJWT()
       .then(res => {
         setJwt(res.jwt);
-        setPhotoUrls(p.map(id => storageService.getFilePreview(id, res.jwt)));
+        setPhotoUrls(p.map(id => storageService.getFilePreview(id)));
       })
       .catch(() => setPhotoUrls(p.map(id => storageService.getFilePreview(id))));
   }, [profile]);
@@ -81,7 +81,7 @@ export default function EditProfilePage() {
     const result = await storageService.uploadFile(file);
     const newPhotos = [...photos, result.$id];
     setPhotos(newPhotos);
-    setPhotoUrls([...photoUrls, storageService.getFilePreview(result.$id, jwt || undefined)]);
+    setPhotoUrls([...photoUrls, storageService.getFilePreview(result.$id)]);
     const user = await account!.get();
     await userService.updateProfile(user.$id, { photos: newPhotos } as any);
     e.target.value = '';

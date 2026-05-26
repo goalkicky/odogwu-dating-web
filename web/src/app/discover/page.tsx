@@ -6,7 +6,7 @@ import ActionButton from '@/components/ActionButton';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import { useAuth } from '@/store/AuthContext';
-import { userService } from '@/lib/appwrite/services';
+import { userService, storageService } from '@/lib/appwrite/services';
 import { account } from '@/lib/appwrite/config';
 
 export default function DiscoverPage() {
@@ -37,7 +37,7 @@ export default function DiscoverPage() {
       }
       const mapped = docs.map((d: any) => ({
         id: d.$id,
-        photos: (d.photos || []).map((fid: string) => `/api/storage/image/${fid}`),
+        photos: (d.photos || []).map((fid: string) => storageService.getFilePreview(fid)),
         fullName: d.fullName || '',
         age: d.age || 0,
         bio: d.bio || '',

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Client, Storage } from 'appwrite';
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ fileId: string }> }
 ) {
   try {
@@ -16,9 +16,6 @@ export async function GET(
       return new NextResponse('Server config missing', { status: 500 });
     }
 
-    const width = Number(request.nextUrl.searchParams.get('w')) || 400;
-    const height = Number(request.nextUrl.searchParams.get('h')) || 600;
-
     const client = new Client()
       .setEndpoint(endpoint)
       .setProject(projectId)
@@ -27,24 +24,14 @@ export async function GET(
     const storage = new Storage(client);
 
     const file = await storage.getFile(bucketId, fileId);
-    const previewUrl = storage.getFilePreview(bucketId, fileId, width, height);
 
-    const response = await fetch(previewUrl, {
-      headers: { 'X-Appwrite-Key': apiKey, 'X-Appwrite-Project': projectId },
-      redirect: 'follow',
-    });
+    const uri = new URL(`${endpoint}/storage/buckets/${bucketId}/files/${fileId}/download`);
+    const imageBuffer: ArrayBuffer = await client.call('get', uri, {}, {}, 'arrayBuffer');
 
-    if (!response.ok) {
-      return new NextResponse('Image fetch failed', { status: response.status });
-    }
-
-    const arrayBuffer = await response.arrayBuffer();
-    const contentType = file.mimeType || 'image/jpeg';
-
-    return new NextResponse(arrayBuffer, {
+    return new NextResponse(imageBuffer, {
       status: 200,
       headers: {
-        'Content-Type': contentType,
+        'Content-Type': file.mimeType || 'image/jpeg',
         'Cache-Control': 'public, max-age=31536000, immutable',
       },
     });

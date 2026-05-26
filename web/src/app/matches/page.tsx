@@ -29,7 +29,7 @@ export default function MatchesPage() {
             ...m,
             matchedUser: {
               ...mp,
-              _photoUrl: mp.photos?.[0] ? storageService.getFilePreview(mp.photos[0], token) : '',
+              _photoUrl: mp.photos?.[0] ? storageService.getFilePreview(mp.photos[0]) : '',
             },
           };
         });

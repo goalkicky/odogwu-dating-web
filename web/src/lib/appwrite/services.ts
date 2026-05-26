@@ -376,7 +376,7 @@ export const storageService = {
     );
   },
 
-  getFilePreview: (fileId: string, _token?: string) => {
+  getFilePreview: (fileId: string) => {
     return `/api/storage/image/${fileId}`;
   },
 
