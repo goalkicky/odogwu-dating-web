@@ -24,10 +24,7 @@ export async function GET(
 
     const res = await fetch(downloadUrl, {
       method: 'GET',
-      headers: {
-        'X-Appwrite-Project': projectId,
-        'X-Appwrite-Key': apiKey,
-      },
+      headers: { 'X-Appwrite-Project': projectId!, 'X-Appwrite-Key': apiKey! } as HeadersInit,
     });
 
     if (!res.ok) {
