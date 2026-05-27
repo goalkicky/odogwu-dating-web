@@ -20,10 +20,6 @@ async function retryOnRate<T>(fn: () => Promise<T>, max = 5): Promise<T> {
   return fn();
 }
 
-function delay(ms: number) {
-  return new Promise(r => setTimeout(r, ms));
-}
-
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get('code');
   const errorParam = request.nextUrl.searchParams.get('error');
@@ -45,15 +41,13 @@ export async function GET(request: NextRequest) {
     if (!endpoint || !projectId) throw new Error('Missing Appwrite config');
     if (!apiKey) throw new Error('APPWRITE_API_KEY not set');
 
-    const redirectUri = `${origin(request)}/api/auth/google/callback`;
-
-    // Exchange Google code directly
+    // Exchange Google code
     const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
         code, client_id: clientId, client_secret: clientSecret,
-        redirect_uri: redirectUri, grant_type: 'authorization_code',
+        redirect_uri: `${origin(request)}/api/auth/google/callback`, grant_type: 'authorization_code',
       }),
     });
     if (!tokenRes.ok) throw new Error('Google token exchange failed: ' + await tokenRes.text());
@@ -68,41 +62,63 @@ export async function GET(request: NextRequest) {
 
     const apiHeaders = { 'Content-Type': 'application/json', 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey };
     const pw = makeid();
+    const email = googleUser.email;
+    const name = googleUser.name || email?.split('@')[0] || 'User';
 
-    // Create user via Users API; 409 means already exists
-    let userId = googleUser.id;
+    // Create user via Users API; 409 = already exists
+    let existingUser = false;
     try {
-      const created = await retryOnRate(() => fetch(`${endpoint}/users`, {
+      await retryOnRate(() => fetch(`${endpoint}/users`, {
         method: 'POST', headers: apiHeaders,
-        body: JSON.stringify({ userId: googleUser.id, email: googleUser.email, name: googleUser.name, password: pw }),
-      }).then(async r => { if (!r.ok) { const t = await r.text(); const e = new Error(t); (e as any).status = r.status; throw e; } return r.json(); }));
-      userId = created.$id;
+        body: JSON.stringify({ userId: googleUser.id, email, name, password: pw }),
+      }).then(async r => { if (!r.ok) { const e: any = new Error(await r.text()); e.status = r.status; throw e; } }));
     } catch (e: any) {
-      if ((e as any).status !== 409) throw e;
+      if (e.status === 409) {
+        existingUser = true;
+        await retryOnRate(() => fetch(`${endpoint}/users/${googleUser.id}/password`, {
+          method: 'PATCH', headers: apiHeaders, body: JSON.stringify({ password: pw }),
+        }).catch(() => {}));
+      } else {
+        throw e;
+      }
     }
 
-    await delay(500);
-
-    // Create session via Account email-password endpoint (returns short secret token)
+    // Create email-password session (public Account API)
     const sessionRes = await retryOnRate(() => fetch(`${endpoint}/account/sessions/email`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Appwrite-Project': projectId },
-      body: JSON.stringify({ email: googleUser.email, password: pw, duration: 31536000 }),
+      body: JSON.stringify({ email, password: pw, duration: 31536000 }),
     }));
+    if (!sessionRes.ok) throw new Error('Appwrite session failed: ' + await sessionRes.text());
 
-    if (!sessionRes.ok) {
-      const errBody = await sessionRes.text();
-      throw new Error('Appwrite session creation failed: ' + errBody);
+    const xFallback = sessionRes.headers.get('X-Fallback-Cookies') || '{}';
+
+    // Check profile for existing user
+    let hasProfile = false;
+    if (existingUser) {
+      try {
+        const q = encodeURIComponent(`equal("userId",["${googleUser.id}"])`);
+        const pdir = await fetch(
+          `${endpoint}/databases/odogwu-dating/collections/profiles/documents?queries=${q}`,
+          { headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey } },
+        );
+        if (pdir.ok) {
+          const docs = await pdir.json();
+          hasProfile = docs.total > 0;
+        }
+      } catch {}
     }
 
-    const session = await sessionRes.json();
-    const oauthUrl = new URL('/oauth', origin(request));
-    oauthUrl.searchParams.set('userId', session.userId);
-    oauthUrl.searchParams.set('secret', session.secret);
-    return NextResponse.redirect(oauthUrl);
+    return new NextResponse(
+      `<!DOCTYPE html><html><body><script>
+try{localStorage.setItem('cookieFallback',${JSON.stringify(xFallback)})}catch(e){}
+window.location.href='${existingUser && hasProfile ? '/discover' : '/onboarding/name'}'
+</script></body></html>`,
+      { headers: { 'Content-Type': 'text/html; charset=utf-8' } },
+    );
   } catch (err: any) {
     const failUrl = new URL('/oauth', origin(request));
-    failUrl.searchParams.set('error', err?.message?.substring(0, 500) || 'oauth_failed');
+    failUrl.searchParams.set('error', encodeURIComponent(err?.message?.substring(0, 500) || 'oauth_failed'));
     return NextResponse.redirect(failUrl);
   }
 }
