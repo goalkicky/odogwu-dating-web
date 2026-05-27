@@ -51,7 +51,7 @@ export default function PremiumPage() {
 
   return (
     <DesktopLayout>
-      <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px' }}>
+      <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px', paddingTop: '24px' }}>
       <div style={{ display: 'flex', flexDirection: 'column', paddingBottom: '85px', overflowY: 'auto' }}>
       <div style={{ background: 'linear-gradient(135deg, #0D0D0D, #1A0000, #0D0D0D)' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 24px 28px' }}>

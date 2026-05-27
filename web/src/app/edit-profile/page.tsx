@@ -117,7 +117,7 @@ export default function EditProfilePage() {
   };
 
   return (
-    <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px', overflowY: 'auto' }}>
+    <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px', paddingTop: '24px', overflowY: 'auto' }}>
       <input ref={fileInputRef} type="file" accept="image/*" onChange={handlePhotoPick} style={{ display: 'none' }} />
 
       <div style={{ padding: '60px 24px 24px' }}>

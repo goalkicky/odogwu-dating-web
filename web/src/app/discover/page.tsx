@@ -134,7 +134,7 @@ export default function DiscoverPage() {
 
   return (
     <DesktopLayout>
-      <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px', overflowY: 'auto' }}>
+      <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px', paddingTop: '24px', overflowY: 'auto' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
           <div>

@@ -55,7 +55,7 @@ export default function LikesPage() {
 
   return (
     <DesktopLayout>
-      <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px' }}>
+      <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px', paddingTop: '24px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '60px 20px 12px' }}>
         <div style={{ width: 36, height: 36, borderRadius: 12, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <EyeIcon size={22} color="white" />

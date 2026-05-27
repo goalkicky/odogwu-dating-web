@@ -45,7 +45,7 @@ export default function MatchesPage() {
 
   return (
     <DesktopLayout>
-      <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px' }}>
+      <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px', paddingTop: '24px' }}>
       <div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
