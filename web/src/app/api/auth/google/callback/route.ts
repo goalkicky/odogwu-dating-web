@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 const origin = (r: NextRequest) => r.nextUrl.origin.replace('://www.', '://');
 
 function makeid() {
-  return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+  return Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 10) + 'A1!';
 }
 
 export async function GET(request: NextRequest) {
@@ -54,32 +54,42 @@ export async function GET(request: NextRequest) {
       'X-Appwrite-Key': apiKey,
     };
 
-    // Try to create user; 409 means already exists
-    const createRes = await fetch(`${endpoint}/users`, {
-      method: 'POST',
+    // Look up existing user by email
+    const listRes = await fetch(`${endpoint}/users?search=${encodeURIComponent(googleUser.email)}`, {
       headers: apiHeaders,
-      body: JSON.stringify({
-        userId: googleUser.id,
-        email: googleUser.email,
-        name: googleUser.name,
-        password: makeid(),
-      }),
     });
-
-    let userId = googleUser.id;
-    if (createRes.status === 409) {
-      // User already exists — find their actual userId
-      const listRes = await fetch(`${endpoint}/users?search=${encodeURIComponent(googleUser.email)}`, {
-        headers: apiHeaders,
-      });
-      if (listRes.ok) {
-        const listData = await listRes.json();
-        const found = listData.users?.find((u: any) => u.email === googleUser.email);
-        if (found) userId = found.$id;
-      }
-    } else if (!createRes.ok) {
-      throw new Error('Appwrite user creation failed: ' + await createRes.text());
+    let userId: string | null = null;
+    if (listRes.ok) {
+      const listData = await listRes.json();
+      const found = listData.users?.find((u: any) => u.email === googleUser.email);
+      if (found) userId = found.$id;
     }
+
+    // If not found, create the user
+    if (!userId) {
+      const createRes = await fetch(`${endpoint}/users`, {
+        method: 'POST',
+        headers: apiHeaders,
+        body: JSON.stringify({
+          userId: googleUser.id,
+          email: googleUser.email,
+          name: googleUser.name,
+          password: makeid(),
+        }),
+      });
+      if (!createRes.ok && createRes.status !== 409) {
+        throw new Error('Appwrite user creation failed: ' + await createRes.text());
+      }
+      if (createRes.ok) {
+        const created = await createRes.json();
+        userId = created.$id;
+      } else {
+        // 409 — user with googleUser.id already exists but we didn't find by email
+        userId = googleUser.id;
+      }
+    }
+
+    if (!userId) throw new Error('Could not resolve Appwrite user');
 
     // Create a session for the user
     const sessionRes = await fetch(`${endpoint}/users/${userId}/sessions`, {
