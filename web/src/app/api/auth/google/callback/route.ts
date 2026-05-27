@@ -6,11 +6,12 @@ function makeid() {
   return Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 10) + 'A1!';
 }
 
-async function retryOnRate<T>(fn: () => Promise<T>, max = 3): Promise<T> {
+async function retryOnRate<T>(fn: () => Promise<T>, max = 5): Promise<T> {
   for (let i = 0; i < max; i++) {
     try { return await fn(); } catch (e: any) {
-      if (e?.message?.includes?.('Rate limit') && i < max - 1) {
-        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
+      const msg = typeof e?.message === 'string' ? e.message : '';
+      if (msg.includes('Rate limit') && i < max - 1) {
+        await new Promise(r => setTimeout(r, 1500 * Math.pow(2, i)));
         continue;
       }
       throw e;
@@ -19,13 +20,17 @@ async function retryOnRate<T>(fn: () => Promise<T>, max = 3): Promise<T> {
   return fn();
 }
 
+function delay(ms: number) {
+  return new Promise(r => setTimeout(r, ms));
+}
+
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get('code');
-  const error = request.nextUrl.searchParams.get('error');
+  const errorParam = request.nextUrl.searchParams.get('error');
 
-  if (error || !code) {
+  if (errorParam || !code) {
     const failUrl = new URL('/oauth', origin(request));
-    failUrl.searchParams.set('error', error || 'access_denied');
+    failUrl.searchParams.set('error', errorParam || 'access_denied');
     return NextResponse.redirect(failUrl);
   }
 
@@ -74,7 +79,7 @@ export async function GET(request: NextRequest) {
       })
     );
 
-    // Try to create user. If already exists (409), the Google ID works directly.
+    // Try to create user. If already exists (409), use the Google ID directly.
     let userId = googleUser.id;
     try {
       const created = await api('/users', {
@@ -86,7 +91,10 @@ export async function GET(request: NextRequest) {
       if ((e as any).status !== 409) throw e;
     }
 
-    // Create session. If the user ID doesn't exist (unlikely with Google ID), try fetching by email.
+    // Space out requests to avoid rate limiting
+    await delay(500);
+
+    // Create session
     let session: any;
     try {
       session = await api(`/users/${userId}/sessions`, {
@@ -95,7 +103,7 @@ export async function GET(request: NextRequest) {
       });
     } catch (e: any) {
       if (!(e as any).message?.includes?.('user_not_found')) throw e;
-      // Fallback: list users by email and find the matching one
+      await delay(500);
       const list = await api(`/users?search=${encodeURIComponent(googleUser.email)}`);
       const found = list.users?.find((u: any) => u.email === googleUser.email);
       if (!found) throw new Error('No Appwrite user found for this Google account');
