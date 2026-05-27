@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Client, Storage } from 'appwrite';
+import { Client, Storage, Permission, Role } from 'appwrite';
 
 export async function GET(
   _request: NextRequest,
@@ -25,10 +25,37 @@ export async function GET(
 
     const file = await storage.getFile(bucketId, fileId);
 
-    const uri = new URL(`${endpoint}/storage/buckets/${bucketId}/files/${fileId}/download`);
-    const imageBuffer: ArrayBuffer = await client.call('get', uri, {}, {}, 'arrayBuffer');
+    // Ensure public read so direct Appwrite URLs also work
+    if (!file.$permissions.includes(Permission.read(Role.any()))) {
+      try {
+        await storage.updateFile(bucketId, fileId, undefined, [
+          ...file.$permissions,
+          Permission.read(Role.any()),
+        ]);
+      } catch {}
+    }
 
-    return new NextResponse(imageBuffer, {
+    // Try management API download first
+    try {
+      const uri = new URL(`${endpoint}/storage/buckets/${bucketId}/files/${fileId}/download`);
+      const imageBuffer: ArrayBuffer = await client.call('get', uri, {}, {}, 'arrayBuffer');
+      return new NextResponse(imageBuffer, {
+        status: 200,
+        headers: {
+          'Content-Type': file.mimeType || 'image/jpeg',
+          'Cache-Control': 'public, max-age=31536000, immutable',
+        },
+      });
+    } catch {}
+
+    // Fallback: direct CDN URL (works after permission fix above)
+    const cdnUrl = storage.getFilePreview(bucketId, fileId, 400, 600);
+    const cdnRes = await fetch(cdnUrl, { redirect: 'follow' });
+    if (!cdnRes.ok) {
+      return new NextResponse('Image unavailable', { status: 404 });
+    }
+    const buf = await cdnRes.arrayBuffer();
+    return new NextResponse(buf, {
       status: 200,
       headers: {
         'Content-Type': file.mimeType || 'image/jpeg',
