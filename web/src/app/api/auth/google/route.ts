@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+const origin = (r: NextRequest) => r.nextUrl.origin.replace('://www.', '://');
+
 export async function GET(request: NextRequest) {
   const clientId = process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   if (!clientId) {
@@ -9,7 +11,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const redirectUri = `${request.nextUrl.origin}/api/auth/google/callback`;
+  const redirectUri = `${origin(request)}/api/auth/google/callback`;
 
   const params = new URLSearchParams({
     client_id: clientId,
