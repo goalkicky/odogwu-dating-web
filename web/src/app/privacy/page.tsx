@@ -17,7 +17,7 @@ export default function PrivacyPage() {
   ];
 
   return (
-    <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px', paddingTop: '24px' }}>
+    <GradientBackground style={{ minHeight: '100vh', padding: '24px 16px 85px' }}>
       <div style={{ padding: '60px 24px 24px' }}>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#FF375F', fontSize: 15, fontWeight: 600, cursor: 'pointer', padding: '8px 0', marginBottom: 8 }}>
           ← Back

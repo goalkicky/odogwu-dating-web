@@ -75,7 +75,7 @@ export default function CallLogsPage() {
   };
 
   return (
-    <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px', paddingTop: '24px' }}>
+    <GradientBackground style={{ minHeight: '100vh', padding: '24px 16px 85px' }}>
       <div style={{ display: 'flex', alignItems: 'center', padding: '56px 16px 12px', gap: 12 }}>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
           <ChevronBackIcon size={28} color="white" />

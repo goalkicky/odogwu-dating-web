@@ -39,7 +39,7 @@ export default function ProfilePage() {
 
   return (
     <DesktopLayout>
-      <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px', paddingTop: '24px', overflowY: 'auto' }}>
+      <GradientBackground style={{ minHeight: '100vh', padding: '24px 16px 85px', overflowY: 'auto' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
           <div style={{ width: 96, height: 96, borderRadius: '50%', padding: 3, background: 'linear-gradient(135deg, #FF3B30, #FF375F)', flexShrink: 0 }}>
