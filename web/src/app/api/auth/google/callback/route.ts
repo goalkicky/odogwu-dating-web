@@ -6,6 +6,19 @@ function makeid() {
   return Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 10) + 'A1!';
 }
 
+async function retryOnRate<T>(fn: () => Promise<T>, max = 3): Promise<T> {
+  for (let i = 0; i < max; i++) {
+    try { return await fn(); } catch (e: any) {
+      if (e?.message?.includes?.('Rate limit') && i < max - 1) {
+        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
+        continue;
+      }
+      throw e;
+    }
+  }
+  return fn();
+}
+
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get('code');
   const error = request.nextUrl.searchParams.get('error');
@@ -54,52 +67,34 @@ export async function GET(request: NextRequest) {
       'X-Appwrite-Key': apiKey,
     };
 
-    // Look up existing user by email
-    const listRes = await fetch(`${endpoint}/users?search=${encodeURIComponent(googleUser.email)}`, {
-      headers: apiHeaders,
-    });
-    let userId: string | null = null;
-    if (listRes.ok) {
-      const listData = await listRes.json();
-      const found = listData.users?.find((u: any) => u.email === googleUser.email);
+    const api = (path: string, opts?: any) => retryOnRate(() =>
+      fetch(`${endpoint}${path}`, opts || { headers: apiHeaders }).then(async r => {
+        if (!r.ok) { const t = await r.text(); const e = new Error(t); (e as any).status = r.status; throw e; }
+        return r.json();
+      })
+    );
+
+    // Try to create user. If 409 (already exists with this Google ID), find them by email.
+    let userId = googleUser.id;
+    try {
+      const created = await api('/users', {
+        method: 'POST', headers: apiHeaders,
+        body: JSON.stringify({ userId: googleUser.id, email: googleUser.email, name: googleUser.name, password: makeid() }),
+      });
+      userId = created.$id;
+    } catch (e: any) {
+      if ((e as any).status !== 409) throw e;
+      // User with googleUser.id exists — find by email
+      const list = await api(`/users?search=${encodeURIComponent(googleUser.email)}`);
+      const found = list.users?.find((u: any) => u.email === googleUser.email);
       if (found) userId = found.$id;
     }
 
-    // If not found, create the user
-    if (!userId) {
-      const createRes = await fetch(`${endpoint}/users`, {
-        method: 'POST',
-        headers: apiHeaders,
-        body: JSON.stringify({
-          userId: googleUser.id,
-          email: googleUser.email,
-          name: googleUser.name,
-          password: makeid(),
-        }),
-      });
-      if (!createRes.ok && createRes.status !== 409) {
-        throw new Error('Appwrite user creation failed: ' + await createRes.text());
-      }
-      if (createRes.ok) {
-        const created = await createRes.json();
-        userId = created.$id;
-      } else {
-        // 409 — user with googleUser.id already exists but we didn't find by email
-        userId = googleUser.id;
-      }
-    }
-
-    if (!userId) throw new Error('Could not resolve Appwrite user');
-
-    // Create a session for the user
-    const sessionRes = await fetch(`${endpoint}/users/${userId}/sessions`, {
-      method: 'POST',
-      headers: apiHeaders,
+    const session = await api(`/users/${userId}/sessions`, {
+      method: 'POST', headers: apiHeaders,
       body: JSON.stringify({ duration: 31536000 }),
     });
-    if (!sessionRes.ok) throw new Error('Appwrite session creation failed: ' + await sessionRes.text());
 
-    const session = await sessionRes.json();
     const oauthUrl = new URL('/oauth', origin(request));
     oauthUrl.searchParams.set('userId', session.userId || userId);
     oauthUrl.searchParams.set('secret', session.secret);
