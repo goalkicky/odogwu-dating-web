@@ -6,7 +6,7 @@ import Button from '@/components/Button';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import { useAuth } from '@/store/AuthContext';
-import { userService, storageService } from '@/lib/appwrite/services';
+import { authService, userService, storageService } from '@/lib/appwrite/services';
 import { account } from '@/lib/appwrite/config';
 
 const GENDERS = ['male', 'female', 'non-binary', 'other'] as const;
@@ -66,7 +66,7 @@ export default function EditProfilePage() {
     const p = profile.photos || [];
     setPhotos(p);
     Promise.all(p.map(id => storageService.ensurePublicRead(id).catch(() => {}))).catch(() => {});
-    account.createJWT()
+    authService.createJWT()
       .then(res => {
         setJwt(res.jwt);
         setPhotoUrls(p.map(id => storageService.getFilePreview(id)));

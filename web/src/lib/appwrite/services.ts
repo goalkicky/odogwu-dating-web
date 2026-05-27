@@ -23,12 +23,22 @@ export const authService = {
 
   getCurrentUser: async () => {
     checkInit();
-    return account!.get();
+    return retryOnRateLimit(() => account!.get());
+  },
+
+  createSession: async (userId: string, secret: string) => {
+    checkInit();
+    return retryOnRateLimit(() => account!.createSession(userId, secret));
+  },
+
+  createJWT: async () => {
+    checkInit();
+    return retryOnRateLimit(() => account!.createJWT());
   },
 
   logout: async () => {
     checkInit();
-    return account!.deleteSession('current');
+    return retryOnRateLimit(() => account!.deleteSession('current'));
   },
 };
 

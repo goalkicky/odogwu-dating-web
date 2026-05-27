@@ -7,8 +7,7 @@ import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
 import { useAuth } from '@/store/AuthContext';
-import { userService } from '@/lib/appwrite/services';
-import { account } from '@/lib/appwrite/config';
+import { authService, userService } from '@/lib/appwrite/services';
 
 const PLANS = [
   { id: 'plus', name: 'Odogwu Plus', price: '$9.99', period: '/month', color: ['#FF375F', '#FF6B8A'], features: ['Unlimited Likes', '5 Super Likes per day', '1 Boost per month', 'Passport (any location)', 'Hide Ads'] },
@@ -32,10 +31,10 @@ export default function PremiumPage() {
   const [subscribing, setSubscribing] = useState(false);
 
   const handleSubscribe = async () => {
-    if (!account || !profile) return;
+    if (!profile) return;
     setSubscribing(true);
     try {
-      const user = await account.get();
+      const user = await authService.getCurrentUser();
       await userService.updateProfile(user.$id, {
         isPremium: true,
         premiumPlan: selectedPlan,

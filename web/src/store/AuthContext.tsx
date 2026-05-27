@@ -1,7 +1,6 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { account as appwriteAccount } from '@/lib/appwrite/config';
-import { userService } from '@/lib/appwrite/services';
+import { authService, userService } from '@/lib/appwrite/services';
 import { UserProfile } from '@/lib/types';
 
 interface AuthState {
@@ -42,8 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refreshUser = useCallback(async () => {
     try {
-      if (!appwriteAccount) throw new Error('Appwrite not configured');
-      const user = await appwriteAccount.get();
+      const user = await authService.getCurrentUser();
       let profile = null;
       let isOnboarded = false;
       try {
@@ -59,9 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const logout = async () => {
-    try {
-      if (appwriteAccount) await appwriteAccount.deleteSession('current');
-    } catch {}
+    try { await authService.logout(); } catch {}
     setState({ user: null, profile: null, loading: false, isAuthenticated: false, isOnboarded: false });
   };
 

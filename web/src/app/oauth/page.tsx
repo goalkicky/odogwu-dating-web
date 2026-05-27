@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { account } from '@/lib/appwrite/config';
-import { userService } from '@/lib/appwrite/services';
+import { authService, userService } from '@/lib/appwrite/services';
 import { useAuth } from '@/store/AuthContext';
 
 export default function OAuthCallback() {
@@ -13,11 +13,7 @@ export default function OAuthCallback() {
 
   useEffect(() => {
     async function routeAfterAuth() {
-      if (!account) {
-        setError('Appwrite not configured');
-        return;
-      }
-      const user = await account.get();
+      const user = await authService.getCurrentUser();
       await refreshUser();
       let hasProfile = false;
       try {
@@ -29,7 +25,6 @@ export default function OAuthCallback() {
 
     async function handleCallback() {
       try {
-        if (!account) throw new Error('Appwrite not configured');
 
         const qParams = new URLSearchParams(window.location.search);
         const hParams = new URLSearchParams(window.location.hash.replace('#', '?'));
@@ -39,19 +34,19 @@ export default function OAuthCallback() {
         const secret = qParams.get('secret') || hParams.get('secret');
         const jwt = qParams.get('jwt');
 
-        if (jwt && account.client) {
+        if (jwt && account?.client) {
           account.client.setJWT(jwt);
           await routeAfterAuth();
           return;
         }
 
         if (userId && secret) {
-          await account.createSession(userId, secret);
+          await authService.createSession(userId, secret);
           await routeAfterAuth();
           return;
         }
 
-        const user = await account.get();
+        const user = await authService.getCurrentUser();
         if (user) {
           await routeAfterAuth();
           return;
