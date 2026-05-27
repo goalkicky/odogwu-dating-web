@@ -33,20 +33,20 @@ export default function AnimatedCard({
   const [isDragging, setIsDragging] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+  const handleDragStart = useCallback((clientX: number, clientY: number) => {
     if (!isFirst) return;
-    setDragStart({ x: e.clientX, y: e.clientY });
+    setDragStart({ x: clientX, y: clientY });
     setIsDragging(true);
   }, [isFirst]);
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+  const handleDragMove = useCallback((clientX: number, clientY: number) => {
     if (!dragStart || !isDragging) return;
-    const dx = e.clientX - dragStart.x;
-    const dy = e.clientY - dragStart.y;
+    const dx = clientX - dragStart.x;
+    const dy = clientY - dragStart.y;
     setOffset({ x: dx, y: dy });
   }, [dragStart, isDragging]);
 
-  const handleMouseUp = useCallback(() => {
+  const handleDragEnd = useCallback(() => {
     if (!dragStart) return;
     const dx = offset.x;
     const dy = offset.y;
@@ -65,6 +65,19 @@ export default function AnimatedCard({
     setIsDragging(false);
     setDragStart(null);
   }, [dragStart, offset, onSwipeLeft, onSwipeRight, onSuperLike]);
+
+  const handleMouseDown = useCallback((e: React.MouseEvent) => handleDragStart(e.clientX, e.clientY), [handleDragStart]);
+  const handleMouseMove = useCallback((e: React.MouseEvent) => handleDragMove(e.clientX, e.clientY), [handleDragMove]);
+  const handleMouseUp = useCallback(() => handleDragEnd(), [handleDragEnd]);
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length !== 1) return;
+    handleDragStart(e.touches[0].clientX, e.touches[0].clientY);
+  }, [handleDragStart]);
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length !== 1) return;
+    handleDragMove(e.touches[0].clientX, e.touches[0].clientY);
+  }, [handleDragMove]);
+  const handleTouchEnd = useCallback(() => handleDragEnd(), [handleDragEnd]);
 
   const rotation = offset.x * 0.08;
   const likeOpacity = Math.min(Math.max(offset.x / 100, 0), 1);
@@ -105,6 +118,9 @@ export default function AnimatedCard({
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
       style={{
         width: '90%',
         maxWidth: '400px',
