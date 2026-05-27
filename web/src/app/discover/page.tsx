@@ -134,6 +134,7 @@ export default function DiscoverPage() {
 
   return (
     <DesktopLayout>
+      <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px', overflowY: 'auto' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
           <div>
@@ -156,9 +157,9 @@ export default function DiscoverPage() {
           </button>
         </div>
 
-        <div style={{ display: 'flex', gap: 32, alignItems: 'flex-start' }}>
-          <div style={{ flex: '0 0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24 }}>
-            <div style={{ position: 'relative', width: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24 }}>
+            <div style={{ position: 'relative', width: 400, minHeight: 520, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <div style={{
                 position: 'absolute', inset: -8, borderRadius: 28,
                 background: 'linear-gradient(135deg, rgba(255,55,95,0.08), rgba(255,59,48,0.04))',
@@ -196,7 +197,7 @@ export default function DiscoverPage() {
             </div>
 
             {lastAction && (
-              <div style={{ background: lastAction === 'match' ? 'linear-gradient(135deg, #FF375F, #FF3B30)' : 'rgba(255,255,255,0.08)', padding: '8px 20px', borderRadius: 9999, zIndex: 100, whiteSpace: 'nowrap' }}>
+              <div style={{ background: lastAction === 'match' ? 'linear-gradient(135deg, #FF375F, #FF3B30)' : 'rgba(255,255,255,0.08)', padding: '8px 20px', borderRadius: 9999, whiteSpace: 'nowrap' }}>
                 <span style={{ color: 'white', fontWeight: 600, fontSize: 14 }}>
                   {lastAction === 'match' ? "It's a Match!" : lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : 'Super Like!'}
                 </span>
@@ -205,7 +206,7 @@ export default function DiscoverPage() {
           </div>
 
           {current && (
-            <div style={{ flex: 1, minWidth: 0, paddingTop: 8 }}>
+            <div style={{ flex: '1 1 300px', minWidth: 260, maxWidth: 400, paddingTop: 8 }}>
               <h2 style={{ fontSize: 26, fontWeight: 800, color: 'white', margin: 0, lineHeight: '32px' }}>
                 {current.fullName}
                 <span style={{ fontWeight: 400, color: '#ABABAB', marginLeft: 8 }}>{current.age}</span>
@@ -249,6 +250,8 @@ export default function DiscoverPage() {
           )}
         </div>
       </div>
+      <TabBar />
+      </GradientBackground>
     </DesktopLayout>
   );
 }
