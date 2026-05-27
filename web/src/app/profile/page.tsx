@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { DiamondIcon, SettingsIcon, BellIcon, ShieldIcon, HelpIcon, ChevronForwardIcon, EyeIcon, CallIcon } from '@/components/Icons';
+import { DiamondIcon, SettingsIcon, BellIcon, ShieldIcon, HelpIcon, ChevronForwardIcon, EyeIcon, CallIcon, PencilIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import Button from '@/components/Button';
 import TabBar from '@/components/TabBar';
@@ -29,6 +29,7 @@ export default function ProfilePage() {
   };
 
   const menuItems = [
+    { icon: <PencilIcon size={22} color="#ABABAB" />, label: 'Edit Profile', onClick: () => router.push('/edit-profile') },
     { icon: <EyeIcon size={22} color="#ABABAB" />, label: 'Who Likes You', onClick: () => router.push('/likes') },
     { icon: <CallIcon size={22} color="#ABABAB" />, label: 'Call Log', onClick: () => router.push('/call-logs') },
     { icon: <SettingsIcon size={22} color="#ABABAB" />, label: 'Settings', onClick: () => router.push('/settings') },

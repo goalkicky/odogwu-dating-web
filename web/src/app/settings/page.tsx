@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { ChevronForwardIcon, BellIcon, ShieldIcon, HelpIcon, PencilIcon } from '@/components/Icons';
+import { ChevronForwardIcon, BellIcon, ShieldIcon, HelpIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 
@@ -12,7 +12,6 @@ export default function SettingsPage() {
     {
       title: 'Account',
       items: [
-        { icon: <PencilIcon size={22} color="#ABABAB" />, label: 'Edit Profile', onClick: () => router.push('/edit-profile') },
         { icon: <BellIcon size={22} color="#ABABAB" />, label: 'Notifications', onClick: () => router.push('/notifications') },
         { icon: <ShieldIcon size={22} color="#ABABAB" />, label: 'Privacy', onClick: () => router.push('/privacy') },
         { icon: <HelpIcon size={22} color="#ABABAB" />, label: 'Help & Support', onClick: () => router.push('/faq') },
