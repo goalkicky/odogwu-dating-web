@@ -32,15 +32,22 @@ export default function OAuthCallback() {
       const userId = qParams.get('userId') || hParams.get('userId');
       const secret = qParams.get('secret') || hParams.get('secret');
       const jwt = qParams.get('jwt');
+      const sessionId = qParams.get('sessionId');
 
-      // No session params — initiate Google OAuth
-      if (!userId && !secret && !jwt) {
+      // No params — initiate Google OAuth
+      if (!userId && !secret && !jwt && !sessionId) {
         const { authService } = await import('@/lib/appwrite/services');
         await authService.loginWithGoogle();
         return;
       }
 
       try {
+        if (sessionId && account?.client) {
+          account.client.setSession(sessionId);
+          await routeAfterAuth();
+          return;
+        }
+
         if (jwt && account?.client) {
           account.client.setJWT(jwt);
           await routeAfterAuth();
