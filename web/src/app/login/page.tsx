@@ -11,17 +11,8 @@ export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState('');
 
-  const handleGoogleLogin = async () => {
-    try {
-      setError('');
-      const { authService } = await import('@/lib/appwrite/services');
-      await authService.loginWithGoogle();
-      await refreshUser();
-      router.push('/onboarding/name');
-    } catch (err) {
-      console.error('Login error:', err);
-      setError('Google sign-in failed.');
-    }
+  const handleGoogleLogin = () => {
+    router.push('/oauth');
   };
 
   return (

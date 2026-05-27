@@ -24,16 +24,23 @@ export default function OAuthCallback() {
     }
 
     async function handleCallback() {
+      const qParams = new URLSearchParams(window.location.search);
+      const hParams = new URLSearchParams(window.location.hash.replace('#', '?'));
+      const errorParam = qParams.get('error') || hParams.get('error');
+      if (errorParam) { setError(errorParam === 'access_denied' ? 'Sign-in cancelled. Please try again.' : errorParam); return; }
+
+      const userId = qParams.get('userId') || hParams.get('userId');
+      const secret = qParams.get('secret') || hParams.get('secret');
+      const jwt = qParams.get('jwt');
+
+      // No session params — initiate Google OAuth
+      if (!userId && !secret && !jwt) {
+        const { authService } = await import('@/lib/appwrite/services');
+        await authService.loginWithGoogle();
+        return;
+      }
+
       try {
-
-        const qParams = new URLSearchParams(window.location.search);
-        const hParams = new URLSearchParams(window.location.hash.replace('#', '?'));
-        const errorParam = qParams.get('error') || hParams.get('error');
-        if (errorParam) { setError(errorParam === 'access_denied' ? 'Sign-in cancelled. Please try again.' : errorParam); return; }
-        const userId = qParams.get('userId') || hParams.get('userId');
-        const secret = qParams.get('secret') || hParams.get('secret');
-        const jwt = qParams.get('jwt');
-
         if (jwt && account?.client) {
           account.client.setJWT(jwt);
           await routeAfterAuth();
@@ -52,18 +59,8 @@ export default function OAuthCallback() {
           return;
         }
 
-        if (retries.current < 10) {
-          retries.current++;
-          setTimeout(handleCallback, 500);
-          return;
-        }
         setError('No user session found.');
       } catch (err: any) {
-        if (retries.current < 10) {
-          retries.current++;
-          setTimeout(handleCallback, 500);
-          return;
-        }
         setError(`Authentication failed. ${err?.message || 'Please try again.'}`);
       }
     }
