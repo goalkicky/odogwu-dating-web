@@ -24,16 +24,6 @@ function delay(ms: number) {
   return new Promise(r => setTimeout(r, ms));
 }
 
-const api = (endpoint: string, apiKey: string) => (path: string, opts?: any) => retryOnRate(() =>
-  fetch(`${endpoint}${path}`, {
-    ...opts,
-    headers: { 'Content-Type': 'application/json', 'X-Appwrite-Project': process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!, 'X-Appwrite-Key': apiKey, ...opts?.headers },
-  }).then(async r => {
-    if (!r.ok) { const t = await r.text(); const e = new Error(t); (e as any).status = r.status; throw e; }
-    return r.json();
-  })
-);
-
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get('code');
   const errorParam = request.nextUrl.searchParams.get('error');
@@ -76,15 +66,16 @@ export async function GET(request: NextRequest) {
     if (!infoRes.ok) throw new Error('Failed to get Google profile');
     const googleUser = await infoRes.json();
 
-    const appwrite = api(endpoint, apiKey);
+    const apiHeaders = { 'Content-Type': 'application/json', 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey };
+    const pw = makeid();
 
-    // Create user. If 409 (exists with this Google ID), use googleUser.id directly.
+    // Create user via Users API; 409 means already exists
     let userId = googleUser.id;
     try {
-      const created = await appwrite('/users', {
-        method: 'POST',
-        body: JSON.stringify({ userId: googleUser.id, email: googleUser.email, name: googleUser.name, password: makeid() }),
-      });
+      const created = await retryOnRate(() => fetch(`${endpoint}/users`, {
+        method: 'POST', headers: apiHeaders,
+        body: JSON.stringify({ userId: googleUser.id, email: googleUser.email, name: googleUser.name, password: pw }),
+      }).then(async r => { if (!r.ok) { const t = await r.text(); const e = new Error(t); (e as any).status = r.status; throw e; } return r.json(); }));
       userId = created.$id;
     } catch (e: any) {
       if ((e as any).status !== 409) throw e;
@@ -92,12 +83,12 @@ export async function GET(request: NextRequest) {
 
     await delay(500);
 
-    // Create session and get its ID
-    const sessionRes = await fetch(`${endpoint}/users/${userId}/sessions`, {
+    // Create session via Account email-password endpoint (returns short secret token)
+    const sessionRes = await retryOnRate(() => fetch(`${endpoint}/account/sessions/email`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey },
-      body: JSON.stringify({ duration: 31536000 }),
-    });
+      headers: { 'Content-Type': 'application/json', 'X-Appwrite-Project': projectId },
+      body: JSON.stringify({ email: googleUser.email, password: pw, duration: 31536000 }),
+    }));
 
     if (!sessionRes.ok) {
       const errBody = await sessionRes.text();
@@ -105,10 +96,9 @@ export async function GET(request: NextRequest) {
     }
 
     const session = await sessionRes.json();
-
-    // Pass session ID to the client — will use client.setSession() to authenticate
     const oauthUrl = new URL('/oauth', origin(request));
-    oauthUrl.searchParams.set('sessionId', session.$id);
+    oauthUrl.searchParams.set('userId', session.userId);
+    oauthUrl.searchParams.set('secret', session.secret);
     return NextResponse.redirect(oauthUrl);
   } catch (err: any) {
     const failUrl = new URL('/oauth', origin(request));
