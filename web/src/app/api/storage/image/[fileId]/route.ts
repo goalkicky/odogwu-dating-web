@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Client, Storage, Permission, Role } from 'appwrite';
 
 export async function GET(
   _request: NextRequest,
@@ -13,56 +12,35 @@ export async function GET(
     const bucketId = process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID;
 
     if (!endpoint || !projectId || !apiKey || !bucketId) {
-      return new NextResponse('Server config missing', { status: 500 });
+      return NextResponse.json({ error: 'Missing env vars' }, { status: 500 });
     }
 
-    const client = new Client()
-      .setEndpoint(endpoint)
-      .setProject(projectId)
-      .setKey(apiKey);
+    const downloadUrl = `${endpoint}/storage/buckets/${bucketId}/files/${fileId}/download`;
 
-    const storage = new Storage(client);
+    const res = await fetch(downloadUrl, {
+      method: 'GET',
+      headers: {
+        'X-Appwrite-Project': projectId,
+        'X-Appwrite-Key': apiKey,
+      },
+    });
 
-    const file = await storage.getFile(bucketId, fileId);
-
-    // Ensure public read so direct Appwrite URLs also work
-    if (!file.$permissions.includes(Permission.read(Role.any()))) {
-      try {
-        await storage.updateFile(bucketId, fileId, undefined, [
-          ...file.$permissions,
-          Permission.read(Role.any()),
-        ]);
-      } catch {}
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      return NextResponse.json({ error: `Appwrite returned ${res.status}`, detail: text.substring(0, 500) }, { status: res.status });
     }
 
-    // Try management API download first
-    try {
-      const uri = new URL(`${endpoint}/storage/buckets/${bucketId}/files/${fileId}/download`);
-      const imageBuffer: ArrayBuffer = await client.call('get', uri, {}, {}, 'arrayBuffer');
-      return new NextResponse(imageBuffer, {
-        status: 200,
-        headers: {
-          'Content-Type': file.mimeType || 'image/jpeg',
-          'Cache-Control': 'public, max-age=31536000, immutable',
-        },
-      });
-    } catch {}
+    const contentType = res.headers.get('content-type') || 'image/jpeg';
+    const buf = await res.arrayBuffer();
 
-    // Fallback: direct CDN URL (works after permission fix above)
-    const cdnUrl = storage.getFilePreview(bucketId, fileId, 400, 600);
-    const cdnRes = await fetch(cdnUrl, { redirect: 'follow' });
-    if (!cdnRes.ok) {
-      return new NextResponse('Image unavailable', { status: 404 });
-    }
-    const buf = await cdnRes.arrayBuffer();
     return new NextResponse(buf, {
       status: 200,
       headers: {
-        'Content-Type': file.mimeType || 'image/jpeg',
+        'Content-Type': contentType,
         'Cache-Control': 'public, max-age=31536000, immutable',
       },
     });
   } catch (err: any) {
-    return new NextResponse(err?.message || 'Image proxy error', { status: 500 });
+    return NextResponse.json({ error: err?.message || 'Unknown error', stack: err?.stack?.substring(0, 500) }, { status: 500 });
   }
 }
