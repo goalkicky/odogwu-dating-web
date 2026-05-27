@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
       })
     );
 
-    // Try to create user. If 409 (already exists with this Google ID), find them by email.
+    // Try to create user. If already exists (409), the Google ID works directly.
     let userId = googleUser.id;
     try {
       const created = await api('/users', {
@@ -84,16 +84,26 @@ export async function GET(request: NextRequest) {
       userId = created.$id;
     } catch (e: any) {
       if ((e as any).status !== 409) throw e;
-      // User with googleUser.id exists — find by email
-      const list = await api(`/users?search=${encodeURIComponent(googleUser.email)}`);
-      const found = list.users?.find((u: any) => u.email === googleUser.email);
-      if (found) userId = found.$id;
     }
 
-    const session = await api(`/users/${userId}/sessions`, {
-      method: 'POST', headers: apiHeaders,
-      body: JSON.stringify({ duration: 31536000 }),
-    });
+    // Create session. If the user ID doesn't exist (unlikely with Google ID), try fetching by email.
+    let session: any;
+    try {
+      session = await api(`/users/${userId}/sessions`, {
+        method: 'POST', headers: apiHeaders,
+        body: JSON.stringify({ duration: 31536000 }),
+      });
+    } catch (e: any) {
+      if (!(e as any).message?.includes?.('user_not_found')) throw e;
+      // Fallback: list users by email and find the matching one
+      const list = await api(`/users?search=${encodeURIComponent(googleUser.email)}`);
+      const found = list.users?.find((u: any) => u.email === googleUser.email);
+      if (!found) throw new Error('No Appwrite user found for this Google account');
+      session = await api(`/users/${found.$id}/sessions`, {
+        method: 'POST', headers: apiHeaders,
+        body: JSON.stringify({ duration: 31536000 }),
+      });
+    }
 
     const oauthUrl = new URL('/oauth', origin(request));
     oauthUrl.searchParams.set('userId', session.userId || userId);
