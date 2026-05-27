@@ -11,8 +11,13 @@ export async function GET(
     const apiKey = process.env.APPWRITE_API_KEY;
     const bucketId = process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID;
 
-    if (!endpoint || !projectId || !apiKey || !bucketId) {
-      return NextResponse.json({ error: 'Missing env vars' }, { status: 500 });
+    const missing: string[] = [];
+    if (!endpoint) missing.push('NEXT_PUBLIC_APPWRITE_ENDPOINT');
+    if (!projectId) missing.push('NEXT_PUBLIC_APPWRITE_PROJECT_ID');
+    if (!apiKey) missing.push('APPWRITE_API_KEY');
+    if (!bucketId) missing.push('NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID');
+    if (missing.length > 0) {
+      return NextResponse.json({ error: 'Missing env vars', missing }, { status: 500 });
     }
 
     const downloadUrl = `${endpoint}/storage/buckets/${bucketId}/files/${fileId}/download`;
