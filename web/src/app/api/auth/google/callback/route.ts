@@ -27,6 +27,7 @@ export async function GET(request: NextRequest) {
         provider: 'google',
         code,
         redirectUrl: redirectUri,
+        duration: 31536000,
       }),
     });
 
