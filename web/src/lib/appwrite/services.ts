@@ -28,15 +28,7 @@ export const authService = {
 
   createSession: async (userId: string, secret: string) => {
     checkInit();
-    const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT;
-    const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID;
-    const res = await fetch(`${endpoint}/account/sessions/create`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Appwrite-Project': projectId!, },
-      body: JSON.stringify({ userId, secret, duration: 31536000 }),
-    });
-    if (!res.ok) throw new Error(await res.text());
-    return res.json();
+    return retryOnRateLimit(() => account!.createSession(userId, secret));
   },
 
   createJWT: async () => {
