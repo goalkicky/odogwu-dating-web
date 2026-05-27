@@ -41,9 +41,7 @@ export async function GET(request: NextRequest) {
 
     const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT;
     const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID;
-    const apiKey = process.env.APPWRITE_API_KEY;
     if (!endpoint || !projectId) throw new Error('Missing Appwrite config');
-    if (!apiKey) throw new Error('APPWRITE_API_KEY not set');
 
     const redirectUri = `${origin(request)}/api/auth/google/callback`;
 
@@ -66,55 +64,25 @@ export async function GET(request: NextRequest) {
     if (!infoRes.ok) throw new Error('Failed to get Google profile');
     const googleUser = await infoRes.json();
 
-    const apiHeaders = {
-      'Content-Type': 'application/json',
-      'X-Appwrite-Project': projectId,
-      'X-Appwrite-Key': apiKey,
-    };
+    // Create OAuth2 session via Appwrite with our access token
+    const sessionRes = await retryOnRate(() => fetch(`${endpoint}/account/sessions/oauth2`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Appwrite-Project': projectId },
+      body: JSON.stringify({
+        provider: 'google',
+        accessToken: tokens.access_token,
+        duration: 31536000,
+      }),
+    }));
 
-    const api = (path: string, opts?: any) => retryOnRate(() =>
-      fetch(`${endpoint}${path}`, opts || { headers: apiHeaders }).then(async r => {
-        if (!r.ok) { const t = await r.text(); const e = new Error(t); (e as any).status = r.status; throw e; }
-        return r.json();
-      })
-    );
-
-    // Try to create user. If already exists (409), use the Google ID directly.
-    let userId = googleUser.id;
-    try {
-      const created = await api('/users', {
-        method: 'POST', headers: apiHeaders,
-        body: JSON.stringify({ userId: googleUser.id, email: googleUser.email, name: googleUser.name, password: makeid() }),
-      });
-      userId = created.$id;
-    } catch (e: any) {
-      if ((e as any).status !== 409) throw e;
+    if (!sessionRes.ok) {
+      const errBody = await sessionRes.text();
+      throw new Error(errBody || 'Appwrite OAuth session creation failed');
     }
 
-    // Space out requests to avoid rate limiting
-    await delay(500);
-
-    // Create session
-    let session: any;
-    try {
-      session = await api(`/users/${userId}/sessions`, {
-        method: 'POST', headers: apiHeaders,
-        body: JSON.stringify({ duration: 31536000 }),
-      });
-    } catch (e: any) {
-      if (!(e as any).message?.includes?.('user_not_found')) throw e;
-      await delay(500);
-      const list = await api(`/users?search=${encodeURIComponent(googleUser.email)}`);
-      const found = list.users?.find((u: any) => u.email === googleUser.email);
-      if (!found) throw new Error('No Appwrite user found for this Google account');
-      session = await api(`/users/${found.$id}/sessions`, {
-        method: 'POST', headers: apiHeaders,
-        body: JSON.stringify({ duration: 31536000 }),
-      });
-    }
-
+    const session = await sessionRes.json();
     const oauthUrl = new URL('/oauth', origin(request));
-    oauthUrl.searchParams.set('userId', session.userId || userId);
+    oauthUrl.searchParams.set('userId', session.userId);
     oauthUrl.searchParams.set('secret', session.secret);
     return NextResponse.redirect(oauthUrl);
   } catch (err: any) {
