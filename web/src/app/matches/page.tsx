@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { FlameIcon, FilterIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
+import DesktopLayout from '@/components/DesktopLayout';
 import { useAuth } from '@/store/AuthContext';
 import { matchService, storageService } from '@/lib/appwrite/services';
 import { account } from '@/lib/appwrite/config';
@@ -43,29 +44,33 @@ export default function MatchesPage() {
   const conversationMatches = matches.filter((m: any) => m.matchedUser);
 
   return (
-    <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '60px 20px 12px' }}>
-        <div style={{ width: 36, height: 36, borderRadius: 12, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <FlameIcon size={22} color="white" />
+    <DesktopLayout>
+      <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px' }}>
+      <div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <FlameIcon size={24} color="white" />
+            </div>
+            <span style={{ fontSize: 24, fontWeight: 800, color: 'white' }}>Matches</span>
+          </div>
+          <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8 }}>
+            <FilterIcon size={24} color="#ABABAB" />
+          </button>
         </div>
-        <span style={{ fontSize: 20, fontWeight: 700, color: 'white' }}>Matches</span>
-        <button style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-          <FilterIcon size={24} color="#ABABAB" />
-        </button>
-      </div>
 
       {loading ? (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 60 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 80 }}>
           <span style={{ color: '#ABABAB', fontSize: 16 }}>Loading matches...</span>
         </div>
       ) : (
         <>
-          <div style={{ paddingLeft: 20, marginBottom: 24 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: 'white', marginBottom: 14 }}>New Matches</h2>
+          <div style={{ marginBottom: 32 }}>
+            <h2 style={{ fontSize: 18, fontWeight: 700, color: 'white', marginBottom: 16 }}>New Matches</h2>
             {newMatches.length === 0 ? (
-              <p style={{ color: '#6B6B6B', fontSize: 14, paddingRight: 20 }}>No matches yet. Keep swiping!</p>
+              <p style={{ color: '#6B6B6B', fontSize: 14 }}>No matches yet. Keep swiping!</p>
             ) : (
-              <div style={{ display: 'flex', gap: 16, overflowX: 'auto', paddingRight: 20, paddingBottom: 4 }}>
+              <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
                 {newMatches.map((item: any) => {
                   const mp = item.matchedUser || {};
                   const photoUrl = mp._photoUrl || '';
@@ -89,8 +94,8 @@ export default function MatchesPage() {
             )}
           </div>
 
-          <div style={{ flex: 1, padding: '0 20px' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: 'white', marginBottom: 14 }}>Messages</h2>
+          <div>
+            <h2 style={{ fontSize: 18, fontWeight: 700, color: 'white', marginBottom: 16 }}>Messages</h2>
             {conversationMatches.length === 0 ? (
               <p style={{ color: '#6B6B6B', fontSize: 14 }}>No messages yet. Start a conversation!</p>
             ) : (
@@ -105,9 +110,12 @@ export default function MatchesPage() {
                       key={item.$id}
                       href={`/chat/${item.$id}`}
                       style={{
-                        display: 'flex', alignItems: 'center', padding: 12, borderRadius: 16, gap: 14,
+                        display: 'flex', alignItems: 'center', padding: 16, borderRadius: 16, gap: 14,
                         backgroundColor: 'rgba(255,255,255,0.08)', marginBottom: 8, textDecoration: 'none', cursor: 'pointer',
+                        transition: 'background 0.15s',
                       }}
+                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.12)')}
+                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)')}
                     >
                       <div style={{ position: 'relative' }}>
                         {photoUrl ? (
@@ -135,8 +143,9 @@ export default function MatchesPage() {
           </div>
         </>
       )}
-
+      </div>
       <TabBar />
-    </GradientBackground>
+      </GradientBackground>
+    </DesktopLayout>
   );
 }

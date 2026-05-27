@@ -5,6 +5,7 @@ import AnimatedCard from '@/components/AnimatedCard';
 import ActionButton from '@/components/ActionButton';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
+import DesktopLayout from '@/components/DesktopLayout';
 import { useAuth } from '@/store/AuthContext';
 import { userService, storageService } from '@/lib/appwrite/services';
 import { account } from '@/lib/appwrite/config';
@@ -101,34 +102,38 @@ export default function DiscoverPage() {
 
   if (loading) {
     return (
-      <GradientBackground style={{ height: '100dvh', overflow: 'hidden' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100dvh' }}>
-          <span style={{ color: '#ABABAB', fontSize: 16 }}>Loading profiles...</span>
-        </div>
-        <TabBar />
-      </GradientBackground>
+      <DesktopLayout>
+        <GradientBackground style={{ height: '100dvh', overflow: 'hidden' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100dvh' }}>
+            <span style={{ color: '#ABABAB', fontSize: 16 }}>Loading profiles...</span>
+          </div>
+          <TabBar />
+        </GradientBackground>
+      </DesktopLayout>
     );
   }
 
   if (users.length === 0) {
     return (
-      <GradientBackground style={{ height: '100dvh', overflow: 'hidden' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 16 }}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#6B6B6B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 1 0 0-8c-2 0-4 1.33-6 4Z"/>
-          </svg>
-          <span style={{ fontSize: 22, fontWeight: 700, color: 'white' }}>No more profiles</span>
-          <button onClick={loadUsers} style={{ background: 'none', border: 'none', color: '#FF375F', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>Refresh</button>
-        </div>
-        <TabBar />
-      </GradientBackground>
+      <DesktopLayout>
+        <GradientBackground style={{ height: '100dvh', overflow: 'hidden' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 16 }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#6B6B6B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 1 0 0-8c-2 0-4 1.33-6 4Z"/>
+            </svg>
+            <span style={{ fontSize: 22, fontWeight: 700, color: 'white' }}>No more profiles</span>
+            <button onClick={loadUsers} style={{ background: 'none', border: 'none', color: '#FF375F', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>Refresh</button>
+          </div>
+          <TabBar />
+        </GradientBackground>
+      </DesktopLayout>
     );
   }
 
   return (
-    <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', background: 'linear-gradient(135deg, #1A0000, #2D0000, #1A0000)', overflow: 'hidden', paddingTop: '50px' }}>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 0, overflow: 'hidden' }}>
-        <div style={{ position: 'relative', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', maxHeight: '100%', overflow: 'hidden' }}>
+    <DesktopLayout>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24 }}>
+        <div style={{ position: 'relative', width: '100%', maxWidth: 480, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {users.slice(0, 3).reverse().map((user, index) => (
             <AnimatedCard
               key={user.id}
@@ -141,35 +146,33 @@ export default function DiscoverPage() {
             />
           ))}
         </div>
-      </div>
 
-      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, padding: '8px 20px 100px' }}>
-        <ActionButton variant="secondary" size={48} onPress={handleReload}>
-          <RefreshIcon size={20} color="#FFD700" />
-        </ActionButton>
-        <ActionButton variant="danger" size={62} onPress={handleSwipeLeft}>
-          <CloseIcon size={30} color="white" />
-        </ActionButton>
-        <ActionButton variant="superlike" size={48} onPress={handleSuperLike}>
-          <StarIcon size={20} color="white" />
-        </ActionButton>
-        <ActionButton variant="primary" size={62} onPress={handleSwipeRight}>
-          <HeartIcon size={30} color="white" />
-        </ActionButton>
-        <ActionButton variant="boost" size={48} onPress={() => {}}>
-          <FlashIcon size={20} color="white" />
-        </ActionButton>
-      </div>
-
-      {lastAction && (
-        <div style={{ position: 'fixed', bottom: 100, left: '50%', transform: 'translateX(-50%)', background: lastAction === 'match' ? 'linear-gradient(135deg, #FF375F, #FF3B30)' : 'rgba(255,255,255,0.08)', padding: '8px 20px', borderRadius: 9999, zIndex: 100, whiteSpace: 'nowrap' }}>
-          <span style={{ color: 'white', fontWeight: 600, fontSize: 14 }}>
-            {lastAction === 'match' ? "It's a Match!" : lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : 'Super Like!'}
-          </span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+          <ActionButton variant="secondary" size={48} onPress={handleReload}>
+            <RefreshIcon size={20} color="#FFD700" />
+          </ActionButton>
+          <ActionButton variant="danger" size={62} onPress={handleSwipeLeft}>
+            <CloseIcon size={30} color="white" />
+          </ActionButton>
+          <ActionButton variant="superlike" size={48} onPress={handleSuperLike}>
+            <StarIcon size={20} color="white" />
+          </ActionButton>
+          <ActionButton variant="primary" size={62} onPress={handleSwipeRight}>
+            <HeartIcon size={30} color="white" />
+          </ActionButton>
+          <ActionButton variant="boost" size={48} onPress={() => {}}>
+            <FlashIcon size={20} color="white" />
+          </ActionButton>
         </div>
-      )}
 
-      <TabBar />
-    </div>
+        {lastAction && (
+          <div style={{ background: lastAction === 'match' ? 'linear-gradient(135deg, #FF375F, #FF3B30)' : 'rgba(255,255,255,0.08)', padding: '8px 20px', borderRadius: 9999, zIndex: 100, whiteSpace: 'nowrap' }}>
+            <span style={{ color: 'white', fontWeight: 600, fontSize: 14 }}>
+              {lastAction === 'match' ? "It's a Match!" : lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : 'Super Like!'}
+            </span>
+          </div>
+        )}
+      </div>
+    </DesktopLayout>
   );
 }

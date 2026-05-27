@@ -5,6 +5,7 @@ import { DiamondIcon, CheckmarkCircleIcon, InfiniteIcon, StarIcon, FlashIcon, Gl
 import Button from '@/components/Button';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
+import DesktopLayout from '@/components/DesktopLayout';
 import { useAuth } from '@/store/AuthContext';
 import { userService } from '@/lib/appwrite/services';
 import { account } from '@/lib/appwrite/config';
@@ -49,10 +50,11 @@ export default function PremiumPage() {
   };
 
   return (
-    <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px' }}>
+    <DesktopLayout>
+      <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px' }}>
       <div style={{ display: 'flex', flexDirection: 'column', paddingBottom: '85px', overflowY: 'auto' }}>
       <div style={{ background: 'linear-gradient(135deg, #0D0D0D, #1A0000, #0D0D0D)' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '80px 24px 32px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 24px 28px' }}>
           <div style={{ width: 72, height: 72, borderRadius: 24, background: 'linear-gradient(135deg, #FFD700, #FF375F)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, boxShadow: '0 0 20px rgba(255,55,95,0.5)' }}>
             <DiamondIcon size={32} color="white" />
           </div>
@@ -60,10 +62,10 @@ export default function PremiumPage() {
           <p style={{ fontSize: 16, color: '#ABABAB', marginTop: 8 }}>Unlock the full Odogwu experience</p>
         </div>
 
-        <div style={{ overflowX: 'auto', paddingBottom: 8 }}>
-          <div style={{ display: 'flex', gap: 12, padding: '0 20px' }}>
+        <div style={{ padding: '0 0 16px' }}>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
             {FEATURES.map((f, i) => (
-              <div key={i} style={{ minWidth: 140, padding: 16, borderRadius: 16, border: '1px solid #2A2A2A', background: 'linear-gradient(135deg, #1A1A1A, #242424)', display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div key={i} style={{ width: 170, padding: 16, borderRadius: 16, border: '1px solid #2A2A2A', background: 'linear-gradient(135deg, #1A1A1A, #242424)', display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <div style={{ width: 40, height: 40, borderRadius: 12, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {f.icon}
                 </div>
@@ -75,9 +77,9 @@ export default function PremiumPage() {
         </div>
       </div>
 
-      <div style={{ padding: '24px 20px 0' }}>
-        <h2 style={{ fontSize: 22, fontWeight: 700, color: 'white', marginBottom: 16 }}>Choose your plan</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ padding: '24px 0 0' }}>
+        <h2 style={{ fontSize: 22, fontWeight: 700, color: 'white', marginBottom: 20, textAlign: 'center' }}>Choose your plan</h2>
+        <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', justifyContent: 'center' }}>
           {PLANS.map((plan) => {
             const selected = selectedPlan === plan.id;
             return (
@@ -85,6 +87,7 @@ export default function PremiumPage() {
                 key={plan.id}
                 onClick={() => setSelectedPlan(plan.id)}
                 style={{
+                  flex: '1 1 280px', maxWidth: 340,
                   backgroundColor: '#1A1A1A',
                   borderRadius: 24,
                   border: selected ? '2px solid #FF375F' : '1px solid #2A2A2A',
@@ -141,5 +144,6 @@ export default function PremiumPage() {
       <TabBar />
       </div>
     </GradientBackground>
+    </DesktopLayout>
   );
 }

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { HeartIcon, EyeIcon, CloseIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
+import DesktopLayout from '@/components/DesktopLayout';
 import { useAuth } from '@/store/AuthContext';
 import { matchService, storageService, userService } from '@/lib/appwrite/services';
 import { account } from '@/lib/appwrite/config';
@@ -53,7 +54,8 @@ export default function LikesPage() {
   };
 
   return (
-    <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px' }}>
+    <DesktopLayout>
+      <GradientBackground style={{ minHeight: '100vh', paddingBottom: '85px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '60px 20px 12px' }}>
         <div style={{ width: 36, height: 36, borderRadius: 12, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <EyeIcon size={22} color="white" />
@@ -81,7 +83,7 @@ export default function LikesPage() {
             const age = mp.age || '';
             return (
               <div key={item.$id} style={{
-                display: 'flex', alignItems: 'center', padding: 12, borderRadius: 16, gap: 14,
+                display: 'flex', alignItems: 'center', padding: 16, borderRadius: 16, gap: 14,
                 backgroundColor: 'rgba(255,255,255,0.08)',
               }}>
                 <div style={{ width: 60, height: 60, borderRadius: '50%', overflow: 'hidden', backgroundColor: '#1A1A1A', flexShrink: 0 }}>
@@ -116,8 +118,8 @@ export default function LikesPage() {
           })}
         </div>
       )}
-
       <TabBar />
-    </GradientBackground>
+      </GradientBackground>
+    </DesktopLayout>
   );
 }
