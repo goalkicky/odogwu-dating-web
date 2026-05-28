@@ -1,11 +1,13 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import MarketingNav from '@/components/MarketingNav';
 import MarketingFooter from '@/components/MarketingFooter';
 import { useMobile } from '@/lib/useMediaQuery';
 import { ChatIcon, StarIcon, ShieldIcon, SparklesIcon, GlobeIcon, EyeIcon } from '@/components/Icons';
 import VideoCarouselBackground from '@/components/VideoCarouselBackground';
+import { useAuth } from '@/store/AuthContext';
 
 const ACCENT = '#FF3B30';
 
@@ -62,6 +64,15 @@ const testimonials = [
 export default function LandingPage() {
   const isMobile = useMobile();
   const [testimonialIdx, setTestimonialIdx] = useState(0);
+  const { loading, isAuthenticated, isOnboarded } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (loading) return;
+    if (isAuthenticated) {
+      router.replace(isOnboarded ? '/discover' : '/onboarding/name');
+    }
+  }, [loading, isAuthenticated, isOnboarded, router]);
 
   useEffect(() => {
     const timer = setInterval(() => {
