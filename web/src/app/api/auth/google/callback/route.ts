@@ -57,6 +57,10 @@ export async function GET(request: NextRequest) {
     const googleUser = await infoRes.json();
 
     const apiHeaders = { 'Content-Type': 'application/json', 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey };
+    const dbId = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
+    if (!dbId) throw new Error('NEXT_PUBLIC_APPWRITE_DATABASE_ID not set');
+    const usersCol = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID || 'users';
+
     const email = googleUser.email;
     const name = googleUser.name || email?.split('@')[0] || 'User';
     const googleId = googleUser.id;
@@ -72,7 +76,6 @@ export async function GET(request: NextRequest) {
     } catch (e: any) {
       if (e.status !== 409) throw e;
       existingUser = true;
-      // Find the existing user by email — users.list supports search
       const searchRes = await retryOnRate(() => fetch(`${endpoint}/users?search=${encodeURIComponent(email)}`, {
         headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey },
       }).then(r => { if (!r.ok) throw new Error('Failed to search users: ' + r.status); return r.json(); }));
@@ -80,6 +83,25 @@ export async function GET(request: NextRequest) {
       if (!found) throw new Error('Existing user not found by email');
       userId = found.$id;
     }
+
+    // Create profile doc in users collection if it doesn't exist
+    try {
+      await fetch(`${endpoint}/databases/${dbId}/collections/${usersCol}/documents/${userId}`, {
+        headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey },
+      }).then(async r => {
+        if (r.status === 404) {
+          // Create bare profile so getDocument('users', userId) doesn't 404
+          await fetch(`${endpoint}/databases/${dbId}/collections/${usersCol}/documents`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey },
+            body: JSON.stringify({
+              documentId: userId,
+              data: { userId, fullName: name, email, onboardingComplete: false },
+              permissions: ['read("any")', `write("user:${userId}")`],
+            }),
+          }).catch(() => {});
+        }
+      });
+    } catch {}
 
     // Create session via Users API
     const sessionRes = await retryOnRate(() => fetch(`${endpoint}/users/${userId}/sessions`, {
@@ -90,22 +112,10 @@ export async function GET(request: NextRequest) {
 
     const xFallback = sessionRes.headers.get('X-Fallback-Cookies') || '{}';
 
-    // Check if user has a profile in the users collection
-    let hasProfile = false;
-    if (existingUser) {
-      try {
-        const profileRes = await fetch(
-          `${endpoint}/databases/odogwu-dating/collections/users/documents/${userId}`,
-          { headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey } },
-        );
-        hasProfile = profileRes.ok;
-      } catch {}
-    }
-
     return new NextResponse(
       `<!DOCTYPE html><html><body><script>
 try{localStorage.setItem('cookieFallback',${JSON.stringify(xFallback)})}catch(e){}
-window.location.href='${existingUser && hasProfile ? '/discover' : '/onboarding/name'}'
+window.location.href='${existingUser ? '/discover' : '/onboarding/name'}'
 </script></body></html>`,
       { headers: { 'Content-Type': 'text/html; charset=utf-8' } },
     );
