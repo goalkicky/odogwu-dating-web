@@ -59,21 +59,29 @@ export async function GET(request: NextRequest) {
     const apiHeaders = { 'Content-Type': 'application/json', 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey };
     const email = googleUser.email;
     const name = googleUser.name || email?.split('@')[0] || 'User';
-    const userId = googleUser.id;
+    const googleId = googleUser.id;
+    let userId = googleId;
     let existingUser = false;
 
-    // Create user via Users API; 409 = already exists
+    // Try to create user with Google ID; 409 = already exists
     try {
       await retryOnRate(() => fetch(`${endpoint}/users`, {
         method: 'POST', headers: apiHeaders,
-        body: JSON.stringify({ userId, email, name }),
+        body: JSON.stringify({ userId: googleId, email, name }),
       }).then(async r => { if (!r.ok) { const e: any = new Error(await r.text()); e.status = r.status; throw e; } }));
     } catch (e: any) {
-      if (e.status === 409) existingUser = true;
-      else throw e;
+      if (e.status !== 409) throw e;
+      existingUser = true;
+      // Find the existing user by email — users.list supports search
+      const searchRes = await retryOnRate(() => fetch(`${endpoint}/users?search=${encodeURIComponent(email)}`, {
+        headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey },
+      }).then(r => { if (!r.ok) throw new Error('Failed to search users: ' + r.status); return r.json(); }));
+      const found = searchRes.users?.find((u: any) => u.email === email);
+      if (!found) throw new Error('Existing user not found by email');
+      userId = found.$id;
     }
 
-    // Create session via Users API (works for any user, no password needed)
+    // Create session via Users API
     const sessionRes = await retryOnRate(() => fetch(`${endpoint}/users/${userId}/sessions`, {
       method: 'POST', headers: apiHeaders,
       body: JSON.stringify({ duration: 31536000 }),
@@ -82,16 +90,15 @@ export async function GET(request: NextRequest) {
 
     const xFallback = sessionRes.headers.get('X-Fallback-Cookies') || '{}';
 
-    // Check profile for existing user
+    // Check if user has a profile in the users collection
     let hasProfile = false;
     if (existingUser) {
       try {
-        const q = encodeURIComponent(`equal("userId",["${userId}"])`);
-        const pdir = await fetch(
-          `${endpoint}/databases/odogwu-dating/collections/profiles/documents?queries=${q}`,
+        const profileRes = await fetch(
+          `${endpoint}/databases/odogwu-dating/collections/users/documents/${userId}`,
           { headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey } },
         );
-        if (pdir.ok && (await pdir.json()).total > 0) hasProfile = true;
+        hasProfile = profileRes.ok;
       } catch {}
     }
 
