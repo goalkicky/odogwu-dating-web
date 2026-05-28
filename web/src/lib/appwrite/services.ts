@@ -44,11 +44,15 @@ export const authService = {
 
 async function getProfileDoc(userId: string) {
   checkInit();
-  return retryOnRateLimit(() => databases!.getDocument(
-    APPWRITE_CONFIG.databaseId,
-    APPWRITE_CONFIG.usersCollectionId,
-    userId
-  ));
+  return retryOnRateLimit(async () => {
+    const result = await databases!.listDocuments(
+      APPWRITE_CONFIG.databaseId,
+      APPWRITE_CONFIG.usersCollectionId,
+      [Query.equal('$id', userId)]
+    );
+    if (result.documents.length === 0) throw new Error('Profile not found');
+    return result.documents[0];
+  });
 }
 
 export const userService = {
