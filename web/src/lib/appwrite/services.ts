@@ -69,12 +69,15 @@ export const userService = {
 
   updateProfile: async (userId: string, data: Partial<UserProfile>) => {
     checkInit();
-    return databases!.updateDocument(
+    return retryOnRateLimit(() => databases!.updateDocument(
       APPWRITE_CONFIG.databaseId,
       APPWRITE_CONFIG.usersCollectionId,
       userId,
       data
-    );
+    ).catch((e: any) => {
+      if (e?.code === 404) return null;
+      throw e;
+    }));
   },
 
   getProfile: async (userId: string) => getProfileDoc(userId),
