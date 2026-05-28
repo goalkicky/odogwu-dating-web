@@ -114,22 +114,22 @@ export async function GET(request: NextRequest) {
 
     // Check if user has a profile document
     const dbId = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
-    let hasProfile = false;
-    if (existingUser && dbId) {
+    let hasProfile = existingUser; // optimistic for returning users
+    if (dbId) {
       try {
         const q = encodeURIComponent(`equal("$id","${userId}")`);
         const pdir = await fetch(
           `${endpoint}/databases/${dbId}/collections/users/documents?queries=${q}`,
           { headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey } },
         );
-        if (pdir.ok && (await pdir.json()).total > 0) hasProfile = true;
+        hasProfile = pdir.ok && (await pdir.json()).total > 0;
       } catch {}
     }
 
     return new NextResponse(
       `<!DOCTYPE html><html><body><script>
 try{localStorage.setItem('cookieFallback',${JSON.stringify(xFallback)})}catch(e){}
-window.location.href='${existingUser && hasProfile ? '/discover' : '/onboarding/name'}'
+window.location.href='${hasProfile ? '/discover' : '/onboarding/name'}'
 </script></body></html>`,
       { headers: { 'Content-Type': 'text/html; charset=utf-8' } },
     );
