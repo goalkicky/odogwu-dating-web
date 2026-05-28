@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { FlameIcon, SparklesIcon, ShieldIcon, ChatIcon, GoogleIcon } from '@/components/Icons';
 import Button from '@/components/Button';
@@ -7,9 +7,16 @@ import VideoCarouselBackground from '@/components/VideoCarouselBackground';
 import { useAuth } from '@/store/AuthContext';
 
 export default function LoginPage() {
-  const { refreshUser } = useAuth();
+  const { loading, isAuthenticated, isOnboarded, refreshUser } = useAuth();
   const router = useRouter();
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (loading) return;
+    if (isAuthenticated) {
+      router.replace(isOnboarded ? '/discover' : '/onboarding/name');
+    }
+  }, [loading, isAuthenticated, isOnboarded, router]);
 
   const handleGoogleLogin = () => {
     router.push('/oauth');
