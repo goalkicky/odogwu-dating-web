@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const origin = (r: NextRequest) => r.nextUrl.origin.replace('://www.', '://');
 
+function makeid() {
+  return Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 10) + 'A1!';
+}
+
 async function retryOnRate<T>(fn: () => Promise<T>, max = 5): Promise<T> {
   for (let i = 0; i < max; i++) {
     try { return await fn(); } catch (e: any) {
@@ -59,6 +63,7 @@ export async function GET(request: NextRequest) {
     const email = googleUser.email;
     const name = googleUser.name || email?.split('@')[0] || 'User';
     const googleId = googleUser.id;
+    const pw = makeid();
     let userId = googleId;
     let existingUser = false;
 
@@ -66,37 +71,46 @@ export async function GET(request: NextRequest) {
     try {
       await retryOnRate(() => fetch(`${endpoint}/users`, {
         method: 'POST', headers: apiHeaders,
-        body: JSON.stringify({ userId: googleId, email, name }),
+        body: JSON.stringify({ userId: googleId, email, name, password: pw }),
       }).then(async r => { if (!r.ok) { const e: any = new Error(await r.text()); e.status = r.status; throw e; } }));
     } catch (e: any) {
       if (e.status !== 409) throw e;
       existingUser = true;
-      // Try direct ID lookup first (fast, no scan)
+      // Try direct ID lookup first
       const idRes = await fetch(`${endpoint}/users/${googleId}`, {
         headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey },
       });
       if (idRes.ok) {
-        const existing = await idRes.json();
-        userId = existing.$id;
+        userId = (await idRes.json()).$id;
+        // Set password so we can create email-password session
+        await retryOnRate(() => fetch(`${endpoint}/users/${userId}/password`, {
+          method: 'PATCH', headers: apiHeaders, body: JSON.stringify({ password: pw }),
+        }).catch(() => {}));
       } else {
-        // Fall back to email search (needs users.read)
+        // Search by email
         const searchRes = await retryOnRate(() => fetch(`${endpoint}/users?search=${encodeURIComponent(email)}`, {
           headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey },
         }).then(r => { if (!r.ok) throw new Error('Failed to search users: ' + r.status); return r.json(); }));
         const found = searchRes.users?.find((u: any) => u.email === email);
         if (!found) throw new Error('Existing user not found by email');
         userId = found.$id;
+        // Set password
+        await retryOnRate(() => fetch(`${endpoint}/users/${userId}/password`, {
+          method: 'PATCH', headers: apiHeaders, body: JSON.stringify({ password: pw }),
+        }).catch(() => {}));
       }
     }
 
-    // Create session
-    const sessionRes = await retryOnRate(() => fetch(`${endpoint}/users/${userId}/sessions`, {
-      method: 'POST', headers: apiHeaders,
-      body: JSON.stringify({ duration: 31536000 }),
+    // Create email-password session via Account API — returns X-Fallback-Cookies!
+    const sessionRes = await retryOnRate(() => fetch(`${endpoint}/account/sessions/email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Appwrite-Project': projectId },
+      body: JSON.stringify({ email, password: pw, duration: 31536000 }),
     }));
-    if (!sessionRes.ok) throw new Error('Appwrite session failed: ' + await sessionRes.text());
+    if (!sessionRes.ok) throw new Error('Session failed: ' + await sessionRes.text());
 
-    const xFallback = sessionRes.headers.get('X-Fallback-Cookies') || '{}';
+    const xFallback = sessionRes.headers.get('X-Fallback-Cookies');
+    if (!xFallback || xFallback === '{}') throw new Error('No session cookies returned from Appwrite');
 
     // Check if user has a profile document
     const dbId = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
