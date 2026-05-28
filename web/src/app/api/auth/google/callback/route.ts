@@ -46,10 +46,9 @@ export async function GET(request: NextRequest) {
         redirect_uri: `${origin(request)}/api/auth/google/callback`, grant_type: 'authorization_code',
       }),
     });
-    if (!tokenRes.ok) throw new Error('Google token exchange failed: ' + await tokenRes.text());
+    if (!tokenRes.ok) throw new Error('Google token failed: ' + await tokenRes.text());
     const tokens = await tokenRes.json();
 
-    // Get Google profile
     const infoRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
       headers: { Authorization: `Bearer ${tokens.access_token}` },
     });
@@ -57,17 +56,13 @@ export async function GET(request: NextRequest) {
     const googleUser = await infoRes.json();
 
     const apiHeaders = { 'Content-Type': 'application/json', 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey };
-    const dbId = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
-    if (!dbId) throw new Error('NEXT_PUBLIC_APPWRITE_DATABASE_ID not set');
-    const usersCol = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID || 'users';
-
     const email = googleUser.email;
     const name = googleUser.name || email?.split('@')[0] || 'User';
     const googleId = googleUser.id;
-    let userId = googleId;
+    const userId = googleId;
     let existingUser = false;
 
-    // Try to create user with Google ID; 409 = already exists
+    // Try to create user with Google ID
     try {
       await retryOnRate(() => fetch(`${endpoint}/users`, {
         method: 'POST', headers: apiHeaders,
@@ -76,38 +71,18 @@ export async function GET(request: NextRequest) {
     } catch (e: any) {
       if (e.status !== 409) throw e;
       existingUser = true;
-      const searchRes = await retryOnRate(() => fetch(`${endpoint}/users?search=${encodeURIComponent(email)}`, {
-        headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey },
-      }).then(r => { if (!r.ok) throw new Error('Failed to search users: ' + r.status); return r.json(); }));
-      const found = searchRes.users?.find((u: any) => u.email === email);
-      if (!found) throw new Error('Existing user not found by email');
-      userId = found.$id;
     }
 
-    // Create profile doc in users collection if it doesn't exist
-    try {
-      await fetch(`${endpoint}/databases/${dbId}/collections/${usersCol}/documents/${userId}`, {
-        headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey },
-      }).then(async r => {
-        if (r.status === 404) {
-          // Create bare profile so getDocument('users', userId) doesn't 404
-          await fetch(`${endpoint}/databases/${dbId}/collections/${usersCol}/documents`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey },
-            body: JSON.stringify({
-              documentId: userId,
-              data: { userId, fullName: name, email, onboardingComplete: false },
-              permissions: ['read("any")', `write("user:${userId}")`],
-            }),
-          }).catch(() => {});
-        }
-      });
-    } catch {}
-
-    // Create session via Users API
+    // Create session — works if user exists with googleId (new or from prior attempt)
     const sessionRes = await retryOnRate(() => fetch(`${endpoint}/users/${userId}/sessions`, {
       method: 'POST', headers: apiHeaders,
       body: JSON.stringify({ duration: 31536000 }),
     }));
+    
+    if (!sessionRes.ok && existingUser) {
+      // 409 + session failed → user exists with a different Appwrite ID (old OAuth)
+      throw new Error('Add users.read scope to APPWRITE_API_KEY so email search works for legacy accounts, or sign in with a new email.');
+    }
     if (!sessionRes.ok) throw new Error('Appwrite session failed: ' + await sessionRes.text());
 
     const xFallback = sessionRes.headers.get('X-Fallback-Cookies') || '{}';
