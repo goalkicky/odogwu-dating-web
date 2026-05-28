@@ -21,9 +21,9 @@ export default function ProfilePage() {
     setPhotoUrl(storageService.getFilePreview(photoId));
   }, [photoId]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     if (window.confirm('Are you sure you want to logout?')) {
-      logout();
+      await logout();
       router.push('/login');
     }
   };

@@ -58,6 +58,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try { await authService.logout(); } catch {}
+    if (typeof window !== 'undefined') {
+      try { window.localStorage.removeItem('cookieFallback'); } catch {}
+    }
     setState({ user: null, profile: null, loading: false, isAuthenticated: false, isOnboarded: false });
   };
 
