@@ -117,7 +117,7 @@ export async function GET(request: NextRequest) {
     let hasProfile = existingUser; // optimistic for returning users
     if (dbId) {
       try {
-        const q = encodeURIComponent(`equal("$id","${userId}")`);
+        const q = encodeURIComponent(`equal("$id",["${userId}"])`);
         const pdir = await fetch(
           `${endpoint}/databases/${dbId}/collections/users/documents?queries=${q}`,
           { headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey } },
