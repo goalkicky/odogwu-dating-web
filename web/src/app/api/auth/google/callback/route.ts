@@ -112,24 +112,10 @@ export async function GET(request: NextRequest) {
     const xFallback = sessionRes.headers.get('X-Fallback-Cookies');
     if (!xFallback || xFallback === '{}') throw new Error('No session cookies returned from Appwrite');
 
-    // Check if user has a profile document
-    const dbId = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
-    let hasProfile = existingUser; // optimistic for returning users
-    if (dbId) {
-      try {
-        const q = encodeURIComponent(`equal("$id",["${userId}"])`);
-        const pdir = await fetch(
-          `${endpoint}/databases/${dbId}/collections/users/documents?queries=${q}`,
-          { headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey } },
-        );
-        hasProfile = pdir.ok && (await pdir.json()).total > 0;
-      } catch {}
-    }
-
     return new NextResponse(
       `<!DOCTYPE html><html><body><script>
 try{localStorage.setItem('cookieFallback',${JSON.stringify(xFallback)})}catch(e){}
-window.location.href='${hasProfile ? '/discover' : '/onboarding/name'}'
+window.location.href='${existingUser ? '/discover' : '/onboarding/name'}'
 </script></body></html>`,
       { headers: { 'Content-Type': 'text/html; charset=utf-8' } },
     );
