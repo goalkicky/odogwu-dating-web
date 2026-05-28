@@ -34,9 +34,16 @@ export default function OAuthCallback() {
       const jwt = qParams.get('jwt');
       const sessionId = qParams.get('sessionId');
 
-      // No params — initiate Google OAuth
+      // Check if already authenticated before doing anything
       if (!userId && !secret && !jwt && !sessionId) {
-        const { authService } = await import('@/lib/appwrite/services');
+        try {
+          const existingUser = await authService.getCurrentUser();
+          if (existingUser) {
+            await routeAfterAuth();
+            return;
+          }
+        } catch {}
+        // Not authenticated — initiate Google OAuth
         await authService.loginWithGoogle();
         return;
       }
