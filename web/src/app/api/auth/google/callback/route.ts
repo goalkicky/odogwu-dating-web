@@ -59,10 +59,10 @@ export async function GET(request: NextRequest) {
     const email = googleUser.email;
     const name = googleUser.name || email?.split('@')[0] || 'User';
     const googleId = googleUser.id;
-    const userId = googleId;
+    let userId = googleId;
     let existingUser = false;
 
-    // Try to create user with Google ID
+    // Try to create user with Google ID; 409 = already exists
     try {
       await retryOnRate(() => fetch(`${endpoint}/users`, {
         method: 'POST', headers: apiHeaders,
@@ -71,26 +71,42 @@ export async function GET(request: NextRequest) {
     } catch (e: any) {
       if (e.status !== 409) throw e;
       existingUser = true;
+      // Find existing user by email (needs users.read scope)
+      const searchRes = await retryOnRate(() => fetch(`${endpoint}/users?search=${encodeURIComponent(email)}`, {
+        headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey },
+      }).then(r => { if (!r.ok) throw new Error('Failed to search users: ' + r.status); return r.json(); }));
+      const found = searchRes.users?.find((u: any) => u.email === email);
+      if (!found) throw new Error('Existing user not found by email');
+      userId = found.$id;
     }
 
-    // Create session — works if user exists with googleId (new or from prior attempt)
+    // Create session
     const sessionRes = await retryOnRate(() => fetch(`${endpoint}/users/${userId}/sessions`, {
       method: 'POST', headers: apiHeaders,
       body: JSON.stringify({ duration: 31536000 }),
     }));
-    
-    if (!sessionRes.ok && existingUser) {
-      // 409 + session failed → user exists with a different Appwrite ID (old OAuth)
-      throw new Error('Add users.read scope to APPWRITE_API_KEY so email search works for legacy accounts, or sign in with a new email.');
-    }
     if (!sessionRes.ok) throw new Error('Appwrite session failed: ' + await sessionRes.text());
 
     const xFallback = sessionRes.headers.get('X-Fallback-Cookies') || '{}';
 
+    // Check if user has a profile document
+    const dbId = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
+    let hasProfile = false;
+    if (existingUser && dbId) {
+      try {
+        const q = encodeURIComponent(`equal("$id","${userId}")`);
+        const pdir = await fetch(
+          `${endpoint}/databases/${dbId}/collections/users/documents?queries=${q}`,
+          { headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey } },
+        );
+        if (pdir.ok && (await pdir.json()).total > 0) hasProfile = true;
+      } catch {}
+    }
+
     return new NextResponse(
       `<!DOCTYPE html><html><body><script>
 try{localStorage.setItem('cookieFallback',${JSON.stringify(xFallback)})}catch(e){}
-window.location.href='${existingUser ? '/discover' : '/onboarding/name'}'
+window.location.href='${existingUser && hasProfile ? '/discover' : '/onboarding/name'}'
 </script></body></html>`,
       { headers: { 'Content-Type': 'text/html; charset=utf-8' } },
     );
