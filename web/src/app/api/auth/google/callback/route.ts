@@ -6,7 +6,7 @@ async function retryOnRate<T>(fn: () => Promise<T>, max = 5): Promise<T> {
   for (let i = 0; i < max; i++) {
     try { return await fn(); } catch (e: any) {
       const msg = typeof e?.message === 'string' ? e.message : '';
-      if (msg.includes('Rate limit') && i < max - 1) {
+      if ((msg.includes('Rate limit') || msg.includes('408')) && i < max - 1) {
         await new Promise(r => setTimeout(r, 1500 * Math.pow(2, i)));
         continue;
       }
@@ -71,13 +71,22 @@ export async function GET(request: NextRequest) {
     } catch (e: any) {
       if (e.status !== 409) throw e;
       existingUser = true;
-      // Find existing user by email (needs users.read scope)
-      const searchRes = await retryOnRate(() => fetch(`${endpoint}/users?search=${encodeURIComponent(email)}`, {
+      // Try direct ID lookup first (fast, no scan)
+      const idRes = await fetch(`${endpoint}/users/${googleId}`, {
         headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey },
-      }).then(r => { if (!r.ok) throw new Error('Failed to search users: ' + r.status); return r.json(); }));
-      const found = searchRes.users?.find((u: any) => u.email === email);
-      if (!found) throw new Error('Existing user not found by email');
-      userId = found.$id;
+      });
+      if (idRes.ok) {
+        const existing = await idRes.json();
+        userId = existing.$id;
+      } else {
+        // Fall back to email search (needs users.read)
+        const searchRes = await retryOnRate(() => fetch(`${endpoint}/users?search=${encodeURIComponent(email)}`, {
+          headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey },
+        }).then(r => { if (!r.ok) throw new Error('Failed to search users: ' + r.status); return r.json(); }));
+        const found = searchRes.users?.find((u: any) => u.email === email);
+        if (!found) throw new Error('Existing user not found by email');
+        userId = found.$id;
+      }
     }
 
     // Create session
