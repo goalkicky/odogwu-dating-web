@@ -2,10 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const origin = (r: NextRequest) => r.nextUrl.origin.replace('://www.', '://');
 
-function makeid() {
-  return Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 10) + 'A1!';
-}
-
 async function retryOnRate<T>(fn: () => Promise<T>, max = 5): Promise<T> {
   for (let i = 0; i < max; i++) {
     try { return await fn(); } catch (e: any) {
@@ -61,33 +57,26 @@ export async function GET(request: NextRequest) {
     const googleUser = await infoRes.json();
 
     const apiHeaders = { 'Content-Type': 'application/json', 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey };
-    const pw = makeid();
     const email = googleUser.email;
     const name = googleUser.name || email?.split('@')[0] || 'User';
+    const userId = googleUser.id;
+    let existingUser = false;
 
     // Create user via Users API; 409 = already exists
-    let existingUser = false;
     try {
       await retryOnRate(() => fetch(`${endpoint}/users`, {
         method: 'POST', headers: apiHeaders,
-        body: JSON.stringify({ userId: googleUser.id, email, name, password: pw }),
+        body: JSON.stringify({ userId, email, name }),
       }).then(async r => { if (!r.ok) { const e: any = new Error(await r.text()); e.status = r.status; throw e; } }));
     } catch (e: any) {
-      if (e.status === 409) {
-        existingUser = true;
-        await retryOnRate(() => fetch(`${endpoint}/users/${googleUser.id}/password`, {
-          method: 'PATCH', headers: apiHeaders, body: JSON.stringify({ password: pw }),
-        }).catch(() => {}));
-      } else {
-        throw e;
-      }
+      if (e.status === 409) existingUser = true;
+      else throw e;
     }
 
-    // Create email-password session (public Account API)
-    const sessionRes = await retryOnRate(() => fetch(`${endpoint}/account/sessions/email`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Appwrite-Project': projectId },
-      body: JSON.stringify({ email, password: pw, duration: 31536000 }),
+    // Create session via Users API (works for any user, no password needed)
+    const sessionRes = await retryOnRate(() => fetch(`${endpoint}/users/${userId}/sessions`, {
+      method: 'POST', headers: apiHeaders,
+      body: JSON.stringify({ duration: 31536000 }),
     }));
     if (!sessionRes.ok) throw new Error('Appwrite session failed: ' + await sessionRes.text());
 
@@ -97,15 +86,12 @@ export async function GET(request: NextRequest) {
     let hasProfile = false;
     if (existingUser) {
       try {
-        const q = encodeURIComponent(`equal("userId",["${googleUser.id}"])`);
+        const q = encodeURIComponent(`equal("userId",["${userId}"])`);
         const pdir = await fetch(
           `${endpoint}/databases/odogwu-dating/collections/profiles/documents?queries=${q}`,
           { headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey } },
         );
-        if (pdir.ok) {
-          const docs = await pdir.json();
-          hasProfile = docs.total > 0;
-        }
+        if (pdir.ok && (await pdir.json()).total > 0) hasProfile = true;
       } catch {}
     }
 
