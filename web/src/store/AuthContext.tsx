@@ -72,7 +72,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!state.user?.$id || !state.isAuthenticated) return;
 
-    const touch = () => userService.updateProfile(state.user.$id, { lastActive: new Date().toISOString() }).catch(() => {});
+    const touch = () => {
+      if (!state.profile) return;
+      userService.updateProfile(state.user.$id, { lastActive: new Date().toISOString() }).catch(() => {});
+    };
     const keepalive = () => authService.getCurrentUser().catch(() => {});
 
     touch();
@@ -82,7 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const sessionKeepaliveId = setInterval(keepalive, 600000);
 
     return () => { clearInterval(heartbeatId); clearInterval(sessionKeepaliveId); };
-  }, [state.user?.$id, state.isAuthenticated]);
+  }, [state.user?.$id, state.isAuthenticated, state.profile]);
 
   return (
     <AuthContext.Provider value={{ ...state, refreshUser, logout, setOnboarded }}>
