@@ -344,9 +344,36 @@ export const callLogService = {
   },
 };
 
+async function compressImage(file: File, maxBytes = 15360): Promise<File> {
+  if (!file.type.startsWith('image/')) return file;
+  const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+    const i = new Image();
+    i.onload = () => resolve(i);
+    i.onerror = reject;
+    i.src = URL.createObjectURL(file);
+  });
+  const attempt = (w: number, q: number): Promise<Blob> => new Promise(r => {
+    const c = document.createElement('canvas');
+    const h = Math.round((img.height / img.width) * w);
+    c.width = w;
+    c.height = h;
+    c.getContext('2d')!.drawImage(img, 0, 0, w, h);
+    c.toBlob(b => r(b!), 'image/jpeg', q / 100);
+  });
+  for (let w = Math.min(img.width, 800); w >= 100; w -= 50) {
+    for (let q = 80; q >= 10; q -= 10) {
+      const blob = await attempt(w, q);
+      if (blob.size <= maxBytes) return new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' });
+    }
+  }
+  const blob = await attempt(80, 10);
+  return new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' });
+}
+
 export const storageService = {
   uploadFile: async (file: File) => {
     checkInit();
+    file = await compressImage(file);
     return storage!.createFile(
       APPWRITE_CONFIG.storageBucketId,
       ID.unique(),
@@ -359,7 +386,7 @@ export const storageService = {
     checkInit();
     const response = await fetch(uri);
     const blob = await response.blob();
-    const file = new File([blob], `photo_${Date.now()}.jpg`, { type: 'image/jpeg' });
+    const file = await compressImage(new File([blob], `photo_${Date.now()}.jpg`, { type: 'image/jpeg' }));
     return storage!.createFile(
       APPWRITE_CONFIG.storageBucketId,
       ID.unique(),
