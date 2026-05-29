@@ -88,7 +88,7 @@ export default function LikesPage() {
               }}>
                 <div style={{ width: 60, height: 60, borderRadius: '50%', overflow: 'hidden', backgroundColor: '#1A1A1A', flexShrink: 0 }}>
                   {photoUrl ? (
-                    <img src={photoUrl} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={photoUrl} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: profile?.isPremium ? 'none' : 'blur(8px)', transition: 'filter 0.3s' }} />
                   ) : (
                     <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <span style={{ color: '#6B6B6B', fontSize: 22 }}>{name[0]}</span>
