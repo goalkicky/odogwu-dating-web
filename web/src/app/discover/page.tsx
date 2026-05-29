@@ -21,12 +21,17 @@ export default function DiscoverPage() {
     if (!profile || !account) return;
     setLoading(true);
     try {
-      const docs = await userService.getDiscoverUsers((profile as any).$id, {
-        gender: profile.interestedIn || 'both',
-        minAge: 18,
-        maxAge: 60,
-      });
-      const photoIds = [...new Set(docs.flatMap((d: any) => d.photos || []))];
+      const [docs, likedIds] = await Promise.all([
+        userService.getDiscoverUsers((profile as any).$id, {
+          gender: profile.interestedIn || 'both',
+          minAge: 18,
+          maxAge: 60,
+        }),
+        userService.getLikedUserIds((profile as any).$id).catch(() => [] as string[]),
+      ]);
+      const likedSet = new Set(likedIds);
+      const filtered = docs.filter((d: any) => !likedSet.has(d.$id));
+      const photoIds = [...new Set(filtered.flatMap((d: any) => d.photos || []))];
       if (photoIds.length > 0) {
         try {
           await fetch('/api/storage/ensure-public-read/batch', {
@@ -36,7 +41,7 @@ export default function DiscoverPage() {
           });
         } catch {}
       }
-      const mapped = docs.map((d: any) => ({
+      const mapped = filtered.map((d: any) => ({
         id: d.$id,
         photos: (d.photos || []).map((fid: string) => storageService.getFilePreview(fid)),
         fullName: d.fullName || '',

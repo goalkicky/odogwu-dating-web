@@ -120,6 +120,15 @@ export const userService = {
     ]);
     return a.documents.length > 0 && b.documents.length > 0;
   },
+
+  getLikedUserIds: async (userId: string) => {
+    checkInit();
+    const r = await databases!.listDocuments(
+      APPWRITE_CONFIG.databaseId, APPWRITE_CONFIG.matchesCollectionId,
+      [Query.equal('userId', userId)]
+    );
+    return r.documents.map((d: any) => d.matchedUserId);
+  },
 };
 
 export const matchService = {
