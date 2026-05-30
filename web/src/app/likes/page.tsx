@@ -1,4 +1,4 @@
-'use client';
+ 'use client';
 import React, { useState, useEffect } from 'react';
 import { HeartIcon, EyeIcon, CloseIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
@@ -14,6 +14,7 @@ export default function LikesPage() {
   const [loading, setLoading] = useState(true);
   const [jwt, setJwt] = useState('');
   const [likingId, setLikingId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     if (!profile) return;
@@ -75,8 +76,29 @@ export default function LikesPage() {
           <span style={{ fontSize: 14, color: '#6B6B6B', textAlign: 'center' }}>Keep swiping on discover to get more likes!</span>
         </div>
       ) : (
+        <>
+        <div style={{ padding: '4px 20px 16px' }}>
+          <div style={{ position: 'relative' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B6B6B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input
+              type="text" placeholder="Search likes..."
+              value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+              style={{
+                width: '100%', padding: '12px 14px 12px 42px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)',
+                background: 'rgba(255,255,255,0.06)', color: 'white', fontSize: 15, outline: 'none', boxSizing: 'border-box',
+              }}
+            />
+          </div>
+        </div>
         <div style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {likers.map((item: any) => {
+          {likers.filter((item: any) => {
+            const q = searchQuery.toLowerCase();
+            if (!q) return true;
+            const mp = item.matchedUser || {};
+            return (mp.fullName || '').toLowerCase().includes(q);
+          }).map((item: any) => {
             const mp = item.matchedUser || {};
             const photoUrl = mp._photoUrl || '';
             const name = mp.fullName || 'User';
@@ -117,6 +139,7 @@ export default function LikesPage() {
             );
           })}
         </div>
+        </>
       )}
       <TabBar />
       </GradientBackground>
