@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { FlameIcon, SparklesIcon, ShieldIcon, ChatIcon, GoogleIcon } from '@/components/Icons';
+import { SparklesIcon, ShieldIcon, ChatIcon, GoogleIcon } from '@/components/Icons';
 import Button from '@/components/Button';
 import VideoCarouselBackground from '@/components/VideoCarouselBackground';
 import { useAuth } from '@/store/AuthContext';
@@ -49,7 +49,7 @@ export default function LoginPage() {
             boxShadow: '0 0 20px rgba(255,55,95,0.5)',
           }}
         >
-          <FlameIcon size={60} color="white" />
+          <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu" style={{ width: 60, height: 60, objectFit: 'cover' }} />
         </div>
         <h1 style={{ fontSize: 48, fontWeight: 800, color: 'white', letterSpacing: 4, textTransform: 'uppercase', margin: 0 }}>
           odogwu

@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useMobile } from '@/lib/useMediaQuery';
-import { FlameIcon } from './Icons';
+
+
 
 const links = [
   { href: '/', label: 'Home' },
@@ -31,13 +32,7 @@ export default function MarketingNav() {
         height: '64px',
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: 8,
-            background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <FlameIcon size={18} color="white" />
-          </div>
+          <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu" style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover' }} />
           <span style={{ fontSize: 18, fontWeight: 800, color: 'white', letterSpacing: 1 }}>ODOGWU</span>
         </Link>
 

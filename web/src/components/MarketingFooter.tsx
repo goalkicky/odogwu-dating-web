@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useMobile } from '@/lib/useMediaQuery';
-import { FlameIcon } from './Icons';
+
 
 export default function MarketingFooter() {
   const isMobile = useMobile();
@@ -20,13 +20,7 @@ export default function MarketingFooter() {
       }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-            <div style={{
-              width: 36, height: 36, borderRadius: 10,
-              background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <FlameIcon size={20} color="white" />
-            </div>
+            <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu" style={{ width: 36, height: 36, borderRadius: 10, objectFit: 'cover' }} />
             <span style={{ fontSize: 20, fontWeight: 800, color: 'white', letterSpacing: 1 }}>ODOGWU</span>
           </div>
           <p style={{ color: '#6B6B6B', fontSize: 14, lineHeight: '22px', maxWidth: 280 }}>
