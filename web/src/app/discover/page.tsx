@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useCallback, useEffect } from 'react';
-import { FlameIcon, HeartIcon, CloseIcon, StarIcon, FlashIcon, RefreshIcon } from '@/components/Icons';
+import { HeartIcon, CloseIcon, StarIcon, FlashIcon, RefreshIcon } from '@/components/Icons';
 import AnimatedCard from '@/components/AnimatedCard';
 import ActionButton from '@/components/ActionButton';
 import GradientBackground from '@/components/GradientBackground';

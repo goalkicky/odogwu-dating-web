@@ -2,13 +2,13 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FlameIcon, ChatIcon, DiamondIcon, PersonIcon, EyeIcon } from './Icons';
+import { ChatIcon, DiamondIcon, PersonIcon, EyeIcon } from './Icons';
 
 export default function TabBar() {
   const pathname = usePathname();
 
   const tabs = [
-    { href: '/discover', icon: <FlameIcon size={22} />, label: 'Discover' },
+    { href: '/discover', icon: <img src="https://kamsirmdlabs.com/img/logo.png" alt="" style={{ width: 22, height: 22, borderRadius: 6, objectFit: 'cover' }} />, label: 'Discover' },
     { href: '/matches', icon: <ChatIcon size={22} />, label: 'Matches' },
     { href: '/likes', icon: <EyeIcon size={22} />, label: 'Likes' },
     { href: '/premium', icon: <DiamondIcon size={22} />, label: 'Premium' },

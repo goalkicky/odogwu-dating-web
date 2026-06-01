@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FlameIcon, FilterIcon } from '@/components/Icons';
+import { FilterIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
@@ -51,9 +51,7 @@ export default function MatchesPage() {
       <div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <FlameIcon size={24} color="white" />
-            </div>
+            <img src="https://kamsirmdlabs.com/img/logo.png" alt="Matches" style={{ width: 40, height: 40, borderRadius: 12, objectFit: 'cover' }} />
             <span style={{ fontSize: 24, fontWeight: 800, color: 'white' }}>Matches</span>
           </div>
           <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8 }}>
