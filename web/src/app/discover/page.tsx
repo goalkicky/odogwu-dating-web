@@ -108,9 +108,10 @@ export default function DiscoverPage() {
   if (loading) {
     return (
       <DesktopLayout>
-        <GradientBackground style={{ height: '100dvh', overflow: 'hidden' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100dvh' }}>
-            <span style={{ color: '#ABABAB', fontSize: 16 }}>Loading profiles...</span>
+        <GradientBackground style={{ minHeight: '100vh' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 18 }}>
+            <div style={{ width: 56, height: 56, borderRadius: 18, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
+            <span className="neon-text" style={{ fontSize: 16, fontWeight: 700 }}>Loading profiles...</span>
           </div>
           <TabBar />
         </GradientBackground>
@@ -121,13 +122,18 @@ export default function DiscoverPage() {
   if (users.length === 0) {
     return (
       <DesktopLayout>
-        <GradientBackground style={{ height: '100dvh', overflow: 'hidden' }}>
+        <GradientBackground style={{ minHeight: '100vh' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 16 }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#6B6B6B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 1 0 0-8c-2 0-4 1.33-6 4Z"/>
-            </svg>
-            <span style={{ fontSize: 22, fontWeight: 700, color: 'white' }}>No more profiles</span>
-            <button onClick={loadUsers} style={{ background: 'none', border: 'none', color: '#FF375F', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>Refresh</button>
+            <div className="glass" style={{ width: 96, height: 96, borderRadius: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 40px rgba(255,55,95,0.15)' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FF6B8A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 1 0 0-8c-2 0-4 1.33-6 4Z"/>
+              </svg>
+            </div>
+            <span className="animate-pop" style={{ fontSize: 22, fontWeight: 800, color: 'white' }}>No more profiles</span>
+            <span style={{ fontSize: 14, color: '#6B6B6B', textAlign: 'center', maxWidth: 260 }}>
+              You&apos;ve seen everyone nearby. Check back later for fresh faces.
+            </span>
+            <button onClick={loadUsers} style={{ padding: '12px 28px', borderRadius: 9999, border: 'none', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 6px 24px rgba(255,55,95,0.4)' }}>Refresh</button>
           </div>
           <TabBar />
         </GradientBackground>
@@ -139,36 +145,45 @@ export default function DiscoverPage() {
 
   return (
     <DesktopLayout>
-      <GradientBackground style={{ minHeight: '100vh', padding: '24px 16px 85px', overflowY: 'auto' }}>
+      <GradientBackground style={{ minHeight: '100vh', padding: '24px 16px 110px', overflowY: 'auto' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
+        <div className="animate-fade-up" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
           <div>
-            <h1 style={{ fontSize: 28, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 0.5 }}>Discover</h1>
+            <h1 style={{ fontSize: 30, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 0.5 }}>
+              Discover<span style={{ color: '#FF375F' }}>.</span>
+            </h1>
             <p style={{ fontSize: 14, color: '#6B6B6B', margin: '4px 0 0' }}>
-              {users.length > 0 ? `${users.length} profiles available` : ''}
+              {users.length > 0 ? `${users.length} profiles ready for you` : ''}
             </p>
           </div>
-          <button
-            onClick={handleReload}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 8,
-              padding: '8px 16px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)',
-              background: 'rgba(255,255,255,0.06)', color: '#ABABAB', fontSize: 13,
-              cursor: 'pointer',
-            }}
-          >
-            <RefreshIcon size={16} color="#ABABAB" />
-            Refresh
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div className="glass" style={{ padding: '8px 14px', borderRadius: 9999, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#34C759', boxShadow: '0 0 10px #34C759' }} />
+              <span style={{ color: '#ABABAB', fontSize: 13, fontWeight: 600 }}>Live</span>
+            </div>
+            <button
+              onClick={handleReload}
+              className="glass lift"
+              style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                padding: '10px 16px', borderRadius: 9999,
+                color: '#D0D0D0', fontSize: 13, fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
+              <RefreshIcon size={16} color="#FF6B8A" />
+              Refresh
+            </button>
+          </div>
         </div>
 
         <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', justifyContent: 'center' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24 }}>
-            <div style={{ position: 'relative', width: 400, minHeight: 520, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 22 }}>
+            <div style={{ position: 'relative', width: 400, minHeight: 540, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <div style={{
-                position: 'absolute', inset: -8, borderRadius: 28,
-                background: 'linear-gradient(135deg, rgba(255,55,95,0.08), rgba(255,59,48,0.04))',
-                filter: 'blur(4px)',
+                position: 'absolute', inset: -20, borderRadius: 40,
+                background: 'radial-gradient(circle, rgba(255,55,95,0.14) 0%, rgba(124,77,255,0.1) 45%, transparent 70%)',
+                filter: 'blur(10px)',
               }} />
               {users.slice(0, 3).reverse().map((user, index) => (
                 <AnimatedCard
@@ -183,50 +198,58 @@ export default function DiscoverPage() {
               ))}
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14 }}>
-              <ActionButton variant="secondary" size={48} onPress={handleReload}>
+            <div className="animate-fade-up" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14 }}>
+              <ActionButton variant="secondary" size={46} onPress={handleReload}>
                 <RefreshIcon size={20} color="#FFD700" />
               </ActionButton>
               <ActionButton variant="danger" size={62} onPress={handleSwipeLeft}>
                 <CloseIcon size={30} color="white" />
               </ActionButton>
-              <ActionButton variant="superlike" size={48} onPress={handleSuperLike}>
+              <ActionButton variant="superlike" size={46} onPress={handleSuperLike}>
                 <StarIcon size={20} color="white" />
               </ActionButton>
               <ActionButton variant="primary" size={62} onPress={handleSwipeRight}>
                 <HeartIcon size={30} color="white" />
               </ActionButton>
-              <ActionButton variant="boost" size={48} onPress={() => {}}>
+              <ActionButton variant="boost" size={46} onPress={() => {}}>
                 <FlashIcon size={20} color="white" />
               </ActionButton>
             </div>
 
             {lastAction && (
-              <div style={{ background: lastAction === 'match' ? 'linear-gradient(135deg, #FF375F, #FF3B30)' : 'rgba(255,255,255,0.08)', padding: '8px 20px', borderRadius: 9999, whiteSpace: 'nowrap' }}>
-                <span style={{ color: 'white', fontWeight: 600, fontSize: 14 }}>
-                  {lastAction === 'match' ? "It's a Match!" : lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : 'Super Like!'}
-                </span>
+              <div className="animate-pop" style={{ animation: lastAction === 'match' ? 'popIn 0.4s cubic-bezier(0.34,1.56,0.64,1)' : 'fadeUp 0.3s ease' }}>
+                {lastAction === 'match' ? (
+                  <div style={{ background: 'linear-gradient(135deg, #FF375F, #7C4DFF)', padding: '10px 24px', borderRadius: 9999, boxShadow: '0 8px 30px rgba(255,55,95,0.5), 0 0 40px rgba(124,77,255,0.35)', whiteSpace: 'nowrap' }}>
+                    <span style={{ color: 'white', fontWeight: 800, fontSize: 15, letterSpacing: 0.5 }}>✨ It&apos;s a Match!</span>
+                  </div>
+                ) : (
+                  <div className="glass-strong" style={{ padding: '8px 20px', borderRadius: 9999, whiteSpace: 'nowrap' }}>
+                    <span style={{ color: 'white', fontWeight: 700, fontSize: 14 }}>
+                      {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : 'Super Like! 💙'}
+                    </span>
+                  </div>
+                )}
               </div>
             )}
           </div>
 
           {current && (
-            <div style={{ flex: '1 1 300px', minWidth: 260, maxWidth: 400, paddingTop: 8 }}>
-              <h2 style={{ fontSize: 26, fontWeight: 800, color: 'white', margin: 0, lineHeight: '32px' }}>
+            <div className="glass animate-fade-up" style={{ flex: '1 1 300px', minWidth: 260, maxWidth: 400, padding: 24, borderRadius: 24, alignSelf: 'flex-start', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <h2 style={{ fontSize: 28, fontWeight: 800, color: 'white', margin: 0, lineHeight: '34px' }}>
                 {current.fullName}
-                <span style={{ fontWeight: 400, color: '#ABABAB', marginLeft: 8 }}>{current.age}</span>
+                <span style={{ fontWeight: 400, color: '#ABABAB', marginLeft: 10 }}>{current.age}</span>
               </h2>
 
               {current.city && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 8 }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B6B6B" strokeWidth="2">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginTop: 10 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF6B8A" strokeWidth="2">
                     <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
                   </svg>
-                  <span style={{ color: '#6B6B6B', fontSize: 14 }}>{current.city}</span>
+                  <span style={{ color: '#ABABAB', fontSize: 14 }}>{current.city}</span>
                 </div>
               )}
 
-              <div style={{ marginTop: 20, padding: '16px 20px', borderRadius: 16, backgroundColor: 'rgba(255,255,255,0.06)' }}>
+              <div style={{ marginTop: 18, padding: '16px 18px', borderRadius: 16, backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
                 <p style={{ fontSize: 15, color: '#D0D0D0', lineHeight: '24px', margin: 0 }}>
                   {current.bio || 'No bio yet'}
                 </p>
@@ -234,12 +257,13 @@ export default function DiscoverPage() {
 
               {current.photos && current.photos.length > 1 && (
                 <div style={{ marginTop: 20 }}>
-                  <p style={{ fontSize: 13, color: '#6B6B6B', marginBottom: 10, fontWeight: 600, letterSpacing: 0.5 }}>PHOTOS</p>
+                  <p style={{ fontSize: 12, color: '#6B6B6B', marginBottom: 10, fontWeight: 700, letterSpacing: 1 }}>GALLERY</p>
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                     {current.photos.slice(1, 4).map((url: string, i: number) => (
-                      <div key={i} style={{
-                        width: 100, height: 120, borderRadius: 12, overflow: 'hidden',
-                        backgroundColor: '#1A1A1A', border: '1px solid rgba(255,255,255,0.06)',
+                      <div key={i} className="lift" style={{
+                        width: 96, height: 116, borderRadius: 14, overflow: 'hidden',
+                        backgroundColor: '#16161C', border: '1px solid rgba(255,255,255,0.08)',
+                        cursor: 'pointer',
                       }}>
                         <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       </div>
@@ -248,7 +272,7 @@ export default function DiscoverPage() {
                 </div>
               )}
 
-              <p style={{ fontSize: 12, color: '#4A4A4A', marginTop: 24, fontStyle: 'italic' }}>
+              <p style={{ fontSize: 12, color: '#4A4A4A', marginTop: 22, fontStyle: 'italic' }}>
                 Drag the card or use the buttons below to respond
               </p>
             </div>

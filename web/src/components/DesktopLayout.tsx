@@ -26,18 +26,19 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
       <div className="desktop-layout-desktop">
         <div style={{
           maxWidth: 1400, margin: '0 auto', minHeight: '100vh',
-          display: 'flex', background: 'linear-gradient(135deg, #1A0000, #2D0000)',
+          display: 'flex', background: 'linear-gradient(180deg, #08080C, #0D0D0D)',
         }}>
           {/* Sidebar */}
-          <aside style={{
-            width: 240, flexShrink: 0, borderRight: '1px solid rgba(255,255,255,0.06)',
-            display: 'flex', flexDirection: 'column', paddingTop: 40, gap: 4,
-          }}>
+          <aside className="sidebar" style={{ width: 240, flexShrink: 0, display: 'flex', flexDirection: 'column', paddingTop: 40, gap: 4 }}>
             {/* Logo */}
             <div style={{ padding: '0 24px 32px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu" style={{ width: 36, height: 36, borderRadius: 10, objectFit: 'cover' }} />
-                <span style={{ fontSize: 20, fontWeight: 800, color: 'white', letterSpacing: 1 }}>ODOGWU</span>
+                <div className="grad-ring" style={{ display: 'flex' }}>
+                  <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu" style={{ width: 34, height: 34, borderRadius: 10, objectFit: 'cover' }} />
+                </div>
+                <span style={{ fontSize: 20, fontWeight: 800, color: 'white', letterSpacing: 1 }}>
+                  ODO<span className="neon-text">GWU</span>
+                </span>
               </div>
             </div>
 
@@ -48,21 +49,38 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
                 <button
                   key={item.href}
                   onClick={() => router.push(item.href)}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 14, padding: '14px 24px',
-                    border: 'none', background: isActive ? 'rgba(255,55,95,0.12)' : 'transparent',
-                    cursor: 'pointer', textAlign: 'left', width: '100%',
-                    borderLeft: isActive ? '3px solid #FF375F' : '3px solid transparent',
-                    transition: 'all 0.15s',
-                  }}
+                  className={`sidebar-item ${isActive ? 'active' : ''}`}
                 >
                   {item.icon}
-                  <span style={{ fontSize: 15, fontWeight: isActive ? 700 : 500, color: isActive ? 'white' : '#ABABAB' }}>
-                    {item.label}
-                  </span>
+                  <span>{item.label}</span>
                 </button>
               );
             })}
+
+            <div style={{ flex: 1 }} />
+
+            <div className="glass" style={{ margin: '0 16px 24px', padding: 16, borderRadius: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg, #FFD700, #FF375F)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <DiamondIcon size={18} color="white" />
+                </div>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: 'white' }}>Go Premium</div>
+                  <div style={{ fontSize: 11, color: '#6B6B6B' }}>Unlock full power</div>
+                </div>
+              </div>
+              <button
+                onClick={() => router.push('/premium')}
+                style={{
+                  marginTop: 12, width: '100%', padding: '10px 0', borderRadius: 10, border: 'none',
+                  background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white',
+                  fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                  boxShadow: '0 4px 18px rgba(255,55,95,0.35)',
+                }}
+              >
+                Upgrade
+              </button>
+            </div>
           </aside>
 
           {/* Main content */}

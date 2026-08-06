@@ -9,7 +9,7 @@ interface GradientBackgroundProps {
 
 export default function GradientBackground({
   children,
-  colors = 'linear-gradient(135deg, #1A0000, #2D0000, #1A0000)',
+  colors,
   style,
   className,
 }: GradientBackgroundProps) {
@@ -17,12 +17,17 @@ export default function GradientBackground({
     <div
       style={{
         minHeight: '100vh',
-        background: colors,
+        position: 'relative',
+        overflow: 'hidden',
+        background: colors || 'linear-gradient(180deg, #08080C 0%, #0D0D0D 100%)',
         ...style,
       }}
       className={className}
     >
-      {children}
+      <div className="aurora aurora-1" />
+      <div className="aurora aurora-2" />
+      <div className="aurora aurora-3" />
+      <div style={{ position: 'relative', zIndex: 1 }}>{children}</div>
     </div>
   );
 }

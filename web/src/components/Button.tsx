@@ -64,22 +64,23 @@ export default function Button({
         style={{ ...baseStyle, border: 'none', padding: 0, background: 'none', ...style }}
         className={className}
       >
-        <div
-          style={{
-            padding: `${sizeStyle.padding}px`.includes('px') ? sizeStyle.padding : undefined,
-            paddingTop: sizeStyle.padding,
-            paddingBottom: sizeStyle.padding,
-            paddingLeft: '28px',
-            paddingRight: '28px',
-            borderRadius: '9999px',
-            background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            width: '100%',
-          }}
-        >
+          <div
+            style={{
+              padding: `${sizeStyle.padding}px`.includes('px') ? sizeStyle.padding : undefined,
+              paddingTop: sizeStyle.padding,
+              paddingBottom: sizeStyle.padding,
+              paddingLeft: '28px',
+              paddingRight: '28px',
+              borderRadius: '9999px',
+              background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              width: '100%',
+              boxShadow: '0 6px 24px rgba(255,55,95,0.4)',
+            }}
+          >
           {loading ? (
             <div style={{ width: 20, height: 20, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: 'white', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />
           ) : (

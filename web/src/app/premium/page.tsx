@@ -50,22 +50,24 @@ export default function PremiumPage() {
 
   return (
     <DesktopLayout>
-      <GradientBackground style={{ minHeight: '100vh', padding: '24px 16px 85px' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', paddingBottom: '85px', overflowY: 'auto' }}>
-      <div style={{ background: 'linear-gradient(135deg, #0D0D0D, #1A0000, #0D0D0D)' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 24px 28px' }}>
-          <div style={{ width: 72, height: 72, borderRadius: 24, background: 'linear-gradient(135deg, #FFD700, #FF375F)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, boxShadow: '0 0 20px rgba(255,55,95,0.5)' }}>
-            <DiamondIcon size={32} color="white" />
+      <GradientBackground style={{ minHeight: '100vh', padding: '24px 16px 110px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div className="animate-fade-up">
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '28px 24px 26px' }}>
+          <div style={{ width: 74, height: 74, borderRadius: 22, background: 'linear-gradient(135deg, #FFD700, #FF375F)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, boxShadow: '0 0 44px rgba(255,55,95,0.5)', animation: 'floaty 4s ease-in-out infinite' }}>
+            <DiamondIcon size={34} color="white" />
           </div>
-          <h1 style={{ fontSize: 36, fontWeight: 800, color: 'white', letterSpacing: 1, margin: 0 }}>Go Premium</h1>
-          <p style={{ fontSize: 16, color: '#ABABAB', marginTop: 8 }}>Unlock the full Odogwu experience</p>
+          <h1 style={{ fontSize: 36, fontWeight: 800, color: 'white', letterSpacing: 1, margin: 0 }}>
+            Go <span className="neon-text">Premium</span>
+          </h1>
+          <p style={{ fontSize: 15, color: '#ABABAB', marginTop: 8 }}>Unlock the full Odogwu experience</p>
         </div>
 
-        <div style={{ padding: '0 0 16px' }}>
+        <div style={{ padding: '0 0 20px' }}>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
             {FEATURES.map((f, i) => (
-              <div key={i} style={{ width: 170, padding: 16, borderRadius: 16, border: '1px solid #2A2A2A', background: 'linear-gradient(135deg, #1A1A1A, #242424)', display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <div style={{ width: 40, height: 40, borderRadius: 12, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div key={i} className="glass lift" style={{ width: 168, padding: 16, borderRadius: 18, display: 'flex', flexDirection: 'column', gap: 10, animation: `fadeUp 0.5s ease both`, animationDelay: `${i * 0.05}s` }}>
+                <div style={{ width: 42, height: 42, borderRadius: 13, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(255,55,95,0.35)' }}>
                   {f.icon}
                 </div>
                 <span style={{ fontSize: 14, fontWeight: 700, color: 'white' }}>{f.title}</span>
@@ -76,47 +78,69 @@ export default function PremiumPage() {
         </div>
       </div>
 
-      <div style={{ padding: '24px 0 0' }}>
-        <h2 style={{ fontSize: 22, fontWeight: 700, color: 'white', marginBottom: 20, textAlign: 'center' }}>Choose your plan</h2>
-        <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', justifyContent: 'center' }}>
-          {PLANS.map((plan) => {
+      <div className="animate-fade-up" style={{ padding: '10px 0 0' }}>
+        <h2 style={{ fontSize: 22, fontWeight: 800, color: 'white', marginBottom: 20, textAlign: 'center' }}>
+          Choose your plan
+        </h2>
+        <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'stretch' }}>
+          {PLANS.map((plan, idx) => {
             const selected = selectedPlan === plan.id;
+            const popular = (plan as any).popular;
             return (
               <button
                 key={plan.id}
                 onClick={() => setSelectedPlan(plan.id)}
+                className="lift"
                 style={{
                   flex: '1 1 280px', maxWidth: 340,
-                  backgroundColor: '#1A1A1A',
-                  borderRadius: 24,
-                  border: selected ? '2px solid #FF375F' : '1px solid #2A2A2A',
+                  borderRadius: 26,
+                  border: popular
+                    ? '2px solid transparent'
+                    : selected ? `2px solid ${plan.color[0]}` : '1px solid rgba(255,255,255,0.1)',
+                  background: selected
+                    ? `linear-gradient(135deg, ${plan.color[0]}22, ${plan.color[1]}11), rgba(20,20,26,0.9)`
+                    : 'rgba(20,20,26,0.7)',
                   overflow: 'hidden',
                   cursor: 'pointer',
                   textAlign: 'left',
                   padding: 0,
+                  position: 'relative',
+                  boxShadow: selected
+                    ? `0 16px 48px rgba(0,0,0,0.5), 0 0 36px ${plan.color[0]}33`
+                    : '0 12px 36px rgba(0,0,0,0.4)',
+                  backdropFilter: 'blur(16px)',
+                  animation: `fadeUp 0.5s ease both`,
+                  animationDelay: `${0.1 + idx * 0.08}s`,
                 }}
               >
-                {(plan as any).popular && (
-                  <div style={{ padding: '6px 0', background: 'linear-gradient(135deg, #FFD700, #FFA500)', textAlign: 'center' }}>
-                    <span style={{ color: 'white', fontSize: 11, fontWeight: 800, letterSpacing: 1 }}>MOST POPULAR</span>
+                {popular && (
+                  <div style={{ position: 'relative', zIndex: 1, pointerEvents: 'none' }}>
+                    <div style={{ position: 'absolute', top: 16, right: -34, background: 'linear-gradient(135deg, #FFD700, #FF9500)', color: '#1A1A1A', fontSize: 11, fontWeight: 800, letterSpacing: 1, padding: '6px 42px', transform: 'rotate(45deg)', boxShadow: '0 4px 14px rgba(255,215,0,0.4)' }}>
+                      MOST POPULAR
+                    </div>
                   </div>
                 )}
-                <div style={{ padding: 20, background: selected ? 'linear-gradient(135deg, ' + plan.color.join(', ') + ')' : 'none' }}>
-                  <h3 style={{ fontSize: 20, fontWeight: 700, color: selected ? 'white' : 'white', margin: 0 }}>{plan.name}</h3>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 2 }}>
-                    <span style={{ fontSize: 28, fontWeight: 800, color: selected ? 'white' : 'white' }}>{plan.price}</span>
-                    <span style={{ fontSize: 14, color: selected ? 'rgba(255,255,255,0.7)' : '#6B6B6B' }}>{plan.period}</span>
+                {popular && (
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, #FF375F, #FFD700, #7C4DFF)', zIndex: 2 }} />
+                )}
+                <div style={{ padding: '26px 24px 18px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div style={{ fontSize: 12, fontWeight: 800, color: plan.color[0], textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>
+                    {plan.name.replace('Odogwu ', '')}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                    <span style={{ fontSize: 32, fontWeight: 800, color: 'white', letterSpacing: 0.5 }}>{plan.price}</span>
+                    <span style={{ fontSize: 14, color: '#6B6B6B' }}>{plan.period}</span>
                   </div>
                 </div>
-                <div style={{ padding: '0 20px 8px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ padding: '18px 24px 8px', display: 'flex', flexDirection: 'column', gap: 11 }}>
                   {plan.features.map((f, i) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <CheckmarkCircleIcon size={18} color={selected ? '#FF375F' : '#6B6B6B'} />
-                      <span style={{ fontSize: 14, color: selected ? '#ABABAB' : '#ABABAB' }}>{f}</span>
+                    <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                      <CheckmarkCircleIcon size={17} color={plan.color[0]} />
+                      <span style={{ fontSize: 13.5, color: selected ? '#E0E0E0' : '#ABABAB', lineHeight: '18px' }}>{f}</span>
                     </div>
                   ))}
                 </div>
-                <div style={{ margin: 16 }}>
+                <div style={{ margin: 18 }}>
                   <Button
                     title={subscribing ? 'Processing...' : selected ? 'Subscribe Now' : `Get ${plan.name.split(' ')[1]}`}
                     onPress={selected ? handleSubscribe : () => setSelectedPlan(plan.id)}
@@ -133,11 +157,13 @@ export default function PremiumPage() {
         </div>
       </div>
 
-      <div style={{ padding: 40, textAlign: 'center' }}>
-        <p style={{ color: '#6B6B6B', fontSize: 12, textAlign: 'center', lineHeight: '18px' }}>
-          Subscription automatically renews. Cancel anytime.{'\n'}
-          Terms of Service • Privacy Policy
-        </p>
+      <div className="animate-fade-up" style={{ padding: 36, textAlign: 'center' }}>
+        <div className="glass" style={{ display: 'inline-block', padding: '14px 28px', borderRadius: 9999 }}>
+          <p style={{ color: '#6B6B6B', fontSize: 12, lineHeight: '18px', margin: 0 }}>
+            Subscription automatically renews. Cancel anytime.{'\n'}
+            <span style={{ color: '#ABABAB' }}>Terms of Service • Privacy Policy</span>
+          </p>
+        </div>
       </div>
 
       <TabBar />
