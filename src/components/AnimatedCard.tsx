@@ -9,6 +9,7 @@ import {
   PanResponder,
   Animated,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../theme';
 
@@ -185,6 +186,19 @@ const AnimatedCard = forwardRef<AnimatedCardHandle, AnimatedCardProps>(function 
           style={styles.gradient}
         />
 
+        <View style={styles.nameOverlay}>
+          <View style={styles.nameRow}>
+            <Text style={styles.name} numberOfLines={1}>{user.fullName}</Text>
+            <Text style={styles.age}>{user.age}</Text>
+          </View>
+          {user.city ? (
+            <View style={styles.cityRow}>
+              <Ionicons name="location-outline" size={13} color="rgba(255,255,255,0.85)" />
+              <Text style={styles.city} numberOfLines={1}>{user.city}</Text>
+            </View>
+          ) : null}
+        </View>
+
         <View style={styles.likeContainer}>
           <Animated.View style={[styles.likeBadge, { opacity: likeOpacity }]}>
             <LinearGradient
@@ -261,6 +275,42 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 140,
+  },
+  nameOverlay: {
+    position: 'absolute',
+    left: 18,
+    right: 18,
+    bottom: 96,
+  },
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: 8,
+  },
+  name: {
+    color: 'white',
+    fontSize: 28,
+    fontWeight: '800',
+    textShadowColor: 'rgba(0,0,0,0.6)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 12,
+    flexShrink: 1,
+  },
+  age: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: '400',
+    opacity: 0.95,
+  },
+  cityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 2,
+  },
+  city: {
+    color: 'rgba(255,255,255,0.85)',
+    fontSize: 13,
   },
   likeContainer: {
     position: 'absolute',

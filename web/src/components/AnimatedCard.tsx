@@ -145,6 +145,22 @@ export default function AnimatedCard({
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 90, background: 'linear-gradient(rgba(0,0,0,0.5), transparent)' }} />
       <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 150, background: 'linear-gradient(transparent, rgba(0,0,0,0.9))' }} />
 
+      {/* Name + age + city overlaid on photo */}
+      <div style={{ position: 'absolute', left: 20, right: 20, bottom: 92 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, minWidth: 0 }}>
+          <span style={{ fontSize: 28, fontWeight: 800, color: '#FFFFFF', textShadow: '0 2px 12px rgba(0,0,0,0.6)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.fullName}</span>
+          <span style={{ fontSize: 24, fontWeight: 400, color: 'rgba(255,255,255,0.95)', textShadow: '0 2px 12px rgba(0,0,0,0.6)' }}>{user.age}</span>
+        </div>
+        {user.city && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 2 }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+            </svg>
+            <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, textShadow: '0 1px 6px rgba(0,0,0,0.6)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.city}</span>
+          </div>
+        )}
+      </div>
+
       {/* Photo progress bars */}
       <div style={{ position: 'absolute', top: '14px', left: '12px', right: '12px', display: 'flex', gap: '5px' }}>
         {user.photos?.slice(0, 5).map((_, i) => (
