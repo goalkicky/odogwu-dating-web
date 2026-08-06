@@ -1,13 +1,16 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Dimensions, Alert } from 'react-native';
+import React, { useState, useCallback, useRef } from 'react';
+import { View, Text, StyleSheet, Alert, useWindowDimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import theme from '../../theme';
-import AnimatedCard from '../../components/AnimatedCard';
+import AnimatedCard, { AnimatedCardHandle } from '../../components/AnimatedCard';
 import ActionButton from '../../components/ActionButton';
 import GradientBackground from '../../components/GradientBackground';
 
-const { width } = Dimensions.get('window');
+const TAB_BAR_HEIGHT = 85;
+const HEADER_HEIGHT = 52;
+const ACTIONS_HEIGHT = 80;
 
 const MOCK_USERS = [
   {
@@ -45,51 +48,36 @@ const MOCK_USERS = [
 ];
 
 export default function DiscoveryScreen() {
+  const insets = useSafeAreaInsets();
+  const { width, height } = useWindowDimensions();
   const [users, setUsers] = useState(MOCK_USERS);
-  const [lastAction, setLastAction] = useState<string | null>(null);
+  const cardRef = useRef<AnimatedCardHandle>(null);
 
-  const handleSwipeLeft = useCallback(() => {
-    setLastAction('dislike');
-    setTimeout(() => {
-      setUsers(prev => prev.slice(1));
-      setLastAction(null);
-      if (users.length <= 1) {
-        setUsers(MOCK_USERS);
-      }
-    }, 300);
-  }, [users.length]);
+  const cardWidth = width * 0.9;
+  const cardHeight = height - insets.top - HEADER_HEIGHT - ACTIONS_HEIGHT - TAB_BAR_HEIGHT - 8;
 
-  const handleSwipeRight = useCallback(() => {
-    setLastAction('like');
-    setTimeout(() => {
-      setUsers(prev => prev.slice(1));
-      setLastAction(null);
-      if (users.length <= 1) {
-        setUsers(MOCK_USERS);
-      }
-    }, 300);
-  }, [users.length]);
+  const currentUser = users[0];
 
-  const handleSuperLike = useCallback(() => {
-    setLastAction('superlike');
-    setTimeout(() => {
-      setUsers(prev => prev.slice(1));
-      setLastAction(null);
-      if (users.length <= 1) {
-        setUsers(MOCK_USERS);
-      }
-    }, 300);
-  }, [users.length]);
+  const removeCurrent = useCallback(() => {
+    setUsers(prev => {
+      const next = prev.slice(1);
+      return next.length === 0 ? [...MOCK_USERS].sort(() => Math.random() - 0.5) : next;
+    });
+  }, []);
+
+  const handleSwipeLeft = useCallback(() => removeCurrent(), [removeCurrent]);
+  const handleSwipeRight = useCallback(() => removeCurrent(), [removeCurrent]);
+  const handleSuperLike = useCallback(() => removeCurrent(), [removeCurrent]);
 
   const handleReload = useCallback(() => {
-    setUsers(MOCK_USERS.sort(() => Math.random() - 0.5));
+    setUsers([...MOCK_USERS].sort(() => Math.random() - 0.5));
   }, []);
 
   const handleInfo = useCallback((user: any) => {
     Alert.alert(user.fullName, `${user.bio}\n\n📍 ${user.city}`);
   }, []);
 
-  if (users.length === 0) {
+  if (!currentUser) {
     return (
       <GradientBackground>
         <View style={styles.emptyContainer}>
@@ -103,7 +91,7 @@ export default function DiscoveryScreen() {
 
   return (
     <GradientBackground>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
         <LinearGradient colors={[theme.colors.primary, theme.colors.secondary]} style={styles.logoSmall}>
           <Ionicons name="flame" size={22} color="white" />
         </LinearGradient>
@@ -114,48 +102,41 @@ export default function DiscoveryScreen() {
       </View>
 
       <View style={styles.cardContainer}>
-        {users.slice(0, 3).reverse().map((user, index) => (
-          <AnimatedCard
-            key={user.id}
-            user={user}
-            isFirst={index === users.slice(0, 3).length - 1}
-            onSwipeLeft={handleSwipeLeft}
-            onSwipeRight={handleSwipeRight}
-            onSuperLike={handleSuperLike}
-            onInfoPress={() => handleInfo(user)}
-          />
-        ))}
+        <AnimatedCard
+          key={currentUser.id}
+          ref={cardRef}
+          user={currentUser}
+          isFirst
+          width={cardWidth}
+          height={cardHeight}
+          onSwipeLeft={handleSwipeLeft}
+          onSwipeRight={handleSwipeRight}
+          onSuperLike={handleSuperLike}
+          onInfoPress={() => handleInfo(currentUser)}
+        />
       </View>
 
       <View style={styles.actionsContainer}>
-        <ActionButton variant="secondary" size={50} onPress={handleReload}>
-          <Ionicons name="refresh" size={24} color={theme.colors.accent} />
+        <ActionButton variant="secondary" size={46} onPress={handleReload}>
+          <Ionicons name="refresh" size={22} color={theme.colors.accent} />
         </ActionButton>
 
-        <ActionButton variant="danger" size={60} onPress={handleSwipeLeft}>
-          <Ionicons name="close" size={30} color="white" />
+        <ActionButton variant="danger" size={58} onPress={() => cardRef.current?.swipeLeft()}>
+          <Ionicons name="close" size={28} color="white" />
         </ActionButton>
 
-        <ActionButton variant="superlike" size={50} onPress={handleSuperLike}>
-          <Ionicons name="star" size={24} color="white" />
+        <ActionButton variant="superlike" size={46} onPress={() => cardRef.current?.superLike()}>
+          <Ionicons name="star" size={22} color="white" />
         </ActionButton>
 
-        <ActionButton variant="primary" size={60} onPress={handleSwipeRight}>
-          <Ionicons name="heart" size={30} color="white" />
+        <ActionButton variant="primary" size={58} onPress={() => cardRef.current?.swipeRight()}>
+          <Ionicons name="heart" size={28} color="white" />
         </ActionButton>
 
-        <ActionButton variant="boost" size={50} onPress={() => Alert.alert('Boost', 'Get seen by more people!')}>
-          <Ionicons name="flash" size={24} color="white" />
+        <ActionButton variant="boost" size={46} onPress={() => Alert.alert('Boost', 'Get seen by more people!')}>
+          <Ionicons name="flash" size={22} color="white" />
         </ActionButton>
       </View>
-
-      {lastAction && (
-        <View style={styles.actionLabel}>
-          <Text style={styles.actionLabelText}>
-            {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : 'Super Like!'}
-          </Text>
-        </View>
-      )}
     </GradientBackground>
   );
 }
@@ -166,8 +147,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingTop: 60,
-    paddingBottom: 12,
+    paddingBottom: 8,
   },
   logoSmall: {
     width: 36,
@@ -189,14 +169,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 16,
   },
   actionsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 16,
-    paddingBottom: 40,
+    gap: 10,
+    paddingBottom: 10,
     paddingHorizontal: 20,
   },
   emptyContainer: {
@@ -213,19 +192,5 @@ const styles = StyleSheet.create({
   emptySubtitle: {
     fontSize: 16,
     color: theme.colors.textSecondary,
-  },
-  actionLabel: {
-    position: 'absolute',
-    bottom: 100,
-    alignSelf: 'center',
-    backgroundColor: theme.colors.glass,
-    paddingHorizontal: 20,
-    paddingVertical: 8,
-    borderRadius: theme.borderRadius.full,
-  },
-  actionLabelText: {
-    color: theme.colors.text,
-    fontWeight: '600',
-    fontSize: 14,
   },
 });

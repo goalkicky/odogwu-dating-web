@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "commonjs",
+    "module": "preserve",
     "lib": [
       "es2019"
     ],
     "jsx": "react-native",
     "strict": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -27,7 +27,8 @@
     "**/*.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "web"
   ],
   "extends": "expo/tsconfig.base"
 }

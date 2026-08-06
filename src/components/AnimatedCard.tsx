@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback, forwardRef, useImperativeHandle } from 'react';
 import {
   View,
   Text,
@@ -13,9 +13,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import theme from '../theme';
 
-const { width, height } = Dimensions.get('window');
-const CARD_WIDTH = width * 0.9;
-const CARD_HEIGHT = height * 0.72;
+const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = Dimensions.get('window');
+
+export interface AnimatedCardHandle {
+  swipeLeft: () => void;
+  swipeRight: () => void;
+  superLike: () => void;
+}
 
 interface UserCard {
   id: string;
@@ -33,22 +37,26 @@ interface AnimatedCardProps {
   onSwipeRight: () => void;
   onSuperLike: () => void;
   onInfoPress: () => void;
+  width?: number;
+  height?: number;
 }
 
-export default function AnimatedCard({
-  user,
-  isFirst,
-  onSwipeLeft,
-  onSwipeRight,
-  onSuperLike,
-  onInfoPress,
-}: AnimatedCardProps) {
+const AnimatedCard = forwardRef<AnimatedCardHandle, AnimatedCardProps>(function AnimatedCard(
+  { user, isFirst, onSwipeLeft, onSwipeRight, onSuperLike, onInfoPress, width, height },
+  ref
+) {
+  const cardWidth = width ?? WINDOW_WIDTH * 0.9;
+  const cardHeight = height ?? WINDOW_HEIGHT * 0.72;
+  const widthRef = useRef(cardWidth);
+  widthRef.current = cardWidth;
+  const heightRef = useRef(cardHeight);
+  heightRef.current = cardHeight;
+
   const position = useRef(new Animated.ValueXY()).current;
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
   const isFirstRef = useRef(isFirst);
   isFirstRef.current = isFirst;
-
   const onSwipeLeftRef = useRef(onSwipeLeft);
   onSwipeLeftRef.current = onSwipeLeft;
   const onSwipeRightRef = useRef(onSwipeRight);
@@ -57,25 +65,25 @@ export default function AnimatedCard({
   onSuperLikeRef.current = onSuperLike;
 
   const rotate = position.x.interpolate({
-    inputRange: [-CARD_WIDTH / 2, 0, CARD_WIDTH / 2],
+    inputRange: [-cardWidth / 2, 0, cardWidth / 2],
     outputRange: ['-10deg', '0deg', '10deg'],
     extrapolate: 'clamp',
   });
 
   const likeOpacity = position.x.interpolate({
-    inputRange: [0, CARD_WIDTH / 4],
+    inputRange: [0, cardWidth / 4],
     outputRange: [0, 1],
     extrapolate: 'clamp',
   });
 
   const nopeOpacity = position.x.interpolate({
-    inputRange: [-CARD_WIDTH / 4, 0],
+    inputRange: [-cardWidth / 4, 0],
     outputRange: [1, 0],
     extrapolate: 'clamp',
   });
 
   const superLikeOpacity = position.y.interpolate({
-    inputRange: [-CARD_HEIGHT / 4, 0],
+    inputRange: [-cardHeight / 4, 0],
     outputRange: [1, 0],
     extrapolate: 'clamp',
   });
@@ -87,21 +95,23 @@ export default function AnimatedCard({
         position.setValue({ x: gesture.dx, y: gesture.dy });
       },
       onPanResponderRelease: (_, gesture) => {
+        const w = widthRef.current;
+        const h = heightRef.current;
         if (gesture.dx > 120) {
           Animated.timing(position, {
-            toValue: { x: CARD_WIDTH * 1.5, y: 0 },
+            toValue: { x: w * 1.5, y: 0 },
             duration: 300,
             useNativeDriver: true,
           }).start(() => onSwipeRightRef.current());
         } else if (gesture.dx < -120) {
           Animated.timing(position, {
-            toValue: { x: -CARD_WIDTH * 1.5, y: 0 },
+            toValue: { x: -w * 1.5, y: 0 },
             duration: 300,
             useNativeDriver: true,
           }).start(() => onSwipeLeftRef.current());
         } else if (gesture.dy < -120) {
           Animated.timing(position, {
-            toValue: { x: 0, y: -CARD_HEIGHT * 1.5 },
+            toValue: { x: 0, y: -h * 1.5 },
             duration: 300,
             useNativeDriver: true,
           }).start(() => onSuperLikeRef.current());
@@ -116,12 +126,43 @@ export default function AnimatedCard({
     })
   ).current;
 
+  const swipeLeft = useCallback(() => {
+    Animated.timing(position, {
+      toValue: { x: -widthRef.current * 1.5, y: 0 },
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => onSwipeLeftRef.current());
+  }, [position]);
+
+  const swipeRight = useCallback(() => {
+    Animated.timing(position, {
+      toValue: { x: widthRef.current * 1.5, y: 0 },
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => onSwipeRightRef.current());
+  }, [position]);
+
+  const superLike = useCallback(() => {
+    Animated.timing(position, {
+      toValue: { x: 0, y: -heightRef.current * 1.5 },
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => onSuperLikeRef.current());
+  }, [position]);
+
+  useImperativeHandle(
+    ref,
+    () => ({ swipeLeft, swipeRight, superLike }),
+    [swipeLeft, swipeRight, superLike]
+  );
+
   const photoUri = user.photos?.[currentPhotoIndex] || 'https://via.placeholder.com/400x600';
 
   return (
     <Animated.View
       style={[
         styles.card,
+        { width: cardWidth, height: cardHeight },
         {
           transform: [...position.getTranslateTransform(), { rotate }],
         },
@@ -180,32 +221,32 @@ export default function AnimatedCard({
 
       <View style={styles.userInfo}>
         <View style={styles.nameRow}>
-          <Text style={styles.name}>{user.fullName}</Text>
+          <Text style={styles.name} numberOfLines={1}>{user.fullName}</Text>
           <Text style={styles.age}>{user.age}</Text>
           <TouchableOpacity onPress={onInfoPress} style={styles.infoButton}>
             <Ionicons name="information-circle-outline" size={24} color="white" />
           </TouchableOpacity>
         </View>
-        {user.bio && (
+        {user.bio ? (
           <Text style={styles.bio} numberOfLines={2}>
             {user.bio}
           </Text>
+        ) : (
+          <Text style={styles.bioMuted}>No bio yet</Text>
         )}
         {user.city && (
           <View style={styles.locationRow}>
-            <Ionicons name="location-outline" size={14} color={theme.colors.textSecondary} />
+            <Ionicons name="location-outline" size={13} color={theme.colors.textSecondary} />
             <Text style={styles.location}>{user.city}</Text>
           </View>
         )}
       </View>
     </Animated.View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   card: {
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
     borderRadius: theme.borderRadius.xl,
     backgroundColor: theme.colors.card,
     position: 'absolute',
@@ -214,7 +255,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: '100%',
-    height: '72%',
+    height: '70%',
     position: 'relative',
   },
   image: {
@@ -224,7 +265,7 @@ const styles = StyleSheet.create({
   },
   photoDots: {
     position: 'absolute',
-    top: 12,
+    top: 10,
     left: 12,
     right: 12,
     flexDirection: 'row',
@@ -244,16 +285,16 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 120,
+    height: 90,
   },
   likeContainer: {
     position: 'absolute',
-    top: 60,
+    top: 50,
     left: 20,
   },
   nopeContainer: {
     position: 'absolute',
-    top: 60,
+    top: 50,
     right: 20,
   },
   likeBadge: {
@@ -264,12 +305,12 @@ const styles = StyleSheet.create({
   },
   superLikeBadge: {
     position: 'absolute',
-    top: 120,
+    top: 100,
     alignSelf: 'center',
   },
   badgeInner: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
     borderRadius: 8,
     borderWidth: 3,
     borderColor: 'white',
@@ -277,12 +318,13 @@ const styles = StyleSheet.create({
   badgeText: {
     color: 'white',
     fontWeight: '800',
-    fontSize: 28,
+    fontSize: 26,
     letterSpacing: 2,
   },
   userInfo: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     justifyContent: 'center',
   },
   nameRow: {
@@ -291,12 +333,13 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   name: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '700',
     color: theme.colors.text,
+    flexShrink: 1,
   },
   age: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '400',
     color: theme.colors.textSecondary,
   },
@@ -305,9 +348,15 @@ const styles = StyleSheet.create({
   },
   bio: {
     color: theme.colors.textSecondary,
-    fontSize: 14,
+    fontSize: 13,
     marginTop: 4,
-    lineHeight: 20,
+    lineHeight: 18,
+  },
+  bioMuted: {
+    color: theme.colors.textTertiary,
+    fontSize: 13,
+    marginTop: 4,
+    fontStyle: 'italic',
   },
   locationRow: {
     flexDirection: 'row',
@@ -317,6 +366,8 @@ const styles = StyleSheet.create({
   },
   location: {
     color: theme.colors.textTertiary,
-    fontSize: 13,
+    fontSize: 12,
   },
 });
+
+export default AnimatedCard;

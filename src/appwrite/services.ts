@@ -17,7 +17,9 @@ export const authService = {
       'odogwu-dating://oauth'
     );
 
-    await Linking.openURL(loginUrl);
+    if (typeof loginUrl === 'string') {
+      await Linking.openURL(loginUrl);
+    }
   },
 
   getCurrentUser: async () => {
