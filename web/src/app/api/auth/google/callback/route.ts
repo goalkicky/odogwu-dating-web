@@ -87,8 +87,9 @@ export async function GET(request: NextRequest) {
           method: 'PATCH', headers: apiHeaders, body: JSON.stringify({ password: pw }),
         }).catch(() => {}));
       } else {
-        // Search by email
-        const searchRes = await retryOnRate(() => fetch(`${endpoint}/users?search=${encodeURIComponent(email)}`, {
+        // Search by email via indexed query (fast, avoids full-text search 408 timeouts)
+        const query = `equal("email", "${email.replace(/"/g, '\\"')}")`;
+        const searchRes = await retryOnRate(() => fetch(`${endpoint}/users?queries=${encodeURIComponent(query)}`, {
           headers: { 'X-Appwrite-Project': projectId, 'X-Appwrite-Key': apiKey },
         }).then(r => { if (!r.ok) throw new Error('Failed to search users: ' + r.status); return r.json(); }));
         const found = searchRes.users?.find((u: any) => u.email === email);
