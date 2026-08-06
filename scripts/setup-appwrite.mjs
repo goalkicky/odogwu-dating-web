@@ -42,6 +42,7 @@ const collections = [
       { key: 'age', type: 'integer', required: false, min: 0, max: 150 },
     ],
     indexes: [
+      { key: 'email_index', type: 'key', attributes: ['email'], orders: ['ASC'] },
       { key: 'gender_index', type: 'key', attributes: ['gender'], orders: ['ASC'] },
       { key: 'age_index', type: 'key', attributes: ['age'], orders: ['ASC'] },
     ],
