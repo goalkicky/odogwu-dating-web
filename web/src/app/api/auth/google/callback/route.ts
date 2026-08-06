@@ -48,29 +48,40 @@ async function profileExists(endpoint: string, projectId: string, apiKey: string
 }
 
 async function findUserByEmail(endpoint: string, projectId: string, apiKey: string, databaseId: string, usersCollectionId: string, email: string) {
-  const query = `equal("email", "${email.replace(/"/g, '\\"')}")`;
   const headers = projectHeaders(projectId, apiKey);
+  const needle = email.toLowerCase();
 
-  // 1. App database profile lookup (indexed, fast — profile doc $id === auth userId)
+  // 1. App database profile lookup (fast when the email attribute is indexed)
+  const query = `equal("email", "${email.replace(/"/g, '\\"')}")`;
+  let dbStatus = 0;
   const dbRes = await retryOnRate(() => fetch(
     `${endpoint}/databases/${databaseId}/collections/${usersCollectionId}/documents?queries[0]=${encodeURIComponent(query)}&queries[1]=${encodeURIComponent('limit(1)')}`,
     { headers },
   ));
+  dbStatus = dbRes.status;
   if (dbRes.ok) {
     const data = await dbRes.json();
-    const doc = data.documents?.[0];
+    const doc = data.documents?.find((d: any) => d.email?.toLowerCase() === needle);
     if (doc) return { userId: doc.$id, hasProfile: true };
   }
 
-  // 2. Auth users list query (fallback for accounts without a profile yet)
-  const usersRes = await retryOnRate(() => fetch(`${endpoint}/users?queries[0]=${encodeURIComponent(query)}`, { headers }));
-  if (usersRes.ok) {
-    const data = await usersRes.json();
-    const found = data.users?.find((u: any) => u.email === email);
-    if (found) return { userId: found.$id, hasProfile: false };
+  // 2. Paginated scan of auth users (plain list is indexed; avoids slow filtered queries)
+  let usersStatus = 0;
+  for (let offset = 0; offset < 5000; ) {
+    const res = await retryOnRate(() => fetch(`${endpoint}/users?limit=100&offset=${offset}`, { headers }));
+    usersStatus = res.status;
+    if (!res.ok) break;
+    const data = await res.json();
+    const found = data.users?.find((u: any) => u.email?.toLowerCase() === needle);
+    if (found) {
+      const hasProfile = await profileExists(endpoint, projectId, apiKey, databaseId, usersCollectionId, found.$id);
+      return { userId: found.$id, hasProfile };
+    }
+    if (!data.users?.length) break;
+    offset += data.users.length;
   }
 
-  throw new Error('Failed to find user by email');
+  throw new Error(`Failed to find user by email (db:${dbStatus || '-'}, users:${usersStatus || '-'})`);
 }
 
 export async function GET(request: NextRequest) {
