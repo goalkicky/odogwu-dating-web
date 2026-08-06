@@ -7,49 +7,55 @@ import Button from '../../components/Button';
 
 const PLANS = [
   {
-    id: 'plus',
-    name: 'Odogwu Plus',
-    price: '$9.99',
+    id: 'premium',
+    name: 'Odogwu Premium',
+    price: 'N4,900',
     period: '/month',
     color: ['#FF375F', '#FF6B8A'] as [string, string, ...string[]],
     features: [
-      'Unlimited Likes',
-      '5 Super Likes per day',
-      '1 Boost per month',
-      'Passport (any location)',
-      'Hide Ads',
+      'Send unlimited likes',
+      'Complete ad-free swiping experience',
+      'Filter your preferences',
+      'Unlimited rewinds to reconsider profiles',
+      'Voice and video calling',
+      '2x Super Likes daily',
     ],
   },
   {
-    id: 'gold',
-    name: 'Odogwu Gold',
-    price: '$19.99',
+    id: 'surplus',
+    name: 'Odogwu Surplus',
+    price: 'N7,900',
     period: '/month',
     color: ['#FFD700', '#FFA500'] as [string, string, ...string[]],
     features: [
-      'All Plus features',
-      '10 Super Likes per day',
-      '3 Boosts per month',
+      'Send unlimited likes',
       'See who likes you',
-      'Top Picks daily',
-      'Message before matching',
+      'Change to any preferred location (Passport mode)',
+      'Complete ad-free swiping experience',
+      'Filter your preferences',
+      'Profile boosts for 10x visibility',
+      'Unlimited rewinds to reconsider profiles',
+      'Voice and video calling',
+      '5x Super Likes daily',
     ],
     popular: true,
   },
   {
     id: 'platinum',
     name: 'Odogwu Platinum',
-    price: '$29.99',
+    price: 'N10,900',
     period: '/month',
     color: ['#AF52DE', '#6C63FF'] as [string, string, ...string[]],
     features: [
-      'All Gold features',
-      'Unlimited Super Likes',
-      'Unlimited Boosts',
-      'Priority likes',
-      'Verified badge',
-      'Read receipts',
-      'Premium support',
+      'Send unlimited likes',
+      'See who likes you',
+      'Change to any preferred location (Passport mode)',
+      'Send unlimited messages without waiting for a mutual match',
+      'Complete ad-free swiping experience',
+      'Filter your preferences',
+      'Unlimited rewinds to reconsider profiles',
+      'Voice and video calling',
+      '7 Super Likes daily',
     ],
   },
 ];
@@ -64,7 +70,7 @@ const FEATURES = [
 ];
 
 export default function PremiumScreen() {
-  const [selectedPlan, setSelectedPlan] = useState('gold');
+  const [selectedPlan, setSelectedPlan] = useState('surplus');
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>

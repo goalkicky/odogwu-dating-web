@@ -49,7 +49,7 @@ export interface CallSignal {
   callType: 'audio' | 'video';
 }
 
-export type PremiumPlan = 'plus' | 'gold' | 'platinum';
+export type PremiumPlan = 'premium' | 'surplus' | 'platinum';
 
 export interface PremiumFeature {
   id: string;

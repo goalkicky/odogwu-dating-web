@@ -10,9 +10,9 @@ import { useAuth } from '@/store/AuthContext';
 import { authService, userService } from '@/lib/appwrite/services';
 
 const PLANS = [
-  { id: 'plus', name: 'Odogwu Plus', price: '$9.99', period: '/month', color: ['#FF375F', '#FF6B8A'], features: ['Unlimited Likes', '5 Super Likes per day', '1 Boost per month', 'Passport (any location)', 'Hide Ads'] },
-  { id: 'gold', name: 'Odogwu Gold', price: '$19.99', period: '/month', color: ['#FFD700', '#FFA500'], features: ['All Plus features', '10 Super Likes per day', '3 Boosts per month', 'See who likes you', 'Top Picks daily', 'Message before matching'], popular: true },
-  { id: 'platinum', name: 'Odogwu Platinum', price: '$29.99', period: '/month', color: ['#FF375F', '#FF3B30'], features: ['All Gold features', 'Unlimited Super Likes', 'Unlimited Boosts', 'Priority likes', 'Verified badge', 'Read receipts', 'Premium support'] },
+  { id: 'premium', name: 'Odogwu Premium', price: 'N4,900', period: '/month', color: ['#FF375F', '#FF6B8A'], features: ['Send unlimited likes', 'Complete ad-free swiping experience', 'Filter your preferences', 'Unlimited rewinds to reconsider profiles', 'Voice and video calling', '2x Super Likes daily'] },
+  { id: 'surplus', name: 'Odogwu Surplus', price: 'N7,900', period: '/month', color: ['#FFD700', '#FFA500'], features: ['Send unlimited likes', 'See who likes you', 'Change to any preferred location (Passport mode)', 'Complete ad-free swiping experience', 'Filter your preferences', 'Profile boosts for 10x visibility', 'Unlimited rewinds to reconsider profiles', 'Voice and video calling', '5x Super Likes daily'], popular: true },
+  { id: 'platinum', name: 'Odogwu Platinum', price: 'N10,900', period: '/month', color: ['#AF52DE', '#6C63FF'], features: ['Send unlimited likes', 'See who likes you', 'Change to any preferred location (Passport mode)', 'Send unlimited messages without waiting for a mutual match', 'Complete ad-free swiping experience', 'Filter your preferences', 'Unlimited rewinds to reconsider profiles', 'Voice and video calling', '7 Super Likes daily'] },
 ];
 
 const FEATURES = [
@@ -27,7 +27,7 @@ const FEATURES = [
 export default function PremiumPage() {
   const router = useRouter();
   const { profile, refreshUser } = useAuth();
-  const [selectedPlan, setSelectedPlan] = useState('gold');
+  const [selectedPlan, setSelectedPlan] = useState('surplus');
   const [subscribing, setSubscribing] = useState(false);
 
   const handleSubscribe = async () => {

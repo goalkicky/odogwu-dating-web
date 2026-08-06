@@ -20,32 +20,45 @@ const plans = [
     highlighted: false,
   },
   {
-    name: 'Premium', price: 9.99, period: 'per month', color: '#FF375F',
+    name: 'Premium', price: 4900, period: 'per month', color: '#FF375F',
     features: [
-      'Unlimited likes & rewinds',
-      'See who liked you',
-      'Advanced AI matching',
-      'Unlimited messaging & voice notes',
-      '5 Super Likes per week',
-      'Passport to any location',
-      'One profile boost per month',
-      'Read receipts',
+      'Send unlimited likes',
+      'Complete ad-free swiping experience',
+      'Filter your preferences',
+      'Unlimited rewinds to reconsider profiles',
+      'Voice and video calling',
+      '2x Super Likes daily',
+    ],
+    highlighted: false,
+  },
+  {
+    name: 'Surplus', price: 7900, period: 'per month', color: '#FFD700',
+    features: [
+      'Send unlimited likes',
+      'See who likes you',
+      'Change to any preferred location (Passport mode)',
+      'Complete ad-free swiping experience',
+      'Filter your preferences',
+      'Profile boosts for 10x visibility',
+      'Unlimited rewinds to reconsider profiles',
+      'Voice and video calling',
+      '5x Super Likes daily',
     ],
     highlighted: true,
     badge: 'Most Popular',
   },
   {
-    name: 'Platinum', price: 19.99, period: 'per month', color: '#FFD700',
+    name: 'Platinum', price: 10900, period: 'per month', color: '#AF52DE',
     features: [
-      'Everything in Premium',
-      'Unlimited Super Likes',
-      'Priority profile visibility',
-      'Weekly profile boosts',
-      'Advanced filters & preferences',
-      'Incognito mode',
-      'See who\'s online now',
-      'Message before matching',
-      'Premium support 24/7',
+      'Send unlimited likes',
+      'See who likes you',
+      'Change to any preferred location (Passport mode)',
+      'Send unlimited messages without waiting for a mutual match',
+      'Complete ad-free swiping experience',
+      'Filter your preferences',
+      'Unlimited rewinds to reconsider profiles',
+      'Voice and video calling',
+      '7 Super Likes daily',
     ],
     highlighted: false,
   },
@@ -114,7 +127,7 @@ export default function PlansPage() {
 
                 <div style={{ fontSize: 11, fontWeight: 700, color: plan.color, textTransform: 'uppercase', letterSpacing: 2, marginBottom: 12 }}>{plan.name}</div>
                 <div style={{ marginBottom: 20 }}>
-                  <span style={{ fontSize: isMobile ? 40 : 48, fontWeight: 800 }}>${finalPrice}</span>
+                  <span style={{ fontSize: isMobile ? 40 : 48, fontWeight: 800 }}>{plan.price === 0 ? 'Free' : `N${finalPrice.toLocaleString()}`}</span>
                   <span style={{ color: '#6B6B6B', fontSize: 14, marginLeft: 4 }}>{plan.period}</span>
                   {plan.price === 0 && <div style={{ color: '#6B6B6B', fontSize: 12, marginTop: 2 }}>No credit card required</div>}
                 </div>
