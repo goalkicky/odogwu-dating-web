@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { View, Text, StyleSheet, Alert, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -10,7 +10,6 @@ import GradientBackground from '../../components/GradientBackground';
 
 const TAB_BAR_HEIGHT = 85;
 const HEADER_HEIGHT = 52;
-const ACTIONS_HEIGHT = 80;
 
 const MOCK_USERS = [
   {
@@ -54,7 +53,7 @@ export default function DiscoveryScreen() {
   const cardRef = useRef<AnimatedCardHandle>(null);
 
   const cardWidth = width * 0.9;
-  const cardHeight = height - insets.top - HEADER_HEIGHT - ACTIONS_HEIGHT - TAB_BAR_HEIGHT - 8;
+  const cardHeight = height - insets.top - HEADER_HEIGHT - TAB_BAR_HEIGHT - 12;
 
   const currentUser = users[0];
 
@@ -71,10 +70,6 @@ export default function DiscoveryScreen() {
 
   const handleReload = useCallback(() => {
     setUsers([...MOCK_USERS].sort(() => Math.random() - 0.5));
-  }, []);
-
-  const handleInfo = useCallback((user: any) => {
-    Alert.alert(user.fullName, `${user.bio}\n\n📍 ${user.city}`);
   }, []);
 
   if (!currentUser) {
@@ -112,30 +107,25 @@ export default function DiscoveryScreen() {
           onSwipeLeft={handleSwipeLeft}
           onSwipeRight={handleSwipeRight}
           onSuperLike={handleSuperLike}
-          onInfoPress={() => handleInfo(currentUser)}
         />
-      </View>
 
-      <View style={styles.actionsContainer}>
-        <ActionButton variant="secondary" size={46} onPress={handleReload}>
-          <Ionicons name="refresh" size={22} color={theme.colors.accent} />
-        </ActionButton>
+        <View style={styles.overlayActions}>
+          <ActionButton variant="secondary" size={50} onPress={handleReload}>
+            <Ionicons name="refresh" size={24} color={theme.colors.accent} />
+          </ActionButton>
 
-        <ActionButton variant="danger" size={58} onPress={() => cardRef.current?.swipeLeft()}>
-          <Ionicons name="close" size={28} color="white" />
-        </ActionButton>
+          <ActionButton variant="danger" size={60} onPress={() => cardRef.current?.swipeLeft()}>
+            <Ionicons name="close" size={30} color="white" />
+          </ActionButton>
 
-        <ActionButton variant="superlike" size={46} onPress={() => cardRef.current?.superLike()}>
-          <Ionicons name="star" size={22} color="white" />
-        </ActionButton>
+          <ActionButton variant="superlike" size={50} onPress={() => cardRef.current?.superLike()}>
+            <Ionicons name="star" size={24} color="white" />
+          </ActionButton>
 
-        <ActionButton variant="primary" size={58} onPress={() => cardRef.current?.swipeRight()}>
-          <Ionicons name="heart" size={28} color="white" />
-        </ActionButton>
-
-        <ActionButton variant="boost" size={46} onPress={() => Alert.alert('Boost', 'Get seen by more people!')}>
-          <Ionicons name="flash" size={22} color="white" />
-        </ActionButton>
+          <ActionButton variant="primary" size={60} onPress={() => cardRef.current?.swipeRight()}>
+            <Ionicons name="heart" size={30} color="white" />
+          </ActionButton>
+        </View>
       </View>
     </GradientBackground>
   );
@@ -170,13 +160,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  actionsContainer: {
+  overlayActions: {
+    position: 'absolute',
+    bottom: 20,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 10,
-    paddingBottom: 10,
-    paddingHorizontal: 20,
+    gap: 16,
   },
   emptyContainer: {
     flex: 1,

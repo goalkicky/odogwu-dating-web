@@ -10,7 +10,6 @@ import {
   Animated,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
 import theme from '../theme';
 
 const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = Dimensions.get('window');
@@ -36,13 +35,12 @@ interface AnimatedCardProps {
   onSwipeLeft: () => void;
   onSwipeRight: () => void;
   onSuperLike: () => void;
-  onInfoPress: () => void;
   width?: number;
   height?: number;
 }
 
 const AnimatedCard = forwardRef<AnimatedCardHandle, AnimatedCardProps>(function AnimatedCard(
-  { user, isFirst, onSwipeLeft, onSwipeRight, onSuperLike, onInfoPress, width, height },
+  { user, isFirst, onSwipeLeft, onSwipeRight, onSuperLike, width, height },
   ref
 ) {
   const cardWidth = width ?? WINDOW_WIDTH * 0.9;
@@ -218,29 +216,6 @@ const AnimatedCard = forwardRef<AnimatedCardHandle, AnimatedCardProps>(function 
           </LinearGradient>
         </Animated.View>
       </View>
-
-      <View style={styles.userInfo}>
-        <View style={styles.nameRow}>
-          <Text style={styles.name} numberOfLines={1}>{user.fullName}</Text>
-          <Text style={styles.age}>{user.age}</Text>
-          <TouchableOpacity onPress={onInfoPress} style={styles.infoButton}>
-            <Ionicons name="information-circle-outline" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-        {user.bio ? (
-          <Text style={styles.bio} numberOfLines={2}>
-            {user.bio}
-          </Text>
-        ) : (
-          <Text style={styles.bioMuted}>No bio yet</Text>
-        )}
-        {user.city && (
-          <View style={styles.locationRow}>
-            <Ionicons name="location-outline" size={13} color={theme.colors.textSecondary} />
-            <Text style={styles.location}>{user.city}</Text>
-          </View>
-        )}
-      </View>
     </Animated.View>
   );
 });
@@ -255,7 +230,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: '100%',
-    height: '70%',
+    height: '100%',
     position: 'relative',
   },
   image: {
@@ -285,7 +260,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 90,
+    height: 140,
   },
   likeContainer: {
     position: 'absolute',
@@ -320,53 +295,6 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     fontSize: 26,
     letterSpacing: 2,
-  },
-  userInfo: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    justifyContent: 'center',
-  },
-  nameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  name: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: theme.colors.text,
-    flexShrink: 1,
-  },
-  age: {
-    fontSize: 20,
-    fontWeight: '400',
-    color: theme.colors.textSecondary,
-  },
-  infoButton: {
-    marginLeft: 'auto',
-  },
-  bio: {
-    color: theme.colors.textSecondary,
-    fontSize: 13,
-    marginTop: 4,
-    lineHeight: 18,
-  },
-  bioMuted: {
-    color: theme.colors.textTertiary,
-    fontSize: 13,
-    marginTop: 4,
-    fontStyle: 'italic',
-  },
-  locationRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    marginTop: 6,
-  },
-  location: {
-    color: theme.colors.textTertiary,
-    fontSize: 12,
   },
 });
 
