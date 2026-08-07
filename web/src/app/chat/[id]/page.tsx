@@ -587,9 +587,11 @@ export default function ChatPage() {
         <div ref={messagesEndRef} />
       </div>
 
+      {/* ===== Fixed footer ===== */}
+      <div style={{ flexShrink: 0, position: 'sticky', bottom: 0, zIndex: 20, background: 'linear-gradient(180deg, rgba(13,13,13,0.85), #0D0D0D 45%)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', boxShadow: '0 -8px 24px rgba(0,0,0,0.35)' }}>
       {/* ===== Quick replies ===== */}
       {!searchOpen && !isRecording && messages.length > 0 && inputText.trim() === '' && (
-        <div style={{ flexShrink: 0, display: 'flex', gap: 8, padding: '4px 12px 8px', overflowX: 'auto' }}>
+        <div style={{ display: 'flex', gap: 8, padding: '4px 12px 8px', overflowX: 'auto' }}>
           {QUICK_REPLIES.map(q => (
             <button
               key={q}
@@ -603,7 +605,7 @@ export default function ChatPage() {
       )}
 
       {/* ===== Composer ===== */}
-      <div style={{ flexShrink: 0 }}>
+      <div>
         {editingId && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 16px', background: 'rgba(255,215,0,0.06)', borderTop: '1px solid rgba(255,215,0,0.15)' }}>
             <PencilIcon size={14} color="#FFD700" />
@@ -736,6 +738,7 @@ export default function ChatPage() {
             )}
           </div>
         )}
+      </div>
       </div>
 
       {/* ===== Image lightbox ===== */}
