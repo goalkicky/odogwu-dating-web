@@ -349,7 +349,7 @@ export default function ChatPage() {
 
   return (
     <GradientBackground style={{ height: '100dvh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, position: 'relative' }}>
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'column', minHeight: 0, position: 'relative' }}>
       {/* ===== Header ===== */}
       <header style={{
         flexShrink: 0, padding: '50px 12px 10px', borderBottom: '1px solid rgba(255,255,255,0.07)',
