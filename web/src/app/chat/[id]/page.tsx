@@ -353,7 +353,7 @@ export default function ChatPage() {
       {/* ===== Header ===== */}
       <header style={{
         flexShrink: 0, padding: '50px 12px 10px', borderBottom: '1px solid rgba(255,255,255,0.07)',
-        position: 'sticky', top: 0, zIndex: 30,
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 30,
         background: 'linear-gradient(180deg, rgba(8,8,12,0.85), rgba(13,13,13,0.7))',
         backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)',
         display: 'flex', alignItems: 'center', gap: 10,
@@ -398,8 +398,9 @@ export default function ChatPage() {
       {/* ===== Search ===== */}
       {searchOpen && (
         <div style={{
-          flexShrink: 0, padding: '8px 12px', borderBottom: '1px solid rgba(255,255,255,0.07)',
-          background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', gap: 8,
+          position: 'fixed', top: 104, left: 0, right: 0, zIndex: 25,
+          padding: '8px 12px', borderBottom: '1px solid rgba(255,255,255,0.07)',
+          background: 'rgba(20,20,26,0.96)', display: 'flex', alignItems: 'center', gap: 8,
         }}>
           <SearchIcon size={16} color="#6B6B6B" />
           <input
@@ -418,7 +419,7 @@ export default function ChatPage() {
       )}
 
       {/* ===== Messages ===== */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '14px 12px 120px', minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, overflowY: 'auto', padding: `${searchOpen ? 150 : 110}px 12px 120px`, display: 'flex', flexDirection: 'column' }}>
         {messages.length === 0 && !searchOpen && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, gap: 12, textAlign: 'center', padding: 24 }}>
             <div className="grad-ring" style={{ width: 76, height: 76, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 44px rgba(255,55,95,0.35)' }}>
