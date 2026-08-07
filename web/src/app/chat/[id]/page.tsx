@@ -349,7 +349,7 @@ export default function ChatPage() {
 
   return (
     <GradientBackground className="chat-screen" style={{ minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      <div style={{ height: '100%', display: 'flex', flexDirection: 'column', minHeight: 0, position: 'relative' }}>
+      <div className="chat-screen" style={{ display: 'flex', flexDirection: 'column', minHeight: 0, position: 'relative' }}>
       {/* ===== Header ===== */}
       <header style={{
         flexShrink: 0, padding: '50px 12px 10px', borderBottom: '1px solid rgba(255,255,255,0.07)',
@@ -418,7 +418,7 @@ export default function ChatPage() {
       )}
 
       {/* ===== Messages ===== */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '14px 12px 6px', minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '14px 12px 120px', minHeight: 0, display: 'flex', flexDirection: 'column' }}>
         {messages.length === 0 && !searchOpen && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, gap: 12, textAlign: 'center', padding: 24 }}>
             <div className="grad-ring" style={{ width: 76, height: 76, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 44px rgba(255,55,95,0.35)' }}>
@@ -588,7 +588,7 @@ export default function ChatPage() {
       </div>
 
       {/* ===== Fixed footer ===== */}
-      <div style={{ flexShrink: 0, position: 'sticky', bottom: 0, zIndex: 20, background: 'linear-gradient(180deg, rgba(13,13,13,0.85), #0D0D0D 45%)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', boxShadow: '0 -8px 24px rgba(0,0,0,0.35)' }}>
+      <div style={{ position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 20, background: 'linear-gradient(180deg, rgba(13,13,13,0.85), #0D0D0D 45%)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', boxShadow: '0 -8px 24px rgba(0,0,0,0.35)' }}>
       {/* ===== Quick replies ===== */}
       {!searchOpen && !isRecording && messages.length > 0 && inputText.trim() === '' && (
         <div style={{ display: 'flex', gap: 8, padding: '4px 12px 8px', overflowX: 'auto' }}>
