@@ -349,9 +349,11 @@ export default function ChatPage() {
 
   return (
     <GradientBackground style={{ height: '100dvh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, position: 'relative' }}>
       {/* ===== Header ===== */}
       <header style={{
         flexShrink: 0, padding: '50px 12px 10px', borderBottom: '1px solid rgba(255,255,255,0.07)',
+        position: 'sticky', top: 0, zIndex: 30,
         background: 'linear-gradient(180deg, rgba(8,8,12,0.85), rgba(13,13,13,0.7))',
         backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)',
         display: 'flex', alignItems: 'center', gap: 10,
@@ -756,6 +758,7 @@ export default function ChatPage() {
           </button>
         </div>
       )}
+      </div>
     </GradientBackground>
   );
 }
