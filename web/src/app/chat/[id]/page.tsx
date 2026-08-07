@@ -348,7 +348,7 @@ export default function ChatPage() {
   });
 
   return (
-    <GradientBackground style={{ height: '100dvh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <GradientBackground className="chat-screen" style={{ minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       <div style={{ height: '100%', display: 'flex', flexDirection: 'column', minHeight: 0, position: 'relative' }}>
       {/* ===== Header ===== */}
       <header style={{

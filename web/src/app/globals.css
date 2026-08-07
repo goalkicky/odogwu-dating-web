@@ -267,6 +267,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   margin: 0 auto;
 }
 
+/* ===== Full-viewport app screens (chat etc.) ===== */
+.chat-screen {
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
+}
+
 .gradient-text {
   background: linear-gradient(135deg, #FF375F, #FF3B30);
   -webkit-background-clip: text;
