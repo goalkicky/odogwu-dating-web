@@ -40,6 +40,7 @@ export interface Message {
   editedAt?: string;
   createdAt: string;
   readAt?: string;
+  reactions?: string[];
 }
 
 export interface CallSignal {

@@ -216,6 +216,16 @@ export const messageService = {
     );
   },
 
+  reactToMessage: async (messageId: string, reactions: string[]) => {
+    checkInit();
+    return databases!.updateDocument(
+      APPWRITE_CONFIG.databaseId,
+      APPWRITE_CONFIG.messagesCollectionId,
+      messageId,
+      { reactions }
+    );
+  },
+
   getMessages: async (matchId: string) => {
     checkInit();
     return databases!.listDocuments(
