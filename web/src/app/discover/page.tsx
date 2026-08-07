@@ -151,7 +151,7 @@ export default function DiscoverPage() {
           padding: isMobile ? '12px 14px 108px' : '24px 16px',
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', height: isMobile ? '100%' : 'auto', gap: 0 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 0 }}>
           <div className="animate-fade-up" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: isMobile ? 12 : 20 }}>
             <div>
               <h1 style={{ fontSize: isMobile ? 26 : 30, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 0.5 }}>
