@@ -1,0 +1,54 @@
+export interface Env {
+  DB: D1Database;
+  MEDIA: R2Bucket;
+  SESSION_SECRET: string;
+  GOOGLE_CLIENT_ID?: string;
+  GOOGLE_CLIENT_SECRET?: string;
+  ChatRoom: DurableObjectNamespace;
+  CallSignals: DurableObjectNamespace;
+}
+
+export interface UserRow {
+  id: string;
+  email: string;
+  full_name: string;
+  date_of_birth: string;
+  gender: string;
+  interested_in: string;
+  bio: string;
+  photos: string;
+  latitude: number;
+  longitude: number;
+  city: string;
+  is_premium: number;
+  verified: number;
+  age: number;
+  premium_plan: string;
+  google_sub: string | null;
+  password_hash: string;
+  password_salt: string;
+  last_active: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MatchRow {
+  id: string;
+  user_id: string;
+  matched_user_id: string;
+  matched_at: string;
+}
+
+export interface MessageRow {
+  id: string;
+  match_id: string;
+  sender_id: string;
+  text: string;
+  type: string;
+  media_url: string;
+  reply_to: string;
+  edited_at: string;
+  created_at: string;
+  read_at: string;
+  reactions: string;
+}

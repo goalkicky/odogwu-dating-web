@@ -47,11 +47,9 @@ export default function PhotoPage() {
     }
     setUploading(true);
     try {
-      const { userService, storageService } = await import('@/lib/appwrite/services');
-      const { account: acct, APPWRITE_CONFIG } = await import('@/lib/appwrite/config');
-      if (!acct) throw new Error('Appwrite not configured');
-      if (!APPWRITE_CONFIG.databaseId) throw new Error('Missing NEXT_PUBLIC_APPWRITE_DATABASE_ID');
-      if (!APPWRITE_CONFIG.storageBucketId) throw new Error('Missing NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID');
+      const { userService, storageService } = await import('@/lib/cloudflare/services');
+      const { account: acct } = await import('@/lib/cloudflare/config');
+      if (!acct) throw new Error('Backend not configured');
       const user = await acct.get();
       const files = filesRef.current;
       const uploadResults = await Promise.all(

@@ -6,8 +6,8 @@ import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
 import { useAuth } from '@/store/AuthContext';
-import { matchService, storageService } from '@/lib/appwrite/services';
-import { account } from '@/lib/appwrite/config';
+import { matchService, storageService } from '@/lib/cloudflare/services';
+import { account } from '@/lib/cloudflare/config';
 
 export default function MatchesPage() {
   const { profile, user } = useAuth();

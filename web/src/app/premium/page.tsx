@@ -7,7 +7,7 @@ import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
 import { useAuth } from '@/store/AuthContext';
-import { authService, userService } from '@/lib/appwrite/services';
+import { authService, userService } from '@/lib/cloudflare/services';
 
 const PLANS = [
   { id: 'premium', name: 'Odogwu Premium', price: 'N4,900', period: '/month', color: ['#FF375F', '#FF6B8A'], features: ['Send unlimited likes', 'Complete ad-free swiping experience', 'Filter your preferences', 'Unlimited rewinds to reconsider profiles', 'Voice and video calling', '2x Super Likes daily'] },

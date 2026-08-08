@@ -5,11 +5,16 @@ import { SparklesIcon, ShieldIcon, ChatIcon, GoogleIcon } from '@/components/Ico
 import Button from '@/components/Button';
 import VideoCarouselBackground from '@/components/VideoCarouselBackground';
 import { useAuth } from '@/store/AuthContext';
+import { authService } from '@/lib/cloudflare/services';
 
 export default function LoginPage() {
   const { loading, isAuthenticated, isOnboarded, refreshUser } = useAuth();
   const router = useRouter();
   const [error, setError] = useState('');
+  const [mode, setMode] = useState<'google' | 'email'>('google');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (loading) return;
@@ -18,8 +23,35 @@ export default function LoginPage() {
     }
   }, [loading, isAuthenticated, isOnboarded, router]);
 
+  const routeAfterAuth = () => {
+    router.replace(isOnboarded ? '/discover' : '/onboarding/name');
+  };
+
   const handleGoogleLogin = () => {
     router.push('/oauth');
+  };
+
+  const handleEmailLogin = async () => {
+    if (!email.trim() || !password || submitting) return;
+    setSubmitting(true);
+    setError('');
+    try {
+      const data = await authService.login(email.trim(), password);
+      await refreshUser();
+      setError('');
+      router.replace(data.hasProfile ? '/discover' : '/onboarding/name');
+    } catch (err: any) {
+      setError(err?.message || 'Login failed. Please try again.');
+      setSubmitting(false);
+      return;
+    }
+    setSubmitting(false);
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%', padding: '14px 16px', borderRadius: 14,
+    background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.14)',
+    color: 'white', fontSize: 15, outline: 'none', boxSizing: 'border-box',
   };
 
   return (
@@ -71,14 +103,59 @@ export default function LoginPage() {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: 60, position: 'relative', zIndex: 1 }}>
-        <Button
-          title="Continue with Google"
-          onPress={handleGoogleLogin}
-          variant="gradient"
-          size="lg"
-          icon={<GoogleIcon size={20} />}
-          style={{ width: '100%', marginBottom: 16 }}
-        />
+        {mode === 'google' ? (
+          <>
+            <Button
+              title="Continue with Google"
+              onPress={handleGoogleLogin}
+              variant="gradient"
+              size="lg"
+              icon={<GoogleIcon size={20} />}
+              style={{ width: '100%', marginBottom: 16 }}
+            />
+            <button
+              onClick={() => setMode('email')}
+              style={{ background: 'none', border: 'none', color: '#FF6B8A', fontSize: 14, fontWeight: 600, cursor: 'pointer', marginBottom: 16, padding: '4px 8px' }}
+            >
+              Sign in with email instead
+            </button>
+          </>
+        ) : (
+          <>
+            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 16 }}>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email address"
+                style={inputStyle}
+              />
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleEmailLogin()}
+                placeholder="Password"
+                style={inputStyle}
+              />
+            </div>
+            <Button
+              title={submitting ? 'Signing in...' : 'Sign In'}
+              onPress={handleEmailLogin}
+              variant="gradient"
+              size="lg"
+              disabled={submitting}
+              loading={submitting}
+              style={{ width: '100%', marginBottom: 12 }}
+            />
+            <button
+              onClick={() => router.push('/register')}
+              style={{ background: 'none', border: 'none', color: '#FF6B8A', fontSize: 14, fontWeight: 600, cursor: 'pointer', marginBottom: 16, padding: '4px 8px' }}
+            >
+              Create an account
+            </button>
+          </>
+        )}
         {error && <p style={{ color: '#FF4444', fontSize: 13, textAlign: 'center', marginBottom: 12 }}>{error}</p>}
         <p style={{ color: '#6B6B6B', fontSize: 12, textAlign: 'center', lineHeight: '18px' }}>
           By signing up, you agree to our Terms of Service and Privacy Policy

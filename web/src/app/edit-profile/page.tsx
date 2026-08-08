@@ -6,8 +6,8 @@ import Button from '@/components/Button';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import { useAuth } from '@/store/AuthContext';
-import { authService, userService, storageService } from '@/lib/appwrite/services';
-import { account } from '@/lib/appwrite/config';
+import { authService, userService, storageService } from '@/lib/cloudflare/services';
+import { account } from '@/lib/cloudflare/config';
 
 const GENDERS = ['male', 'female', 'non-binary', 'other'] as const;
 const INTERESTS = ['male', 'female', 'both', 'non-binary'] as const;

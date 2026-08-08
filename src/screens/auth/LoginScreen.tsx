@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import theme from '../../theme';
 import Button from '../../components/Button';
 import { useAuth } from '../../store/AuthContext';
+import { setToken } from '../../api/config';
 
 const { width, height } = Dimensions.get('window');
 
@@ -15,6 +16,9 @@ export default function LoginScreen({ navigation }: any) {
   useEffect(() => {
     const handleRedirect = (event: { url: string }) => {
       if (event.url?.startsWith('odogwu-dating://oauth')) {
+        const url = new URL(event.url);
+        const token = url.searchParams.get('token');
+        if (token) setToken(token);
         refreshUser();
       }
     };
@@ -25,7 +29,7 @@ export default function LoginScreen({ navigation }: any) {
   const handleGoogleLogin = async () => {
     try {
       setError('');
-      const { authService } = await import('../../appwrite/services');
+      const { authService } = await import('../../api/services');
       await authService.loginWithGoogle();
     } catch (error) {
       console.error('Login error:', error);

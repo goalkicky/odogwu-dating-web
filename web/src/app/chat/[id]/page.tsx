@@ -8,8 +8,8 @@ import {
 } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import { useAuth } from '@/store/AuthContext';
-import { messageService, storageService, matchService, userService } from '@/lib/appwrite/services';
-import { account } from '@/lib/appwrite/config';
+import { messageService, storageService, matchService, userService } from '@/lib/cloudflare/services';
+import { account } from '@/lib/cloudflare/config';
 import type { Message } from '@/lib/types';
 
 const EMOJIS = ['😀', '😂', '❤️', '🔥', '😍', '🥰', '😘', '💕', '😊', '😎', '🙌', '👋', '💪', '✨', '🌟', '🎉', '🎂', '🍕', '☕', '🌮'];
@@ -175,7 +175,7 @@ export default function ChatPage() {
       }).catch(() => {});
     }).catch(() => {});
     messageService.getMessages(matchId).then(res => {
-      const msgs = res.documents.map(d => ({
+      const msgs = res.documents.map((d: any) => ({
         id: d.$id,
         matchId: d.matchId,
         senderId: d.senderId,

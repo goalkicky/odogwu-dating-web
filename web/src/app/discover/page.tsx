@@ -8,8 +8,8 @@ import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
 import { useMobile } from '@/lib/useMediaQuery';
 import { useAuth } from '@/store/AuthContext';
-import { userService, storageService } from '@/lib/appwrite/services';
-import { account } from '@/lib/appwrite/config';
+import { userService, storageService } from '@/lib/cloudflare/services';
+import { account } from '@/lib/cloudflare/config';
 
 export default function DiscoverPage() {
   const { profile } = useAuth();
@@ -33,16 +33,6 @@ export default function DiscoverPage() {
       ]);
       const likedSet = new Set(likedIds);
       const filtered = docs.filter((d: any) => !likedSet.has(d.$id));
-      const photoIds = [...new Set(filtered.flatMap((d: any) => d.photos || []))];
-      if (photoIds.length > 0) {
-        try {
-          await fetch('/api/storage/ensure-public-read/batch', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ fileIds: photoIds }),
-          });
-        } catch {}
-      }
       const mapped = filtered.map((d: any) => ({
         id: d.$id,
         photos: (d.photos || []).map((fid: string) => storageService.getFilePreview(fid)),

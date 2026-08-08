@@ -5,8 +5,8 @@ import { ChevronBackIcon, CallIcon, VideoIcon, CheckmarkCircleIcon, CloseCircleI
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import { useAuth } from '@/store/AuthContext';
-import { callLogService, userService } from '@/lib/appwrite/services';
-import { account } from '@/lib/appwrite/config';
+import { callLogService, userService } from '@/lib/cloudflare/services';
+import { account } from '@/lib/cloudflare/config';
 
 interface CallLogEntry {
   $id: string;

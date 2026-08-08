@@ -7,7 +7,7 @@ import Button from '@/components/Button';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
 import { useAuth } from '@/store/AuthContext';
-import { storageService } from '@/lib/appwrite/services';
+import { storageService } from '@/lib/cloudflare/services';
 
 export default function ProfilePage() {
   const router = useRouter();

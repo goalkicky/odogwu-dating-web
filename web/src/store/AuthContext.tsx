@@ -1,6 +1,6 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { authService, userService } from '@/lib/appwrite/services';
+import { authService, userService } from '@/lib/cloudflare/services';
 import { UserProfile } from '@/lib/types';
 
 interface AuthState {

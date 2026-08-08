@@ -66,8 +66,8 @@ export default function PhotoScreen({ navigation }: any) {
     }
     setUploading(true);
     try {
-      const { userService, storageService } = await import('../../appwrite/services');
-      const { account } = await import('../../appwrite/config');
+      const { userService, storageService } = await import('../../api/services');
+      const { account } = await import('../../api/config');
       const user = await account.get();
       const uploadedUrls = await Promise.all(
         data.photos.map((uri) => storageService.uploadPhoto(uri).then((f) => f.$id))

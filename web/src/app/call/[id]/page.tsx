@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/store/AuthContext';
 import { useCall } from '@/store/CallContext';
-import { callService, userService, callLogService } from '@/lib/appwrite/services';
+import { callService, userService, callLogService } from '@/lib/cloudflare/services';
 import { MicIcon, MicOffIcon, VolumeIcon, VideoIcon, CallIcon } from '@/components/Icons';
 
 const RTC_CONFIG = {
@@ -185,7 +185,7 @@ export default function CallPage() {
           if (offerId) {
             try {
               const offerDoc = await callService.getSignals(uid);
-              const found = offerDoc.documents.find(d => d.$id === offerId);
+              const found = (offerDoc.documents as any[]).find((d: any) => d.$id === offerId);
               if (found) {
                 const offer = JSON.parse(found.data);
                 await pc.setRemoteDescription(new RTCSessionDescription(offer));

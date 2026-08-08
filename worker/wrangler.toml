@@ -1,0 +1,34 @@
+name = "odogwu-api"
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+
+# ===== Deploy steps =====
+# 1. wrangler login
+# 2. wrangler d1 create odogwu-db         -> paste database_id below
+# 3. wrangler r2 bucket create odogwu-media
+# 4. npm run db:migrate:remote
+# 5. wrangler secret put SESSION_SECRET   -> random string (openssl rand -hex 32)
+# 6. npm run deploy
+# 7. Set NEXT_PUBLIC_API_URL / EXPO_PUBLIC_API_URL to the deployed worker URL
+#    (e.g. https://odogwu-api.<subdomain>.workers.dev)
+
+[[d1_databases]]
+binding = "DB"
+database_name = "odogwu-db"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "odogwu-media"
+
+[[durable_objects.bindings]]
+name = "ChatRoom"
+class_name = "ChatRoom"
+
+[[durable_objects.bindings]]
+name = "CallSignals"
+class_name = "CallSignals"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["ChatRoom", "CallSignals"]

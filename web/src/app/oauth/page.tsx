@@ -1,84 +1,41 @@
 'use client';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { account } from '@/lib/appwrite/config';
-import { authService, userService } from '@/lib/appwrite/services';
+import { authService, userService } from '@/lib/cloudflare/services';
 import { useAuth } from '@/store/AuthContext';
 
 export default function OAuthCallback() {
   const router = useRouter();
   const { refreshUser } = useAuth();
   const [error, setError] = useState('');
-  const retries = useRef(0);
 
   useEffect(() => {
-    async function routeAfterAuth() {
-      const user = await authService.getCurrentUser();
-      await refreshUser();
-      let hasProfile = false;
-      try {
-        await userService.getProfile(user.$id);
-        hasProfile = true;
-      } catch {}
-      router.replace(hasProfile ? '/discover' : '/onboarding/name');
-    }
-
-    async function handleCallback() {
+    async function run() {
       const qParams = new URLSearchParams(window.location.search);
       const hParams = new URLSearchParams(window.location.hash.replace('#', '?'));
       const errorParam = qParams.get('error') || hParams.get('error');
-      if (errorParam) { setError(errorParam === 'access_denied' ? 'Sign-in cancelled. Please try again.' : errorParam); return; }
-
-      const userId = qParams.get('userId') || hParams.get('userId');
-      const secret = qParams.get('secret') || hParams.get('secret');
-      const jwt = qParams.get('jwt');
-      const sessionId = qParams.get('sessionId');
-
-      // Check if already authenticated before doing anything
-      if (!userId && !secret && !jwt && !sessionId) {
-        try {
-          const existingUser = await authService.getCurrentUser();
-          if (existingUser) {
-            await routeAfterAuth();
-            return;
-          }
-        } catch {}
-        // Not authenticated — initiate Google OAuth
-        await authService.loginWithGoogle();
+      if (errorParam) {
+        setError(errorParam === 'access_denied' ? 'Sign-in cancelled. Please try again.' : errorParam);
         return;
       }
 
       try {
-        if (sessionId && account?.client) {
-          account.client.setSession(sessionId);
-          await routeAfterAuth();
-          return;
-        }
-
-        if (jwt && account?.client) {
-          account.client.setJWT(jwt);
-          await routeAfterAuth();
-          return;
-        }
-
-        if (userId && secret) {
-          await authService.createSession(userId, secret);
-          await routeAfterAuth();
-          return;
-        }
-
         const user = await authService.getCurrentUser();
         if (user) {
-          await routeAfterAuth();
+          await refreshUser();
+          let hasProfile = false;
+          try {
+            await userService.getProfile(user.$id);
+            hasProfile = true;
+          } catch {}
+          router.replace(hasProfile ? '/discover' : '/onboarding/name');
           return;
         }
+      } catch {}
 
-        setError('No user session found.');
-      } catch (err: any) {
-        setError(`Authentication failed. ${err?.message || 'Please try again.'}`);
-      }
+      await authService.loginWithGoogle();
     }
-    handleCallback();
+    run();
   }, [router, refreshUser]);
 
   if (error) {

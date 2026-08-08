@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { account } from '../appwrite/config';
-import { userService } from '../appwrite/services';
+import { account } from '../api/config';
+import { userService } from '../api/services';
 import { UserProfile } from '../types';
 
 interface AuthState {

@@ -6,8 +6,8 @@ import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
 import { useAuth } from '@/store/AuthContext';
-import { matchService, storageService, userService } from '@/lib/appwrite/services';
-import { account } from '@/lib/appwrite/config';
+import { matchService, storageService, userService } from '@/lib/cloudflare/services';
+import { account } from '@/lib/cloudflare/config';
 
 export default function LikesPage() {
   const { profile } = useAuth();
