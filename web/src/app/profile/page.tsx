@@ -21,6 +21,19 @@ export default function ProfilePage() {
     setPhotoUrl(storageService.getFilePreview(photoId));
   }, [photoId]);
 
+  const completionFields = [
+    Boolean(profile?.photos?.length),
+    Boolean(profile?.bio),
+    Boolean(profile?.age || profile?.dateOfBirth),
+    Boolean(profile?.gender),
+    Boolean(profile?.interestedIn),
+    Boolean(profile?.city),
+  ];
+  const completionPct = Math.round((completionFields.filter(Boolean).length / completionFields.length) * 100);
+  const RING_SIZE = 108;
+  const RING_R = 50;
+  const RING_CIRC = 2 * Math.PI * RING_R;
+
   const handleLogout = async () => {
     if (window.confirm('Are you sure you want to logout?')) {
       await logout();
@@ -44,8 +57,23 @@ export default function ProfilePage() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         {/* Hero */}
         <div className="glass animate-fade-up" style={{ borderRadius: 26, padding: '28px 24px', background: 'linear-gradient(135deg, rgba(255,55,95,0.1), rgba(124,77,255,0.08)), rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', gap: 22 }}>
-          <div className="grad-ring" style={{ width: 108, height: 108, display: 'flex', flexShrink: 0, boxShadow: '0 8px 32px rgba(255,55,95,0.35)' }}>
-            <div style={{ width: 102, height: 102, borderRadius: '50%', backgroundColor: '#16161C', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+          <button onClick={() => router.push('/edit-profile')} style={{ position: 'relative', width: RING_SIZE, height: RING_SIZE, flexShrink: 0, padding: 0, border: 'none', background: 'transparent', cursor: 'pointer' }}>
+            <svg width={RING_SIZE} height={RING_SIZE} viewBox="0 0 108 108" style={{ transform: 'rotate(-90deg)' }}>
+              <defs>
+                <linearGradient id="profileRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#FF375F" />
+                  <stop offset="100%" stopColor="#7C4DFF" />
+                </linearGradient>
+              </defs>
+              <circle cx="54" cy="54" r={RING_R} fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="4" />
+              <circle
+                cx="54" cy="54" r={RING_R} fill="none" stroke="url(#profileRingGrad)" strokeWidth="4" strokeLinecap="round"
+                strokeDasharray={RING_CIRC}
+                strokeDashoffset={RING_CIRC * (1 - completionPct / 100)}
+                style={{ transition: 'stroke-dashoffset 0.8s ease' }}
+              />
+            </svg>
+            <div style={{ position: 'absolute', inset: 6, borderRadius: '50%', overflow: 'hidden', backgroundColor: '#16161C', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 32px rgba(255,55,95,0.35)' }}>
               {profile?.photos?.[0] && photoUrl ? (
                 <img src={photoUrl} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={() => setPhotoUrl('')} />
               ) : (
@@ -54,7 +82,11 @@ export default function ProfilePage() {
                 </svg>
               )}
             </div>
-          </div>
+            <div style={{ position: 'absolute', bottom: -1, left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: 4, padding: '3px 10px', borderRadius: 9999, background: 'rgba(10,10,14,0.92)', border: '1px solid rgba(255,55,95,0.5)', boxShadow: '0 4px 14px rgba(0,0,0,0.45)', whiteSpace: 'nowrap' }}>
+              <span style={{ fontSize: 12, fontWeight: 800, color: completionPct === 100 ? '#34C759' : '#FF375F' }}>{completionPct}%</span>
+              <span style={{ fontSize: 9.5, fontWeight: 700, color: '#ABABAB', letterSpacing: 0.5 }}>COMPLETE</span>
+            </div>
+          </button>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
               <h1 style={{ fontSize: 26, fontWeight: 800, color: 'white', margin: 0 }}>{profile?.fullName || user?.name || 'User'}</h1>
