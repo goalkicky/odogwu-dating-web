@@ -69,7 +69,7 @@ export default function ProfilePage() {
 
   return (
     <DesktopLayout>
-      <GradientBackground style={{ minHeight: '100vh', padding: '24px 16px 110px', overflowY: 'auto' }}>
+      <GradientBackground style={{ minHeight: '100vh', padding: '24px 16px 110px' }}>
         <div style={{ maxWidth: 520, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 14 }}>
           {/* Photo carousel — Tinder-style hero */}
           <div

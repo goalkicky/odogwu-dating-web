@@ -29,7 +29,7 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
           display: 'flex', background: 'linear-gradient(180deg, #08080C, #0D0D0D)',
         }}>
           {/* Sidebar */}
-          <aside className="sidebar" style={{ width: 240, flexShrink: 0, display: 'flex', flexDirection: 'column', paddingTop: 40, gap: 4 }}>
+          <aside className="sidebar" style={{ width: 240, flexShrink: 0, display: 'flex', flexDirection: 'column', paddingTop: 40, gap: 4, position: 'sticky', top: 0, height: '100vh', alignSelf: 'flex-start' }}>
             {/* Logo */}
             <div style={{ padding: '0 24px 32px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -86,7 +86,7 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
           {/* Main content */}
           <main style={{
             flex: 1, display: 'flex', justifyContent: 'center',
-            padding: '32px 40px', overflowY: 'auto', minHeight: '100vh',
+            padding: '32px 40px',
           }}>
             <div style={{ width: '100%', maxWidth: 900 }}>
               {children}
