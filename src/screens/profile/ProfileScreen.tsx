@@ -69,7 +69,7 @@ export default function ProfileScreen({ navigation }: any) {
             {photoUrls.length > 0 ? (
               photoUrls.map((src, i) => (
                 <View key={i} style={[styles.slide, { width, height: CAROUSEL_H }]}>
-                  <Image source={{ uri: src }} style={styles.slideImage} resizeMode="cover" />
+                  <Image source={{ uri: src }} style={styles.slideImage} resizeMode="contain" />
                   <LinearGradient
                     colors={['rgba(0,0,0,0.25)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0.85)']}
                     style={styles.slideGradient}
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginTop: 12,
   },
-  slide: { position: 'relative', borderRadius: 24, overflow: 'hidden' },
+  slide: { position: 'relative', borderRadius: 24, overflow: 'hidden', backgroundColor: '#000' },
   slideImage: { width: '100%', height: '100%' },
   slideGradient: { ...StyleSheet.absoluteFillObject },
   nameOverlay: {
