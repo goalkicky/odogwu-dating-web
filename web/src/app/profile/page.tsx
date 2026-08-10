@@ -80,19 +80,19 @@ export default function ProfilePage() {
               position: 'relative',
               borderRadius: 26,
               overflow: 'hidden',
-              aspectRatio: '3 / 4.1',
               display: 'flex',
+              alignItems: 'flex-start',
               scrollSnapType: 'x mandatory',
               overscrollBehaviorX: 'contain',
             }}
           >
             {photoUrls.length > 0 ? (
               photoUrls.map((src, i) => (
-                <div key={i} style={{ position: 'relative', minWidth: '100%', scrollSnapAlign: 'start', flexShrink: 0 }}>
+                <div key={i} style={{ position: 'relative', width: '100%', flex: '0 0 100%', scrollSnapAlign: 'start' }}>
                   <img
                     src={src}
                     alt=""
-                    style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', background: '#000' }}
+                    style={{ width: '100%', height: 'auto', maxHeight: '78vh', objectFit: 'contain', display: 'block', background: '#000' }}
                     onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0'; }}
                   />
                   <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 34%, rgba(0,0,0,0.82) 100%)' }} />
@@ -117,7 +117,7 @@ export default function ProfilePage() {
                 </div>
               ))
             ) : (
-              <button onClick={() => router.push('/edit-profile')} style={{ width: '100%', height: '100%', background: 'linear-gradient(160deg, rgba(255,55,95,0.14), rgba(108,99,255,0.1)), rgba(255,255,255,0.02)', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, color: '#ABABAB' }}>
+              <button onClick={() => router.push('/edit-profile')} style={{ width: '100%', height: 420, background: 'linear-gradient(160deg, rgba(255,55,95,0.14), rgba(108,99,255,0.1)), rgba(255,255,255,0.02)', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, color: '#ABABAB' }}>
                 <div style={{ width: 64, height: 64, borderRadius: 9999, background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <PlusIcon size={30} color="white" />
                 </div>
