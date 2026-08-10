@@ -30,17 +30,18 @@ export async function hashToken(token: string, secret: string): Promise<string> 
 }
 
 // PBKDF2 password hashing (Web Crypto — no native deps needed on Workers)
+// Note: Workers runtime rejects iteration counts above 100000.
 export async function hashPassword(password: string): Promise<string> {
   const saltBytes = crypto.getRandomValues(new Uint8Array(16));
   const salt = toHex(saltBytes.buffer);
-  const hash = await pbkdf2(password, salt, 150000, 32);
+  const hash = await pbkdf2(password, salt, 100000, 32);
   return `${salt}:${hash}`;
 }
 
 export async function verifyPassword(password: string, stored: string): Promise<boolean> {
   const [salt, expected] = stored.split(':');
   if (!salt || !expected) return false;
-  const hash = await pbkdf2(password, salt, 150000, 32);
+  const hash = await pbkdf2(password, salt, 100000, 32);
   const a = Uint8Array.from(enc(expected));
   const b = Uint8Array.from(enc(hash));
   if (a.length !== b.length) return false;

@@ -15,7 +15,7 @@ compatibility_date = "2026-01-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "odogwu-db"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "3bf6f4cb-a946-4de5-be89-e1cf1003bae7"
 
 [[r2_buckets]]
 binding = "MEDIA"
