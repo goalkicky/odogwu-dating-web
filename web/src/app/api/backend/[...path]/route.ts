@@ -7,7 +7,7 @@ async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }
     return NextResponse.json({ error: 'NEXT_PUBLIC_API_URL not configured' }, { status: 500 });
   }
   const { path } = await ctx.params;
-  const upstream = new URL(`/api/${path.join('/')}${req.nextUrl.search}`, API_URL);
+  const upstream = new URL(`/${path.join('/')}${req.nextUrl.search}`, API_URL);
 
   const headers = new Headers(req.headers);
   headers.delete('host');

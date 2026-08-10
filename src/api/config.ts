@@ -46,7 +46,7 @@ export async function apiFetch(
     body = JSON.stringify(opts.json);
   }
 
-  const res = await fetch(`${API_URL}/api${path}`, {
+  const res = await fetch(`${API_URL}${path}`, {
     method: opts.method || 'GET',
     headers,
     body,
