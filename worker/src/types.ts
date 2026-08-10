@@ -17,6 +17,7 @@ export interface UserRow {
   interested_in: string;
   bio: string;
   photos: string;
+  interests: string;
   latitude: number;
   longitude: number;
   city: string;

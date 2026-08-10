@@ -137,6 +137,29 @@ export default function ProfileScreen({ navigation }: any) {
           </Text>
         </View>
 
+        {/* Interests */}
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <Text style={styles.sectionTitle}>Interests</Text>
+            <TouchableOpacity style={styles.editBtn} activeOpacity={0.7}>
+              <Ionicons name="pencil" size={14} color={theme.colors.textSecondary} />
+            </TouchableOpacity>
+          </View>
+          {(profile?.interests?.length || 0) > 0 ? (
+            <View style={styles.interestsWrap}>
+              {profile!.interests!.map((it) => (
+                <View key={it} style={styles.interestChip}>
+                  <Text style={styles.interestText}>{it}</Text>
+                </View>
+              ))}
+            </View>
+          ) : (
+            <Text style={[styles.bio, styles.bioEmpty]}>
+              Add your interests so people can see what you love.
+            </Text>
+          )}
+        </View>
+
         {/* Details */}
         <View style={[styles.card, styles.detailsCard]}>
           {detailsRows.map((row, i) => (
@@ -293,6 +316,16 @@ const styles = StyleSheet.create({
   },
   bio: { fontSize: 15, color: '#D6D6D6', lineHeight: 23, marginTop: 12 },
   bioEmpty: { color: '#6B6B6B' },
+  interestsWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 14 },
+  interestChip: {
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 9999,
+    backgroundColor: 'rgba(255,55,95,0.15)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,55,95,0.4)',
+  },
+  interestText: { fontSize: 13, fontWeight: '600', color: theme.colors.text },
   detailsCard: { padding: 0, overflow: 'hidden' },
   detailRow: {
     flexDirection: 'row',

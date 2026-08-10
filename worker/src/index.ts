@@ -18,6 +18,8 @@ function isOnboarded(user: UserRow | null): boolean {
 function toProfile(r: any): any {
   let photos: string[] = [];
   try { photos = JSON.parse(r.photos || '[]'); } catch {}
+  let interests: string[] = [];
+  try { interests = JSON.parse(r.interests || '[]'); } catch {}
   return {
     $id: r.id,
     id: r.id,
@@ -28,6 +30,7 @@ function toProfile(r: any): any {
     interestedIn: r.interested_in,
     bio: r.bio,
     photos,
+    interests,
     latitude: r.latitude,
     longitude: r.longitude,
     city: r.city,
@@ -123,6 +126,7 @@ const PROFILE_FIELDS: Record<string, string> = {
   interestedIn: 'interested_in',
   bio: 'bio',
   photos: 'photos',
+  interests: 'interests',
   city: 'city',
   latitude: 'latitude',
   longitude: 'longitude',
@@ -140,7 +144,7 @@ function mapProfileValues(data: Record<string, any>): { cols: string[]; vals: an
     const col = PROFILE_FIELDS[k];
     if (!col) continue;
     let value = v;
-    if (col === 'photos') value = JSON.stringify(v || []);
+    if (col === 'photos' || col === 'interests') value = JSON.stringify(v || []);
     if (col === 'is_premium' || col === 'verified') value = v ? 1 : 0;
     cols.push(col);
     vals.push(value);

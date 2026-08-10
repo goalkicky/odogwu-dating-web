@@ -157,6 +157,35 @@ export default function ProfilePage() {
             </p>
           </div>
 
+          {/* Interests */}
+          <div className="glass animate-fade-up" style={{ borderRadius: 20, padding: '20px 20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h2 style={{ fontSize: 14, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 1.4, textTransform: 'uppercase' }}>Interests</h2>
+              <button onClick={() => router.push('/edit-profile')} aria-label="Edit interests" style={{ width: 32, height: 32, borderRadius: 9999, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <PencilIcon size={14} color="#ABABAB" />
+              </button>
+            </div>
+            {(profile?.interests?.length || 0) > 0 ? (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 14 }}>
+                {profile!.interests!.map((it) => (
+                  <span key={it} style={{
+                    padding: '8px 16px', borderRadius: 9999, fontSize: 13, fontWeight: 600, color: 'white',
+                    background: 'linear-gradient(135deg, rgba(255,55,95,0.18), rgba(108,99,255,0.16))',
+                    border: '1px solid rgba(255,55,95,0.35)',
+                  }}>
+                    {it}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <button onClick={() => router.push('/edit-profile')} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
+                <p style={{ fontSize: 14.5, color: '#6B6B6B', margin: '12px 0 0', textAlign: 'left' }}>
+                  Add your interests so people can see what you love.
+                </p>
+              </button>
+            )}
+          </div>
+
           {/* Profile completion */}
           <div className="glass animate-fade-up" style={{ borderRadius: 20, padding: '16px 20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

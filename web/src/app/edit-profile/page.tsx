@@ -11,6 +11,11 @@ import { account } from '@/lib/cloudflare/config';
 
 const GENDERS = ['male', 'female', 'non-binary', 'other'] as const;
 const INTERESTS = ['male', 'female', 'both', 'non-binary'] as const;
+const INTEREST_OPTIONS = [
+  'Travel', 'Food', 'Music', 'Movies', 'Fitness', 'Hiking', 'Dancing', 'Cooking',
+  'Art', 'Photography', 'Gaming', 'Reading', 'Sports', 'Fashion', 'Pets', 'Coffee',
+  'Nature', 'Yoga', 'Shopping', 'Tech', 'Beach', 'Wine',
+];
 
 function OptionPicker({ label, options, value, onChange, onClose }: { label: string; options: readonly string[]; value: string; onChange: (v: string) => void; onClose: () => void }) {
   return (
@@ -47,6 +52,7 @@ export default function EditProfilePage() {
   const [dob, setDob] = useState(profile?.dateOfBirth || '');
   const [gender, setGender] = useState(profile?.gender || '');
   const [interest, setInterest] = useState(profile?.interestedIn || '');
+  const [interests, setInterests] = useState<string[]>(profile?.interests || []);
   const [photos, setPhotos] = useState<string[]>(profile?.photos || []);
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [jwt, setJwt] = useState<string>('');
@@ -63,6 +69,7 @@ export default function EditProfilePage() {
     setDob(profile.dateOfBirth || '');
     setGender(profile.gender || '');
     setInterest(profile.interestedIn || '');
+    setInterests(profile.interests || []);
     const p = profile.photos || [];
     setPhotos(p);
     Promise.all(p.map(id => storageService.ensurePublicRead(id).catch(() => {}))).catch(() => {});
@@ -107,6 +114,7 @@ export default function EditProfilePage() {
         dateOfBirth: dob,
         gender,
         interestedIn: interest,
+        interests,
       } as any);
       await refreshUser();
       router.back();
@@ -179,6 +187,33 @@ export default function EditProfilePage() {
           <FieldRow icon={<CalendarIcon size={20} color="#ABABAB" />} label="Date of Birth">
             <input value={dob} onChange={e => setDob(e.target.value)} placeholder="YYYY-MM-DD" type="date" style={{ flex: 1, background: 'none', border: 'none', color: 'white', fontSize: 15, textAlign: 'right', outline: 'none', padding: '14px 0' }} />
           </FieldRow>
+        </div>
+
+        <div style={{ marginBottom: 28 }}>
+          <h2 style={{ fontSize: 13, fontWeight: 800, color: 'white', letterSpacing: 1.4, textTransform: 'uppercase', margin: '0 0 6px' }}>Interests</h2>
+          <p style={{ fontSize: 12.5, color: '#6B6B6B', margin: '0 0 14px' }}>Select what you love — these show as badges on your profile.</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {INTEREST_OPTIONS.map(opt => {
+              const selected = interests.includes(opt);
+              return (
+                <button
+                  key={opt}
+                  onClick={() => {
+                    setInterests(prev => selected ? prev.filter(x => x !== opt) : [...prev, opt]);
+                  }}
+                  style={{
+                    padding: '9px 16px', borderRadius: 9999, fontSize: 13.5, fontWeight: 600, cursor: 'pointer',
+                    color: selected ? 'white' : '#ABABAB',
+                    background: selected ? 'linear-gradient(135deg, #FF375F, #FF6B8A)' : 'rgba(255,255,255,0.06)',
+                    border: selected ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  {opt}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {error && <p style={{ color: '#FF3B30', fontSize: 13, textAlign: 'center', marginBottom: 12 }}>{error}</p>}

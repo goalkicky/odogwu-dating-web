@@ -7,6 +7,7 @@ export interface UserProfile {
   interestedIn: 'male' | 'female' | 'both' | 'non-binary';
   bio: string;
   photos: string[];
+  interests: string[];
   latitude: number;
   longitude: number;
   city: string;
