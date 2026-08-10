@@ -12,7 +12,7 @@ interface AuthState {
 }
 
 interface AuthContextType extends AuthState {
-  refreshUser: () => Promise<void>;
+  refreshUser: () => Promise<boolean>;
   logout: () => Promise<void>;
   setOnboarded: () => void;
 }
@@ -23,7 +23,7 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   isAuthenticated: false,
   isOnboarded: false,
-  refreshUser: async () => {},
+  refreshUser: async () => false,
   logout: async () => {},
   setOnboarded: () => {},
 });
@@ -39,20 +39,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     isOnboarded: false,
   });
 
-  const refreshUser = useCallback(async () => {
+  const refreshUser = useCallback(async (): Promise<boolean> => {
     try {
       const user = await authService.getCurrentUser();
       let profile = null;
       let isOnboarded = false;
       try {
         profile = await userService.getProfile(user.$id) as unknown as UserProfile;
-        isOnboarded = true;
+        isOnboarded = !!(profile?.age && profile?.gender);
       } catch {
         isOnboarded = false;
       }
       setState({ user, profile, loading: false, isAuthenticated: true, isOnboarded });
+      return isOnboarded;
     } catch {
       setState({ user: null, profile: null, loading: false, isAuthenticated: false, isOnboarded: false });
+      return false;
     }
   }, []);
 

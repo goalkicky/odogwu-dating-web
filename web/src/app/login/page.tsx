@@ -36,10 +36,10 @@ export default function LoginPage() {
     setSubmitting(true);
     setError('');
     try {
-      const data = await authService.login(email.trim(), password);
-      await refreshUser();
+      await authService.login(email.trim(), password);
+      const onboarded = await refreshUser();
       setError('');
-      router.replace(data.hasProfile ? '/discover' : '/onboarding/name');
+      router.replace(onboarded ? '/discover' : '/onboarding/name');
     } catch (err: any) {
       setError(err?.message || 'Login failed. Please try again.');
       setSubmitting(false);

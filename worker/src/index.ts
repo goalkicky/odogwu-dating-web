@@ -11,6 +11,10 @@ const SESSION_DAYS = 365;
 
 // ===== Serializers (Appwrite-compatible document shape) =====
 
+function isOnboarded(user: UserRow | null): boolean {
+  return !!user && !!user.gender && !!user.age;
+}
+
 function toProfile(r: any): any {
   let photos: string[] = [];
   try { photos = JSON.parse(r.photos || '[]'); } catch {}
@@ -217,7 +221,7 @@ async function handleLogin(env: Env, req: Request): Promise<Response> {
     token,
     user: { $id: user.id, email: user.email, name: user.full_name },
     profile: toProfile(user),
-    hasProfile: !!user.full_name,
+    hasProfile: isOnboarded(user),
   });
 }
 
@@ -257,11 +261,10 @@ async function upsertGoogleUser(env: Env, googleId: string, email: string, name:
 }
 
 function googleSessionBody(user: UserRow, fallbackName: string): any {
-  const hasProfile = !!(user.full_name || user.photos !== '[]' || user.age);
   return {
     user: { $id: user.id, email: user.email, name: user.full_name || fallbackName },
     profile: toProfile(user),
-    hasProfile,
+    hasProfile: isOnboarded(user),
   };
 }
 

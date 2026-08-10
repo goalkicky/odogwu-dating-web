@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       let isOnboarded = false;
       try {
         profile = await userService.getProfile(user.$id) as unknown as UserProfile;
-        isOnboarded = true;
+        isOnboarded = !!(profile?.age && profile?.gender);
       } catch {
         isOnboarded = false;
       }

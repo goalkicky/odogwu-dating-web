@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { authService, userService } from '@/lib/cloudflare/services';
+import { authService } from '@/lib/cloudflare/services';
 import { useAuth } from '@/store/AuthContext';
 
 export default function OAuthCallback() {
@@ -22,13 +22,8 @@ export default function OAuthCallback() {
       try {
         const user = await authService.getCurrentUser();
         if (user) {
-          await refreshUser();
-          let hasProfile = false;
-          try {
-            await userService.getProfile(user.$id);
-            hasProfile = true;
-          } catch {}
-          router.replace(hasProfile ? '/discover' : '/onboarding/name');
+          const onboarded = await refreshUser();
+          router.replace(onboarded ? '/discover' : '/onboarding/name');
           return;
         }
       } catch {}
