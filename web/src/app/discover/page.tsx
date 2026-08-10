@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useCallback, useEffect } from 'react';
-import { HeartIcon, CloseIcon, StarIcon, RefreshIcon } from '@/components/Icons';
+import { HeartIcon, CloseIcon, StarIcon, RefreshIcon, FilterIcon } from '@/components/Icons';
 import AnimatedCard from '@/components/AnimatedCard';
 import ActionButton from '@/components/ActionButton';
 import GradientBackground from '@/components/GradientBackground';
@@ -18,17 +18,24 @@ export default function DiscoverPage() {
 
   const [lastAction, setLastAction] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
+
+  const baseGender = (profile?.interestedIn as string) || 'both';
+  const defaultPrefs = { gender: baseGender, minAge: 18, maxAge: 60, maxDistance: 0 };
+  const [prefs, setPrefs] = useState(defaultPrefs);
+
+  const activeFilterCount =
+    (prefs.gender !== baseGender ? 1 : 0) +
+    (prefs.minAge !== 18 ? 1 : 0) +
+    (prefs.maxAge !== 60 ? 1 : 0) +
+    (prefs.maxDistance > 0 ? 1 : 0);
 
   const loadUsers = useCallback(async () => {
     if (!profile || !account) return;
     setLoading(true);
     try {
       const [docs, likedIds] = await Promise.all([
-        userService.getDiscoverUsers((profile as any).$id, {
-          gender: profile.interestedIn || 'both',
-          minAge: 18,
-          maxAge: 60,
-        }),
+        userService.getDiscoverUsers((profile as any).$id, prefs),
         userService.getLikedUserIds((profile as any).$id).catch(() => [] as string[]),
       ]);
       const likedSet = new Set(likedIds);
@@ -40,11 +47,12 @@ export default function DiscoverPage() {
         age: d.age || 0,
         bio: d.bio || '',
         city: d.city || '',
+        distanceKm: d.distanceKm,
       })).filter((u: any) => u.photos.length > 0);
       setUsers(mapped);
     } catch {}
     setLoading(false);
-  }, [profile]);
+  }, [profile, prefs]);
 
   useEffect(() => { loadUsers(); }, [loadUsers]);
 
@@ -169,6 +177,30 @@ export default function DiscoverPage() {
                 <RefreshIcon size={16} color="#FF6B8A" />
                 Refresh
               </button>
+              <button
+                onClick={() => setShowFilters(true)}
+                className="glass lift"
+                aria-label="Filter preferences"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  padding: '8px 14px', borderRadius: 9999, position: 'relative',
+                  color: '#D0D0D0', fontSize: 13, fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                <FilterIcon size={16} color="#FF6B8A" />
+                Filters
+                {activeFilterCount > 0 && (
+                  <span style={{
+                    position: 'absolute', top: -6, right: -6, minWidth: 20, height: 20, padding: '0 5px', boxSizing: 'border-box',
+                    borderRadius: 9999, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white',
+                    fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    boxShadow: '0 2px 10px rgba(255,55,95,0.6)', border: '2px solid #0D0D0D',
+                  }}>
+                    {activeFilterCount}
+                  </span>
+                )}
+              </button>
             </div>
           </div>
 
@@ -227,7 +259,166 @@ export default function DiscoverPage() {
           </div>
         </div>
         {isMobile && <TabBar />}
+
+        {showFilters && (
+          <FilterPanel
+            prefs={prefs}
+            defaults={defaultPrefs}
+            onChange={setPrefs}
+            onApply={() => setShowFilters(false)}
+            onClose={() => setShowFilters(false)}
+          />
+        )}
       </GradientBackground>
     </DesktopLayout>
+  );
+}
+
+const GENDER_OPTIONS = [
+  { value: 'both', label: 'Everyone' },
+  { value: 'female', label: 'Women' },
+  { value: 'male', label: 'Men' },
+];
+const AGE_MIN = 18;
+const AGE_MAX = 80;
+const DIST_MAX = 100;
+
+function FilterLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: 1.2, textTransform: 'uppercase', color: '#8A8A8A', margin: '0 0 12px' }}>
+      {children}
+    </p>
+  );
+}
+
+function Stepper({ label, value, onDec, onInc }: { label: string; value: number; onDec: () => void; onInc: () => void }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+      <span style={{ fontSize: 11, fontWeight: 700, color: '#6B6B6B', letterSpacing: 1, textTransform: 'uppercase' }}>{label}</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 14, padding: '5px' }}>
+        <button onClick={onDec} aria-label={`Decrease ${label}`} style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,255,255,0.08)', border: 'none', color: 'white', fontSize: 20, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          −
+        </button>
+        <span style={{ color: 'white', fontSize: 22, fontWeight: 800, minWidth: 32, textAlign: 'center' }}>{value}</span>
+        <button onClick={onInc} aria-label={`Increase ${label}`} style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,255,255,0.08)', border: 'none', color: 'white', fontSize: 20, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          +
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
+  prefs: { gender: string; minAge: number; maxAge: number; maxDistance: number };
+  defaults: { gender: string; minAge: number; maxAge: number; maxDistance: number };
+  onChange: (p: typeof prefs) => void;
+  onApply: () => void;
+  onClose: () => void;
+}) {
+  const [draft, setDraft] = useState(prefs);
+  const set = (patch: Partial<typeof draft>) => setDraft(d => ({ ...d, ...patch }));
+
+  const clampAge = (min: number, max: number) => ({
+    minAge: Math.min(AGE_MAX, Math.max(AGE_MIN, Math.min(min, max))),
+    maxAge: Math.min(AGE_MAX, Math.max(AGE_MIN, Math.max(min, max))),
+  });
+
+  const distFill = (draft.maxDistance / DIST_MAX) * 100;
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'flex-end', background: 'rgba(0,0,0,0.6)', paddingTop: 40 }} onClick={onClose}>
+      <div
+        onClick={e => e.stopPropagation()}
+        className="animate-fade-up"
+        style={{
+          width: '100%', maxWidth: 520, margin: '0 auto',
+          background: '#16161C', borderRadius: '24px 24px 0 0',
+          padding: '24px 24px 40px',
+          borderTop: '1px solid rgba(255,255,255,0.1)',
+          boxShadow: '0 -12px 60px rgba(0,0,0,0.6)',
+          maxHeight: '100%', overflowY: 'auto',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+          <h3 style={{ fontSize: 20, fontWeight: 800, color: 'white', margin: 0 }}>Discovery Preferences</h3>
+          <button onClick={onClose} aria-label="Close" style={{ width: 36, height: 36, borderRadius: 9999, background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <CloseIcon size={16} color="white" />
+          </button>
+        </div>
+
+        <div style={{ marginBottom: 30 }}>
+          <FilterLabel>Gender</FilterLabel>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {GENDER_OPTIONS.map(opt => (
+              <button
+                key={opt.value}
+                onClick={() => set({ gender: opt.value })}
+                style={{
+                  flex: 1, padding: '13px 0', borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: 'pointer',
+                  color: draft.gender === opt.value ? 'white' : '#ABABAB',
+                  background: draft.gender === opt.value ? 'linear-gradient(135deg, #FF375F, #FF6B8A)' : 'rgba(255,255,255,0.06)',
+                  border: draft.gender === opt.value ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                  boxShadow: draft.gender === opt.value ? '0 4px 18px rgba(255,55,95,0.35)' : 'none',
+                }}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ marginBottom: 30 }}>
+          <FilterLabel>Age Range</FilterLabel>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, justifyContent: 'center' }}>
+            <Stepper label="Min" value={draft.minAge} onDec={() => set(clampAge(draft.minAge - 1, draft.maxAge))} onInc={() => set(clampAge(draft.minAge + 1, draft.maxAge))} />
+            <span style={{ color: '#4A4A4A', fontSize: 22, fontWeight: 800 }}>—</span>
+            <Stepper label="Max" value={draft.maxAge} onDec={() => set(clampAge(draft.minAge, draft.maxAge - 1))} onInc={() => set(clampAge(draft.minAge, draft.maxAge + 1))} />
+          </div>
+        </div>
+
+        <div style={{ marginBottom: 30 }}>
+          <FilterLabel>Distance</FilterLabel>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <span style={{ color: 'white', fontSize: 22, fontWeight: 800 }}>
+              {draft.maxDistance === 0 ? 'Anywhere' : `${draft.maxDistance} km`}
+            </span>
+            {draft.maxDistance > 0 && (
+              <button onClick={() => set({ maxDistance: 0 })} style={{ background: 'none', border: 'none', color: '#FF6B8A', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                Anywhere
+              </button>
+            )}
+          </div>
+          <input
+            type="range"
+            className="slider"
+            min={0}
+            max={DIST_MAX}
+            step={5}
+            value={draft.maxDistance}
+            onChange={e => set({ maxDistance: Number(e.target.value) })}
+            style={{ ['--fill' as any]: `${distFill}%` }}
+          />
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
+            <span style={{ fontSize: 11, color: '#6B6B6B' }}>Anywhere</span>
+            <span style={{ fontSize: 11, color: '#6B6B6B' }}>100 km</span>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button
+            onClick={() => setDraft(defaults)}
+            style={{ padding: '14px 22px', borderRadius: 9999, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#D0D0D0', fontSize: 15, fontWeight: 700, cursor: 'pointer' }}
+          >
+            Reset
+          </button>
+          <button
+            onClick={() => { onChange(draft); onApply(); }}
+            style={{ flex: 1, padding: '14px 22px', borderRadius: 9999, border: 'none', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white', fontSize: 15, fontWeight: 800, cursor: 'pointer', boxShadow: '0 6px 24px rgba(255,55,95,0.4)' }}
+          >
+            Apply Filters
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -8,6 +8,7 @@ interface UserCard {
   age: number;
   bio: string;
   city?: string;
+  distanceKm?: number;
 }
 
 interface AnimatedCardProps {
@@ -157,6 +158,11 @@ export default function AnimatedCard({
               <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
             </svg>
             <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, textShadow: '0 1px 6px rgba(0,0,0,0.6)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.city}</span>
+            {typeof user.distanceKm === 'number' && (
+              <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12.5, textShadow: '0 1px 6px rgba(0,0,0,0.6)', whiteSpace: 'nowrap' }}>
+                · {user.distanceKm} km
+              </span>
+            )}
           </div>
         )}
       </div>

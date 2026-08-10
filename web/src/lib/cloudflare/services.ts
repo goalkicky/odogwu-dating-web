@@ -55,9 +55,10 @@ export const userService = {
 
   getProfile: async (userId: string) => getProfileDoc(userId),
 
-  getDiscoverUsers: async (currentUserId: string, preferences: { gender: string; minAge: number; maxAge: number }) => {
+  getDiscoverUsers: async (currentUserId: string, preferences: { gender: string; minAge: number; maxAge: number; maxDistance?: number }) => {
     void currentUserId;
     const q = new URLSearchParams({ gender: preferences.gender, minAge: String(preferences.minAge), maxAge: String(preferences.maxAge) });
+    if (preferences.maxDistance) q.set('maxDistance', String(preferences.maxDistance));
     return apiFetch(`/api/discover?${q.toString()}`);
   },
 
