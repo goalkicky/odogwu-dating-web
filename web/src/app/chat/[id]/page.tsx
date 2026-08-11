@@ -182,7 +182,7 @@ export default function ChatPage() {
 
   const userId = (profile as any)?.$id || user?.$id;
 
-  const recBars = useMemo(() => Array.from({ length: 24 }, (_, i) => 6 + ((i * 13) % 18)), []);
+  const recBars = useMemo(() => Array.from({ length: 16 }, (_, i) => 6 + ((i * 13) % 18)), []);
 
   useEffect(() => {
     if (!matchId || !userId) return;
@@ -340,8 +340,6 @@ export default function ChatPage() {
     setRecordingLocked(false);
     setRecordingDuration(0);
   };
-
-  const cancelRecording = () => { stopRecording(false); };
 
   const handleMicPointerDown = async () => { await startRecording(); };
 
@@ -770,36 +768,39 @@ export default function ChatPage() {
         )}
 
         {isRecording ? (
-          <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: 8, borderTop: '1px solid rgba(255,255,255,0.08)', background: 'rgba(13,13,13,0.9)' }}>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, padding: '10px 16px' }}>
-              <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#FF3B30', boxShadow: '0 0 12px #FF3B30', animation: 'pulse 1s infinite' }} />
-              <span style={{ fontSize: 15, color: 'white', fontWeight: 700, fontVariant: 'tabular-nums' }}>{formatDuration(recordingDuration)}</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 2, height: 26 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px 12px', borderTop: '1px solid rgba(255,255,255,0.08)', background: 'rgba(13,13,13,0.9)' }}>
+            <button
+              onClick={() => stopRecording(false)}
+              title="Cancel"
+              style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,59,48,0.15)', border: '1px solid rgba(255,59,48,0.3)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+            >
+              <CloseCircleIcon size={20} color="#FF3B30" />
+            </button>
+            <div style={{ flex: 1, minWidth: 0, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 9999, padding: '0 12px' }}>
+              <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#FF3B30', boxShadow: '0 0 12px #FF3B30', animation: 'pulse 1s infinite', flexShrink: 0 }} />
+              <span style={{ fontSize: 15, color: 'white', fontWeight: 700, fontVariant: 'tabular-nums', flexShrink: 0 }}>{formatDuration(recordingDuration)}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 2, height: 26, overflow: 'hidden' }}>
                 {recBars.map((h, i) => (
-                  <div key={i} style={{ width: 3, height: h, borderRadius: 2, background: i % 3 === 0 ? '#FF375F' : '#FF6B8A', transformOrigin: 'center', animation: `equalizer 0.8s ease-in-out ${(i % 6) * 0.1}s infinite` }} />
+                  <div key={i} style={{ width: 3, height: h, borderRadius: 2, background: i % 3 === 0 ? '#FF375F' : '#FF6B8A', transformOrigin: 'center', animation: `equalizer 0.8s ease-in-out ${(i % 6) * 0.1}s infinite`, flexShrink: 0 }} />
                 ))}
               </div>
             </div>
-            {recordingLocked ? (
-              <>
-                <button onClick={cancelRecording} style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,59,48,0.15)', border: '1px solid rgba(255,59,48,0.3)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <CloseCircleIcon size={20} color="#FF3B30" />
-                </button>
-                <button onClick={() => stopRecording(true)} style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(255,55,95,0.4)' }}>
-                  <SendIcon size={18} color="white" />
-                </button>
-              </>
-            ) : (
-              <>
-                <button onPointerDown={toggleRecordingLock} title="Lock" style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, padding: '4px 8px' }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B8A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                  <span style={{ fontSize: 9, color: '#FF6B8A', fontWeight: 700 }}>Lock</span>
-                </button>
-                <button onClick={() => stopRecording(false)} style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <CloseCircleIcon size={20} color="#ABABAB" />
-                </button>
-              </>
+            {!recordingLocked && (
+              <button
+                onPointerDown={toggleRecordingLock}
+                title="Lock"
+                style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B8A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </button>
             )}
+            <button
+              onClick={() => stopRecording(true)}
+              title="Send"
+              style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 16px rgba(255,55,95,0.4)' }}
+            >
+              <SendIcon size={18} color="white" />
+            </button>
           </div>
         ) : (
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px 12px' }}>
