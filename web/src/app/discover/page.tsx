@@ -165,19 +165,6 @@ export default function DiscoverPage() {
                 <span style={{ color: '#ABABAB', fontSize: 13, fontWeight: 600 }}>Live</span>
               </div>
               <button
-                onClick={handleReload}
-                className="glass lift"
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 8,
-                  padding: '8px 14px', borderRadius: 9999,
-                  color: '#D0D0D0', fontSize: 13, fontWeight: 600,
-                  cursor: 'pointer',
-                }}
-              >
-                <RefreshIcon size={16} color="#FF6B8A" />
-                Refresh
-              </button>
-              <button
                 onClick={() => setShowFilters(true)}
                 className="glass lift"
                 aria-label="Filter preferences"
