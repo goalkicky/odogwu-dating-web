@@ -804,13 +804,6 @@ export default function ChatPage() {
         ) : (
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, padding: '8px 12px 12px' }}>
             <button
-              onClick={toggleGift}
-              title="Send coins"
-              style={{ width: 38, height: 38, borderRadius: '50%', border: showGift ? '1px solid rgba(255,215,0,0.4)' : '1px solid rgba(255,215,0,0.2)', background: showGift ? 'rgba(255,215,0,0.12)' : 'rgba(255,215,0,0.05)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
-            >
-              <CoinsIcon size={20} color="#FFD700" />
-            </button>
-            <button
               onClick={() => attachRef.current?.click()}
               title="Send a photo"
               style={{ width: 38, height: 38, borderRadius: '50%', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.06)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
@@ -834,6 +827,13 @@ export default function ChatPage() {
                   <CloseCircleIcon size={16} color="#6B6B6B" />
                 </button>
               )}
+              <button
+                onClick={toggleGift}
+                title="Send coins"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 6, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                <CoinsIcon size={20} color={showGift ? '#FFD700' : '#A8842C'} />
+              </button>
               <button
                 onClick={() => { setShowEmoji(!showEmoji); if (!showEmoji) setShowGift(false); }}
                 style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 6, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
