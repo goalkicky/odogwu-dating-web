@@ -100,6 +100,12 @@ export const DiamondIcon = ({ size, color, className }: IconProps) => (
   </svg>
 );
 
+export const CompassIcon = ({ size, color, className }: IconProps) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={s(size)} height={s(size)} viewBox="0 0 24 24" fill="none" stroke={color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+  </svg>
+);
+
 export const SparklesIcon = ({ size, color, className }: IconProps) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={s(size)} height={s(size)} viewBox="0 0 24 24" fill="none" stroke={color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M12 3l1.5 5.5L19 10l-5.5 1.5L12 17l-1.5-5.5L5 10l5.5-1.5z"/><path d="M18 15l1 2.5L21.5 18l-2.5 1L18 21.5l-1-2.5L14.5 18l2.5-1z"/>

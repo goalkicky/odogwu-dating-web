@@ -1,13 +1,13 @@
 'use client';
 import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { HeartIcon, EyeIcon, DiamondIcon, PersonIcon } from '@/components/Icons';
+import { HeartIcon, EyeIcon, DiamondIcon, PersonIcon, CompassIcon } from '@/components/Icons';
 
 const NAV_ITEMS = [
   { label: 'Discover', icon: <img src="https://kamsirmdlabs.com/img/logo.png" alt="" style={{ width: 22, height: 22, borderRadius: 6, objectFit: 'cover' }} />, href: '/discover' },
+  { label: 'Explore', icon: <CompassIcon size={22} color="white" />, href: '/explore' },
   { label: 'Matches', icon: <HeartIcon size={22} color="white" />, href: '/matches' },
   { label: 'Likes', icon: <EyeIcon size={22} color="white" />, href: '/likes' },
-  { label: 'Premium', icon: <DiamondIcon size={22} color="white" />, href: '/premium' },
   { label: 'Profile', icon: <PersonIcon size={22} color="white" />, href: '/profile' },
 ];
 
