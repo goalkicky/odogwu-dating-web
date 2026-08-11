@@ -1,9 +1,9 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   DiamondIcon, SettingsIcon, BellIcon, ShieldIcon, HelpIcon,
-  ChevronForwardIcon, EyeIcon, CallIcon, PencilIcon, CheckmarkIcon,
+  ChevronForwardIcon, ChevronBackIcon, EyeIcon, CallIcon, PencilIcon, CheckmarkIcon,
   CameraIcon, PlusIcon, LocationIcon,
 } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
@@ -20,36 +20,13 @@ export default function ProfilePage() {
   const photos = profile?.photos || [];
   const photoUrls = photos.map((id: string) => storageService.getFilePreview(id));
   const [photoIndex, setPhotoIndex] = useState(0);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
-  const [photoRatios, setPhotoRatios] = useState<Record<string, number>>({});
-  const [boxWidth, setBoxWidth] = useState(0);
-
-  useEffect(() => {
-    const measure = () => {
-      const el = imgRef.current;
-      if (el) setBoxWidth(el.getBoundingClientRect().width);
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    if (imgRef.current) ro.observe(imgRef.current);
-    return () => ro.disconnect();
-  }, [photoIndex, photoUrls.length]);
-
-  const currentSrc = photoUrls[photoIndex];
-  const currentRatio = currentSrc ? photoRatios[currentSrc] : undefined;
-  const boxHeight = boxWidth > 0 && currentRatio ? boxWidth / currentRatio : undefined;
 
   const name = profile?.fullName || user?.name || 'User';
   const age = profile?.age;
   const displayName = age ? `${name}, ${age}` : name;
 
-  const onScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const el = e.currentTarget;
-    if (el.clientWidth === 0) return;
-    const idx = Math.round(el.scrollLeft / el.clientWidth);
-    if (idx !== photoIndex) setPhotoIndex(idx);
-  };
+  const nextPhoto = () => setPhotoIndex((p) => (p + 1) % photoUrls.length);
+  const prevPhoto = () => setPhotoIndex((p) => (p - 1 + photoUrls.length) % photoUrls.length);
 
   const completionFields = [
     Boolean(profile?.photos?.length),
@@ -89,60 +66,20 @@ export default function ProfilePage() {
     <DesktopLayout>
       <GradientBackground style={{ minHeight: '100vh', padding: '24px 16px 110px' }}>
         <div style={{ maxWidth: 520, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 14 }}>
-          {/* Photo carousel — Tinder-style hero */}
+          {/* Photo box — sized exactly to the current photo */}
           <div
-            ref={scrollRef}
-            onScroll={onScroll}
             className="glass animate-fade-up"
-            style={{
-              position: 'relative',
-              borderRadius: 26,
-              overflow: 'hidden',
-              display: 'flex',
-              alignItems: 'flex-start',
-              height: boxHeight,
-              scrollSnapType: 'x mandatory',
-              overscrollBehaviorX: 'contain',
-            }}
+            style={{ position: 'relative', borderRadius: 26, overflow: 'hidden' }}
           >
             {photoUrls.length > 0 ? (
-              photoUrls.map((src, i) => (
-                <div key={i} style={{ position: 'relative', width: '100%', flex: '0 0 100%', scrollSnapAlign: 'start' }}>
-                  <img
-                    src={src}
-                    alt=""
-                    ref={i === photoIndex ? imgRef : undefined}
-                    style={{ width: '100%', height: 'auto', display: 'block' }}
-                    onLoad={(e) => {
-                      const el = e.currentTarget;
-                      if (el.naturalWidth && el.naturalHeight) {
-                        setPhotoRatios(prev => ({ ...prev, [src]: el.naturalWidth / el.naturalHeight }));
-                        setBoxWidth(el.getBoundingClientRect().width);
-                      }
-                    }}
-                    onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0'; }}
-                  />
-                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 34%, rgba(0,0,0,0.82) 100%)' }} />
-                  {i === photoIndex && (
-                    <div style={{ position: 'absolute', left: 22, right: 22, bottom: 26 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-                        <h1 style={{ fontSize: 34, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 0.3, textShadow: '0 2px 14px rgba(0,0,0,0.5)' }}>{displayName}</h1>
-                        {profile?.verified && (
-                          <div style={{ width: 24, height: 24, borderRadius: 9999, background: 'linear-gradient(135deg, #4FC3F7, #0288D1)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 12px rgba(79,195,247,0.7)', flexShrink: 0 }}>
-                            <CheckmarkIcon size={14} color="white" />
-                          </div>
-                        )}
-                      </div>
-                      {profile?.city && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 4 }}>
-                          <LocationIcon size={14} color="rgba(255,255,255,0.85)" />
-                          <span style={{ fontSize: 15, fontWeight: 500, color: 'rgba(255,255,255,0.92)', textShadow: '0 1px 8px rgba(0,0,0,0.5)' }}>{profile.city}</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))
+              <img
+                key={photoIndex}
+                src={photoUrls[photoIndex]}
+                alt=""
+                className="animate-fade-up"
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+                onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0'; }}
+              />
             ) : (
               <button onClick={() => router.push('/edit-profile')} style={{ width: '100%', height: 420, background: 'linear-gradient(160deg, rgba(255,55,95,0.14), rgba(108,99,255,0.1)), rgba(255,255,255,0.02)', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, color: '#ABABAB' }}>
                 <div style={{ width: 64, height: 64, borderRadius: 9999, background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -153,13 +90,53 @@ export default function ProfilePage() {
               </button>
             )}
 
+            {photoUrls.length > 0 && (
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 34%, rgba(0,0,0,0.82) 100%)' }} />
+            )}
+
+            {/* Name + city */}
+            {photoUrls.length > 0 && (
+              <div style={{ position: 'absolute', left: 22, right: 22, bottom: 26, zIndex: 3 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+                  <h1 style={{ fontSize: 34, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 0.3, textShadow: '0 2px 14px rgba(0,0,0,0.5)' }}>{displayName}</h1>
+                  {profile?.verified && (
+                    <div style={{ width: 24, height: 24, borderRadius: 9999, background: 'linear-gradient(135deg, #4FC3F7, #0288D1)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 12px rgba(79,195,247,0.7)', flexShrink: 0 }}>
+                      <CheckmarkIcon size={14} color="white" />
+                    </div>
+                  )}
+                </div>
+                {profile?.city && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 4 }}>
+                    <LocationIcon size={14} color="rgba(255,255,255,0.85)" />
+                    <span style={{ fontSize: 15, fontWeight: 500, color: 'rgba(255,255,255,0.92)', textShadow: '0 1px 8px rgba(0,0,0,0.5)' }}>{profile.city}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Page dots */}
             {photoUrls.length > 1 && (
               <div style={{ position: 'absolute', top: 18, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 6, zIndex: 3 }}>
                 {photoUrls.map((_, i) => (
-                  <span key={i} style={{ width: photoIndex === i ? 20 : 7, height: 7, borderRadius: 9999, background: photoIndex === i ? 'white' : 'rgba(255,255,255,0.4)', transition: 'all 0.25s ease' }} />
+                  <span
+                    key={i}
+                    onClick={() => setPhotoIndex(i)}
+                    style={{ width: photoIndex === i ? 20 : 7, height: 7, borderRadius: 9999, background: photoIndex === i ? 'white' : 'rgba(255,255,255,0.4)', transition: 'all 0.25s ease', cursor: 'pointer' }}
+                  />
                 ))}
               </div>
+            )}
+
+            {/* Prev / next arrows */}
+            {photoUrls.length > 1 && (
+              <>
+                <button onClick={prevPhoto} aria-label="Previous photo" style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', width: 36, height: 36, borderRadius: 9999, background: 'rgba(0,0,0,0.4)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 4, backdropFilter: 'blur(6px)' }}>
+                  <ChevronBackIcon size={20} color="white" />
+                </button>
+                <button onClick={nextPhoto} aria-label="Next photo" style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', width: 36, height: 36, borderRadius: 9999, background: 'rgba(0,0,0,0.4)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 4, backdropFilter: 'blur(6px)' }}>
+                  <ChevronForwardIcon size={20} color="white" />
+                </button>
+              </>
             )}
 
             {/* Top controls */}
