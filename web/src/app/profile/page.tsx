@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   DiamondIcon, SettingsIcon, BellIcon, ShieldIcon, HelpIcon,
@@ -21,6 +21,23 @@ export default function ProfilePage() {
   const photoUrls = photos.map((id: string) => storageService.getFilePreview(id));
   const [photoIndex, setPhotoIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+  const [photoRatios, setPhotoRatios] = useState<Record<string, number>>({});
+  const [boxWidth, setBoxWidth] = useState(0);
+
+  useEffect(() => {
+    const el = imgRef.current;
+    if (!el) return;
+    const update = () => setBoxWidth(el.getBoundingClientRect().width);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [photoIndex, photoUrls.length]);
+
+  const currentSrc = photoUrls[photoIndex];
+  const currentRatio = currentSrc ? photoRatios[currentSrc] : undefined;
+  const boxHeight = currentRatio ? boxWidth / currentRatio : undefined;
 
   const name = profile?.fullName || user?.name || 'User';
   const age = profile?.age;
@@ -82,6 +99,7 @@ export default function ProfilePage() {
               overflow: 'hidden',
               display: 'flex',
               alignItems: 'flex-start',
+              height: boxHeight,
               scrollSnapType: 'x mandatory',
               overscrollBehaviorX: 'contain',
             }}
@@ -92,7 +110,14 @@ export default function ProfilePage() {
                   <img
                     src={src}
                     alt=""
+                    ref={i === photoIndex ? imgRef : undefined}
                     style={{ width: '100%', height: 'auto', display: 'block' }}
+                    onLoad={(e) => {
+                      const el = e.currentTarget;
+                      if (el.naturalWidth && el.naturalHeight) {
+                        setPhotoRatios(prev => ({ ...prev, [src]: el.naturalWidth / el.naturalHeight }));
+                      }
+                    }}
                     onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0'; }}
                   />
                   <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 34%, rgba(0,0,0,0.82) 100%)' }} />
