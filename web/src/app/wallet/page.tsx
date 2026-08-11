@@ -1,12 +1,11 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { CoinsIcon, DiamondIcon, CheckmarkCircleIcon, PlusIcon } from '@/components/Icons';
+import { CoinsIcon, DiamondIcon } from '@/components/Icons';
 import Button from '@/components/Button';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
-import { useAuth } from '@/store/AuthContext';
 import { walletService } from '@/lib/cloudflare/services';
 
 const PACKS = [
@@ -29,9 +28,16 @@ function formatNaira(amount: number) {
 }
 
 export default function WalletPage() {
+  return (
+    <Suspense fallback={null}>
+      <WalletContent />
+    </Suspense>
+  );
+}
+
+function WalletContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { profile } = useAuth();
   const [coins, setCoins] = useState(0);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
