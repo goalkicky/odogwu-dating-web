@@ -802,19 +802,19 @@ export default function ChatPage() {
             )}
           </div>
         ) : (
-          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, padding: '8px 12px 12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px 12px' }}>
             <button
               onClick={() => attachRef.current?.click()}
               title="Send a photo"
-              style={{ width: 38, height: 38, borderRadius: '50%', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.06)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+              style={{ width: 40, height: 40, borderRadius: '50%', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.06)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
             >
               <ImagesIcon size={20} color="#FF6B8A" />
             </button>
             <input ref={attachRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAttach} />
 
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 9999, padding: '0 8px 0 16px' }}>
+            <div style={{ flex: 1, height: 40, minWidth: 0, display: 'flex', alignItems: 'center', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 9999, padding: '0 6px 0 16px' }}>
               <input
-                style={{ flex: 1, color: 'white', fontSize: 15, background: 'none', border: 'none', outline: 'none', padding: '11px 0' }}
+                style={{ flex: 1, minWidth: 0, color: 'white', fontSize: 15, background: 'none', border: 'none', outline: 'none', padding: 0 }}
                 placeholder={sendingImage ? 'Uploading photo…' : 'Type a message...'}
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
@@ -823,20 +823,20 @@ export default function ChatPage() {
                 disabled={sendingImage}
               />
               {inputText.length > 0 && (
-                <button onClick={() => setInputText('')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex' }}>
+                <button onClick={() => setInputText('')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 5, display: 'flex', flexShrink: 0 }}>
                   <CloseCircleIcon size={16} color="#6B6B6B" />
                 </button>
               )}
               <button
                 onClick={toggleGift}
                 title="Send coins"
-                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 6, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 5, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
               >
                 <CoinsIcon size={20} color={showGift ? '#FFD700' : '#A8842C'} />
               </button>
               <button
                 onClick={() => { setShowEmoji(!showEmoji); if (!showEmoji) setShowGift(false); }}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 6, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 5, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
               >
                 {showEmoji ? <KeypadIcon size={20} color="#FF6B8A" /> : <HappyIcon size={20} color={inputText ? '#D0D0D0' : '#6B6B6B'} />}
               </button>
@@ -846,7 +846,7 @@ export default function ChatPage() {
               <button
                 onClick={handleSend}
                 disabled={sending}
-                style={{ width: 42, height: 42, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 6px 20px rgba(255,55,95,0.4)', opacity: sending ? 0.5 : 1 }}
+                style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 6px 20px rgba(255,55,95,0.4)', opacity: sending ? 0.5 : 1 }}
               >
                 <SendIcon size={18} color="white" />
               </button>
@@ -855,7 +855,7 @@ export default function ChatPage() {
                 onPointerDown={handleMicPointerDown}
                 onPointerUp={handleMicPointerUp}
                 onPointerLeave={handleMicPointerLeave}
-                style={{ width: 42, height: 42, borderRadius: '50%', background: 'linear-gradient(135deg, #2A2A2A, #1A1A1A)', border: '1px solid rgba(255,255,255,0.12)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, userSelect: 'none', touchAction: 'none' }}
+                style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #2A2A2A, #1A1A1A)', border: '1px solid rgba(255,255,255,0.12)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, userSelect: 'none', touchAction: 'none' }}
               >
                 <MicIcon size={18} color="#D0D0D0" />
               </button>
