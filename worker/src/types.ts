@@ -4,6 +4,8 @@ export interface Env {
   SESSION_SECRET: string;
   GOOGLE_CLIENT_ID?: string;
   GOOGLE_CLIENT_SECRET?: string;
+  PAYSTACK_SECRET_KEY?: string;
+  PAYSTACK_CALLBACK_URL?: string;
   ChatRoom: DurableObjectNamespace;
   CallSignals: DurableObjectNamespace;
 }
@@ -25,6 +27,8 @@ export interface UserRow {
   verified: number;
   age: number;
   premium_plan: string;
+  premium_expires_at: string;
+  coins: number;
   google_sub: string | null;
   password_hash: string;
   password_salt: string;

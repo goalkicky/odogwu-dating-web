@@ -14,27 +14,69 @@ const FEATURES = [
   { icon: ChatIcon, title: 'Priority Chat', desc: 'Message before you match and skip the wait.' },
 ];
 
+const MAX_SHOWS = 5;
+const INTERVAL_MS = 30_000;
+const VISIBLE_MS = 60_000;
+const countKey = (userId: string) => `premium_popup_v2_count_${userId}`;
+
 export default function PremiumPopup() {
   const router = useRouter();
   const { profile } = useAuth();
   const [open, setOpen] = useState(false);
   const [feature, setFeature] = useState(FEATURES[0]);
-  const checkedRef = useRef(false);
+  const lastIndexRef = useRef(-1);
 
   useEffect(() => {
-    if (checkedRef.current) return;
-    checkedRef.current = true;
     if (!profile?.id) return;
     if (profile.isPremium) return;
-    const key = `premium_popup_shown_${profile.id}`;
-    try {
-      if (sessionStorage.getItem(key) === '1') return;
-    } catch {}
-    try { sessionStorage.setItem(key, '1'); } catch {}
-    setFeature(FEATURES[Math.floor(Math.random() * FEATURES.length)]);
-    const t = setTimeout(() => setOpen(true), 900);
+    if (open) return;
+
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let removeListeners: (() => void) | null = null;
+
+    const showPopup = () => {
+      const key = countKey(profile.id);
+      let shown = 0;
+      try { shown = Number(sessionStorage.getItem(key)) || 0; } catch {}
+      if (shown >= MAX_SHOWS) return;
+      try { sessionStorage.setItem(key, String(shown + 1)); } catch {}
+      let i;
+      do { i = Math.floor(Math.random() * FEATURES.length); } while (i === lastIndexRef.current && FEATURES.length > 1);
+      lastIndexRef.current = i;
+      setFeature(FEATURES[i]);
+      setOpen(true);
+    };
+
+    const teardown = () => {
+      if (timer) clearTimeout(timer);
+      timer = undefined;
+      removeListeners?.();
+      removeListeners = null;
+    };
+
+    const armTimer = () => {
+      if (document.hasFocus() && !document.hidden) {
+        timer = setTimeout(showPopup, INTERVAL_MS);
+      } else {
+        const onActive = () => { teardown(); armTimer(); };
+        window.addEventListener('focus', onActive);
+        document.addEventListener('visibilitychange', onActive);
+        removeListeners = () => {
+          window.removeEventListener('focus', onActive);
+          document.removeEventListener('visibilitychange', onActive);
+        };
+      }
+    };
+
+    armTimer();
+    return teardown;
+  }, [profile?.id, profile?.isPremium, open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const t = setTimeout(() => setOpen(false), VISIBLE_MS);
     return () => clearTimeout(t);
-  }, [profile?.id, profile?.isPremium]);
+  }, [open]);
 
   if (!open) return null;
 

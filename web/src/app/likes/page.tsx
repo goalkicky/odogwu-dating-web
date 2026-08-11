@@ -5,7 +5,6 @@ import { HeartIcon, EyeIcon, DiamondIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
-import PremiumPopup from '@/components/PremiumPopup';
 import { useAuth } from '@/store/AuthContext';
 import { matchService, storageService, userService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
@@ -61,7 +60,6 @@ export default function LikesPage() {
   return (
     <DesktopLayout>
       <GradientBackground style={{ minHeight: '100vh', padding: '24px 16px 110px' }}>
-      <PremiumPopup />
       <div>
         {/* Hero header */}
         <div className="glass animate-fade-up" style={{ borderRadius: 24, padding: 24, marginBottom: 22, background: 'linear-gradient(135deg, rgba(255,55,95,0.12), rgba(124,77,255,0.1)), rgba(255,255,255,0.03)', border: '1px solid rgba(255,55,95,0.2)', display: 'flex', alignItems: 'center', gap: 16 }}>

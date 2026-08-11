@@ -3,13 +3,14 @@ import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation';
 import {
   ChevronBackIcon, CallIcon, VideoIcon, MicIcon, SendIcon, PencilIcon,
-  CloseCircleIcon, HappyIcon, KeypadIcon, CheckmarkDoneIcon, ImagesIcon,
-  SearchIcon,
+  CloseCircleIcon, HappyIcon, KeypadIcon, CheckmarkIcon, CheckmarkDoneIcon, ImagesIcon,
+  SearchIcon, CoinsIcon,
 } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import { useAuth } from '@/store/AuthContext';
-import { messageService, storageService, matchService, userService } from '@/lib/cloudflare/services';
+import { messageService, storageService, matchService, userService, walletService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
+import Button from '@/components/Button';
 import type { Message } from '@/lib/types';
 
 const EMOJIS = ['😀', '😂', '❤️', '🔥', '😍', '🥰', '😘', '💕', '😊', '😎', '🙌', '👋', '💪', '✨', '🌟', '🎉', '🎂', '🍕', '☕', '🌮'];
@@ -129,6 +130,22 @@ function VoiceBubble({ url, isMe }: { url: string; isMe: boolean }) {
   );
 }
 
+function docToMessage(d: any): Message {
+  return {
+    id: d.$id || d.id,
+    matchId: d.matchId,
+    senderId: d.senderId,
+    text: d.text,
+    type: d.type,
+    mediaUrl: d.mediaUrl,
+    replyTo: d.replyTo ? (typeof d.replyTo === 'string' ? JSON.parse(d.replyTo) : d.replyTo) : undefined,
+    editedAt: d.editedAt,
+    createdAt: d.createdAt,
+    readAt: d.readAt,
+    reactions: (d.reactions as string[]) || [],
+  };
+}
+
 export default function ChatPage() {
   const router = useRouter();
   const params = useParams();
@@ -152,6 +169,10 @@ export default function ChatPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [lightbox, setLightbox] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [showGift, setShowGift] = useState(false);
+  const [giftAmount, setGiftAmount] = useState(5);
+  const [gifting, setGifting] = useState(false);
+  const [myCoins, setMyCoins] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const attachRef = useRef<HTMLInputElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -175,26 +196,15 @@ export default function ChatPage() {
       }).catch(() => {});
     }).catch(() => {});
     messageService.getMessages(matchId).then(res => {
-      const msgs = res.documents.map((d: any) => ({
-        id: d.$id,
-        matchId: d.matchId,
-        senderId: d.senderId,
-        text: d.text,
-        type: d.type,
-        mediaUrl: d.mediaUrl,
-        replyTo: d.replyTo ? (typeof d.replyTo === 'string' ? JSON.parse(d.replyTo) : d.replyTo) : undefined,
-        editedAt: d.editedAt,
-        createdAt: d.createdAt,
-        readAt: d.readAt,
-        reactions: (d.reactions as string[]) || [],
-      })) as Message[];
+      const msgs = (res.documents || []).map(docToMessage);
       setMessages(msgs);
     }).catch(() => {});
 
     messageService.subscribeToMessages(matchId, (msg) => {
       setMessages(prev => {
         if (prev.some(m => m.id === msg.id)) return prev;
-        return [...prev, msg];
+        const cleaned = prev.filter(m => !(m.id.startsWith('temp-') && m.senderId === msg.senderId && m.text === msg.text && m.type === msg.type));
+        return [...cleaned, msg];
       });
     }).then(sub => { unsubRef.current = sub; });
     return () => { if (unsubRef.current) unsubRef.current.unsubscribe(); };
@@ -232,7 +242,29 @@ export default function ChatPage() {
         setMessages(prev => prev.map(m => m.id === editingId ? { ...m, text, editedAt: new Date().toISOString() } : m));
         setEditingId(null);
       } else {
-        await messageService.sendMessage(matchId, userId, { text, type: 'text', replyTo: replyTo || undefined });
+        const tempId = `temp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        const optimistic: Message = {
+          id: tempId,
+          matchId,
+          senderId: userId,
+          text,
+          type: 'text',
+          replyTo: replyTo || undefined,
+          createdAt: new Date().toISOString(),
+          readAt: new Date().toISOString(),
+          reactions: [],
+        };
+        setMessages(prev => [...prev, optimistic]);
+        try {
+          const doc = await messageService.sendMessage(matchId, userId, { text, type: 'text', replyTo: replyTo || undefined });
+          if (doc && (doc.$id || doc.id)) {
+            setMessages(prev => prev.map(m => m.id === tempId ? docToMessage(doc) : m));
+          } else {
+            setMessages(prev => prev.filter(m => m.id !== tempId));
+          }
+        } catch {
+          setMessages(prev => prev.filter(m => m.id !== tempId));
+        }
       }
       setInputText('');
       setReplyTo(null);
@@ -340,6 +372,29 @@ export default function ChatPage() {
     setShowEmoji(false);
   };
 
+  const handleGift = async () => {
+    const amt = Math.floor(giftAmount);
+    if (!amt || amt < 1 || gifting) return;
+    setGifting(true);
+    try {
+      const res = await walletService.gift(otherUserId, amt);
+      setMyCoins(res?.coins ?? 0);
+      setShowGift(false);
+    } catch (e: any) {
+      alert(e?.message || 'Gift failed');
+    }
+    setGifting(false);
+  };
+
+  const toggleGift = () => {
+    setShowGift(prev => {
+      const next = !prev;
+      if (next) setShowEmoji(false);
+      return next;
+    });
+    walletService.getWallet().then(w => setMyCoins(w?.coins ?? 0)).catch(() => {});
+  };
+
   const roundBtn = (active: boolean) => ({
     width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
     border: active ? '1px solid rgba(255,55,95,0.35)' : '1px solid rgba(255,255,255,0.1)',
@@ -445,17 +500,26 @@ export default function ChatPage() {
           const showTime = !sameGroupAsNext;
           const isImage = msg.type === 'image';
           const isVoice = msg.type === 'voice';
+          const isGift = msg.type === 'gift';
           const mediaUrl = msg.mediaUrl;
           const metaColor = isMe ? 'rgba(255,255,255,0.65)' : 'rgba(255,255,255,0.4)';
           const bubbleStyle: React.CSSProperties = isImage
             ? { maxWidth: '100%', padding: 0, background: 'transparent', border: 'none', borderRadius: 16, overflow: 'hidden' }
-            : {
-                maxWidth: '100%', padding: '9px 13px',
-                background: isMe ? 'linear-gradient(135deg, #FF375F, #FF3B30)' : 'rgba(255,255,255,0.06)',
-                border: isMe ? 'none' : '1px solid rgba(255,255,255,0.08)',
-                borderRadius: isMe ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                boxShadow: isMe ? '0 4px 18px rgba(255,55,95,0.22)' : 'none',
-              };
+            : isGift
+              ? {
+                  maxWidth: '100%', padding: '10px 14px',
+                  background: 'linear-gradient(135deg, rgba(255,215,0,0.16), rgba(255,150,0,0.07))',
+                  border: '1px solid rgba(255,215,0,0.35)',
+                  borderRadius: isMe ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
+                  boxShadow: '0 4px 18px rgba(255,215,0,0.12)',
+                }
+              : {
+                  maxWidth: '100%', padding: '9px 13px',
+                  background: isMe ? 'linear-gradient(135deg, #FF375F, #FF3B30)' : 'rgba(255,255,255,0.06)',
+                  border: isMe ? 'none' : '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: isMe ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
+                  boxShadow: isMe ? '0 4px 18px rgba(255,55,95,0.22)' : 'none',
+                };
 
           return (
             <div key={msg.id}>
@@ -547,9 +611,24 @@ export default function ChatPage() {
                           <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 4, justifyContent: 'flex-end', padding: '2px 8px 4px' }}>
                             {msg.editedAt && <span style={{ fontSize: 10, color: metaColor, fontStyle: 'italic' }}>edited</span>}
                             <span style={{ fontSize: 10, color: metaColor, fontVariant: 'tabular-nums' }}>{formatTime(msg.createdAt)}</span>
-                            {isMe && <CheckmarkDoneIcon size={13} color={msg.readAt ? '#7CFFA0' : 'rgba(255,255,255,0.55)'} />}
+                            {isMe && (msg.readAt ? <CheckmarkDoneIcon size={13} color="#7CFFA0" /> : <CheckmarkIcon size={13} color="rgba(255,255,255,0.55)" />)}
                           </div>
                         )}
+                      </div>
+                    ) : isGift ? (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '2px 2px' }}>
+                        <div style={{
+                          width: 36, height: 36, borderRadius: '50%', flexShrink: 0,
+                          background: 'linear-gradient(135deg, #FFD700, #FF9500)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          boxShadow: '0 4px 12px rgba(255,200,0,0.35)',
+                        }}>
+                          <CoinsIcon size={18} color="#1A1A1A" />
+                        </div>
+                        <div>
+                          <div style={{ fontSize: 13, fontWeight: 800, color: '#FFD700' }}>{isMe ? 'Gift sent' : 'Gift received'}</div>
+                          <div style={{ fontSize: 13, color: isMe ? 'rgba(255,255,255,0.9)' : '#E8E8E8', fontWeight: 600 }}>{msg.text} coins</div>
+                        </div>
                       </div>
                     ) : (
                       <div style={{ fontSize: 15, lineHeight: '21px', color: isMe ? 'white' : '#E8E8E8', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
@@ -561,7 +640,7 @@ export default function ChatPage() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 4, justifyContent: 'flex-end' }}>
                         {msg.editedAt && <span style={{ fontSize: 10, color: metaColor, fontStyle: 'italic' }}>edited</span>}
                         <span style={{ fontSize: 10, color: metaColor, fontVariant: 'tabular-nums' }}>{formatTime(msg.createdAt)}</span>
-                        {isMe && <CheckmarkDoneIcon size={13} color={msg.readAt ? '#7CFFA0' : 'rgba(255,255,255,0.55)'} />}
+                        {isMe && (msg.readAt ? <CheckmarkDoneIcon size={13} color="#7CFFA0" /> : <CheckmarkIcon size={13} color="rgba(255,255,255,0.55)" />)}
                       </div>
                     )}
                   </div>
@@ -653,6 +732,43 @@ export default function ChatPage() {
           </div>
         )}
 
+        {showGift && (
+          <div style={{ background: 'rgba(20,20,28,0.96)', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 14px 0' }}>
+              <span style={{ fontSize: 12, color: '#FFD700', fontWeight: 700, letterSpacing: 1 }}>GIFT COINS</span>
+              <button onClick={() => setShowGift(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                <CloseCircleIcon size={18} color="#6B6B6B" />
+              </button>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', padding: 10, gap: 8 }}>
+              {[1, 5, 10, 25, 50, 100, 200].map(n => (
+                <button
+                  key={n}
+                  onClick={() => setGiftAmount(n)}
+                  style={{
+                    padding: '8px 12px', borderRadius: 9999, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5,
+                    background: giftAmount === n ? 'rgba(255,215,0,0.16)' : 'rgba(255,255,255,0.05)',
+                    border: giftAmount === n ? '1px solid rgba(255,215,0,0.5)' : '1px solid rgba(255,255,255,0.1)',
+                    color: giftAmount === n ? '#FFD700' : '#D0D0D0', fontSize: 13, fontWeight: 700,
+                  }}
+                >
+                  {n} <CoinsIcon size={12} color={giftAmount === n ? '#FFD700' : '#8A8A8A'} />
+                </button>
+              ))}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px 10px' }}>
+              <input
+                type="number" min={1} value={giftAmount}
+                onChange={(e) => setGiftAmount(Math.max(1, Math.floor(Number(e.target.value) || 1)))}
+                placeholder="Custom"
+                style={{ width: 90, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 10, padding: '8px 10px', color: 'white', fontSize: 14, outline: 'none' }}
+              />
+              <Button title={gifting ? 'Sending…' : 'Send Gift'} variant="gradient" size="sm" loading={gifting} disabled={gifting} onPress={handleGift} />
+              <span style={{ marginLeft: 'auto', fontSize: 11, color: '#6B6B6B', fontWeight: 600 }}>You have {myCoins.toLocaleString()} coins</span>
+            </div>
+          </div>
+        )}
+
         {isRecording ? (
           <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: 8, borderTop: '1px solid rgba(255,255,255,0.08)', background: 'rgba(13,13,13,0.9)' }}>
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, padding: '10px 16px' }}>
@@ -688,6 +804,13 @@ export default function ChatPage() {
         ) : (
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, padding: '8px 12px 12px' }}>
             <button
+              onClick={toggleGift}
+              title="Send coins"
+              style={{ width: 38, height: 38, borderRadius: '50%', border: showGift ? '1px solid rgba(255,215,0,0.4)' : '1px solid rgba(255,215,0,0.2)', background: showGift ? 'rgba(255,215,0,0.12)' : 'rgba(255,215,0,0.05)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+            >
+              <CoinsIcon size={20} color="#FFD700" />
+            </button>
+            <button
               onClick={() => attachRef.current?.click()}
               title="Send a photo"
               style={{ width: 38, height: 38, borderRadius: '50%', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.06)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
@@ -712,7 +835,7 @@ export default function ChatPage() {
                 </button>
               )}
               <button
-                onClick={() => setShowEmoji(!showEmoji)}
+                onClick={() => { setShowEmoji(!showEmoji); if (!showEmoji) setShowGift(false); }}
                 style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 6, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               >
                 {showEmoji ? <KeypadIcon size={20} color="#FF6B8A" /> : <HappyIcon size={20} color={inputText ? '#D0D0D0' : '#6B6B6B'} />}

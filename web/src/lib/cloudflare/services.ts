@@ -212,6 +212,28 @@ export const callLogService = {
   },
 };
 
+export const walletService = {
+  getWallet: async () => {
+    return apiFetch('/api/wallet');
+  },
+
+  purchase: async (coinQty: number) => {
+    return apiFetch('/api/wallet/purchase', { method: 'POST', json: { coinQty } });
+  },
+
+  verifyPurchase: async (reference: string) => {
+    return apiFetch('/api/wallet/verify', { method: 'POST', json: { reference } });
+  },
+
+  gift: async (toUserId: string, coins: number) => {
+    return apiFetch('/api/wallet/gift', { method: 'POST', json: { toUserId, coins } });
+  },
+
+  payPremium: async (planId: string) => {
+    return apiFetch('/api/wallet/premium', { method: 'POST', json: { planId } });
+  },
+};
+
 async function compressImage(file: File, maxBytes = 15360): Promise<File> {
   if (!file.type.startsWith('image/')) return file;
   const img = await new Promise<HTMLImageElement>((resolve, reject) => {

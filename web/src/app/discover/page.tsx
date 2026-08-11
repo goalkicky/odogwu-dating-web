@@ -6,7 +6,6 @@ import ActionButton from '@/components/ActionButton';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
-import PremiumPopup from '@/components/PremiumPopup';
 import { useMobile } from '@/lib/useMediaQuery';
 import { useAuth } from '@/store/AuthContext';
 import { userService, storageService } from '@/lib/cloudflare/services';
@@ -150,7 +149,6 @@ export default function DiscoverPage() {
           padding: isMobile ? '12px 14px 108px' : '24px 16px',
         }}
       >
-        <PremiumPopup />
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 0 }}>
           <div className="animate-fade-up" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: isMobile ? 12 : 20 }}>
             <div>

@@ -303,6 +303,14 @@ export const SearchIcon = ({ size, color, className }: IconProps) => (
 
 export const PlusIcon = ({ size, color, className }: IconProps) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={s(size)} height={s(size)} viewBox="0 0 24 24" fill="none" stroke={color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    <path d="M12 5v14M5 12h14"/>
+  </svg>
+);
+
+export const CoinsIcon = ({ size, color, className }: IconProps) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={s(size)} height={s(size)} viewBox="0 0 24 24" fill="none" stroke={color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <circle cx="9" cy="9" r="6"/>
+    <path d="M17.09 10.37A6 6 0 1 1 10.34 18"/>
+    <path d="M9 6.5v3M7.5 8h3M15.7 14.7l.7.7-2.8 2.8M15 17h3v3"/>
   </svg>
 );

@@ -9,6 +9,13 @@ export { ChatRoom, CallSignals };
 
 const SESSION_DAYS = 365;
 
+// 1 coin = N100. Coin packs map qty -> naira price.
+const COIN_PACKS: Record<number, number> = { 10: 1000, 25: 2500, 50: 5000, 100: 10000, 200: 20000 };
+const PLAN_COINS: Record<string, number> = { premium: 49, surplus: 79, platinum: 109 };
+const PLAN_NAMES: Record<string, string> = { premium: 'Odogwu Premium', surplus: 'Odogwu Surplus', platinum: 'Odogwu Platinum' };
+const PREMIUM_DAYS = 30;
+const COIN_RATE_NAIRA = 100;
+
 // ===== Serializers (Appwrite-compatible document shape) =====
 
 function isOnboarded(user: UserRow | null): boolean {
@@ -20,6 +27,7 @@ function toProfile(r: any): any {
   try { photos = JSON.parse(r.photos || '[]'); } catch {}
   let interests: string[] = [];
   try { interests = JSON.parse(r.interests || '[]'); } catch {}
+  const premiumActive = !!r.is_premium && (!r.premium_expires_at || new Date(r.premium_expires_at).getTime() > Date.now());
   return {
     $id: r.id,
     id: r.id,
@@ -34,10 +42,12 @@ function toProfile(r: any): any {
     latitude: r.latitude,
     longitude: r.longitude,
     city: r.city,
-    isPremium: !!r.is_premium,
+    isPremium: premiumActive,
     verified: !!r.verified,
     age: r.age,
     premiumPlan: r.premium_plan,
+    premiumExpiresAt: r.premium_expires_at || '',
+    coins: r.coins ?? 0,
     lastActive: r.last_active,
     createdAt: r.created_at,
   };
@@ -424,11 +434,21 @@ async function handleUpdateProfile(env: Env, req: Request, userId?: string): Pro
 
 // ===== Discover =====
 
+function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371;
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
 async function handleDiscover(env: Env, req: Request, me: string): Promise<Response> {
   const url = new URL(req.url);
   const gender = url.searchParams.get('gender') || 'both';
   const minAge = Number(url.searchParams.get('minAge')) || 18;
   const maxAge = Number(url.searchParams.get('maxAge')) || 99;
+  const maxDistance = Number(url.searchParams.get('maxDistance')) || 0;
 
   let sql = `SELECT * FROM users WHERE id != ? AND age BETWEEN ? AND ?
              AND id NOT IN (SELECT matched_user_id FROM matches WHERE user_id = ?)`;
@@ -439,7 +459,22 @@ async function handleDiscover(env: Env, req: Request, me: string): Promise<Respo
   }
   sql += ' ORDER BY updated_at DESC';
   const { results } = await env.DB.prepare(sql).bind(...binds).all();
-  return json({ documents: results.map(toProfile) });
+
+  const meRow = await getUserRow(env, me);
+  const myLat = Number(meRow?.latitude);
+  const myLng = Number(meRow?.longitude);
+  const hasMeCoords = myLat && myLng;
+
+  let docs = results.map(toProfile).map(d => {
+    if (!hasMeCoords || !d.latitude || !d.longitude) return d;
+    return { ...d, distanceKm: Math.round(haversineKm(myLat, myLng, d.latitude, d.longitude)) };
+  });
+  if (maxDistance > 0 && hasMeCoords) {
+    docs = docs
+      .filter(d => typeof d.distanceKm === 'number' && d.distanceKm <= maxDistance)
+      .sort((a, b) => (a.distanceKm || 0) - (b.distanceKm || 0));
+  }
+  return json({ documents: docs });
 }
 
 // ===== Likes / matches =====
@@ -710,8 +745,159 @@ async function serveMedia(env: Env, key: string): Promise<Response> {
   return new Response(obj.body, { headers });
 }
 
-// ===== WebSocket upgrade handlers =====
+// ===== Coins / Wallet =====
 
+async function logCoinTx(env: Env, userId: string, type: string, amount: number, balanceAfter: number, counterparty = '', meta: any = null): Promise<void> {
+  await env.DB.prepare(
+    `INSERT INTO coin_transactions (id, user_id, type, amount, balance_after, counterparty, meta, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+  ).bind(newId(), userId, type, amount, balanceAfter, counterparty, meta ? JSON.stringify(meta) : '', now()).run();
+}
+
+async function getWalletDoc(env: Env, me: string): Promise<any> {
+  const user = await getUserRow(env, me);
+  const { results } = await env.DB.prepare(
+    `SELECT * FROM coin_transactions WHERE user_id = ? ORDER BY created_at DESC, rowid DESC LIMIT 50`
+  ).bind(me).all();
+  return {
+    coins: user ? (user.coins ?? 0) : 0,
+    transactions: results.map((r: any) => {
+      let meta: any = null;
+      if (r.meta) { try { meta = JSON.parse(r.meta); } catch {} }
+      return {
+        id: r.id,
+        type: r.type,
+        amount: r.amount,
+        balanceAfter: r.balance_after,
+        counterparty: r.counterparty,
+        meta,
+        createdAt: r.created_at,
+      };
+    }),
+  };
+}
+
+async function handleGetWallet(env: Env, _req: Request, me: string): Promise<Response> {
+  return json(await getWalletDoc(env, me));
+}
+
+async function handlePurchaseInit(env: Env, req: Request, me: string): Promise<Response> {
+  const body = await req.json() as any;
+  const coinQty = Number(body.coinQty);
+  const naira = COIN_PACKS[coinQty];
+  if (!naira) return json({ error: 'Invalid coin pack' }, 400);
+  if (!env.PAYSTACK_SECRET_KEY) return json({ error: 'Payments not configured' }, 500);
+  const user = await getUserRow(env, me);
+  if (!user) return json({ error: 'User not found' }, 404);
+
+  const reference = `OGW-${newId().slice(0, 16)}`.toUpperCase();
+  const amountKobo = naira * 100;
+  const callbackUrl = env.PAYSTACK_CALLBACK_URL || 'https://odogwudating.com/wallet';
+
+  await env.DB.prepare(
+    `INSERT INTO paystack_payments (reference, user_id, coin_qty, amount_kobo, status, created_at) VALUES (?, ?, ?, ?, 'pending', ?)`
+  ).bind(reference, me, coinQty, amountKobo, now()).run();
+
+  const res = await fetch('https://api.paystack.co/transaction/initialize', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${env.PAYSTACK_SECRET_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: user.email, amount: amountKobo, currency: 'NGN', reference, callback_url: callbackUrl }),
+  });
+  const data: any = await res.json();
+  if (!data.status || !data.data?.authorization_url) {
+    return json({ error: data?.message || 'Failed to initialize payment' }, 502);
+  }
+  return json({ authorization_url: data.data.authorization_url, reference });
+}
+
+async function handlePurchaseVerify(env: Env, req: Request, me: string): Promise<Response> {
+  const body = await req.json() as any;
+  const reference = String(body.reference || '');
+  if (!reference) return json({ error: 'Reference required' }, 400);
+  if (!env.PAYSTACK_SECRET_KEY) return json({ error: 'Payments not configured' }, 500);
+  const pay = await env.DB.prepare('SELECT * FROM paystack_payments WHERE reference = ?').bind(reference).first() as any;
+  if (!pay || pay.user_id !== me) return json({ error: 'Payment not found' }, 404);
+
+  if (pay.status === 'success') return json({ verified: true, wallet: await getWalletDoc(env, me) });
+
+  const res = await fetch(`https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`, {
+    headers: { Authorization: `Bearer ${env.PAYSTACK_SECRET_KEY}` },
+  });
+  const data: any = await res.json();
+  if (!data.status) return json({ error: data?.message || 'Verification failed' }, 502);
+  if (data.data?.status !== 'success') {
+    await env.DB.prepare(`UPDATE paystack_payments SET status = ? WHERE reference = ?`).bind(String(data.data?.status || 'failed'), reference).run();
+    return json({ verified: false, error: 'Payment not successful' }, 402);
+  }
+  if (Number(data.data.amount) !== pay.amount_kobo) return json({ error: 'Payment amount mismatch' }, 400);
+
+  const claimed = await env.DB.prepare(
+    `UPDATE paystack_payments SET status = 'success', verified_at = ? WHERE reference = ? AND status = 'pending'`
+  ).bind(now(), reference).run();
+  if (claimed.meta.changes === 0) return json({ verified: true, wallet: await getWalletDoc(env, me) });
+
+  await env.DB.prepare(`UPDATE users SET coins = coins + ?, updated_at = ? WHERE id = ?`).bind(pay.coin_qty, now(), me).run();
+  const user = await getUserRow(env, me);
+  await logCoinTx(env, me, 'purchase', pay.coin_qty, user!.coins ?? 0, '', { reference, pack: pay.coin_qty, amountKobo: pay.amount_kobo });
+  return json({ verified: true, wallet: await getWalletDoc(env, me) });
+}
+
+async function handleGiftCoins(env: Env, req: Request, me: string): Promise<Response> {
+  const body = await req.json() as any;
+  const toUserId = String(body.toUserId || '');
+  const coins = Math.floor(Number(body.coins));
+  if (!toUserId || toUserId === me) return json({ error: 'Invalid recipient' }, 400);
+  if (!Number.isFinite(coins) || coins < 1 || coins > 100000) return json({ error: 'Invalid coin amount' }, 400);
+
+  const recipient = await getUserRow(env, toUserId);
+  if (!recipient) return json({ error: 'Recipient not found' }, 404);
+
+  const match = await env.DB.prepare(
+    `SELECT * FROM matches WHERE (user_id = ? AND matched_user_id = ?) OR (user_id = ? AND matched_user_id = ?) ORDER BY matched_at DESC LIMIT 1`
+  ).bind(me, toUserId, toUserId, me).first() as MatchRow | null;
+  if (!match) return json({ error: 'You can only gift your matches' }, 403);
+
+  const deducted = await env.DB.prepare(`UPDATE users SET coins = coins - ?, updated_at = ? WHERE id = ? AND coins >= ?`)
+    .bind(coins, now(), me, coins).run();
+  if (deducted.meta.changes === 0) return json({ error: 'Insufficient coins' }, 402);
+
+  await env.DB.prepare(`UPDATE users SET coins = coins + ?, updated_at = ? WHERE id = ?`).bind(coins, now(), toUserId).run();
+  const meRow = await getUserRow(env, me);
+  const toRow = await getUserRow(env, toUserId);
+  await logCoinTx(env, me, 'gift_out', coins, meRow!.coins ?? 0, toUserId);
+  await logCoinTx(env, toUserId, 'gift_in', coins, toRow!.coins ?? 0, me);
+
+  try {
+    const mid = newId();
+    const ts = now();
+    await env.DB.prepare(
+      `INSERT INTO messages (id, match_id, sender_id, text, type, media_url, reply_to, created_at) VALUES (?, ?, ?, ?, 'gift', '', '', ?)`
+    ).bind(mid, match.id, me, String(coins), ts).run();
+    const row = await env.DB.prepare('SELECT * FROM messages WHERE id = ?').bind(mid).first();
+    const doc = toMessageDoc(row);
+    await relayToRoom(env, match.id, { type: 'message', message: doc });
+  } catch {}
+
+  return json({ coins: meRow!.coins ?? 0, giftedTo: toUserId, amount: coins });
+}
+
+async function handlePremiumWithCoins(env: Env, req: Request, me: string): Promise<Response> {
+  const body = await req.json() as any;
+  const planId = String(body.planId || '');
+  const cost = PLAN_COINS[planId];
+  if (!cost) return json({ error: 'Invalid plan' }, 400);
+
+  const expires = new Date(Date.now() + PREMIUM_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  const updated = await env.DB.prepare(
+    `UPDATE users SET coins = coins - ?, is_premium = 1, premium_plan = ?, premium_expires_at = ?, updated_at = ? WHERE id = ? AND coins >= ?`
+  ).bind(cost, planId, expires, now(), me, cost).run();
+  if (updated.meta.changes === 0) return json({ error: 'Insufficient coins' }, 402);
+
+  const user = await getUserRow(env, me);
+  await logCoinTx(env, me, 'premium_paid', cost, user!.coins ?? 0, '', { plan: planId, planName: PLAN_NAMES[planId] || planId, expires });
+  return json(toProfile(user));
+}
+
+// ===== WebSocket upgrade handlers =====
 async function handleChatWS(req: Request, env: Env, url: URL): Promise<Response> {
   const token = url.searchParams.get('token');
   const authReq = token
@@ -804,6 +990,13 @@ export default {
     if (path === '/api/call-signals' && req.method === 'GET') return handleGetSignals(env, req);
     if (path === '/api/call-logs' && req.method === 'POST') return handleCreateCallLog(env, req, me);
     if (path === '/api/call-logs' && req.method === 'GET') return handleGetCallLogs(env, req, me);
+
+    // Wallet / coins
+    if (path === '/api/wallet' && req.method === 'GET') return handleGetWallet(env, req, me);
+    if (path === '/api/wallet/purchase' && req.method === 'POST') return handlePurchaseInit(env, req, me);
+    if (path === '/api/wallet/verify' && req.method === 'POST') return handlePurchaseVerify(env, req, me);
+    if (path === '/api/wallet/gift' && req.method === 'POST') return handleGiftCoins(env, req, me);
+    if (path === '/api/wallet/premium' && req.method === 'POST') return handlePremiumWithCoins(env, req, me);
 
     return json({ error: 'Not found' }, 404);
   },

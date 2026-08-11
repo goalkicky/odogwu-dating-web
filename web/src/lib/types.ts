@@ -14,6 +14,9 @@ export interface UserProfile {
   isPremium: boolean;
   verified: boolean;
   age: number;
+  premiumPlan?: string;
+  premiumExpiresAt?: string;
+  coins?: number;
   lastActive?: string;
 }
 
@@ -31,7 +34,7 @@ export interface Message {
   matchId: string;
   senderId: string;
   text: string;
-  type: 'text' | 'image' | 'voice' | 'video';
+  type: 'text' | 'image' | 'voice' | 'video' | 'gift';
   mediaUrl?: string;
   replyTo?: {
     id: string;

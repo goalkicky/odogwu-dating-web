@@ -5,7 +5,6 @@ import { FilterIcon, ChatIcon, ChevronForwardIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
-import PremiumPopup from '@/components/PremiumPopup';
 import { useAuth } from '@/store/AuthContext';
 import { matchService, storageService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
@@ -59,7 +58,6 @@ export default function MatchesPage() {
   return (
     <DesktopLayout>
       <GradientBackground style={{ minHeight: '100vh', padding: '24px 16px 110px' }}>
-      <PremiumPopup />
       <div>
         <div className="animate-fade-up" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
