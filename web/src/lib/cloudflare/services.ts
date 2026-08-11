@@ -59,7 +59,8 @@ export const userService = {
     void currentUserId;
     const q = new URLSearchParams({ gender: preferences.gender, minAge: String(preferences.minAge), maxAge: String(preferences.maxAge) });
     if (preferences.maxDistance) q.set('maxDistance', String(preferences.maxDistance));
-    return apiFetch(`/api/discover?${q.toString()}`);
+    const data = await apiFetch(`/api/discover?${q.toString()}`);
+    return data?.documents || [];
   },
 
   likeUser: async (_userId: string, likedUserId: string) => {
@@ -93,12 +94,14 @@ export const matchService = {
 
   getUserMatches: async (userId: string) => {
     void userId;
-    return apiFetch('/api/matches');
+    const data = await apiFetch('/api/matches');
+    return data?.documents || [];
   },
 
   getWhoLikedMe: async (userId: string) => {
     void userId;
-    return apiFetch('/api/likes?whoLikedMe=1');
+    const data = await apiFetch('/api/likes?whoLikedMe=1');
+    return data?.documents || [];
   },
 
   checkMatch: async (userId: string, likedUserId: string) => {
@@ -185,7 +188,8 @@ export const callService = {
   },
 
   getSignals: async (userId: string) => {
-    return apiFetch(`/api/call-signals?to=${encodeURIComponent(userId)}`);
+    const data = await apiFetch(`/api/call-signals?to=${encodeURIComponent(userId)}`);
+    return data?.documents || [];
   },
 };
 
@@ -203,7 +207,8 @@ export const callLogService = {
 
   getCallLogs: async (userId: string) => {
     void userId;
-    return apiFetch('/api/call-logs?user=1');
+    const data = await apiFetch('/api/call-logs?user=1');
+    return data?.documents || [];
   },
 };
 

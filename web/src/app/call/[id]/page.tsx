@@ -185,7 +185,7 @@ export default function CallPage() {
           if (offerId) {
             try {
               const offerDoc = await callService.getSignals(uid);
-              const found = (offerDoc.documents as any[]).find((d: any) => d.$id === offerId);
+              const found = (offerDoc as any[]).find((d: any) => d.$id === offerId);
               if (found) {
                 const offer = JSON.parse(found.data);
                 await pc.setRemoteDescription(new RTCSessionDescription(offer));
