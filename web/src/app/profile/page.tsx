@@ -26,18 +26,19 @@ export default function ProfilePage() {
   const [boxWidth, setBoxWidth] = useState(0);
 
   useEffect(() => {
-    const el = imgRef.current;
-    if (!el) return;
-    const update = () => setBoxWidth(el.getBoundingClientRect().width);
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
+    const measure = () => {
+      const el = imgRef.current;
+      if (el) setBoxWidth(el.getBoundingClientRect().width);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (imgRef.current) ro.observe(imgRef.current);
     return () => ro.disconnect();
   }, [photoIndex, photoUrls.length]);
 
   const currentSrc = photoUrls[photoIndex];
   const currentRatio = currentSrc ? photoRatios[currentSrc] : undefined;
-  const boxHeight = currentRatio ? boxWidth / currentRatio : undefined;
+  const boxHeight = boxWidth > 0 && currentRatio ? boxWidth / currentRatio : undefined;
 
   const name = profile?.fullName || user?.name || 'User';
   const age = profile?.age;
@@ -116,6 +117,7 @@ export default function ProfilePage() {
                       const el = e.currentTarget;
                       if (el.naturalWidth && el.naturalHeight) {
                         setPhotoRatios(prev => ({ ...prev, [src]: el.naturalWidth / el.naturalHeight }));
+                        setBoxWidth(el.getBoundingClientRect().width);
                       }
                     }}
                     onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0'; }}
