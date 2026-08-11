@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ChatIcon, PersonIcon, EyeIcon, CompassIcon, CoinsIcon } from './Icons';
+import { ChatIcon, PersonIcon, EyeIcon, CompassIcon } from './Icons';
 
 export default function TabBar() {
   const pathname = usePathname();
@@ -12,7 +12,6 @@ export default function TabBar() {
     { href: '/explore', icon: <CompassIcon size={20} />, label: 'Explore' },
     { href: '/matches', icon: <ChatIcon size={20} />, label: 'Matches' },
     { href: '/likes', icon: <EyeIcon size={20} />, label: 'Likes' },
-    { href: '/wallet', icon: <CoinsIcon size={20} />, label: 'Wallet' },
     { href: '/profile', icon: <PersonIcon size={20} />, label: 'Profile' },
   ];
 

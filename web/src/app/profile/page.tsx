@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import {
   DiamondIcon, SettingsIcon, BellIcon, ShieldIcon, HelpIcon,
   ChevronForwardIcon, ChevronBackIcon, EyeIcon, CallIcon, PencilIcon, CheckmarkIcon,
-  CameraIcon, PlusIcon, LocationIcon,
+  CameraIcon, PlusIcon, LocationIcon, CoinsIcon,
 } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import Button from '@/components/Button';
@@ -56,6 +56,7 @@ export default function ProfilePage() {
     { icon: <PencilIcon size={20} color="#FF6B8A" />, label: 'Edit Profile', onClick: () => router.push('/edit-profile') },
     { icon: <EyeIcon size={20} color="#4FC3F7" />, label: 'Who Likes You', onClick: () => router.push('/likes') },
     { icon: <CallIcon size={20} color="#34C759" />, label: 'Call Log', onClick: () => router.push('/call-logs') },
+    { icon: <CoinsIcon size={20} color="#FFD700" />, label: 'Wallet', onClick: () => router.push('/wallet') },
     { icon: <SettingsIcon size={20} color="#D0D0D0" />, label: 'Settings', onClick: () => router.push('/settings') },
     { icon: <BellIcon size={20} color="#FFD700" />, label: 'Notifications', onClick: () => router.push('/notifications') },
     { icon: <ShieldIcon size={20} color="#7C4DFF" />, label: 'Privacy', onClick: () => router.push('/privacy') },
