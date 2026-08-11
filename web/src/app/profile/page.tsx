@@ -92,7 +92,7 @@ export default function ProfilePage() {
                   <img
                     src={src}
                     alt=""
-                    style={{ width: '100%', height: 'auto', maxHeight: '78vh', objectFit: 'contain', display: 'block', background: '#000' }}
+                    style={{ width: '100%', height: 'auto', display: 'block' }}
                     onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0'; }}
                   />
                   <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 34%, rgba(0,0,0,0.82) 100%)' }} />
