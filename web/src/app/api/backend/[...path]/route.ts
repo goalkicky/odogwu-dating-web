@@ -15,6 +15,7 @@ async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }
   headers.delete('connection');
   headers.delete('upgrade');
   headers.delete('accept-encoding');
+  headers.delete('expect');
 
   const init: RequestInit = { method: req.method, headers, redirect: 'manual', cache: 'no-store' };
   if (req.method !== 'GET' && req.method !== 'HEAD') {
@@ -22,7 +23,15 @@ async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }
     if (buf.byteLength > 0) init.body = buf;
   }
 
-  const upstreamRes = await fetch(upstream.toString(), init);
+  let upstreamRes: Response;
+  try {
+    upstreamRes = await fetch(upstream.toString(), init);
+  } catch (err: any) {
+    return NextResponse.json(
+      { error: `Upstream request failed: ${err?.cause?.message || err?.message || 'unknown error'}` },
+      { status: 502 }
+    );
+  }
 
   const resHeaders = new Headers();
   const ct = upstreamRes.headers.get('content-type');
