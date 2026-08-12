@@ -25,6 +25,12 @@ export default function ProfilePage() {
   const age = profile?.age;
   const displayName = age ? `${name}, ${age}` : name;
 
+  const PLAN_NAMES: Record<string, string> = { premium: 'Odogwu Premium', surplus: 'Odogwu Surplus', platinum: 'Odogwu Platinum' };
+  const premiumPlanName = profile?.premiumPlan ? PLAN_NAMES[profile.premiumPlan] || profile.premiumPlan : 'Odogwu Premium';
+  const premiumExpiry = profile?.premiumExpiresAt
+    ? new Date(profile.premiumExpiresAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+    : '';
+
   const nextPhoto = () => setPhotoIndex((p) => (p + 1) % photoUrls.length);
   const prevPhoto = () => setPhotoIndex((p) => (p - 1 + photoUrls.length) % photoUrls.length);
 
@@ -221,14 +227,29 @@ export default function ProfilePage() {
             ))}
           </div>
 
-          {/* Premium CTA */}
-          {!profile?.isPremium && (
+          {/* Premium */}
+          {profile?.isPremium ? (
+            <div className="glass animate-fade-up" style={{ borderRadius: 20, padding: '16px 20px', border: '1px solid rgba(255,215,0,0.35)', background: 'linear-gradient(135deg, rgba(255,215,0,0.14), rgba(255,149,0,0.08))' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
+                <div style={{ width: 42, height: 42, borderRadius: 14, background: 'linear-gradient(135deg, #FFD700, #FF9500)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 16px rgba(255,215,0,0.4)' }}>
+                  <DiamondIcon size={20} color="white" />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 15, fontWeight: 800, color: 'white' }}>Premium Active</div>
+                  <div style={{ fontSize: 12.5, color: '#ABABAB', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {premiumPlanName}{premiumExpiry ? ` · renews ${premiumExpiry}` : ''}
+                  </div>
+                </div>
+                <Button title="Manage" onPress={() => router.push('/premium')} variant="gradient" size="sm" />
+              </div>
+            </div>
+          ) : (
             <button onClick={() => router.push('/premium')} className="glass lift" style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '15px 20px', borderRadius: 20, border: '1px solid rgba(255,215,0,0.25)', background: 'linear-gradient(135deg, rgba(255,215,0,0.12), rgba(255,149,0,0.08))', cursor: 'pointer', textAlign: 'left' }}>
               <div style={{ width: 42, height: 42, borderRadius: 14, background: 'linear-gradient(135deg, #FFD700, #FF9500)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 16px rgba(255,215,0,0.4)' }}>
                 <DiamondIcon size={20} color="white" />
               </div>
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 15, fontWeight: 800, color: 'white' }}>Go Premium</div>
+                <div style={{ fontSize: 15, fontWeight: 800, color: 'white' }}>Subscribe to Premium</div>
                 <div style={{ fontSize: 12.5, color: '#ABABAB', marginTop: 2 }}>Unlimited likes, rewind & more</div>
               </div>
               <ChevronForwardIcon size={18} color="#FFD700" />
