@@ -29,6 +29,9 @@ export interface UserRow {
   premium_plan: string;
   premium_expires_at: string;
   coins: number;
+  show_online_status: number;
+  profile_visibility: string;
+  data_analytics: number;
   google_sub: string | null;
   password_hash: string;
   password_salt: string;

@@ -18,6 +18,9 @@ export interface UserProfile {
   premiumExpiresAt?: string;
   coins?: number;
   lastActive?: string;
+  showOnlineStatus?: boolean;
+  profileVisibility?: 'everyone' | 'matches_only';
+  dataAnalytics?: boolean;
 }
 
 export interface Match {

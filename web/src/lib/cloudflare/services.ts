@@ -110,6 +110,21 @@ export const matchService = {
   },
 };
 
+export const blockService = {
+  list: async () => {
+    const data = await apiFetch('/api/blocks');
+    return data?.documents || [];
+  },
+
+  block: async (blockedId: string) => {
+    return apiFetch('/api/blocks', { method: 'POST', json: { blockedId } });
+  },
+
+  unblock: async (blockedId: string) => {
+    return apiFetch(`/api/blocks/${encodeURIComponent(blockedId)}`, { method: 'DELETE' });
+  },
+};
+
 function wsUrl(path: string): string {
   const token = getToken();
   return `${WS_URL}${path}${path.includes('?') ? '&' : '?'}token=${encodeURIComponent(token)}`;

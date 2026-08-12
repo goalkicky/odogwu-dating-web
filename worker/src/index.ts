@@ -49,6 +49,9 @@ function toProfile(r: any): any {
     premiumExpiresAt: r.premium_expires_at || '',
     coins: r.coins ?? 0,
     lastActive: r.last_active,
+    showOnlineStatus: !!r.show_online_status,
+    profileVisibility: r.profile_visibility || 'everyone',
+    dataAnalytics: !!r.data_analytics,
     createdAt: r.created_at,
   };
 }
@@ -145,6 +148,9 @@ const PROFILE_FIELDS: Record<string, string> = {
   age: 'age',
   premiumPlan: 'premium_plan',
   lastActive: 'last_active',
+  showOnlineStatus: 'show_online_status',
+  profileVisibility: 'profile_visibility',
+  dataAnalytics: 'data_analytics',
 };
 
 function mapProfileValues(data: Record<string, any>): { cols: string[]; vals: any[] } {
@@ -156,6 +162,7 @@ function mapProfileValues(data: Record<string, any>): { cols: string[]; vals: an
     let value = v;
     if (col === 'photos' || col === 'interests') value = JSON.stringify(v || []);
     if (col === 'is_premium' || col === 'verified') value = v ? 1 : 0;
+    if (col === 'show_online_status' || col === 'data_analytics') value = v ? 1 : 0;
     cols.push(col);
     vals.push(value);
   }
@@ -170,6 +177,30 @@ async function requireMatchMembership(env: Env, matchId: string, userId: string)
   return (await env.DB.prepare(
     `SELECT * FROM matches WHERE id = ? AND (user_id = ? OR matched_user_id = ?)`
   ).bind(matchId, userId, userId).first()) as MatchRow | null;
+}
+
+async function isBlockedEitherWay(env: Env, a: string, b: string): Promise<boolean> {
+  const row = await env.DB.prepare(
+    'SELECT 1 FROM blocks WHERE (blocker_id = ? AND blocked_id = ?) OR (blocker_id = ? AND blocked_id = ?)'
+  ).bind(a, b, b, a).first();
+  return !!row;
+}
+
+async function blockedIds(env: Env, userId: string): Promise<string[]> {
+  const { results } = await env.DB.prepare('SELECT blocked_id FROM blocks WHERE blocker_id = ?').bind(userId).all();
+  return results.map((r: any) => String(r.blocked_id));
+}
+
+async function blockerIds(env: Env, userId: string): Promise<string[]> {
+  const { results } = await env.DB.prepare('SELECT blocker_id FROM blocks WHERE blocked_id = ?').bind(userId).all();
+  return results.map((r: any) => String(r.blocker_id));
+}
+
+function publicize(p: any): any {
+  if (!p) return p;
+  const copy = { ...p };
+  if (copy.showOnlineStatus === false || copy.showOnlineStatus === undefined) copy.lastActive = '';
+  return copy;
 }
 
 async function relayToRoom(env: Env, matchId: string, payload: unknown): Promise<void> {
@@ -390,10 +421,21 @@ async function handleMe(env: Env, req: Request): Promise<Response> {
 
 // ===== Profile handlers =====
 
-async function handleGetProfile(env: Env, req: Request, userId: string): Promise<Response> {
+async function handleGetProfile(env: Env, req: Request, userId: string, me?: string): Promise<Response> {
   void req;
   const user = await getUserRow(env, userId);
   if (!user) return json({ error: 'Profile not found' }, 404);
+  if (!me || userId !== me) {
+    if (me && await isBlockedEitherWay(env, me, userId)) return json({ error: 'Profile not found' }, 404);
+    if ((user.profile_visibility || 'everyone') === 'matches_only') {
+      const [a, b] = await Promise.all([
+        env.DB.prepare('SELECT 1 FROM matches WHERE user_id = ? AND matched_user_id = ?').bind(userId, me).first(),
+        env.DB.prepare('SELECT 1 FROM matches WHERE user_id = ? AND matched_user_id = ?').bind(me, userId).first(),
+      ]);
+      if (!a || !b) return json({ error: 'Profile not found' }, 404);
+    }
+    return json(publicize(toProfile(user)));
+  }
   return json(toProfile(user));
 }
 
@@ -451,8 +493,11 @@ async function handleDiscover(env: Env, req: Request, me: string): Promise<Respo
   const maxDistance = Number(url.searchParams.get('maxDistance')) || 0;
 
   let sql = `SELECT * FROM users WHERE id != ? AND age BETWEEN ? AND ?
-             AND id NOT IN (SELECT matched_user_id FROM matches WHERE user_id = ?)`;
-  const binds: any[] = [me, minAge, maxAge, me];
+             AND id NOT IN (SELECT matched_user_id FROM matches WHERE user_id = ?)
+             AND profile_visibility != 'matches_only'
+             AND id NOT IN (SELECT blocked_id FROM blocks WHERE blocker_id = ?)
+             AND id NOT IN (SELECT blocker_id FROM blocks WHERE blocked_id = ?)`;
+  const binds: any[] = [me, minAge, maxAge, me, me, me];
   if (gender !== 'both') {
     sql += ' AND gender = ?';
     binds.push(gender);
@@ -465,7 +510,7 @@ async function handleDiscover(env: Env, req: Request, me: string): Promise<Respo
   const myLng = Number(meRow?.longitude);
   const hasMeCoords = myLat && myLng;
 
-  let docs = results.map(toProfile).map(d => {
+  let docs = results.map(toProfile).map(publicize).map(d => {
     if (!hasMeCoords || !d.latitude || !d.longitude) return d;
     return { ...d, distanceKm: Math.round(haversineKm(myLat, myLng, d.latitude, d.longitude)) };
   });
@@ -486,11 +531,13 @@ async function handleLikes(env: Env, req: Request, me: string): Promise<Response
     const { results } = await env.DB.prepare(
       `SELECT m.* FROM matches m WHERE m.matched_user_id = ?
        AND NOT EXISTS (SELECT 1 FROM matches r WHERE r.user_id = ? AND r.matched_user_id = m.user_id)
+       AND NOT EXISTS (SELECT 1 FROM blocks b WHERE b.blocker_id = ? AND b.blocked_id = m.user_id)
+       AND NOT EXISTS (SELECT 1 FROM blocks b WHERE b.blocker_id = m.user_id AND b.blocked_id = ?)
        ORDER BY m.matched_at DESC`
-    ).bind(me, me).all();
+    ).bind(me, me, me, me).all();
     const docs = await Promise.all(results.map(async (d: any) => {
       const p = await getUserRow(env, d.user_id);
-      return { ...toMatchDoc(d), matchedUser: p ? toProfile(p) : null };
+      return { ...toMatchDoc(d), matchedUser: p ? publicize(toProfile(p)) : null };
     }));
     return json({ documents: docs });
   }
@@ -507,13 +554,20 @@ async function handleLikes(env: Env, req: Request, me: string): Promise<Response
   const { results } = await env.DB.prepare(
     'SELECT * FROM matches WHERE user_id = ? ORDER BY matched_at DESC'
   ).bind(me).all();
-  return json({ documents: results.map(toMatchDoc) });
+  const docs: any[] = [];
+  for (const d of results) {
+    const r = d as any;
+    if (await isBlockedEitherWay(env, me, r.matched_user_id)) continue;
+    docs.push(toMatchDoc(r));
+  }
+  return json({ documents: docs });
 }
 
 async function handleCreateLike(env: Env, req: Request, me: string): Promise<Response> {
   const body = await req.json() as any;
   const matchedUserId = String(body.matchedUserId || '');
   if (!matchedUserId || matchedUserId === me) return json({ error: 'Invalid user' }, 400);
+  if (await isBlockedEitherWay(env, me, matchedUserId)) return json({ error: 'Cannot like a blocked user' }, 403);
   const id = newId();
   const ts = now();
   await env.DB.prepare(
@@ -532,19 +586,23 @@ async function handleGetMatches(env: Env, req: Request, me: string): Promise<Res
     `SELECT m.* FROM matches m
      WHERE m.user_id = ?
        AND EXISTS (SELECT 1 FROM matches r WHERE r.user_id = m.matched_user_id AND r.matched_user_id = m.user_id)
+       AND NOT EXISTS (SELECT 1 FROM blocks b WHERE (b.blocker_id = ? AND b.blocked_id = m.matched_user_id) OR (b.blocker_id = m.matched_user_id AND b.blocked_id = ?))
      ORDER BY m.matched_at DESC`
-  ).bind(me).all();
+  ).bind(me, me, me).all();
   const docs = await Promise.all(results.map(async (d: any) => {
     const p = await getUserRow(env, d.matched_user_id);
-    return { ...toMatchDoc(d), matchedUser: p ? toProfile(p) : null };
+    return { ...toMatchDoc(d), matchedUser: p ? publicize(toProfile(p)) : null };
   }));
   return json({ documents: docs });
 }
 
-async function handleGetMatch(env: Env, req: Request, matchId: string): Promise<Response> {
+async function handleGetMatch(env: Env, req: Request, matchId: string, me: string): Promise<Response> {
   void req;
-  const doc = await env.DB.prepare('SELECT * FROM matches WHERE id = ?').bind(matchId).first();
+  const doc = (await env.DB.prepare('SELECT * FROM matches WHERE id = ?').bind(matchId).first()) as any;
   if (!doc) return json({ error: 'Match not found' }, 404);
+  if (doc.user_id !== me && doc.matched_user_id !== me) return json({ error: 'Forbidden' }, 403);
+  const other = doc.user_id === me ? doc.matched_user_id : doc.user_id;
+  if (await isBlockedEitherWay(env, me, other)) return json({ error: 'Forbidden' }, 403);
   return json(toMatchDoc(doc));
 }
 
@@ -552,6 +610,7 @@ async function handleCreateMatch(env: Env, req: Request, me: string): Promise<Re
   const body = await req.json() as any;
   const userId = String(body.userId || me);
   const matchedUserId = String(body.matchedUserId || '');
+  if (await isBlockedEitherWay(env, userId, matchedUserId)) return json({ error: 'Cannot match a blocked user' }, 403);
   const id = newId();
   const ts = now();
   await env.DB.prepare(
@@ -569,6 +628,8 @@ async function handleSendMessage(env: Env, req: Request, me: string): Promise<Re
   if (senderId !== me) return json({ error: 'Forbidden' }, 403);
   const membership = await requireMatchMembership(env, matchId, me);
   if (!membership) return json({ error: 'Not a match participant' }, 403);
+  const other = membership.user_id === me ? membership.matched_user_id : membership.user_id;
+  if (await isBlockedEitherWay(env, me, other)) return json({ error: 'You blocked this user or were blocked' }, 403);
 
   const id = newId();
   const ts = now();
@@ -595,6 +656,8 @@ async function handleGetMessages(env: Env, req: Request, me: string): Promise<Re
   const matchId = url.searchParams.get('matchId') || '';
   const membership = await requireMatchMembership(env, matchId, me);
   if (!membership) return json({ error: 'Not a match participant' }, 403);
+  const other = membership.user_id === me ? membership.matched_user_id : membership.user_id;
+  if (await isBlockedEitherWay(env, me, other)) return json({ error: 'Forbidden' }, 403);
   const { results } = await env.DB.prepare(
     'SELECT * FROM messages WHERE match_id = ? ORDER BY created_at ASC LIMIT 2000'
   ).bind(matchId).all();
@@ -620,6 +683,8 @@ async function handleReactToMessage(env: Env, req: Request, me: string, messageI
   if (!row) return json({ error: 'Message not found' }, 404);
   const membership = await requireMatchMembership(env, row.match_id, me);
   if (!membership) return json({ error: 'Forbidden' }, 403);
+  const other = membership.user_id === me ? membership.matched_user_id : membership.user_id;
+  if (await isBlockedEitherWay(env, me, other)) return json({ error: 'Forbidden' }, 403);
   const reactions = Array.isArray(body.reactions) ? body.reactions : [];
   await env.DB.prepare('UPDATE messages SET reactions = ? WHERE id = ?')
     .bind(JSON.stringify(reactions), messageId).run();
@@ -850,6 +915,7 @@ async function handleGiftCoins(env: Env, req: Request, me: string): Promise<Resp
 
   const recipient = await getUserRow(env, toUserId);
   if (!recipient) return json({ error: 'Recipient not found' }, 404);
+  if (await isBlockedEitherWay(env, me, toUserId)) return json({ error: 'Cannot gift a blocked user' }, 403);
 
   const match = await env.DB.prepare(
     `SELECT * FROM matches WHERE (user_id = ? AND matched_user_id = ?) OR (user_id = ? AND matched_user_id = ?) ORDER BY matched_at DESC LIMIT 1`
@@ -897,6 +963,45 @@ async function handlePremiumWithCoins(env: Env, req: Request, me: string): Promi
   return json(toProfile(user));
 }
 
+// ===== Blocks / privacy =====
+
+function toBlockDoc(r: any): any {
+  return { $id: r.id, id: r.id, blockerId: r.blocker_id, blockedId: r.blocked_id, createdAt: r.created_at };
+}
+
+async function handleListBlocks(env: Env, req: Request, me: string): Promise<Response> {
+  void req;
+  const { results } = await env.DB.prepare(
+    'SELECT * FROM blocks WHERE blocker_id = ? ORDER BY created_at DESC'
+  ).bind(me).all();
+  const docs = await Promise.all(results.map(async (d: any) => {
+    const p = await getUserRow(env, d.blocked_id);
+    return { ...toBlockDoc(d), blockedUser: p ? publicize(toProfile(p)) : null };
+  }));
+  return json({ documents: docs });
+}
+
+async function handleCreateBlock(env: Env, req: Request, me: string): Promise<Response> {
+  const body = await req.json() as any;
+  const blockedId = String(body.blockedId || '');
+  if (!blockedId || blockedId === me) return json({ error: 'Invalid user' }, 400);
+  const target = await getUserRow(env, blockedId);
+  if (!target) return json({ error: 'User not found' }, 404);
+  const id = newId();
+  const ts = now();
+  await env.DB.prepare(
+    'INSERT OR IGNORE INTO blocks (id, blocker_id, blocked_id, created_at) VALUES (?, ?, ?, ?)'
+  ).bind(id, me, blockedId, ts).run();
+  return json({ blockedId }, 201);
+}
+
+async function handleUnblock(env: Env, req: Request, me: string, blockedId: string): Promise<Response> {
+  void req;
+  await env.DB.prepare('DELETE FROM blocks WHERE blocker_id = ? AND blocked_id = ?')
+    .bind(me, blockedId).run();
+  return json({ ok: true });
+}
+
 // ===== WebSocket upgrade handlers =====
 async function handleChatWS(req: Request, env: Env, url: URL): Promise<Response> {
   const token = url.searchParams.get('token');
@@ -908,6 +1013,8 @@ async function handleChatWS(req: Request, env: Env, url: URL): Promise<Response>
   const matchId = url.searchParams.get('matchId') || '';
   const membership = await requireMatchMembership(env, matchId, auth.user.id);
   if (!membership) return json({ error: 'Not a match participant' }, 403);
+  const other = membership.user_id === auth.user.id ? membership.matched_user_id : membership.user_id;
+  if (await isBlockedEitherWay(env, auth.user.id, other)) return json({ error: 'Forbidden' }, 403);
   const room = env.ChatRoom.get(env.ChatRoom.idFromName(matchId));
   return room.fetch('http://chatroom/ws?uid=' + encodeURIComponent(auth.user.id));
 }
@@ -962,7 +1069,7 @@ export default {
     if (path === '/api/profile' && req.method === 'POST') return handleCreateProfile(env, req);
     if (path === '/api/profile' && req.method === 'PUT') return handleUpdateProfile(env, req);
     const profileMatch = path.match(/^\/api\/profile\/([^/]+)$/);
-    if (profileMatch && req.method === 'GET') return handleGetProfile(env, req, decodeURIComponent(profileMatch[1]));
+    if (profileMatch && req.method === 'GET') return handleGetProfile(env, req, decodeURIComponent(profileMatch[1]), me);
 
     // Discover
     if (path === '/api/discover' && req.method === 'GET') return handleDiscover(env, req, me);
@@ -975,7 +1082,7 @@ export default {
     if (path === '/api/matches' && req.method === 'GET') return handleGetMatches(env, req, me);
     if (path === '/api/matches' && req.method === 'POST') return handleCreateMatch(env, req, me);
     const matchMatch = path.match(/^\/api\/matches\/([^/]+)$/);
-    if (matchMatch && req.method === 'GET') return handleGetMatch(env, req, decodeURIComponent(matchMatch[1]));
+    if (matchMatch && req.method === 'GET') return handleGetMatch(env, req, decodeURIComponent(matchMatch[1]), me);
 
     // Messages
     if (path === '/api/messages' && req.method === 'POST') return handleSendMessage(env, req, me);
@@ -997,6 +1104,12 @@ export default {
     if (path === '/api/wallet/verify' && req.method === 'POST') return handlePurchaseVerify(env, req, me);
     if (path === '/api/wallet/gift' && req.method === 'POST') return handleGiftCoins(env, req, me);
     if (path === '/api/wallet/premium' && req.method === 'POST') return handlePremiumWithCoins(env, req, me);
+
+    // Blocks / privacy
+    if (path === '/api/blocks' && req.method === 'GET') return handleListBlocks(env, req, me);
+    if (path === '/api/blocks' && req.method === 'POST') return handleCreateBlock(env, req, me);
+    const blockMatch = path.match(/^\/api\/blocks\/([^/]+)$/);
+    if (blockMatch && req.method === 'DELETE') return handleUnblock(env, req, me, decodeURIComponent(blockMatch[1]));
 
     return json({ error: 'Not found' }, 404);
   },

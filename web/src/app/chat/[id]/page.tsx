@@ -4,11 +4,11 @@ import { useRouter, useParams } from 'next/navigation';
 import {
   ChevronBackIcon, CallIcon, VideoIcon, MicIcon, SendIcon, PencilIcon,
   CloseCircleIcon, HappyIcon, KeypadIcon, CheckmarkIcon, CheckmarkDoneIcon, ImagesIcon,
-  SearchIcon, CoinsIcon,
+  SearchIcon, CoinsIcon, EllipsisIcon,
 } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import { useAuth } from '@/store/AuthContext';
-import { messageService, storageService, matchService, userService, walletService } from '@/lib/cloudflare/services';
+import { messageService, storageService, matchService, userService, walletService, blockService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
 import Button from '@/components/Button';
 import type { Message } from '@/lib/types';
@@ -177,6 +177,8 @@ export default function ChatPage() {
   const [giftAmount, setGiftAmount] = useState(5);
   const [gifting, setGifting] = useState(false);
   const [myCoins, setMyCoins] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [blockAction, setBlockAction] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const attachRef = useRef<HTMLInputElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -420,6 +422,33 @@ export default function ChatPage() {
     walletService.getWallet().then(w => setMyCoins(w?.coins ?? 0)).catch(() => {});
   };
 
+  const handleBlock = async () => {
+    if (!otherUserId || blockAction) return;
+    if (!window.confirm(`Block ${matchName}? They won't be able to see your profile, like or message you.`)) return;
+    setBlockAction(true);
+    try {
+      await blockService.block(otherUserId);
+      setMenuOpen(false);
+      alert(`${matchName} has been blocked.`);
+      router.back();
+    } catch {
+      alert('Failed to block this user.');
+    }
+    setBlockAction(false);
+  };
+
+  const handleUnblock = async () => {
+    if (!otherUserId || blockAction) return;
+    setBlockAction(true);
+    try {
+      await blockService.unblock(otherUserId);
+      setMenuOpen(false);
+    } catch {
+      alert('Failed to unblock this user.');
+    }
+    setBlockAction(false);
+  };
+
   const roundBtn = (active: boolean) => ({
     width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
     border: active ? '1px solid rgba(255,55,95,0.35)' : '1px solid rgba(255,255,255,0.1)',
@@ -462,7 +491,7 @@ export default function ChatPage() {
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 8, position: 'relative' }}>
           <button onClick={() => setSearchOpen(o => !o)} style={roundBtn(searchOpen)}>
             {searchOpen ? <CloseCircleIcon size={18} color="#FF6B8A" /> : <SearchIcon size={18} color={searchOpen ? '#FF6B8A' : '#D0D0D0'} />}
           </button>
@@ -472,6 +501,31 @@ export default function ChatPage() {
           <button onClick={() => router.push(`/call/${matchId}?type=video&otherId=${otherUserId}`)} style={{ ...roundBtn(false), border: '1px solid rgba(255,55,95,0.3)', background: 'rgba(255,55,95,0.1)' }}>
             <VideoIcon size={18} color="#FF375F" />
           </button>
+          <button onClick={() => setMenuOpen(o => !o)} style={roundBtn(menuOpen)} aria-label="More options">
+            <EllipsisIcon size={18} color={menuOpen ? '#FF6B8A' : '#D0D0D0'} />
+          </button>
+          {menuOpen && (
+            <div style={{
+              position: 'absolute', right: 0, top: 46, zIndex: 40, minWidth: 200,
+              borderRadius: 14, overflow: 'hidden', background: '#1B1B22',
+              border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 12px 32px rgba(0,0,0,0.5)',
+            }}>
+              <button
+                onClick={handleBlock}
+                disabled={blockAction}
+                style={{ display: 'block', width: '100%', padding: '13px 16px', textAlign: 'left', border: 'none', background: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 600, color: '#FF6B8A' }}
+              >
+                {blockAction ? 'Blocking…' : `Block ${matchName}`}
+              </button>
+              <button
+                onClick={handleUnblock}
+                disabled={blockAction}
+                style={{ display: 'block', width: '100%', padding: '13px 16px', textAlign: 'left', border: 'none', background: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 600, color: '#ABABAB' }}
+              >
+                Unblock
+              </button>
+            </div>
+          )}
         </div>
       </header>
 
