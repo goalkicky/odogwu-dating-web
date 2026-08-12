@@ -40,7 +40,7 @@ export default function BlockedUsersPage() {
         </button>
         <h1 style={{ fontSize: 28, fontWeight: 800, color: 'white', margin: '0 0 8px' }}>Blocked Users</h1>
         <p style={{ fontSize: 14, color: '#6B6B6B', margin: '0 0 24px' }}>
-          Blocked people can't see your profile, like or message you.
+          Blocked people can&apos;t see your profile, like or message you.
         </p>
 
         {loading ? (
@@ -49,7 +49,7 @@ export default function BlockedUsersPage() {
           </div>
         ) : blocks.length === 0 ? (
           <div style={{ backgroundColor: 'rgba(255,255,255,0.08)', padding: 24, borderRadius: 18, textAlign: 'center' }}>
-            <p style={{ color: '#6B6B6B', fontSize: 14, margin: 0 }}>You haven't blocked anyone yet.</p>
+            <p style={{ color: '#6B6B6B', fontSize: 14, margin: 0 }}>You haven&apos;t blocked anyone yet.</p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
