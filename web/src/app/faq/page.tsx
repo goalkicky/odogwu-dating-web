@@ -11,8 +11,8 @@ const faqs = [
   {
     category: 'Getting Started',
     items: [
-      { q: 'How do I create an account?', a: 'Download the Odogwu app from the App Store or Google Play Store, or sign up on our website. You\'ll need to provide your basic info, upload at least 3 photos, and verify your phone number and email to get started.' },
-      { q: 'Is Odogwu free to use?', a: 'Yes! Odogwu is free to create an account, browse profiles, and send up to 10 likes per day. Premium features like unlimited likes, Super Likes, and profile boosts are available through our Premium and Platinum subscription plans.' },
+      { q: 'How do I create an account?', a: 'Download the Odogwu Dating app from the App Store or Google Play Store, or sign up on our website. You\'ll need to provide your basic info, upload at least 3 photos, and verify your phone number and email to get started.' },
+      { q: 'Is Odogwu Dating free to use?', a: 'Yes! Odogwu Dating is free to create an account, browse profiles, and send up to 10 likes per day. Premium features like unlimited likes, Super Likes, and profile boosts are available through our Premium and Platinum subscription plans.' },
       { q: 'How do I verify my profile?', a: 'After signing up, you\'ll be prompted to verify your profile. This includes phone number verification, email verification, and a photo verification process where you\'ll take a selfie that our AI compares to your profile photos.' },
     ],
   },
@@ -28,10 +28,10 @@ const faqs = [
   {
     category: 'Safety & Privacy',
     items: [
-      { q: 'Is my data safe on Odogwu?', a: 'Absolutely. We use industry-standard encryption to protect your data. Your personal information is never shared with third parties without your consent. We also offer photo privacy controls so you can control who sees your pictures.' },
+      { q: 'Is my data safe on Odogwu Dating?', a: 'Absolutely. We use industry-standard encryption to protect your data. Your personal information is never shared with third parties without your consent. We also offer photo privacy controls so you can control who sees your pictures.' },
       { q: 'How do I report someone?', a: 'You can report any user directly from their profile or chat screen. Our moderation team reviews every report within 24 hours. We have a zero-tolerance policy for harassment, hate speech, and inappropriate behavior.' },
       { q: 'Can I block someone?', a: 'Yes, you can block any user at any time. Blocked users won\'t be able to see your profile or contact you. You can also unblock users from your settings at any time.' },
-      { q: 'Are all profiles verified?', a: 'Every profile on Odogwu goes through our verification process. Profiles that complete all verification steps receive a blue verification badge. We actively monitor for suspicious activity and remove unverified or fake accounts.' },
+      { q: 'Are all profiles verified?', a: 'Every profile on Odogwu Dating goes through our verification process. Profiles that complete all verification steps receive a blue verification badge. We actively monitor for suspicious activity and remove unverified or fake accounts.' },
     ],
   },
   {
@@ -119,7 +119,7 @@ export default function FAQPage() {
           <h1 style={{ fontSize: isMobile ? 28 : 'clamp(36px, 5vw, 52px)', fontWeight: 800, margin: '0 0 12px' }}>
             Frequently Asked <span className="gradient-text">Questions</span>
           </h1>
-          <p style={{ color: '#ABABAB', fontSize: isMobile ? 14 : 18 }}>Everything you need to know about Odogwu.</p>
+          <p style={{ color: '#ABABAB', fontSize: isMobile ? 14 : 18 }}>Everything you need to know about Odogwu Dating.</p>
         </div>
 
         {faqs.map((group, i) => (

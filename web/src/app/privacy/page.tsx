@@ -83,7 +83,7 @@ export default function PrivacyPage() {
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 15, color: 'white' }}>Profile Visibility</div>
               <div style={{ fontSize: 12, color: '#6B6B6B', marginTop: 2 }}>
-                {visibility === 'everyone' ? 'Anyone on Odogwu can find your profile' : 'Only your matches can see your profile'}
+                {visibility === 'everyone' ? 'Anyone on Odogwu Dating can find your profile' : 'Only your matches can see your profile'}
               </div>
             </div>
           </div>
@@ -132,7 +132,7 @@ export default function PrivacyPage() {
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 15, color: 'white' }}>Data & Analytics</div>
               <div style={{ fontSize: 12, color: '#6B6B6B', marginTop: 2 }}>
-                {dataAnalytics ? 'Help us improve Odogwu with anonymous usage data' : 'Your usage data is not used for analytics'}
+                {dataAnalytics ? 'Help us improve Odogwu Dating with anonymous usage data' : 'Your usage data is not used for analytics'}
               </div>
             </div>
             <Switch checked={dataAnalytics} disabled={saving} onToggle={() => { setDataAnalytics(!dataAnalytics); persist({ dataAnalytics: !dataAnalytics }); }} />

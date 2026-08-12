@@ -73,7 +73,7 @@ export default function PremiumPage() {
           <h1 style={{ fontSize: 36, fontWeight: 800, color: 'white', letterSpacing: 1, margin: 0 }}>
             Go <span className="neon-text">Premium</span>
           </h1>
-          <p style={{ fontSize: 15, color: '#ABABAB', marginTop: 8 }}>Unlock the full Odogwu experience</p>
+          <p style={{ fontSize: 15, color: '#ABABAB', marginTop: 8 }}>Unlock the full Odogwu Dating experience</p>
         </div>
 
         <div style={{ padding: '0 0 20px' }}>

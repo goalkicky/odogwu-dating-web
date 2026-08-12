@@ -35,10 +35,10 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
             <div style={{ padding: '0 24px 32px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div className="grad-ring" style={{ display: 'flex' }}>
-                  <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu" style={{ width: 34, height: 34, borderRadius: 10, objectFit: 'cover' }} />
+                  <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu Dating" style={{ width: 34, height: 34, borderRadius: 10, objectFit: 'cover' }} />
                 </div>
                 <span style={{ fontSize: 20, fontWeight: 800, color: 'white', letterSpacing: 1 }}>
-                  ODO<span className="neon-text">GWU</span>
+                  ODO<span className="neon-text">GWU</span> DATING
                 </span>
               </div>
             </div>

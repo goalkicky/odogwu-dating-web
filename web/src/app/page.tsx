@@ -56,9 +56,9 @@ const steps = [
 ];
 
 const testimonials = [
-  { name: 'Amara O.', photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100', text: 'I found the love of my life on Odogwu. The verified profiles gave me confidence to connect.', location: 'Lagos, Nigeria' },
+  { name: 'Amara O.', photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100', text: 'I found the love of my life on Odogwu Dating. The verified profiles gave me confidence to connect.', location: 'Lagos, Nigeria' },
   { name: 'Chidi E.', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100', text: 'The smart matching is incredible. I matched with someone who shares all my interests!', location: 'Abuja, Nigeria' },
-  { name: 'Zainab K.', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100', text: 'From the first chat to our first date, everything felt natural. Thank you Odogwu!', location: 'Port Harcourt, Nigeria' },
+  { name: 'Zainab K.', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100', text: 'From the first chat to our first date, everything felt natural. Thank you Odogwu Dating!', location: 'Port Harcourt, Nigeria' },
 ];
 
 export default function LandingPage() {
@@ -112,7 +112,7 @@ export default function LandingPage() {
           }}>
             Find Your{' '}
             <span className="gradient-text">Perfect Match</span>
-            {' '}With Odogwu
+            {' '}With Odogwu Dating
           </h1>
 
           <p style={{
@@ -323,7 +323,7 @@ export default function LandingPage() {
             Ready to Find Your Match?
           </h2>
           <p style={{ color: '#ABABAB', fontSize: isMobile ? 14 : 18, maxWidth: 500, margin: '0 auto 32px', lineHeight: '26px', padding: isMobile ? '0 8px' : 0 }}>
-            Join thousands of singles who have found meaningful connections through Odogwu. Your story starts here.
+            Join thousands of singles who have found meaningful connections through Odogwu Dating. Your story starts here.
           </p>
           <Link href="/login" style={{
             padding: isMobile ? '14px 36px' : '18px 48px',

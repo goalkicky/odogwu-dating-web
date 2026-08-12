@@ -41,7 +41,7 @@ export default function RegisterPage() {
       <VideoCarouselBackground />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingTop: '60px', position: 'relative', zIndex: 1, maxWidth: 420, width: '100%', margin: '0 auto' }}>
         <h1 style={{ fontSize: 32, fontWeight: 800, color: 'white', margin: '0 0 6px' }}>Create account</h1>
-        <p style={{ fontSize: 14, color: '#ABABAB', margin: '0 0 28px' }}>Join Odogwu and start meeting people</p>
+        <p style={{ fontSize: 14, color: '#ABABAB', margin: '0 0 28px' }}>Join Odogwu Dating and start meeting people</p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
           <input value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Full name" style={inputStyle} />

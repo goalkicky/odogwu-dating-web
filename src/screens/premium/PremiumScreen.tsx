@@ -80,7 +80,7 @@ export default function PremiumScreen() {
             <Ionicons name="diamond" size={32} color="white" />
           </LinearGradient>
           <Text style={styles.headerTitle}>Go Premium</Text>
-          <Text style={styles.headerSubtitle}>Unlock the full Odogwu experience</Text>
+          <Text style={styles.headerSubtitle}>Unlock the full Odogwu Dating experience</Text>
         </View>
 
         <View style={styles.featuresPreview}>

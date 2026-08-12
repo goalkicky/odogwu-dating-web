@@ -10,7 +10,7 @@ const ACCENT = '#FF3B30';
 const featureGroups = [
   {
     title: 'Smart Matching', color: '#FF375F',
-    desc: 'Our AI learns your preferences from every interaction. The more you use Odogwu, the better your matches become.',
+    desc: 'Our AI learns your preferences from every interaction. The more you use Odogwu Dating, the better your matches become.',
     icon: <SparklesIcon size={28} color="#FF375F" />,
     items: [
       'AI-powered compatibility scoring based on interests, values, and lifestyle',
@@ -22,7 +22,7 @@ const featureGroups = [
   },
   {
     title: 'Verified Profiles', color: ACCENT,
-    desc: 'Say goodbye to catfish. Every profile on Odogwu goes through a rigorous verification process to ensure authenticity.',
+    desc: 'Say goodbye to catfish. Every profile on Odogwu Dating goes through a rigorous verification process to ensure authenticity.',
     icon: <ShieldIcon size={28} color={ACCENT} />,
     items: [
       'Photo verification with AI-powered liveness detection',
@@ -100,7 +100,7 @@ export default function FeaturesPage() {
           Powerful Features for <span className="gradient-text">Meaningful Connections</span>
         </h1>
         <p style={{ color: '#ABABAB', fontSize: isMobile ? 14 : 18, maxWidth: 600, margin: '0 auto', lineHeight: isMobile ? '22px' : '28px', padding: isMobile ? '0 4px' : 0 }}>
-          Every feature in Odogwu is designed with one goal: helping you find authentic, lasting relationships. From AI matching to safety tools, we&apos;ve got you covered.
+          Every feature in Odogwu Dating is designed with one goal: helping you find authentic, lasting relationships. From AI matching to safety tools, we&apos;ve got you covered.
         </p>
       </section>
 

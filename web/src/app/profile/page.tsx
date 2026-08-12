@@ -268,7 +268,7 @@ export default function ProfilePage() {
                   </div>
                   <div style={{ flex: 1 }}>
                     <div className="neon-text" style={{ fontSize: 22, fontWeight: 900, letterSpacing: 0.5, lineHeight: 1.1 }}>Go Premium</div>
-                    <div style={{ fontSize: 12.5, color: '#ABABAB', marginTop: 3 }}>Unlock the full Odogwu experience</div>
+                    <div style={{ fontSize: 12.5, color: '#ABABAB', marginTop: 3 }}>Unlock the full Odogwu Dating experience</div>
                   </div>
                   <div style={{ padding: '5px 10px', borderRadius: 9999, background: 'rgba(255,215,0,0.14)', border: '1px solid rgba(255,215,0,0.4)', fontSize: 10.5, fontWeight: 800, color: '#FFD700', letterSpacing: 1, whiteSpace: 'nowrap' }}>BEST VALUE</div>
                 </div>
@@ -298,7 +298,7 @@ export default function ProfilePage() {
                 {/* social proof */}
                 <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                   <CheckmarkCircleIcon size={13} color="#34C759" />
-                  <span style={{ fontSize: 11.5, color: '#6B6B6B' }}>Trusted by 2,000+ Odogwu members · Cancel anytime</span>
+                  <span style={{ fontSize: 11.5, color: '#6B6B6B' }}>Trusted by 2,000+ Odogwu Dating members · Cancel anytime</span>
                 </div>
               </div>
             </button>

@@ -19,7 +19,7 @@ const sections = [
   },
   {
     title: 'Profile visibility',
-    body: 'With "Everyone", any Odogwu member can find your profile on Discover. With "Only Matches", only people you have already matched with can see your profile.',
+    body: 'With "Everyone", any Odogwu Dating member can find your profile on Discover. With "Only Matches", only people you have already matched with can see your profile.',
   },
   {
     title: 'Blocking',

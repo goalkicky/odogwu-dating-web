@@ -32,8 +32,8 @@ export default function MarketingNav() {
         height: '64px',
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-          <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu" style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover' }} />
-          <span style={{ fontSize: 18, fontWeight: 800, color: 'white', letterSpacing: 1 }}>ODOGWU</span>
+          <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu Dating" style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover' }} />
+          <span style={{ fontSize: 18, fontWeight: 800, color: 'white', letterSpacing: 1 }}>ODOGWU DATING</span>
         </Link>
 
         {/* Desktop links */}

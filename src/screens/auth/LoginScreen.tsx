@@ -49,7 +49,7 @@ export default function LoginScreen({ navigation }: any) {
         >
           <Ionicons name="flame" size={60} color="white" />
         </LinearGradient>
-        <Text style={styles.title}>odogwu</Text>
+        <Text style={styles.title}>odogwu dating</Text>
         <Text style={styles.subtitle}>Find your perfect match</Text>
       </View>
 
