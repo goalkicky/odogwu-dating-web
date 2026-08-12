@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import {
   DiamondIcon, SettingsIcon, BellIcon, ShieldIcon, HelpIcon,
   ChevronForwardIcon, ChevronBackIcon, EyeIcon, CallIcon, PencilIcon, CheckmarkIcon,
-  CameraIcon, PlusIcon, LocationIcon, CoinsIcon,
+  CameraIcon, PlusIcon, LocationIcon, CoinsIcon, InfiniteIcon, StarIcon, CheckmarkCircleIcon,
 } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import Button from '@/components/Button';
@@ -244,15 +244,63 @@ export default function ProfilePage() {
               </div>
             </div>
           ) : (
-            <button onClick={() => router.push('/premium')} className="glass lift" style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '15px 20px', borderRadius: 20, border: '1px solid rgba(255,215,0,0.25)', background: 'linear-gradient(135deg, rgba(255,215,0,0.12), rgba(255,149,0,0.08))', cursor: 'pointer', textAlign: 'left' }}>
-              <div style={{ width: 42, height: 42, borderRadius: 14, background: 'linear-gradient(135deg, #FFD700, #FF9500)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 16px rgba(255,215,0,0.4)' }}>
-                <DiamondIcon size={20} color="white" />
+            <button
+              onClick={() => router.push('/premium')}
+              className="lift animate-fade-up"
+              style={{
+                position: 'relative', borderRadius: 24, overflow: 'hidden', padding: 0,
+                border: '1px solid rgba(255,215,0,0.4)', cursor: 'pointer', textAlign: 'left',
+                background: 'linear-gradient(160deg, #1A1014 0%, #14121A 55%, #141C18 100%)',
+                boxShadow: '0 14px 44px rgba(255,55,95,0.18), inset 0 0 0 1px rgba(255,215,0,0.06)',
+              }}
+            >
+              {/* animated shimmer top border */}
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, transparent 0%, #FFD700 20%, #FF375F 40%, #7C4DFF 60%, #FFD700 80%, transparent 100%)', backgroundSize: '200% 100%', animation: 'shimmer 2.8s linear infinite' }} />
+              {/* glowing blobs */}
+              <div style={{ position: 'absolute', top: -70, left: -40, width: 190, height: 190, borderRadius: 9999, background: 'rgba(255,215,0,0.16)', filter: 'blur(55px)', pointerEvents: 'none' }} />
+              <div style={{ position: 'absolute', bottom: -80, right: -30, width: 210, height: 210, borderRadius: 9999, background: 'rgba(255,55,95,0.2)', filter: 'blur(55px)', pointerEvents: 'none' }} />
+
+              <div style={{ position: 'relative', zIndex: 1, padding: '22px 20px 18px' }}>
+                {/* header row */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 48, height: 48, borderRadius: 15, background: 'linear-gradient(135deg, #FFD700, #FF9500)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 8px 24px rgba(255,215,0,0.45)', animation: 'floaty 3.5s ease-in-out infinite' }}>
+                    <DiamondIcon size={24} color="white" />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div className="neon-text" style={{ fontSize: 22, fontWeight: 900, letterSpacing: 0.5, lineHeight: 1.1 }}>Go Premium</div>
+                    <div style={{ fontSize: 12.5, color: '#ABABAB', marginTop: 3 }}>Unlock the full Odogwu experience</div>
+                  </div>
+                  <div style={{ padding: '5px 10px', borderRadius: 9999, background: 'rgba(255,215,0,0.14)', border: '1px solid rgba(255,215,0,0.4)', fontSize: 10.5, fontWeight: 800, color: '#FFD700', letterSpacing: 1, whiteSpace: 'nowrap' }}>BEST VALUE</div>
+                </div>
+
+                {/* benefits */}
+                <div style={{ display: 'flex', gap: 8, marginTop: 18 }}>
+                  {[
+                    { icon: <InfiniteIcon size={18} color="#FF6B8A" />, label: 'Unlimited\nLikes' },
+                    { icon: <EyeIcon size={18} color="#4FC3F7" />, label: 'See who\nlikes you' },
+                    { icon: <StarIcon size={18} color="#FFD700" />, label: 'Super\nLikes' },
+                  ].map((b, i) => (
+                    <div key={i} style={{ flex: 1, borderRadius: 14, padding: '12px 6px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
+                      <div style={{ width: 32, height: 32, borderRadius: 10, background: 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {b.icon}
+                      </div>
+                      <span style={{ fontSize: 10.5, fontWeight: 700, color: '#D0D0D0', textAlign: 'center', lineHeight: '13px', whiteSpace: 'pre-line' }}>{b.label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* CTA */}
+                <div style={{ marginTop: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, borderRadius: 15, padding: '14px 18px', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', boxShadow: '0 10px 30px rgba(255,55,95,0.45)', animation: 'glowPulse 2.6s ease-in-out infinite' }}>
+                  <span style={{ fontSize: 15.5, fontWeight: 800, color: 'white', letterSpacing: 0.3 }}>Subscribe now · from N4,900/mo</span>
+                  <ChevronForwardIcon size={18} color="white" />
+                </div>
+
+                {/* social proof */}
+                <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                  <CheckmarkCircleIcon size={13} color="#34C759" />
+                  <span style={{ fontSize: 11.5, color: '#6B6B6B' }}>Trusted by 2,000+ Odogwu members · Cancel anytime</span>
+                </div>
               </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 15, fontWeight: 800, color: 'white' }}>Subscribe to Premium</div>
-                <div style={{ fontSize: 12.5, color: '#ABABAB', marginTop: 2 }}>Unlimited likes, rewind & more</div>
-              </div>
-              <ChevronForwardIcon size={18} color="#FFD700" />
             </button>
           )}
 
