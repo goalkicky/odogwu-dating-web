@@ -105,7 +105,7 @@ export default function EditProfilePage() {
     const files = e.target.files;
     if (!files?.length) return;
     const file = files[0];
-    const result = await storageService.uploadFile(file);
+    const result = await storageService.uploadFile(file, 400 * 1024);
     const newPhotos = [...photos, result.$id];
     setPhotos(newPhotos);
     setPhotoUrls([...photoUrls, storageService.getFilePreview(result.$id)]);

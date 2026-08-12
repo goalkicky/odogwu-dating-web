@@ -53,7 +53,7 @@ export default function PhotoPage() {
       const user = await acct.get();
       const files = filesRef.current;
       const uploadResults = await Promise.all(
-        files.map((file) => storageService.uploadFile(file))
+        files.map((file) => storageService.uploadFile(file, 400 * 1024))
       );
       const uploadedIds = uploadResults.map(r => r.$id);
       const age = data.dateOfBirth

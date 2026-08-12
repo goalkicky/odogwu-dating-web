@@ -251,33 +251,42 @@ export const walletService = {
 
 async function compressImage(file: File, maxBytes = 15360): Promise<File> {
   if (!file.type.startsWith('image/')) return file;
-  const img = await new Promise<HTMLImageElement>((resolve, reject) => {
-    const i = new Image();
-    i.onload = () => resolve(i);
-    i.onerror = reject;
-    i.src = URL.createObjectURL(file);
-  });
-  const attempt = (w: number, q: number): Promise<Blob> => new Promise(r => {
+  let img: HTMLImageElement | null = null;
+  try {
+    img = await new Promise<HTMLImageElement | null>((resolve) => {
+      const i = new Image();
+      i.onload = () => resolve(i);
+      i.onerror = () => resolve(null);
+      i.src = URL.createObjectURL(file);
+    });
+  } catch {
+    return file;
+  }
+  if (!img) return file;
+  const attempt = (w: number, q: number): Promise<Blob | null> => new Promise(r => {
     const c = document.createElement('canvas');
-    const h = Math.round((img.height / img.width) * w);
+    const h = Math.max(1, Math.round((img.height / img.width) * w));
     c.width = w;
     c.height = h;
-    c.getContext('2d')!.drawImage(img, 0, 0, w, h);
-    c.toBlob(b => r(b!), 'image/jpeg', q / 100);
+    const ctx = c.getContext('2d');
+    if (!ctx) { r(null); return; }
+    ctx.drawImage(img, 0, 0, w, h);
+    c.toBlob(b => r(b), 'image/jpeg', q / 100);
   });
-  for (let w = Math.min(img.width, 800); w >= 100; w -= 50) {
+  for (let w = Math.min(img.width || 800, 800); w >= 100; w -= 50) {
     for (let q = 80; q >= 10; q -= 10) {
       const blob = await attempt(w, q);
-      if (blob.size <= maxBytes) return new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' });
+      if (blob && blob.size <= maxBytes) return new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' });
     }
   }
   const blob = await attempt(80, 10);
-  return new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' });
+  if (blob) return new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' });
+  return file;
 }
 
 export const storageService = {
-  uploadFile: async (file: File) => {
-    file = await compressImage(file);
+  uploadFile: async (file: File, maxBytes?: number) => {
+    file = await compressImage(file, maxBytes);
     const form = new FormData();
     form.append('file', file, file.name);
     const data = await apiFetch('/api/media', { method: 'POST', body: form });
