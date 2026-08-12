@@ -6,6 +6,55 @@ import Button from '@/components/Button';
 import OnboardingProgress from '@/components/OnboardingProgress';
 import { useOnboarding } from '@/store/OnboardingContext';
 
+async function reverseGeocode(lat: number, lon: number): Promise<string> {
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&zoom=13&lat=${lat}&lon=${lon}`
+    );
+    if (!res.ok) throw new Error('reverse geocode failed');
+    const geo = await res.json();
+    const a = geo.address || {};
+    return (
+      a.city || a.town || a.village || a.municipality || a.hamlet ||
+      a.city_district || a.suburb || a.state || a.county || a.country || 'Unknown'
+    );
+  } catch {
+    return 'Unknown';
+  }
+}
+
+async function ipGeolocation(): Promise<{ latitude: number; longitude: number; city: string } | null> {
+  let geo: any = null;
+  try {
+    const res = await fetch('https://ipwho.is/');
+    if (res.ok) {
+      const d = await res.json();
+      if (d && d.city) geo = d;
+    }
+  } catch {}
+  if (!geo?.city) {
+    try {
+      const res = await fetch('https://ipapi.co/json/');
+      if (!res.ok) throw new Error('IP geolocation failed');
+      geo = await res.json();
+    } catch {
+      return null;
+    }
+  }
+  const latitude = Number(geo?.latitude);
+  const longitude = Number(geo?.longitude);
+  let city = String(geo?.city || '');
+  if (city && Number.isFinite(latitude) && Number.isFinite(longitude) && latitude && longitude) {
+    const precise = await reverseGeocode(latitude, longitude);
+    if (precise !== 'Unknown') city = precise;
+  }
+  return {
+    latitude: Number.isFinite(latitude) ? latitude : 0,
+    longitude: Number.isFinite(longitude) ? longitude : 0,
+    city: city || 'Unknown',
+  };
+}
+
 export default function LocationPage() {
   const router = useRouter();
   const { data, updateData } = useOnboarding();
@@ -17,11 +66,9 @@ export default function LocationPage() {
   const tryIpGeolocation = useCallback(async () => {
     setIpLoading(true);
     try {
-      const res = await fetch('https://ipapi.co/json/');
-      if (!res.ok) throw new Error('IP geolocation failed');
-      const geo = await res.json();
-      if (geo.city) {
-        updateData({ latitude: geo.latitude, longitude: geo.longitude, city: geo.city });
+      const result = await ipGeolocation();
+      if (result) {
+        updateData({ latitude: result.latitude, longitude: result.longitude, city: result.city });
       }
     } catch {
       // IP geolocation also failed, user can enter manually
@@ -34,20 +81,15 @@ export default function LocationPage() {
     try {
       if (!navigator.geolocation) {
         setLoading(false);
+        tryIpGeolocation();
         return;
       }
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 });
+        navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
       });
       const { latitude, longitude } = position.coords;
-      try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
-        const geo = await res.json();
-        const city = geo.address?.city || geo.address?.town || geo.address?.village || geo.address?.state || 'Unknown';
-        updateData({ latitude, longitude, city });
-      } catch {
-        updateData({ latitude, longitude, city: 'Unknown' });
-      }
+      const city = await reverseGeocode(latitude, longitude);
+      updateData({ latitude, longitude, city });
     } catch {
       tryIpGeolocation();
     }
