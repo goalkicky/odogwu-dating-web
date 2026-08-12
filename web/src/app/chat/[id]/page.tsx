@@ -146,6 +146,10 @@ function docToMessage(d: any): Message {
   };
 }
 
+function resolveMediaUrl(url: string): string {
+  return url.startsWith('blob:') || url.startsWith('data:') ? url : storageService.getFilePreview(url);
+}
+
 export default function ChatPage() {
   const router = useRouter();
   const params = useParams();
@@ -290,10 +294,33 @@ export default function ChatPage() {
     if (!file || !userId || sendingImage) return;
     if (!file.type.startsWith('image/')) return;
     setSendingImage(true);
+
+    const tempId = `temp-img-${Date.now()}`;
+    const localUrl = URL.createObjectURL(file);
+    const optimistic: Message = {
+      id: tempId,
+      matchId,
+      senderId: userId,
+      text: '',
+      type: 'image',
+      mediaUrl: localUrl,
+      createdAt: new Date().toISOString(),
+      reactions: [],
+    };
+    setMessages(prev => [...prev, optimistic]);
+
     try {
       const uploaded = await storageService.uploadFile(file);
-      await messageService.sendMessage(matchId, userId, { type: 'image', mediaUrl: uploaded.$id });
-    } catch {}
+      setMessages(prev => prev.map(m => m.id === tempId ? { ...m, mediaUrl: storageService.getFilePreview(uploaded.$id) } : m));
+      const doc = await messageService.sendMessage(matchId, userId, { type: 'image', mediaUrl: uploaded.$id });
+      if (doc && (doc.$id || doc.id)) {
+        setMessages(prev => prev.map(m => m.id === tempId ? docToMessage(doc) : m));
+      } else {
+        setMessages(prev => prev.filter(m => m.id !== tempId));
+      }
+    } catch {
+      setMessages(prev => prev.filter(m => m.id !== tempId));
+    }
     setSendingImage(false);
   };
 
@@ -596,13 +623,13 @@ export default function ChatPage() {
                     )}
 
                     {isVoice && mediaUrl ? (
-                      <VoiceBubble url={storageService.getFilePreview(mediaUrl)} isMe={isMe} />
+                      <VoiceBubble url={resolveMediaUrl(mediaUrl)} isMe={isMe} />
                     ) : isImage && mediaUrl ? (
                       <div>
                         <img
-                          src={storageService.getFilePreview(mediaUrl)}
+                          src={resolveMediaUrl(mediaUrl)}
                           alt=""
-                          onClick={(e) => { e.stopPropagation(); setLightbox(storageService.getFilePreview(mediaUrl)); }}
+                          onClick={(e) => { e.stopPropagation(); setLightbox(resolveMediaUrl(mediaUrl)); }}
                           style={{ display: 'block', maxWidth: 240, maxHeight: 280, borderRadius: 12, cursor: 'zoom-in', objectFit: 'cover' }}
                         />
                         {(showTime || msg.editedAt) && (
