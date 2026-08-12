@@ -83,7 +83,7 @@ export default function LoginPage() {
         >
           <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu Dating" style={{ width: 60, height: 60, objectFit: 'cover' }} />
         </div>
-        <h1 style={{ fontSize: 48, fontWeight: 800, color: 'white', letterSpacing: 4, textTransform: 'uppercase', margin: 0 }}>
+        <h1 style={{ fontSize: 32, fontWeight: 800, color: 'white', letterSpacing: 4, textTransform: 'uppercase', margin: 0 }}>
           odogwu dating
         </h1>
         <p style={{ fontSize: 18, color: '#ABABAB', marginTop: 8 }}>Find your perfect match</p>
