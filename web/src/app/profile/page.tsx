@@ -12,6 +12,7 @@ import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
 import { useAuth } from '@/store/AuthContext';
 import { storageService } from '@/lib/cloudflare/services';
+import { INTEREST_CATEGORIES } from '@/lib/interests';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -177,16 +178,28 @@ export default function ProfilePage() {
               </button>
             </div>
             {(profile?.interests?.length || 0) > 0 ? (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 14 }}>
-                {profile!.interests!.map((it) => (
-                  <span key={it} style={{
-                    padding: '8px 16px', borderRadius: 9999, fontSize: 13, fontWeight: 600, color: 'white',
-                    background: 'linear-gradient(135deg, rgba(255,55,95,0.18), rgba(108,99,255,0.16))',
-                    border: '1px solid rgba(255,55,95,0.35)',
-                  }}>
-                    {it}
-                  </span>
-                ))}
+              <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 18 }}>
+                {INTEREST_CATEGORIES
+                  .map(cat => ({ cat, items: cat.items.filter(it => (profile?.interests || []).includes(it)) }))
+                  .filter(g => g.items.length > 0)
+                  .map(({ cat, items }) => (
+                    <div key={cat.label}>
+                      <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.2, textTransform: 'uppercase', color: '#6B6B6B', marginBottom: 10 }}>
+                        {cat.label}
+                      </div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                        {items.map((it) => (
+                          <span key={it} style={{
+                            padding: '8px 16px', borderRadius: 9999, fontSize: 13, fontWeight: 600, color: 'white',
+                            background: 'linear-gradient(135deg, rgba(255,55,95,0.18), rgba(108,99,255,0.16))',
+                            border: '1px solid rgba(255,55,95,0.35)',
+                          }}>
+                            {it}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
               </div>
             ) : (
               <button onClick={() => router.push('/edit-profile')} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>

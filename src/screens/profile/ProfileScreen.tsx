@@ -9,6 +9,7 @@ import theme from '../../theme';
 import Button from '../../components/Button';
 import { useAuth } from '../../store/AuthContext';
 import { storageService } from '../../api/services';
+import { INTEREST_CATEGORIES } from '../../data/interests';
 
 const { width } = Dimensions.get('window');
 const CAROUSEL_H = Math.min(width * (4 / 3), 640);
@@ -146,12 +147,22 @@ export default function ProfileScreen({ navigation }: any) {
             </TouchableOpacity>
           </View>
           {(profile?.interests?.length || 0) > 0 ? (
-            <View style={styles.interestsWrap}>
-              {profile!.interests!.map((it) => (
-                <View key={it} style={styles.interestChip}>
-                  <Text style={styles.interestText}>{it}</Text>
-                </View>
-              ))}
+            <View>
+              {INTEREST_CATEGORIES
+                .map(cat => ({ cat, items: cat.items.filter((it) => (profile?.interests || []).includes(it)) }))
+                .filter(g => g.items.length > 0)
+                .map(({ cat, items }) => (
+                  <View key={cat.label} style={{ marginBottom: 14 }}>
+                    <Text style={styles.interestCategoryLabel}>{cat.label}</Text>
+                    <View style={styles.interestsWrap}>
+                      {items.map((it) => (
+                        <View key={it} style={styles.interestChip}>
+                          <Text style={styles.interestText}>{it}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+                ))}
             </View>
           ) : (
             <Text style={[styles.bio, styles.bioEmpty]}>
@@ -316,6 +327,14 @@ const styles = StyleSheet.create({
   },
   bio: { fontSize: 15, color: '#D6D6D6', lineHeight: 23, marginTop: 12 },
   bioEmpty: { color: '#6B6B6B' },
+  interestCategoryLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 1.2,
+    textTransform: 'uppercase',
+    color: theme.colors.textSecondary,
+    marginBottom: 10,
+  },
   interestsWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 14 },
   interestChip: {
     paddingVertical: 8,
