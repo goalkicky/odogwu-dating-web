@@ -17,6 +17,7 @@ interface AnimatedCardProps {
   onSwipeLeft: () => void;
   onSwipeRight: () => void;
   onSuperLike: () => void;
+  onOpenProfile?: () => void;
   width?: React.CSSProperties['width'];
   height?: React.CSSProperties['height'];
 }
@@ -27,6 +28,7 @@ export default function AnimatedCard({
   onSwipeLeft,
   onSwipeRight,
   onSuperLike,
+  onOpenProfile,
   width,
   height,
 }: AnimatedCardProps) {
@@ -187,6 +189,27 @@ export default function AnimatedCard({
           />
         ))}
       </div>
+
+      {onOpenProfile && (
+        <button
+          aria-label="View full profile"
+          onMouseDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+          onClick={(e) => { e.stopPropagation(); onOpenProfile(); }}
+          style={{
+            position: 'absolute', top: '50px', right: '16px', zIndex: 10,
+            width: 40, height: 40, borderRadius: 9999,
+            background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.25)',
+            backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.35)',
+          }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+          </svg>
+        </button>
+      )}
 
       {likeOpacity > 0.1 && (
         <div style={{ position: 'absolute', top: '70px', left: '24px', transform: 'rotate(-15deg)', opacity: likeOpacity, animation: 'popIn 0.3s ease' }}>
