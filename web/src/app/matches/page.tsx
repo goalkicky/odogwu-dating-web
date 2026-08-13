@@ -61,9 +61,7 @@ export default function MatchesPage() {
       <div>
         <div className="animate-fade-up" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div className="grad-ring" style={{ display: 'flex', boxShadow: '0 0 24px rgba(255,55,95,0.3)' }}>
-              <img src="https://kamsirmdlabs.com/img/logo.png" alt="Matches" style={{ width: 40, height: 40, borderRadius: 10, objectFit: 'cover' }} />
-            </div>
+            <img src="https://kamsirmdlabs.com/img/logo.png" alt="Matches" style={{ width: 40, height: 40, borderRadius: 10, objectFit: 'cover' }} />
             <div>
               <span style={{ fontSize: 24, fontWeight: 800, color: 'white' }}>Matches</span>
               {matches.length > 0 && (
