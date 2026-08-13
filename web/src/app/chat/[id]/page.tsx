@@ -7,6 +7,7 @@ import {
   SearchIcon, CoinsIcon, EllipsisIcon,
 } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
+import ProfileModal from '@/components/ProfileModal';
 import { useAuth } from '@/store/AuthContext';
 import { messageService, storageService, matchService, userService, walletService, blockService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
@@ -166,6 +167,8 @@ export default function ChatPage() {
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [matchName, setMatchName] = useState('User');
   const [otherUserId, setOtherUserId] = useState('');
+  const [otherProfile, setOtherProfile] = useState<any>(null);
+  const [showOtherProfile, setShowOtherProfile] = useState(false);
   const [otherOnline, setOtherOnline] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendingImage, setSendingImage] = useState(false);
@@ -188,6 +191,8 @@ export default function ChatPage() {
 
   const userId = (profile as any)?.$id || user?.$id;
 
+  const otherAvatarUrl = otherProfile?.photos?.[0] ? storageService.getFilePreview(otherProfile.photos[0]) : '';
+
   const recBars = useMemo(() => Array.from({ length: 16 }, (_, i) => 6 + ((i * 13) % 18)), []);
 
   useEffect(() => {
@@ -196,6 +201,7 @@ export default function ChatPage() {
       const other = (doc as any).userId === userId ? (doc as any).matchedUserId : (doc as any).userId;
       setOtherUserId(other);
       userService.getProfile(other).then(p => {
+        setOtherProfile(p);
         setMatchName((p as any).displayName || (p as any).fullName || 'User');
         const lastActive = (p as any).lastActive;
         setOtherOnline(!!lastActive && Date.now() - new Date(lastActive).getTime() < 120000);
@@ -472,16 +478,24 @@ export default function ChatPage() {
         </button>
 
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
-          <div style={{ position: 'relative', flexShrink: 0 }}>
-            <div className="grad-ring" style={{ width: 44, height: 44, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ color: 'white', fontWeight: 800, fontSize: 19 }}>{(matchName[0] || 'U').toUpperCase()}</span>
+          <button
+            onClick={() => setShowOtherProfile(true)}
+            aria-label="View profile"
+            style={{ position: 'relative', flexShrink: 0, padding: 0, border: 'none', background: 'none', cursor: 'pointer' }}
+          >
+            <div className="grad-ring" style={{ width: 44, height: 44, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+              {otherAvatarUrl ? (
+                <img src={otherAvatarUrl} alt={matchName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                <span style={{ color: 'white', fontWeight: 800, fontSize: 19 }}>{(matchName[0] || 'U').toUpperCase()}</span>
+              )}
             </div>
             <span style={{
               position: 'absolute', right: 0, bottom: 0, width: 12, height: 12, borderRadius: '50%',
               border: '2px solid #0D0D0D', background: otherOnline ? '#34C759' : '#6B6B6B',
               boxShadow: otherOnline ? '0 0 8px #34C759' : 'none',
             }} />
-          </div>
+          </button>
           <div style={{ minWidth: 0 }}>
             <div style={{ fontSize: 17, fontWeight: 800, color: 'white', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{matchName}</div>
             <div style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5, color: otherOnline ? '#34C759' : '#6B6B6B' }}>
@@ -556,8 +570,12 @@ export default function ChatPage() {
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, overflowY: 'auto', padding: `${searchOpen ? 150 : 110}px 12px 120px`, display: 'flex', flexDirection: 'column' }}>
         {messages.length === 0 && !searchOpen && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, gap: 12, textAlign: 'center', padding: 24 }}>
-            <div className="grad-ring" style={{ width: 76, height: 76, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 44px rgba(255,55,95,0.35)' }}>
-              <span style={{ color: 'white', fontWeight: 800, fontSize: 30 }}>{(matchName[0] || 'U').toUpperCase()}</span>
+            <div className="grad-ring" style={{ width: 76, height: 76, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 44px rgba(255,55,95,0.35)', overflow: 'hidden' }}>
+              {otherAvatarUrl ? (
+                <img src={otherAvatarUrl} alt={matchName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                <span style={{ color: 'white', fontWeight: 800, fontSize: 30 }}>{(matchName[0] || 'U').toUpperCase()}</span>
+              )}
             </div>
             <div style={{ fontSize: 18, fontWeight: 800, color: 'white' }}>You matched with {matchName}!</div>
             <div style={{ fontSize: 13, color: '#6B6B6B', maxWidth: 260, lineHeight: '20px' }}>
@@ -966,6 +984,22 @@ export default function ChatPage() {
             <CloseCircleIcon size={24} color="white" />
           </button>
         </div>
+      )}
+
+      {/* ===== Other user's full profile ===== */}
+      {showOtherProfile && otherProfile && (
+        <ProfileModal
+          user={{
+            fullName: matchName,
+            age: otherProfile?.age,
+            photos: (otherProfile?.photos || []).map((fid: string) => storageService.getFilePreview(fid)),
+            city: otherProfile?.city,
+            gender: otherProfile?.gender,
+            bio: otherProfile?.bio,
+            interests: otherProfile?.interests || [],
+          }}
+          onClose={() => setShowOtherProfile(false)}
+        />
       )}
       </div>
     </GradientBackground>
