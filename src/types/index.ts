@@ -14,6 +14,8 @@ export interface UserProfile {
   isPremium: boolean;
   verified: boolean;
   age: number;
+  superlikesRemaining?: number;
+  superlikesDailyLimit?: number;
 }
 
 export interface Match {

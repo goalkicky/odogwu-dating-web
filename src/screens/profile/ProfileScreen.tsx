@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Alert, Dimensions,
   NativeScrollEvent, NativeSyntheticEvent,
@@ -8,7 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../theme';
 import Button from '../../components/Button';
 import { useAuth } from '../../store/AuthContext';
-import { storageService } from '../../api/services';
+import { storageService, superlikeService } from '../../api/services';
 import { INTEREST_CATEGORIES } from '../../data/interests';
 
 const { width } = Dimensions.get('window');
@@ -17,6 +17,11 @@ const CAROUSEL_H = Math.min(width * (4 / 3), 640);
 export default function ProfileScreen({ navigation }: any) {
   const { profile, user, logout } = useAuth();
   const [photoIndex, setPhotoIndex] = useState(0);
+  const [superlikes, setSuperlikes] = useState({ remaining: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
+
+  useEffect(() => {
+    superlikeService.getStatus().then(setSuperlikes).catch(() => {});
+  }, []);
 
   const photos: string[] = profile?.photos || [];
   const photoUrls = photos.map((id) => storageService.getFilePreview(id));
@@ -180,6 +185,54 @@ export default function ProfileScreen({ navigation }: any) {
               <Ionicons name="chevron-forward" size={16} color="#4A4A4A" />
             </TouchableOpacity>
           ))}
+        </View>
+
+        {/* Super Likes wallet */}
+        <View style={[styles.card, styles.superlikeCard]}>
+          <View style={styles.superlikeRow}>
+            <LinearGradient colors={['#4FC3F7', '#0288D1']} style={styles.superlikeIcon}>
+              <Ionicons name="star" size={20} color="white" />
+            </LinearGradient>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.superlikeTitle}>Super Likes</Text>
+              <Text style={styles.superlikeSub}>
+                {superlikes.dailyLimit > 0
+                  ? `${superlikes.remaining} of ${superlikes.dailyLimit} left today`
+                  : 'Daily Super Likes with premium'}
+              </Text>
+            </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <Text style={[styles.superlikeCount, superlikes.remaining > 0 && { color: '#4FC3F7' }]}>
+                {superlikes.remaining}
+              </Text>
+              <Text style={styles.superlikeCountLabel}>left today</Text>
+            </View>
+          </View>
+
+          {superlikes.dailyLimit > 0 && superlikes.remaining > 0 && (
+            <View style={{ marginTop: 12 }}>
+              <View style={styles.superlikeBar}>
+                <View
+                  style={[
+                    styles.superlikeBarFill,
+                    { width: `${Math.min(100, (superlikes.remaining / superlikes.dailyLimit) * 100)}%` },
+                  ]}
+                />
+              </View>
+              <Text style={styles.superlikeRefill}>Refills at midnight · {superlikes.dailyLimit} Super Likes a day</Text>
+            </View>
+          )}
+
+          {superlikes.dailyLimit === 0 && (
+            <TouchableOpacity
+              activeOpacity={0.85}
+              onPress={() => navigation?.navigate('PremiumTab')}
+              style={styles.superlikeCta}
+            >
+              <Ionicons name="star" size={16} color="white" />
+              <Text style={styles.superlikeCtaText}>Get Super Likes — stand out to matches</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* Premium CTA */}
@@ -363,6 +416,62 @@ const styles = StyleSheet.create({
     color: '#6B6B6B',
   },
   detailValue: { flex: 1, fontSize: 15, fontWeight: '600', color: theme.colors.text },
+  superlikeCard: {
+    borderWidth: 1,
+    borderColor: 'rgba(79,195,247,0.35)',
+    backgroundColor: 'rgba(79,195,247,0.08)',
+  },
+  superlikeRow: { flexDirection: 'row', alignItems: 'center', gap: 13 },
+  superlikeIcon: {
+    width: 42,
+    height: 42,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  superlikeTitle: { fontSize: 15, fontWeight: '800', color: theme.colors.text },
+  superlikeSub: { fontSize: 12.5, color: theme.colors.textSecondary, marginTop: 2 },
+  superlikeCount: {
+    fontSize: 26,
+    fontWeight: '900',
+    color: theme.colors.textTertiary,
+    lineHeight: 28,
+  },
+  superlikeCountLabel: {
+    fontSize: 9,
+    color: theme.colors.textTertiary,
+    fontWeight: '700',
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
+  },
+  superlikeBar: {
+    height: 6,
+    borderRadius: 9999,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    overflow: 'hidden',
+  },
+  superlikeBarFill: {
+    height: '100%',
+    borderRadius: 9999,
+    backgroundColor: '#0288D1',
+  },
+  superlikeRefill: { fontSize: 11, color: theme.colors.textTertiary, marginTop: 7 },
+  superlikeCta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    marginTop: 14,
+    paddingVertical: 12,
+    borderRadius: 14,
+    backgroundColor: '#0288D1',
+    shadowColor: '#4FC3F7',
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 8,
+  },
+  superlikeCtaText: { color: 'white', fontSize: 14, fontWeight: '800' },
   premiumCta: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -13,8 +13,10 @@ const SESSION_DAYS = 365;
 const COIN_PACKS: Record<number, number> = { 10: 1000, 25: 2500, 50: 5000, 100: 10000, 200: 20000 };
 const PLAN_COINS: Record<string, number> = { premium: 49, surplus: 79, platinum: 109 };
 const PLAN_NAMES: Record<string, string> = { premium: 'Odogwu Premium', surplus: 'Odogwu Surplus', platinum: 'Odogwu Platinum' };
+const SUPERLIKE_DAILY: Record<string, number> = { premium: 2, surplus: 5, platinum: 7 };
 const PREMIUM_DAYS = 30;
 const COIN_RATE_NAIRA = 100;
+const WAT_OFFSET_MS = 60 * 60 * 1000;
 
 // ===== Serializers (Appwrite-compatible document shape) =====
 
@@ -48,6 +50,8 @@ function toProfile(r: any): any {
     premiumPlan: r.premium_plan,
     premiumExpiresAt: r.premium_expires_at || '',
     coins: r.coins ?? 0,
+    superlikesRemaining: r.superlikes_remaining ?? 0,
+    superlikesDailyLimit: superlikeAllowance(r),
     lastActive: r.last_active,
     showOnlineStatus: !!r.show_online_status,
     profileVisibility: r.profile_visibility || 'everyone',
@@ -173,6 +177,53 @@ async function getUserRow(env: Env, userId: string): Promise<UserRow | null> {
   return (await env.DB.prepare('SELECT * FROM users WHERE id = ?').bind(userId).first()) as UserRow | null;
 }
 
+// ===== Super Likes wallet =====
+
+// Today's date in Nigeria time (WAT = UTC+1), e.g. "2026-08-13".
+function superlikeDate(): string {
+  return new Date(Date.now() + WAT_OFFSET_MS).toISOString().slice(0, 10);
+}
+
+// ISO instant when the current WAT day ends (super likes refill).
+function superlikeRefillsAt(): string {
+  const next = new Date(Date.now() + WAT_OFFSET_MS + 86400000);
+  next.setUTCHours(0, 0, 0, 0);
+  return new Date(next.getTime() - WAT_OFFSET_MS).toISOString();
+}
+
+function superlikeAllowance(user: UserRow | null): number {
+  if (!user) return 0;
+  const premiumActive = !!user.is_premium && (!user.premium_expires_at || new Date(user.premium_expires_at).getTime() > Date.now());
+  if (!premiumActive) return 0;
+  return SUPERLIKE_DAILY[user.premium_plan] ?? 2;
+}
+
+// Ensures the stored remaining count matches today's allowance (resets once per day).
+async function ensureSuperlikes(env: Env, user: UserRow | null): Promise<UserRow | null> {
+  if (!user) return user;
+  const allowance = superlikeAllowance(user);
+  const date = superlikeDate();
+  if (user.superlikes_date !== date || (user.superlikes_remaining ?? 0) > allowance || user.superlikes_remaining === undefined) {
+    await env.DB.prepare(
+      'UPDATE users SET superlikes_remaining = ?, superlikes_date = ?, updated_at = ? WHERE id = ?'
+    ).bind(allowance, date, now(), user.id).run();
+    return { ...user, superlikes_remaining: allowance, superlikes_date: date };
+  }
+  return user;
+}
+
+function superlikeStatusDoc(user: UserRow): any {
+  const dailyLimit = superlikeAllowance(user);
+  const remaining = Math.max(0, user.superlikes_remaining ?? 0);
+  return {
+    remaining,
+    used: Math.max(0, dailyLimit - remaining),
+    dailyLimit,
+    refillsAt: superlikeRefillsAt(),
+    isPremium: !!user.is_premium,
+  };
+}
+
 async function requireMatchMembership(env: Env, matchId: string, userId: string): Promise<MatchRow | null> {
   return (await env.DB.prepare(
     `SELECT * FROM matches WHERE id = ? AND (user_id = ? OR matched_user_id = ?)`
@@ -200,6 +251,8 @@ function publicize(p: any): any {
   if (!p) return p;
   const copy = { ...p };
   if (copy.showOnlineStatus === false || copy.showOnlineStatus === undefined) copy.lastActive = '';
+  delete copy.superlikesRemaining;
+  delete copy.superlikesDailyLimit;
   return copy;
 }
 
@@ -578,6 +631,55 @@ async function handleCreateLike(env: Env, req: Request, me: string): Promise<Res
     'SELECT 1 FROM matches WHERE user_id = ? AND matched_user_id = ?'
   ).bind(matchedUserId, me).first());
   return json({ ...doc, mutual });
+}
+
+// ===== Super Likes =====
+
+async function handleGetSuperlikes(env: Env, _req: Request, me: string): Promise<Response> {
+  const user = await ensureSuperlikes(env, await getUserRow(env, me));
+  return json(superlikeStatusDoc(user!));
+}
+
+async function handleSuperLike(env: Env, req: Request, me: string): Promise<Response> {
+  const body = await req.json() as any;
+  const matchedUserId = String(body.matchedUserId || '');
+  if (!matchedUserId || matchedUserId === me) return json({ error: 'Invalid user' }, 400);
+  if (await isBlockedEitherWay(env, me, matchedUserId)) return json({ error: 'Cannot super like a blocked user' }, 403);
+
+  const user = await ensureSuperlikes(env, await getUserRow(env, me));
+  const status = superlikeStatusDoc(user!);
+
+  // Idempotent — if already liked, don't spend a super like.
+  const alreadyLiked = !!(await env.DB.prepare(
+    'SELECT 1 FROM matches WHERE user_id = ? AND matched_user_id = ?'
+  ).bind(me, matchedUserId).first());
+  const mutual = !!(await env.DB.prepare(
+    'SELECT 1 FROM matches WHERE user_id = ? AND matched_user_id = ?'
+  ).bind(matchedUserId, me).first());
+  if (alreadyLiked) {
+    return json({ ...status, mutual, match: toMatchDoc({ id: '', user_id: me, matched_user_id: matchedUserId, matched_at: '' }) });
+  }
+
+  if (status.remaining <= 0) {
+    return json({ error: 'No super likes left for today. Upgrade to premium for more.', code: 'NO_SUPERLIKES' }, 402);
+  }
+
+  const spent = await env.DB.prepare(
+    'UPDATE users SET superlikes_remaining = superlikes_remaining - 1, updated_at = ? WHERE id = ? AND superlikes_remaining >= 1'
+  ).bind(now(), me).run();
+  if (spent.meta.changes === 0) {
+    return json({ error: 'No super likes left for today. Upgrade to premium for more.', code: 'NO_SUPERLIKES' }, 402);
+  }
+
+  const id = newId();
+  const ts = now();
+  await env.DB.prepare(
+    'INSERT OR IGNORE INTO matches (id, user_id, matched_user_id, matched_at) VALUES (?, ?, ?, ?)'
+  ).bind(id, me, matchedUserId, ts).run();
+  const match = toMatchDoc({ id, user_id: me, matched_user_id: matchedUserId, matched_at: ts });
+
+  const updated = await getUserRow(env, me);
+  return json({ ...superlikeStatusDoc(updated!), mutual, match });
 }
 
 async function handleGetMatches(env: Env, req: Request, me: string): Promise<Response> {
@@ -1077,6 +1179,10 @@ export default {
     // Likes
     if (path === '/api/likes' && req.method === 'GET') return handleLikes(env, req, me);
     if (path === '/api/likes' && req.method === 'POST') return handleCreateLike(env, req, me);
+
+    // Super Likes
+    if (path === '/api/superlikes' && req.method === 'GET') return handleGetSuperlikes(env, req, me);
+    if (path === '/api/superlikes' && req.method === 'POST') return handleSuperLike(env, req, me);
 
     // Matches
     if (path === '/api/matches' && req.method === 'GET') return handleGetMatches(env, req, me);

@@ -7,9 +7,10 @@ import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
 import ProfileModal from '@/components/ProfileModal';
+import SuperlikeUpsellModal from '@/components/SuperlikeUpsellModal';
 import { useMobile } from '@/lib/useMediaQuery';
 import { useAuth } from '@/store/AuthContext';
-import { userService, storageService } from '@/lib/cloudflare/services';
+import { userService, storageService, superlikeService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
 
 export default function DiscoverPage() {
@@ -21,6 +22,8 @@ export default function DiscoverPage() {
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const [showProfileUser, setShowProfileUser] = useState<any>(null);
+  const [superlikes, setSuperlikes] = useState<any>({ remaining: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
+  const [showSuperlikeUpsell, setShowSuperlikeUpsell] = useState(false);
 
   const baseGender = (profile?.interestedIn as string) || 'both';
   const defaultPrefs = { gender: baseGender, minAge: 18, maxAge: 60, maxDistance: 0 };
@@ -60,6 +63,10 @@ export default function DiscoverPage() {
 
   useEffect(() => { loadUsers(); }, [loadUsers]);
 
+  useEffect(() => {
+    superlikeService.getStatus().then(setSuperlikes).catch(() => {});
+  }, []);
+
   const nextUser = useCallback(() => {
     setUsers(prev => {
       const next = prev.slice(1);
@@ -91,15 +98,25 @@ export default function DiscoverPage() {
   }, [users, profile, nextUser]);
 
   const handleSuperLike = useCallback(async () => {
-    setLastAction('superlike');
     const liked = users[0];
-    if (liked && account) {
+    if (!superlikes || superlikes.remaining <= 0) {
+      setShowSuperlikeUpsell(true);
+      return;
+    }
+    setLastAction('superlike');
+    if (liked) {
       try {
-        await userService.likeUser((profile as any).$id, liked.id);
-      } catch {}
+        const res = await superlikeService.send(liked.id);
+        setSuperlikes(res);
+        if (res.mutual) setLastAction('match');
+      } catch (e: any) {
+        if (e?.status === 402 || e?.code === 'NO_SUPERLIKES' || String(e?.message || '').includes('super like')) {
+          setShowSuperlikeUpsell(true);
+        }
+      }
     }
     setTimeout(() => { setLastAction(null); nextUser(); }, 300);
-  }, [users, profile, nextUser]);
+  }, [users, superlikes, nextUser]);
 
   const handleReload = useCallback(() => {
     loadUsers();
@@ -227,7 +244,7 @@ export default function DiscoverPage() {
                 ) : (
                   <div className="glass-strong" style={{ padding: '8px 20px', borderRadius: 9999, whiteSpace: 'nowrap' }}>
                     <span style={{ color: 'white', fontWeight: 700, fontSize: 14 }}>
-                      {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : 'Super Like! 💙'}
+                      {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : `Super Liked ${current.fullName.split(' ')[0] || 'them'}! 💙`}
                     </span>
                   </div>
                 )}
@@ -241,9 +258,20 @@ export default function DiscoverPage() {
               <ActionButton variant="danger" size={62} onPress={handleSwipeLeft}>
                 <CloseIcon size={30} color="white" />
               </ActionButton>
-              <ActionButton variant="superlike" size={46} onPress={handleSuperLike}>
-                <StarIcon size={20} color="white" />
-              </ActionButton>
+              <div style={{ position: 'relative' }}>
+                <ActionButton variant="superlike" size={46} onPress={handleSuperLike}>
+                  <StarIcon size={20} color="white" />
+                </ActionButton>
+                <span style={{
+                  position: 'absolute', top: -4, right: -6, minWidth: 20, height: 20, padding: '0 5px', boxSizing: 'border-box',
+                  borderRadius: 9999, background: superlikes.remaining > 0 ? 'linear-gradient(135deg, #4FC3F7, #0288D1)' : '#FF3B30',
+                  color: 'white', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: superlikes.remaining > 0 ? '0 2px 10px rgba(79,195,247,0.6)' : '0 2px 10px rgba(255,59,48,0.6)',
+                  border: '2px solid #0D0D0D',
+                }}>
+                  {superlikes.remaining}
+                </span>
+              </div>
               <ActionButton variant="primary" size={62} onPress={handleSwipeRight}>
                 <HeartIcon size={30} color="white" />
               </ActionButton>
@@ -264,6 +292,10 @@ export default function DiscoverPage() {
 
         {showProfileUser && (
           <ProfileModal user={showProfileUser} onClose={() => setShowProfileUser(null)} />
+        )}
+
+        {showSuperlikeUpsell && (
+          <SuperlikeUpsellModal onClose={() => setShowSuperlikeUpsell(false)} />
         )}
       </GradientBackground>
     </DesktopLayout>

@@ -6,9 +6,10 @@ import ActionButton from '@/components/ActionButton';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
+import SuperlikeUpsellModal from '@/components/SuperlikeUpsellModal';
 import { useMobile } from '@/lib/useMediaQuery';
 import { useAuth } from '@/store/AuthContext';
-import { userService, storageService } from '@/lib/cloudflare/services';
+import { userService, storageService, superlikeService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
 import { INTEREST_OPTIONS, interestCategory } from '@/lib/interests';
 
@@ -75,6 +76,8 @@ export default function ExplorePage() {
   const [deck, setDeck] = useState<ExploreUser[]>([]);
   const [lastAction, setLastAction] = useState<string | null>(null);
   const [search, setSearch] = useState('');
+  const [superlikes, setSuperlikes] = useState<any>({ remaining: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
+  const [showSuperlikeUpsell, setShowSuperlikeUpsell] = useState(false);
 
   const load = useCallback(async () => {
     if (!profile || !account) return;
@@ -100,6 +103,10 @@ export default function ExplorePage() {
   }, [profile]);
 
   useEffect(() => { load(); }, [load]);
+
+  useEffect(() => {
+    superlikeService.getStatus().then(setSuperlikes).catch(() => {});
+  }, []);
 
   const groups = useMemo(() => {
     const map: Record<string, ExploreUser[]> = {};
@@ -159,14 +166,26 @@ export default function ExplorePage() {
   }, [current, profile, removeSwiped, advance]);
 
   const handleSuperLike = useCallback(async () => {
-    setLastAction('superlike');
     const liked = current;
+    if (!superlikes || superlikes.remaining <= 0) {
+      setShowSuperlikeUpsell(true);
+      return;
+    }
+    setLastAction('superlike');
     if (liked) {
-      try { await userService.likeUser((profile as any).$id, liked.id); } catch {}
+      try {
+        const res = await superlikeService.send(liked.id);
+        setSuperlikes(res);
+        if (res.mutual) setLastAction('match');
+      } catch (e: any) {
+        if (e?.status === 402 || e?.code === 'NO_SUPERLIKES' || String(e?.message || '').includes('super like')) {
+          setShowSuperlikeUpsell(true);
+        }
+      }
       removeSwiped(liked.id);
     }
     setTimeout(() => { setLastAction(null); advance(); }, 300);
-  }, [current, profile, removeSwiped, advance]);
+  }, [current, superlikes, removeSwiped, advance]);
 
   const totalPeople = users.length;
   const activeStyle = activeInterest ? interestStyle(activeInterest) : null;
@@ -234,11 +253,11 @@ export default function ExplorePage() {
                         <span style={{ color: 'white', fontWeight: 800, fontSize: 15, letterSpacing: 0.5 }}>✨ It&apos;s a Match!</span>
                       </div>
                     ) : (
-                      <div className="glass-strong" style={{ padding: '8px 20px', borderRadius: 9999, whiteSpace: 'nowrap' }}>
-                        <span style={{ color: 'white', fontWeight: 700, fontSize: 14 }}>
-                          {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : 'Super Like! 💙'}
-                        </span>
-                      </div>
+                  <div className="glass-strong" style={{ padding: '8px 20px', borderRadius: 9999, whiteSpace: 'nowrap' }}>
+                    <span style={{ color: 'white', fontWeight: 700, fontSize: 14 }}>
+                      {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : `Super Liked ${current.fullName.split(' ')[0] || 'them'}! 💙`}
+                    </span>
+                  </div>
                     )}
                   </div>
                 )}
@@ -250,9 +269,20 @@ export default function ExplorePage() {
                   <ActionButton variant="danger" size={62} onPress={handleSwipeLeft}>
                     <CloseIcon size={30} color="white" />
                   </ActionButton>
-                  <ActionButton variant="superlike" size={46} onPress={handleSuperLike}>
-                    <StarIcon size={20} color="white" />
-                  </ActionButton>
+                  <div style={{ position: 'relative' }}>
+                    <ActionButton variant="superlike" size={46} onPress={handleSuperLike}>
+                      <StarIcon size={20} color="white" />
+                    </ActionButton>
+                    <span style={{
+                      position: 'absolute', top: -4, right: -6, minWidth: 20, height: 20, padding: '0 5px', boxSizing: 'border-box',
+                      borderRadius: 9999, background: superlikes.remaining > 0 ? 'linear-gradient(135deg, #4FC3F7, #0288D1)' : '#FF3B30',
+                      color: 'white', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      boxShadow: superlikes.remaining > 0 ? '0 2px 10px rgba(79,195,247,0.6)' : '0 2px 10px rgba(255,59,48,0.6)',
+                      border: '2px solid #0D0D0D',
+                    }}>
+                      {superlikes.remaining}
+                    </span>
+                  </div>
                   <ActionButton variant="primary" size={62} onPress={handleSwipeRight}>
                     <HeartIcon size={30} color="white" />
                   </ActionButton>
@@ -365,6 +395,10 @@ export default function ExplorePage() {
         )}
 
         {isMobile && <TabBar />}
+
+        {showSuperlikeUpsell && (
+          <SuperlikeUpsellModal onClose={() => setShowSuperlikeUpsell(false)} />
+        )}
       </GradientBackground>
     </DesktopLayout>
   );

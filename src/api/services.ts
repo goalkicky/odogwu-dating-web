@@ -106,6 +106,16 @@ export const matchService = {
   },
 };
 
+export const superlikeService = {
+  getStatus: async () => {
+    return apiFetch('/api/superlikes');
+  },
+
+  send: async (matchedUserId: string) => {
+    return apiFetch('/api/superlikes', { method: 'POST', json: { matchedUserId } });
+  },
+};
+
 function wsUrl(path: string): string {
   return `${WS_URL}${path}`;
 }

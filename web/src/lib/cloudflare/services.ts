@@ -249,6 +249,16 @@ export const walletService = {
   },
 };
 
+export const superlikeService = {
+  getStatus: async () => {
+    return apiFetch('/api/superlikes');
+  },
+
+  send: async (matchedUserId: string) => {
+    return apiFetch('/api/superlikes', { method: 'POST', json: { matchedUserId } });
+  },
+};
+
 async function compressImage(file: File, maxBytes = 15360): Promise<File> {
   if (!file.type.startsWith('image/')) return file;
   let img: HTMLImageElement | null = null;

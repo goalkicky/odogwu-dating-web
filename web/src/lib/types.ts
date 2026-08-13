@@ -17,6 +17,8 @@ export interface UserProfile {
   premiumPlan?: string;
   premiumExpiresAt?: string;
   coins?: number;
+  superlikesRemaining?: number;
+  superlikesDailyLimit?: number;
   lastActive?: string;
   showOnlineStatus?: boolean;
   profileVisibility?: 'everyone' | 'matches_only';

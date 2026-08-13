@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   DiamondIcon, SettingsIcon, BellIcon, ShieldIcon, HelpIcon,
@@ -11,7 +11,7 @@ import Button from '@/components/Button';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
 import { useAuth } from '@/store/AuthContext';
-import { storageService } from '@/lib/cloudflare/services';
+import { storageService, superlikeService } from '@/lib/cloudflare/services';
 import { INTEREST_CATEGORIES } from '@/lib/interests';
 
 export default function ProfilePage() {
@@ -21,6 +21,11 @@ export default function ProfilePage() {
   const photos = profile?.photos || [];
   const photoUrls = photos.map((id: string) => storageService.getFilePreview(id));
   const [photoIndex, setPhotoIndex] = useState(0);
+  const [superlikes, setSuperlikes] = useState<any>({ remaining: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
+
+  useEffect(() => {
+    superlikeService.getStatus().then(setSuperlikes).catch(() => {});
+  }, []);
 
   const name = profile?.fullName || user?.name || 'User';
   const age = profile?.age;
@@ -238,6 +243,65 @@ export default function ProfilePage() {
                 <ChevronForwardIcon size={16} color="#4A4A4A" />
               </button>
             ))}
+          </div>
+
+          {/* Super Likes wallet */}
+          <div
+            className="glass animate-fade-up"
+            style={{
+              borderRadius: 20, padding: '18px 20px',
+              border: superlikes.remaining > 0 ? '1px solid rgba(79,195,247,0.35)' : '1px solid rgba(255,255,255,0.08)',
+              background: superlikes.remaining > 0
+                ? 'linear-gradient(135deg, rgba(79,195,247,0.14), rgba(2,136,209,0.06))'
+                : undefined,
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
+              <div style={{ width: 42, height: 42, borderRadius: 14, background: 'linear-gradient(135deg, #4FC3F7, #0288D1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: superlikes.remaining > 0 ? '0 4px 16px rgba(79,195,247,0.45)' : 'none' }}>
+                <StarIcon size={20} color="white" />
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 15, fontWeight: 800, color: 'white' }}>Super Likes</div>
+                <div style={{ fontSize: 12.5, color: '#ABABAB', marginTop: 2 }}>
+                  {superlikes.dailyLimit > 0
+                    ? `${superlikes.remaining} of ${superlikes.dailyLimit} left today`
+                    : 'Daily Super Likes with premium'}
+                </div>
+              </div>
+              <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                <div style={{ fontSize: 26, fontWeight: 900, color: superlikes.remaining > 0 ? '#4FC3F7' : '#6B6B6B', lineHeight: 1 }}>
+                  {superlikes.remaining}
+                </div>
+                <div style={{ fontSize: 10, color: '#6B6B6B', fontWeight: 700, letterSpacing: 0.8, textTransform: 'uppercase', marginTop: 3 }}>left today</div>
+              </div>
+            </div>
+
+            {superlikes.dailyLimit > 0 && superlikes.remaining > 0 && (
+              <div style={{ marginTop: 12 }}>
+                <div style={{ height: 6, borderRadius: 9999, background: 'rgba(255,255,255,0.1)', overflow: 'hidden' }}>
+                  <div style={{ width: `${Math.min(100, (superlikes.remaining / superlikes.dailyLimit) * 100)}%`, height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, #4FC3F7, #0288D1)', transition: 'width 0.5s ease' }} />
+                </div>
+                <div style={{ fontSize: 11, color: '#6B6B6B', marginTop: 7 }}>
+                  Refills at midnight · {superlikes.dailyLimit} Super Likes a day
+                </div>
+              </div>
+            )}
+
+            {superlikes.dailyLimit === 0 && (
+              <button
+                onClick={() => router.push('/premium')}
+                className="lift"
+                style={{
+                  marginTop: 14, width: '100%', padding: '12px 16px', borderRadius: 14, border: 'none', cursor: 'pointer',
+                  background: 'linear-gradient(135deg, #4FC3F7, #0288D1)',
+                  color: 'white', fontSize: 14, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  boxShadow: '0 8px 24px rgba(79,195,247,0.4)',
+                }}
+              >
+                <StarIcon size={16} color="white" />
+                Get Super Likes — stand out to matches
+              </button>
+            )}
           </div>
 
           {/* Premium */}

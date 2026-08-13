@@ -32,6 +32,8 @@ export interface UserRow {
   show_online_status: number;
   profile_visibility: string;
   data_analytics: number;
+  superlikes_remaining: number;
+  superlikes_date: string;
   google_sub: string | null;
   password_hash: string;
   password_salt: string;
