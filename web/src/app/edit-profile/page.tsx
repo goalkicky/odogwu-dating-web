@@ -8,16 +8,12 @@ import TabBar from '@/components/TabBar';
 import { useAuth } from '@/store/AuthContext';
 import { authService, userService, storageService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
+import { INTEREST_CATEGORIES } from '@/lib/interests';
 
 const GENDERS = ['male', 'female', 'non-binary', 'other'] as const;
 const INTERESTS = ['male', 'female', 'both', 'non-binary'] as const;
-const INTEREST_OPTIONS = [
-  'Travel', 'Food', 'Music', 'Movies', 'Fitness', 'Hiking', 'Dancing', 'Cooking',
-  'Art', 'Photography', 'Gaming', 'Reading', 'Sports', 'Fashion', 'Pets', 'Coffee',
-  'Nature', 'Yoga', 'Shopping', 'Tech', 'Beach', 'Wine',
-];
 const BIO_MAX = 500;
-const MAX_INTERESTS = 5;
+const MAX_INTERESTS = 20;
 
 function calcAge(dob: string): number | null {
   if (!dob) return null;
@@ -290,27 +286,35 @@ export default function EditProfilePage() {
           </span>
         </div>
         {interestNote && <p style={{ fontSize: 12.5, color: '#FF6B8A', margin: '-6px 2px 10px', fontWeight: 600 }}>{interestNote}</p>}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {INTEREST_OPTIONS.map(opt => {
-            const selected = interests.includes(opt);
-            return (
-              <button
-                key={opt}
-                onClick={() => toggleInterest(opt)}
-                style={{
-                  padding: '9px 16px', borderRadius: 9999, fontSize: 13.5, fontWeight: 600, cursor: 'pointer',
-                  color: selected ? 'white' : '#ABABAB',
-                  background: selected ? 'linear-gradient(135deg, #FF375F, #FF6B8A)' : 'rgba(255,255,255,0.06)',
-                  border: selected ? 'none' : '1px solid rgba(255,255,255,0.1)',
-                  opacity: !selected && interests.length >= MAX_INTERESTS ? 0.45 : 1,
-                  transition: 'all 0.15s ease',
-                }}
-              >
-                {opt}
-              </button>
-            );
-          })}
-        </div>
+        {INTEREST_CATEGORIES.map(cat => (
+          <div key={cat.label} style={{ marginBottom: 4 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7, margin: '18px 2px 10px' }}>
+              <span style={{ fontSize: 14 }}>{cat.emoji}</span>
+              <span style={{ fontSize: 12.5, fontWeight: 800, letterSpacing: 1.2, textTransform: 'uppercase', color: '#8A8A8A' }}>{cat.label}</span>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {cat.items.map(opt => {
+                const selected = interests.includes(opt);
+                return (
+                  <button
+                    key={opt}
+                    onClick={() => toggleInterest(opt)}
+                    style={{
+                      padding: '9px 16px', borderRadius: 9999, fontSize: 13.5, fontWeight: 600, cursor: 'pointer',
+                      color: selected ? 'white' : '#ABABAB',
+                      background: selected ? 'linear-gradient(135deg, #FF375F, #FF6B8A)' : 'rgba(255,255,255,0.06)',
+                      border: selected ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                      opacity: !selected && interests.length >= MAX_INTERESTS ? 0.45 : 1,
+                      transition: 'all 0.15s ease',
+                    }}
+                  >
+                    {opt}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
 
         {error && <p style={{ color: '#FF3B30', fontSize: 13, textAlign: 'center', marginTop: 20 }}>{error}</p>}
 

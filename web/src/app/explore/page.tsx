@@ -10,12 +10,7 @@ import { useMobile } from '@/lib/useMediaQuery';
 import { useAuth } from '@/store/AuthContext';
 import { userService, storageService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
-
-const INTEREST_OPTIONS = [
-  'Travel', 'Food', 'Music', 'Movies', 'Fitness', 'Hiking', 'Dancing', 'Cooking',
-  'Art', 'Photography', 'Gaming', 'Reading', 'Sports', 'Fashion', 'Pets', 'Coffee',
-  'Nature', 'Yoga', 'Shopping', 'Tech', 'Beach', 'Wine',
-];
+import { INTEREST_OPTIONS, interestCategory } from '@/lib/interests';
 
 const INTEREST_STYLE: Record<string, { emoji: string; c1: string; c2: string }> = {
   Travel: { emoji: '✈️', c1: '#1E88E5', c2: '#4FC3F7' },
@@ -43,7 +38,8 @@ const INTEREST_STYLE: Record<string, { emoji: string; c1: string; c2: string }> 
 };
 
 function interestStyle(interest: string) {
-  return INTEREST_STYLE[interest] || { emoji: '🌟', c1: '#7C4DFF', c2: '#FF375F' };
+  const match = INTEREST_STYLE[interest] || interestCategory(interest);
+  return match || { emoji: '🌟', c1: '#7C4DFF', c2: '#FF375F' };
 }
 
 interface ExploreUser {
