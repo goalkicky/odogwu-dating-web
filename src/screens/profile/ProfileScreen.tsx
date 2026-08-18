@@ -8,7 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../theme';
 import Button from '../../components/Button';
 import { useAuth } from '../../store/AuthContext';
-import { storageService, superlikeService } from '../../api/services';
+import { storageService, superlikeService, likeService } from '../../api/services';
 import { INTEREST_CATEGORIES } from '../../data/interests';
 
 const { width } = Dimensions.get('window');
@@ -18,9 +18,11 @@ export default function ProfileScreen({ navigation }: any) {
   const { profile, user, logout } = useAuth();
   const [photoIndex, setPhotoIndex] = useState(0);
   const [superlikes, setSuperlikes] = useState({ remaining: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
+  const [likes, setLikes] = useState({ remaining: 0, used: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
 
   useEffect(() => {
     superlikeService.getStatus().then(setSuperlikes).catch(() => {});
+    likeService.getStatus().then(setLikes).catch(() => {});
   }, []);
 
   const photos: string[] = profile?.photos || [];
@@ -231,6 +233,61 @@ export default function ProfileScreen({ navigation }: any) {
             >
               <Ionicons name="star" size={16} color="white" />
               <Text style={styles.superlikeCtaText}>Get Super Likes — stand out to matches</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* Likes wallet */}
+        <View style={[styles.card, styles.likeCard]}>
+          <View style={styles.superlikeRow}>
+            <LinearGradient colors={['#FF375F', '#FF3B30']} style={styles.superlikeIcon}>
+              <Ionicons name="heart" size={20} color="white" />
+            </LinearGradient>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.superlikeTitle}>Likes</Text>
+              <Text style={styles.superlikeSub}>
+                {likes.isPremium
+                  ? 'Unlimited daily likes with premium'
+                  : likes.dailyLimit > 0
+                    ? `${Math.max(0, likes.remaining ?? 0)} of ${likes.dailyLimit} left today`
+                    : 'Daily likes with premium'}
+              </Text>
+            </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              {likes.isPremium ? (
+                <Ionicons name="infinite" size={28} color="#FF375F" />
+              ) : (
+                <Text style={[styles.superlikeCount, (likes.remaining ?? 0) > 0 && { color: '#FF375F' }]}>
+                  {Math.max(0, likes.remaining ?? 0)}
+                </Text>
+              )}
+              <Text style={styles.superlikeCountLabel}>{likes.isPremium ? 'unlimited' : 'left today'}</Text>
+            </View>
+          </View>
+
+          {!likes.isPremium && likes.dailyLimit > 0 && (likes.remaining ?? 0) > 0 && (
+            <View style={{ marginTop: 12 }}>
+              <View style={styles.superlikeBar}>
+                <View
+                  style={[
+                    styles.superlikeBarFill,
+                    styles.likeBarFill,
+                    { width: `${Math.min(100, ((likes.remaining ?? 0) / likes.dailyLimit) * 100)}%` },
+                  ]}
+                />
+              </View>
+              <Text style={styles.superlikeRefill}>Refills at midnight · {likes.dailyLimit} Likes a day</Text>
+            </View>
+          )}
+
+          {!likes.isPremium && likes.dailyLimit > 0 && (likes.remaining ?? 0) <= 0 && (
+            <TouchableOpacity
+              activeOpacity={0.85}
+              onPress={() => navigation?.navigate('PremiumTab')}
+              style={[styles.superlikeCta, styles.likeCta]}
+            >
+              <Ionicons name="heart" size={16} color="white" />
+              <Text style={styles.superlikeCtaText}>Get Unlimited Likes</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -472,6 +529,18 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   superlikeCtaText: { color: 'white', fontSize: 14, fontWeight: '800' },
+  likeCard: {
+    borderWidth: 1,
+    borderColor: 'rgba(255,55,95,0.35)',
+    backgroundColor: 'rgba(255,55,95,0.08)',
+  },
+  likeBarFill: {
+    backgroundColor: '#FF375F',
+  },
+  likeCta: {
+    backgroundColor: '#FF375F',
+    shadowColor: '#FF375F',
+  },
   premiumCta: {
     flexDirection: 'row',
     alignItems: 'center',

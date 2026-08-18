@@ -20,6 +20,7 @@
     "expo": "~54.0.33",
     "expo-av": "^16.0.8",
     "expo-blur": "^55.0.14",
+    "expo-image-manipulator": "~14.0.8",
     "expo-image-picker": "^55.0.20",
     "expo-linear-gradient": "^55.0.13",
     "expo-location": "^55.1.9",

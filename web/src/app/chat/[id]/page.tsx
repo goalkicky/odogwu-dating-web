@@ -11,6 +11,7 @@ import ProfileModal from '@/components/ProfileModal';
 import { useAuth } from '@/store/AuthContext';
 import { messageService, storageService, matchService, userService, walletService, blockService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
+import { captureStream, mediaConstraints, mediaErrorMessage } from '@/lib/media';
 import Button from '@/components/Button';
 import type { Message } from '@/lib/types';
 
@@ -462,6 +463,16 @@ export default function ChatPage() {
     cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
   });
 
+  const startCall = async (type: 'audio' | 'video') => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia(mediaConstraints(type));
+      captureStream(stream);
+      router.push(`/call/${matchId}?type=${type}&otherId=${otherUserId}`);
+    } catch (err: any) {
+      alert(mediaErrorMessage(err));
+    }
+  };
+
   return (
     <GradientBackground className="chat-screen" style={{ minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       <div className="chat-screen" style={{ display: 'flex', flexDirection: 'column', minHeight: 0, position: 'relative' }}>
@@ -509,10 +520,10 @@ export default function ChatPage() {
           <button onClick={() => setSearchOpen(o => !o)} style={roundBtn(searchOpen)}>
             {searchOpen ? <CloseCircleIcon size={18} color="#FF6B8A" /> : <SearchIcon size={18} color={searchOpen ? '#FF6B8A' : '#D0D0D0'} />}
           </button>
-          <button onClick={() => router.push(`/call/${matchId}?type=audio&otherId=${otherUserId}`)} style={{ ...roundBtn(false), border: '1px solid rgba(52,199,89,0.25)', background: 'rgba(52,199,89,0.08)' }}>
+          <button onClick={() => startCall('audio')} style={{ ...roundBtn(false), border: '1px solid rgba(52,199,89,0.25)', background: 'rgba(52,199,89,0.08)' }}>
             <CallIcon size={18} color="#34C759" />
           </button>
-          <button onClick={() => router.push(`/call/${matchId}?type=video&otherId=${otherUserId}`)} style={{ ...roundBtn(false), border: '1px solid rgba(255,55,95,0.3)', background: 'rgba(255,55,95,0.1)' }}>
+          <button onClick={() => startCall('video')} style={{ ...roundBtn(false), border: '1px solid rgba(255,55,95,0.3)', background: 'rgba(255,55,95,0.1)' }}>
             <VideoIcon size={18} color="#FF375F" />
           </button>
           <button onClick={() => setMenuOpen(o => !o)} style={roundBtn(menuOpen)} aria-label="More options">

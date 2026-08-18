@@ -1,17 +1,22 @@
 'use client';
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { ChevronBackIcon, RefreshIcon, HeartIcon, CloseIcon, StarIcon, SearchIcon } from '@/components/Icons';
+import { ChevronBackIcon, RefreshIcon, HeartIcon, CloseIcon, StarIcon, SearchIcon, CameraIcon, PlusIcon, GlobeIcon, PeopleIcon, GridIcon } from '@/components/Icons';
 import AnimatedCard from '@/components/AnimatedCard';
 import ActionButton from '@/components/ActionButton';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
 import SuperlikeUpsellModal from '@/components/SuperlikeUpsellModal';
+import LikeUpsellModal from '@/components/LikeUpsellModal';
 import { useMobile } from '@/lib/useMediaQuery';
 import { useAuth } from '@/store/AuthContext';
-import { userService, storageService, superlikeService } from '@/lib/cloudflare/services';
+import { userService, storageService, superlikeService, likeService, feedService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
-import { INTEREST_OPTIONS, interestCategory } from '@/lib/interests';
+import { INTEREST_CATEGORIES, interestCategory, InterestCategory } from '@/lib/interests';
+import PostCard from '@/components/PostCard';
+import CommentSheet from '@/components/CommentSheet';
+import CreatePostModal from '@/components/CreatePostModal';
+import { FeedPost } from '@/lib/types';
 
 const INTEREST_STYLE: Record<string, { emoji: string; c1: string; c2: string }> = {
   Travel: { emoji: '✈️', c1: '#1E88E5', c2: '#4FC3F7' },
@@ -72,12 +77,66 @@ export default function ExplorePage() {
 
   const [users, setUsers] = useState<ExploreUser[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState<InterestCategory | null>(null);
   const [activeInterest, setActiveInterest] = useState<string | null>(null);
   const [deck, setDeck] = useState<ExploreUser[]>([]);
   const [lastAction, setLastAction] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [superlikes, setSuperlikes] = useState<any>({ remaining: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
   const [showSuperlikeUpsell, setShowSuperlikeUpsell] = useState(false);
+  const [likes, setLikes] = useState<any>({ remaining: 0, used: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
+  const [showLikeUpsell, setShowLikeUpsell] = useState(false);
+
+  // Feed state
+  const [feedPosts, setFeedPosts] = useState<FeedPost[]>([]);
+  const [feedLoading, setFeedLoading] = useState(true);
+  const [feedCursor, setFeedCursor] = useState<string | null>(null);
+  const [feedHasMore, setFeedHasMore] = useState(true);
+  const [feedFilter, setFeedFilter] = useState<'all' | 'public' | 'friends'>('all');
+  const [showCreatePost, setShowCreatePost] = useState(false);
+  const [commentPost, setCommentPost] = useState<FeedPost | null>(null);
+
+  const loadFeed = useCallback(async (cursor?: string, filter?: 'all' | 'public' | 'friends') => {
+    setFeedLoading(true);
+    try {
+      const visibility = filter === 'all' ? undefined : filter === 'public' ? 'public' as const : 'friends' as const;
+      const data = await feedService.getFeed(cursor, visibility);
+      const docs = (data?.documents || []) as FeedPost[];
+      if (cursor) {
+        setFeedPosts(prev => [...prev, ...docs]);
+      } else {
+        setFeedPosts(docs);
+      }
+      setFeedCursor(data?.cursor || null);
+      setFeedHasMore(docs.length >= 10);
+    } catch {}
+    setFeedLoading(false);
+  }, []);
+
+  useEffect(() => { loadFeed(undefined, feedFilter); }, [feedFilter, loadFeed]);
+
+  const loadMoreFeed = useCallback(() => {
+    if (feedCursor && feedHasMore && !feedLoading) {
+      loadFeed(feedCursor, feedFilter);
+    }
+  }, [feedCursor, feedHasMore, feedLoading, feedFilter, loadFeed]);
+
+  const handlePostCreated = useCallback(() => {
+    setShowCreatePost(false);
+    loadFeed(undefined, feedFilter);
+  }, [feedFilter, loadFeed]);
+
+  const handlePostDeleted = useCallback((postId: string) => {
+    setFeedPosts(prev => prev.filter(p => p.id !== postId));
+  }, []);
+
+  const handleLikeToggle = useCallback(() => {}, []);
+
+  const handleSaveToggle = useCallback(() => {}, []);
+
+  const handleCommentAdded = useCallback((postId: string) => {
+    setFeedPosts(prev => prev.map(p => p.id === postId ? { ...p, commentsCount: p.commentsCount + 1 } : p));
+  }, []);
 
   const load = useCallback(async () => {
     if (!profile || !account) return;
@@ -106,6 +165,7 @@ export default function ExplorePage() {
 
   useEffect(() => {
     superlikeService.getStatus().then(setSuperlikes).catch(() => {});
+    likeService.getStatus().then(setLikes).catch(() => {});
   }, []);
 
   const groups = useMemo(() => {
@@ -126,6 +186,20 @@ export default function ExplorePage() {
   }, [groups]);
 
   const backToGrid = useCallback(() => {
+    setActiveInterest(null);
+    setDeck([]);
+    setLastAction(null);
+  }, []);
+
+  const backToCategories = useCallback(() => {
+    setActiveCategory(null);
+    setActiveInterest(null);
+    setDeck([]);
+    setLastAction(null);
+  }, []);
+
+  const openCategory = useCallback((category: InterestCategory) => {
+    setActiveCategory(category);
     setActiveInterest(null);
     setDeck([]);
     setLastAction(null);
@@ -154,16 +228,27 @@ export default function ExplorePage() {
   const handleSwipeRight = useCallback(async () => {
     setLastAction('like');
     const liked = current;
+    if (!likes.isPremium && (likes.remaining ?? 0) <= 0) {
+      setShowLikeUpsell(true);
+      if (liked) removeSwiped(liked.id);
+      setTimeout(() => { setLastAction(null); advance(); }, 300);
+      return;
+    }
     if (liked) {
       try {
-        await userService.likeUser((profile as any).$id, liked.id);
+        const res = await userService.likeUser((profile as any).$id, liked.id);
+        if (res && typeof res.remaining === 'number') setLikes(res);
         const mutual = await userService.isMutualMatch((profile as any).$id, liked.id);
         if (mutual) setLastAction('match');
-      } catch {}
+      } catch (e: any) {
+        if (e?.status === 402 || e?.code === 'NO_LIKES' || String(e?.message || '').includes('like')) {
+          setShowLikeUpsell(true);
+        }
+      }
       removeSwiped(liked.id);
     }
     setTimeout(() => { setLastAction(null); advance(); }, 300);
-  }, [current, profile, removeSwiped, advance]);
+  }, [current, profile, likes, removeSwiped, advance]);
 
   const handleSuperLike = useCallback(async () => {
     const liked = current;
@@ -199,12 +284,12 @@ export default function ExplorePage() {
         }}
       >
         {activeInterest && activeStyle ? (
-          /* ===== Swipe deck for a selected interest ===== */
-          <div style={{ maxWidth: 520, margin: '0 auto', display: 'flex', flexDirection: 'column' }}>
-            <div className="animate-fade-up" style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 18 }}>
+          /* ===== Feed timeline for a selected interest ===== */
+          <div className="animate-fade-up" style={{ maxWidth: 560, margin: '0 auto' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
               <button
                 onClick={backToGrid}
-                aria-label="Back to explore"
+                aria-label="Back to interests"
                 className="glass lift"
                 style={{ width: 42, height: 42, borderRadius: 9999, border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
               >
@@ -218,111 +303,137 @@ export default function ExplorePage() {
                   </h1>
                 </div>
                 <p style={{ fontSize: 13, color: '#6B6B6B', margin: '2px 0 0' }}>
-                  {current ? `${deck.length} matching ${deck.length === 1 ? 'profile' : 'profiles'}` : `No one left in ${activeInterest}`}
+                  Timeline of posts about {activeInterest.toLowerCase()}.
                 </p>
               </div>
             </div>
 
-            {loading ? (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '55vh', gap: 18 }}>
-                <div style={{ width: 56, height: 56, borderRadius: 18, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
-                <span className="neon-text" style={{ fontSize: 16, fontWeight: 700 }}>Loading profiles...</span>
+            {/* Feed header + create */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <GridIcon size={20} color="#FF375F" />
+                <h2 style={{ fontSize: isMobile ? 22 : 24, fontWeight: 800, color: 'white', margin: 0 }}>Feed</h2>
               </div>
-            ) : current ? (
-              <div style={{ position: 'relative', height: isMobile ? '62vh' : 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {!isMobile && (
-                  <div style={{ position: 'absolute', inset: -20, borderRadius: 40, background: `radial-gradient(circle, ${activeStyle.c1}33 0%, rgba(124,77,255,0.12) 45%, transparent 70%)`, filter: 'blur(10px)' }} />
-                )}
-                <div style={{ position: 'relative', width: isMobile ? '100%' : 420, height: isMobile ? '100%' : 600, maxWidth: '100%' }}>
-                  <AnimatedCard
-                    key={current.id}
-                    user={toCard(current)}
-                    isFirst
-                    width="100%"
-                    height="100%"
-                    onSwipeLeft={handleSwipeLeft}
-                    onSwipeRight={handleSwipeRight}
-                    onSuperLike={handleSuperLike}
-                  />
-                </div>
+              <button
+                onClick={() => setShowCreatePost(true)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 6,
+                  padding: '8px 16px', borderRadius: 9999, border: 'none',
+                  background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+                  color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                  boxShadow: '0 4px 18px rgba(255,55,95,0.35)',
+                }}
+              >
+                <PlusIcon size={16} color="white" /> Post
+              </button>
+            </div>
 
-                {lastAction && (
-                  <div className="animate-pop" style={{ position: 'absolute', bottom: 92, left: 0, right: 0, display: 'flex', justifyContent: 'center', animation: lastAction === 'match' ? 'popIn 0.4s cubic-bezier(0.34,1.56,0.64,1)' : 'fadeUp 0.3s ease' }}>
-                    {lastAction === 'match' ? (
-                      <div style={{ background: 'linear-gradient(135deg, #FF375F, #7C4DFF)', padding: '10px 24px', borderRadius: 9999, boxShadow: '0 8px 30px rgba(255,55,95,0.5), 0 0 40px rgba(124,77,255,0.35)', whiteSpace: 'nowrap' }}>
-                        <span style={{ color: 'white', fontWeight: 800, fontSize: 15, letterSpacing: 0.5 }}>✨ It&apos;s a Match!</span>
-                      </div>
-                    ) : (
-                  <div className="glass-strong" style={{ padding: '8px 20px', borderRadius: 9999, whiteSpace: 'nowrap' }}>
-                    <span style={{ color: 'white', fontWeight: 700, fontSize: 14 }}>
-                      {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : `Super Liked ${current.fullName.split(' ')[0] || 'them'}! 💙`}
-                    </span>
-                  </div>
-                    )}
-                  </div>
-                )}
+            {/* Filter tabs */}
+            <div style={{ display: 'flex', gap: 6, marginBottom: 18 }}>
+              {([
+                { key: 'all' as const, label: 'All', icon: <GridIcon size={14} color={feedFilter === 'all' ? 'white' : '#6B6B6B'} /> },
+                { key: 'public' as const, label: 'Public', icon: <GlobeIcon size={14} color={feedFilter === 'public' ? 'white' : '#6B6B6B'} /> },
+                { key: 'friends' as const, label: 'Friends', icon: <PeopleIcon size={14} color={feedFilter === 'friends' ? 'white' : '#6B6B6B'} /> },
+              ]).map(tab => (
+                <button
+                  key={tab.key}
+                  onClick={() => setFeedFilter(tab.key)}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 6,
+                    padding: '7px 14px', borderRadius: 9999, border: 'none', cursor: 'pointer',
+                    fontSize: 12, fontWeight: 700,
+                    background: feedFilter === tab.key ? 'linear-gradient(135deg, rgba(255,55,95,0.2), rgba(124,77,255,0.15))' : 'rgba(255,255,255,0.04)',
+                    color: feedFilter === tab.key ? 'white' : '#6B6B6B',
+                    boxShadow: feedFilter === tab.key ? 'inset 0 0 0 1px rgba(255,55,95,0.3)' : 'inset 0 0 0 1px rgba(255,255,255,0.06)',
+                    transition: 'all 0.2s',
+                  }}
+                >
+                  {tab.icon} {tab.label}
+                </button>
+              ))}
+            </div>
 
-                <div className="animate-fade-up" style={{ position: 'absolute', bottom: 10, left: 0, right: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14 }}>
-                  <ActionButton variant="secondary" size={46} onPress={load}>
-                    <RefreshIcon size={20} color="#FFD700" />
-                  </ActionButton>
-                  <ActionButton variant="danger" size={62} onPress={handleSwipeLeft}>
-                    <CloseIcon size={30} color="white" />
-                  </ActionButton>
-                  <div style={{ position: 'relative' }}>
-                    <ActionButton variant="superlike" size={46} onPress={handleSuperLike}>
-                      <StarIcon size={20} color="white" />
-                    </ActionButton>
-                    <span style={{
-                      position: 'absolute', top: -4, right: -6, minWidth: 20, height: 20, padding: '0 5px', boxSizing: 'border-box',
-                      borderRadius: 9999, background: superlikes.remaining > 0 ? 'linear-gradient(135deg, #4FC3F7, #0288D1)' : '#FF3B30',
-                      color: 'white', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      boxShadow: superlikes.remaining > 0 ? '0 2px 10px rgba(79,195,247,0.6)' : '0 2px 10px rgba(255,59,48,0.6)',
-                      border: '2px solid #0D0D0D',
-                    }}>
-                      {superlikes.remaining}
-                    </span>
-                  </div>
-                  <ActionButton variant="primary" size={62} onPress={handleSwipeRight}>
-                    <HeartIcon size={30} color="white" />
-                  </ActionButton>
+            {/* Feed posts */}
+            {feedLoading && feedPosts.length === 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '30vh', gap: 18 }}>
+                <div style={{ width: 48, height: 48, borderRadius: 16, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
+                <span className="neon-text" style={{ fontSize: 14, fontWeight: 700 }}>Loading feed...</span>
+              </div>
+            ) : feedPosts.length === 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 0', gap: 12, textAlign: 'center' }}>
+                <div style={{ width: 72, height: 72, borderRadius: 22, background: 'linear-gradient(135deg, rgba(255,55,95,0.12), rgba(124,77,255,0.08))', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  <CameraIcon size={32} color="#6B6B6B" />
                 </div>
+                <span style={{ fontSize: 16, fontWeight: 700, color: 'white' }}>No posts yet</span>
+                <span style={{ fontSize: 13, color: '#6B6B6B', maxWidth: 280 }}>
+                  Be the first to share something about {activeInterest.toLowerCase()}.
+                </span>
+                <button
+                  onClick={() => setShowCreatePost(true)}
+                  style={{
+                    marginTop: 4, display: 'flex', alignItems: 'center', gap: 8,
+                    padding: '12px 24px', borderRadius: 9999, border: 'none',
+                    background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+                    color: 'white', fontSize: 14, fontWeight: 700, cursor: 'pointer',
+                    boxShadow: '0 6px 24px rgba(255,55,95,0.4)',
+                  }}
+                >
+                  <PlusIcon size={16} color="white" /> Create First Post
+                </button>
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', gap: 16, textAlign: 'center' }}>
-                <div style={{ width: 96, height: 96, borderRadius: 28, background: `linear-gradient(135deg, ${activeStyle.c1}, ${activeStyle.c2})`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 0 40px ${activeStyle.c1}55` }}>
-                  <span style={{ fontSize: 44 }}>{activeStyle.emoji}</span>
-                </div>
-                <span className="animate-pop" style={{ fontSize: 22, fontWeight: 800, color: 'white' }}>No more profiles</span>
-                <span style={{ fontSize: 14, color: '#6B6B6B', maxWidth: 280 }}>
-                  You&apos;ve seen everyone into {activeInterest}. Try another interest or refresh.
-                </span>
-                <div style={{ display: 'flex', gap: 10 }}>
-                  <button onClick={backToGrid} className="glass" style={{ padding: '12px 24px', borderRadius: 9999, border: '1px solid rgba(255,255,255,0.12)', color: 'white', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
-                    Back to Explore
+              <div>
+                {feedPosts.map(post => (
+                  <PostCard
+                    key={post.id}
+                    post={post}
+                    currentUserId={(profile as any)?.$id || ''}
+                    onLikeToggle={handleLikeToggle}
+                    onSaveToggle={handleSaveToggle}
+                    onComment={(p) => setCommentPost(p)}
+                    onDelete={handlePostDeleted}
+                  />
+                ))}
+                {feedHasMore && (
+                  <button
+                    onClick={loadMoreFeed}
+                    disabled={feedLoading}
+                    style={{
+                      width: '100%', padding: '14px 0', borderRadius: 14, border: '1px solid rgba(255,255,255,0.06)',
+                      background: 'rgba(255,255,255,0.03)', color: '#6B6B6B', fontSize: 13, fontWeight: 600,
+                      cursor: feedLoading ? 'default' : 'pointer', opacity: feedLoading ? 0.5 : 1,
+                    }}
+                  >
+                    {feedLoading ? 'Loading...' : 'Load more'}
                   </button>
-                  <button onClick={load} style={{ padding: '12px 24px', borderRadius: 9999, border: 'none', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white', fontSize: 14, fontWeight: 800, cursor: 'pointer', boxShadow: '0 6px 24px rgba(255,55,95,0.4)' }}>
-                    Refresh
-                  </button>
-                </div>
+                )}
               </div>
             )}
           </div>
-        ) : (
-          /* ===== Interest grid ===== */
+        ) : activeCategory ? (
+          /* ===== Interest grid within a category ===== */
           <div className="animate-fade-up" style={{ maxWidth: 560, margin: '0 auto' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-              <h1 style={{ fontSize: isMobile ? 26 : 30, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 0.5 }}>
-                Explore<span style={{ color: '#FF375F' }}>.</span>
-              </h1>
-              <div className="glass" style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 14px', borderRadius: 9999 }}>
-                <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#34C759', boxShadow: '0 0 10px #34C759' }} />
-                <span style={{ color: '#ABABAB', fontSize: 13, fontWeight: 600 }}>{totalPeople} people</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
+              <button
+                onClick={backToCategories}
+                aria-label="Back to categories"
+                className="glass lift"
+                style={{ width: 42, height: 42, borderRadius: 9999, border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+              >
+                <ChevronBackIcon size={20} color="white" />
+              </button>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontSize: 20 }}>{activeCategory.emoji}</span>
+                  <h1 style={{ fontSize: isMobile ? 24 : 26, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 0.4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {activeCategory.label}
+                  </h1>
+                </div>
+                <p style={{ fontSize: 13, color: '#6B6B6B', margin: '2px 0 0' }}>
+                  Pick an interest to find people who share it.
+                </p>
               </div>
             </div>
-            <p style={{ fontSize: 13, color: '#6B6B6B', margin: '0 0 16px' }}>
-              Pick an interest to find people who share it.
-            </p>
 
             <div className="glass lift" style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px', borderRadius: 16, marginBottom: 18 }}>
               <SearchIcon size={18} color="#6B6B6B" />
@@ -341,7 +452,7 @@ export default function ExplorePage() {
               </div>
             ) : (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
-                {INTEREST_OPTIONS.filter(it => it.toLowerCase().includes(search.trim().toLowerCase())).map((interest) => {
+                {activeCategory.items.filter(it => it.toLowerCase().includes(search.trim().toLowerCase())).map((interest) => {
                   const style = interestStyle(interest);
                   const members = groups[interest] || [];
                   const count = members.length;
@@ -392,12 +503,107 @@ export default function ExplorePage() {
               </div>
             )}
           </div>
+        ) : (
+          /* ===== Category grid ===== */
+          <div className="animate-fade-up" style={{ maxWidth: 560, margin: '0 auto' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+              <h1 style={{ fontSize: isMobile ? 26 : 30, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 0.5 }}>
+                Explore<span style={{ color: '#FF375F' }}>.</span>
+              </h1>
+              <div className="glass" style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 14px', borderRadius: 9999 }}>
+                <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#34C759', boxShadow: '0 0 10px #34C759' }} />
+                <span style={{ color: '#ABABAB', fontSize: 13, fontWeight: 600 }}>{totalPeople} people</span>
+              </div>
+            </div>
+            <p style={{ fontSize: 13, color: '#6B6B6B', margin: '0 0 16px' }}>
+              Pick a category to find people who share your interests.
+            </p>
+
+            {loading ? (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '50vh', gap: 18 }}>
+                <div style={{ width: 56, height: 56, borderRadius: 18, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
+                <span className="neon-text" style={{ fontSize: 16, fontWeight: 700 }}>Finding people...</span>
+              </div>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
+                {INTEREST_CATEGORIES.map((category) => {
+                  const count = category.items.reduce((sum, it) => sum + (groups[it] || []).length, 0);
+                  const firstInterest = category.items.find(it => (groups[it] || []).length > 0);
+                  const style = firstInterest ? interestStyle(firstInterest) : category;
+                  const cover = firstInterest ? groups[firstInterest]?.[0]?.photos?.[0] : undefined;
+                  return (
+                    <button
+                      key={category.label}
+                      onClick={() => openCategory(category)}
+                      className="lift"
+                      style={{
+                        position: 'relative', borderRadius: 20, overflow: 'hidden', border: 'none', cursor: 'pointer', padding: 0,
+                        aspectRatio: '4 / 5', background: `linear-gradient(160deg, ${style.c1}, ${style.c2})`, textAlign: 'left',
+                      }}
+                    >
+                      {cover && (
+                        <img src={cover} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                      )}
+                      <div style={{ position: 'absolute', inset: 0, background: cover ? 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.62) 100%)' : 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 100%)' }} />
+                      {count > 0 && (
+                        <div style={{ position: 'absolute', top: 12, right: 12, padding: '4px 10px', borderRadius: 9999, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(6px)', fontSize: 12, fontWeight: 800, color: 'white' }}>
+                          {count}
+                        </div>
+                      )}
+                      <div style={{ position: 'absolute', left: 14, right: 14, bottom: 14 }}>
+                        <div style={{ fontSize: 26, lineHeight: 1 }}>{category.emoji}</div>
+                        <div style={{ fontSize: 19, fontWeight: 800, color: 'white', marginTop: 8, textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>{category.label}</div>
+                        <div style={{ fontSize: 12.5, fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 3, textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
+                          {count > 0 ? `${count} ${count === 1 ? 'person' : 'people'}` : `${category.items.length} interests`}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {!loading && totalPeople === 0 && (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, marginTop: 24, textAlign: 'center' }}>
+                <span style={{ fontSize: 14, color: '#6B6B6B', maxWidth: 300 }}>
+                  No profiles are available right now. Check back soon.
+                </span>
+                <button onClick={load} className="glass" style={{ padding: '12px 26px', borderRadius: 9999, border: '1px solid rgba(255,255,255,0.12)', color: 'white', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <RefreshIcon size={16} color="#FF6B8A" />
+                    Refresh
+                  </div>
+                </button>
+              </div>
+            )}
+          </div>
         )}
 
         {isMobile && <TabBar />}
 
         {showSuperlikeUpsell && (
           <SuperlikeUpsellModal onClose={() => setShowSuperlikeUpsell(false)} />
+        )}
+
+        {showLikeUpsell && (
+          <LikeUpsellModal onClose={() => setShowLikeUpsell(false)} />
+        )}
+
+        {commentPost && (
+          <CommentSheet
+            post={commentPost}
+            currentUserId={(profile as any)?.$id || ''}
+            onClose={() => setCommentPost(null)}
+            onCommentAdded={handleCommentAdded}
+          />
+        )}
+
+        {showCreatePost && (
+          <CreatePostModal
+            currentUserId={(profile as any)?.$id || ''}
+            onClose={() => setShowCreatePost(false)}
+            onPostCreated={handlePostCreated}
+          />
         )}
       </GradientBackground>
     </DesktopLayout>

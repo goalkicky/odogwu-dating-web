@@ -58,8 +58,8 @@ export const ImagesIcon = ({ size, color, className }: IconProps) => (
   </svg>
 );
 
-export const HeartIcon = ({ size, color, className }: IconProps) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={s(size)} height={s(size)} viewBox="0 0 24 24" fill="none" stroke={color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+export const HeartIcon = ({ size, color, filled, className }: IconProps & { filled?: boolean }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={s(size)} height={s(size)} viewBox="0 0 24 24" fill={filled ? (color || 'currentColor') : 'none'} stroke={color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
   </svg>
 );
@@ -304,6 +304,36 @@ export const SearchIcon = ({ size, color, className }: IconProps) => (
 export const PlusIcon = ({ size, color, className }: IconProps) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={s(size)} height={s(size)} viewBox="0 0 24 24" fill="none" stroke={color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <path d="M12 5v14M5 12h14"/>
+  </svg>
+);
+
+export const CommentIcon = ({ size, color, className }: IconProps) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={s(size)} height={s(size)} viewBox="0 0 24 24" fill="none" stroke={color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/>
+  </svg>
+);
+
+export const BookmarkIcon = ({ size, color, filled, className }: IconProps & { filled?: boolean }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={s(size)} height={s(size)} viewBox="0 0 24 24" fill={filled ? (color || 'currentColor') : 'none'} stroke={color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+  </svg>
+);
+
+export const ShareIcon = ({ size, color, className }: IconProps) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={s(size)} height={s(size)} viewBox="0 0 24 24" fill="none" stroke={color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+  </svg>
+);
+
+export const GridIcon = ({ size, color, className }: IconProps) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={s(size)} height={s(size)} viewBox="0 0 24 24" fill="none" stroke={color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+  </svg>
+);
+
+export const TrashIcon = ({ size, color, className }: IconProps) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={s(size)} height={s(size)} viewBox="0 0 24 24" fill="none" stroke={color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
   </svg>
 );
 

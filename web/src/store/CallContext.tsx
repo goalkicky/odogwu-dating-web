@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect, useRef, useCallb
 import { useRouter } from 'next/navigation';
 import { useAuth } from './AuthContext';
 import { callService, userService, callLogService } from '@/lib/cloudflare/services';
+import { captureStream, mediaConstraints, mediaErrorMessage } from '@/lib/media';
 
 interface IncomingCall {
   from: string;
@@ -35,10 +36,31 @@ export function CallProvider({ children }: { children: React.ReactNode }) {
   const [incomingCall, setIncomingCall] = useState<IncomingCall | null>(null);
   const unsubRef = useRef<{ unsubscribe: () => Promise<void> } | null>(null);
   const listenersRef = useRef<Set<SignalCallback>>(new Set());
+  const shownOffersRef = useRef<Set<string>>(new Set());
+  const incomingRef = useRef<IncomingCall | null>(null);
+  useEffect(() => { incomingRef.current = incomingCall; }, [incomingCall]);
 
   const onSignal = useCallback((cb: SignalCallback) => {
     listenersRef.current.add(cb);
     return () => { listenersRef.current.delete(cb); };
+  }, []);
+
+  const presentOffer = useCallback(async (signal: any) => {
+    if (!signal?.$id || shownOffersRef.current.has(signal.$id)) return;
+    shownOffersRef.current.add(signal.$id);
+    let name = 'Someone';
+    try {
+      const profile = await userService.getProfile(signal.from);
+      name = (profile as any).displayName || (profile as any).fullName || 'Someone';
+    } catch {}
+    setIncomingCall({
+      from: signal.from,
+      matchId: signal.matchId,
+      callType: signal.callType || 'audio',
+      callerName: name,
+      signalDocId: signal.$id,
+      offerData: signal.data,
+    });
   }, []);
 
   useEffect(() => {
@@ -47,26 +69,36 @@ export function CallProvider({ children }: { children: React.ReactNode }) {
     callService.subscribeToSignals(user.$id, async (signal: any) => {
       listenersRef.current.forEach(cb => cb(signal));
       if (signal.type === 'offer') {
-        let name = 'Someone';
-        try {
-          const profile = await userService.getProfile(signal.from);
-          name = (profile as any).displayName || (profile as any).fullName || 'Someone';
-        } catch {}
-        setIncomingCall({
-          from: signal.from,
-          matchId: signal.matchId,
-          callType: signal.callType || 'audio',
-          callerName: name,
-          signalDocId: signal.$id,
-          offerData: signal.data,
-        });
+        await presentOffer(signal);
       }
     }).then(sub => { unsubRef.current = sub; });
 
-    return () => { if (unsubRef.current) unsubRef.current.unsubscribe(); };
-  }, [user?.$id]);
+    const pollOffers = async () => {
+      try {
+        const docs = (await callService.getSignals(user.$id)) as any[];
+        for (const d of docs) {
+          if (!d || d.type !== 'offer' || d.from === user.$id) continue;
+          const age = Date.now() - new Date(d.createdAt).getTime();
+          if (age > 3 * 60 * 1000) continue;
+          if (!incomingRef.current) {
+            await presentOffer(d);
+          }
+        }
+      } catch {}
+    };
+    pollOffers();
+    const pollTimer = setInterval(pollOffers, 10000);
 
-  const dismissCall = useCallback(() => setIncomingCall(null), []);
+    return () => {
+      clearInterval(pollTimer);
+      if (unsubRef.current) unsubRef.current.unsubscribe();
+    };
+  }, [user?.$id, presentOffer]);
+
+  const dismissCall = useCallback(() => {
+    if (incomingRef.current) shownOffersRef.current.add(incomingRef.current.signalDocId);
+    setIncomingCall(null);
+  }, []);
 
   return (
     <CallContext.Provider value={{ incomingCall, dismissCall, onSignal }}>
@@ -81,6 +113,13 @@ function IncomingCallOverlay({ call, onDismiss }: { call: IncomingCall; onDismis
   const router = useRouter();
 
   const handleAccept = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia(mediaConstraints(call.callType));
+      captureStream(stream);
+    } catch (err: any) {
+      alert(mediaErrorMessage(err));
+      return;
+    }
     onDismiss();
     router.push(`/call/${call.matchId}?type=${call.callType}&mode=incoming&otherId=${call.from}&offerId=${call.signalDocId}`);
   };

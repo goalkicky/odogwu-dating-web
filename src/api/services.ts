@@ -1,5 +1,6 @@
 import { apiFetch, getToken, setToken, clearToken, WS_URL, API_URL, openGoogleOAuth } from './config';
 import { UserProfile, Match, Message } from '../types';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 export const authService = {
   loginWithGoogle: async () => {
@@ -116,6 +117,16 @@ export const superlikeService = {
   },
 };
 
+export const likeService = {
+  getStatus: async () => {
+    return apiFetch('/api/likes/status');
+  },
+
+  send: async (matchedUserId: string) => {
+    return apiFetch('/api/likes', { method: 'POST', json: { matchedUserId } });
+  },
+};
+
 function wsUrl(path: string): string {
   return `${WS_URL}${path}`;
 }
@@ -217,11 +228,40 @@ export const callLogService = {
   },
 };
 
+const MAX_PHOTO_WIDTH = 1080;
+const MAX_PHOTO_HEIGHT = 1920;
+const PHOTO_QUALITY = 0.8;
+
+async function compressPhoto(uri: string): Promise<string> {
+  try {
+    const info = await ImageManipulator.manipulateAsync(
+      uri,
+      [],
+      { compress: PHOTO_QUALITY, format: ImageManipulator.SaveFormat.JPEG }
+    );
+    if (info.width > MAX_PHOTO_WIDTH || info.height > MAX_PHOTO_HEIGHT) {
+      const resize = info.width >= info.height
+        ? { width: MAX_PHOTO_WIDTH }
+        : { height: MAX_PHOTO_HEIGHT };
+      const result = await ImageManipulator.manipulateAsync(
+        info.uri,
+        [{ resize }],
+        { compress: PHOTO_QUALITY, format: ImageManipulator.SaveFormat.JPEG }
+      );
+      return result.uri;
+    }
+    return info.uri;
+  } catch {
+    return uri;
+  }
+}
+
 export const storageService = {
   uploadPhoto: async (uri: string) => {
+    const optimizedUri = await compressPhoto(uri);
     const form = new FormData();
     const name = `photo_${Date.now()}.jpg`;
-    form.append('file', { uri, name, type: 'image/jpeg' } as any);
+    form.append('file', { uri: optimizedUri, name, type: 'image/jpeg' } as any);
     const data = await apiFetch('/api/media', { method: 'POST', body: form });
     return { $id: data.key, key: data.key };
   },

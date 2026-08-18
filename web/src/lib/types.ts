@@ -60,6 +60,31 @@ export interface CallSignal {
   callType: 'audio' | 'video';
 }
 
+export interface FeedPost {
+  id: string;
+  userId: string;
+  userName: string;
+  userPhoto: string;
+  images: string[];
+  caption: string;
+  visibility: 'public' | 'friends';
+  likesCount: number;
+  commentsCount: number;
+  likedByMe: boolean;
+  savedByMe: boolean;
+  createdAt: string;
+}
+
+export interface FeedComment {
+  id: string;
+  postId: string;
+  userId: string;
+  userName: string;
+  userPhoto: string;
+  text: string;
+  createdAt: string;
+}
+
 export type PremiumPlan = 'premium' | 'surplus' | 'platinum';
 
 export interface PremiumFeature {

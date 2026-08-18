@@ -1,15 +1,21 @@
 'use client';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/store/AuthContext';
 import { useCall } from '@/store/CallContext';
-import { callService, userService, callLogService } from '@/lib/cloudflare/services';
+import { callService, userService, callLogService, turnService } from '@/lib/cloudflare/services';
+import { takeStream, mediaConstraints, mediaErrorMessage } from '@/lib/media';
 import { MicIcon, MicOffIcon, VolumeIcon, VideoIcon, CallIcon } from '@/components/Icons';
 
 const RTC_CONFIG = {
   iceServers: [
     { urls: 'stun:stun.l.google.com:19302' },
     { urls: 'stun:stun1.l.google.com:19302' },
+    { urls: 'stun:stun2.l.google.com:19302' },
+    { urls: 'stun:stun3.l.google.com:19302' },
+    { urls: 'stun:stun4.l.google.com:19302' },
+    { urls: 'stun:stun.services.mozilla.com' },
+    { urls: 'stun:stun.cloudflare.com:3478' },
   ],
 };
 
@@ -41,19 +47,28 @@ export default function CallPage() {
   const localStreamRef = useRef<MediaStream | null>(null);
   const unsubRef = useRef<{ unsubscribe: () => void } | null>(null);
 
-  const getOtherUserId = useCallback(() => {
-    return otherId;
-  }, [otherId]);
+  const [debugLog, setDebugLog] = useState<string[]>([]);
+  const debug = (msg: string) => {
+    const line = `[${new Date().toISOString().slice(11, 19)}] ${msg}`;
+    console.log('[CallDebug]', line);
+    setDebugLog(prev => [...prev.slice(-18), line]);
+  };
+
+  const durationRef = useRef(0);
+
+  useEffect(() => {
+    durationRef.current = callDuration;
+  }, [callDuration]);
 
   useEffect(() => {
     if (!user?.$id) return;
-    const uid = getOtherUserId();
+    const uid = otherId;
     if (uid) {
       userService.getProfile(uid).then(p => {
         setOtherName((p as any)?.displayName || (p as any)?.fullName || 'User');
       }).catch(() => {});
     }
-  }, [user?.$id, getOtherUserId]);
+  }, [user?.$id, otherId]);
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
@@ -67,82 +82,183 @@ export default function CallPage() {
     if (!user?.$id) return;
 
     const uid = user.$id;
-    const constraints: MediaStreamConstraints = {
-      audio: true,
-      video: callType === 'video' ? { width: { ideal: 640 }, height: { ideal: 480 } } : false,
+    const targetId = otherId;
+    const constraints = mediaConstraints(callType);
+
+    let disposed = false;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    let pollTimer: ReturnType<typeof setInterval> | null = null;
+    let remoteDescSet = false;
+    const pendingCandidates: RTCIceCandidateInit[] = [];
+
+    const stopPoll = () => {
+      if (pollTimer) {
+        clearInterval(pollTimer);
+        pollTimer = null;
+      }
+    };
+
+    const clearTimeoutIfAny = () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+    };
+
+    const addCandidate = async (candidate: RTCIceCandidateInit) => {
+      const pc = pcRef.current;
+      if (!pc || disposed) return;
+      if (!remoteDescSet) {
+        pendingCandidates.push(candidate);
+        return;
+      }
+      try {
+        await pc.addIceCandidate(new RTCIceCandidate(candidate));
+      } catch {}
+    };
+
+    const drainCandidates = async () => {
+      const pc = pcRef.current;
+      if (!pc || disposed) return;
+      const batch = pendingCandidates.splice(0, pendingCandidates.length);
+      for (const c of batch) {
+        try {
+          await pc.addIceCandidate(new RTCIceCandidate(c));
+        } catch {}
+      }
+    };
+
+    const applyAnswer = async (answerDoc: any) => {
+      try {
+        const answer = JSON.parse(answerDoc.data || answerDoc);
+        if (!answer.sdp) return false;
+        await pcRef.current!.setRemoteDescription(new RTCSessionDescription(answer));
+        remoteDescSet = true;
+        answeredRef.current = true;
+        clearTimeoutIfAny();
+        stopPoll();
+        debug('answer applied, remoteDescription set');
+        await drainCandidates();
+        return true;
+      } catch (e) {
+        debug('applyAnswer failed: ' + (e as any)?.message);
+        return false;
+      }
+    };
+
+    const applyOfferAndAnswer = async (offerDoc: any) => {
+      try {
+        const offer = JSON.parse(offerDoc.data || offerDoc);
+        if (!offer.sdp) return;
+        await pcRef.current!.setRemoteDescription(new RTCSessionDescription(offer));
+        remoteDescSet = true;
+        const answer = await pcRef.current!.createAnswer();
+        await pcRef.current!.setLocalDescription(answer);
+        if (targetId) {
+          await callService.sendSignal({
+            from: uid,
+            to: targetId,
+            matchId,
+            type: 'answer',
+            callType,
+            data: JSON.stringify(answer),
+          });
+          debug('answer sent to ' + targetId);
+        }
+        setStatusText('Connected');
+        setIsCallActive(true);
+        answeredRef.current = true;
+        clearTimeoutIfAny();
+        await drainCandidates();
+      } catch (e) {
+        debug('applyOfferAndAnswer failed: ' + (e as any)?.message);
+        setStatusText('Connection failed');
+      }
     };
 
     async function setup() {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        const [preStream, turnIce] = await Promise.all([
+          Promise.resolve(takeStream()),
+          turnService.getIceServers().catch(() => [] as RTCIceServer[]),
+        ]);
+        const stream = preStream || await navigator.mediaDevices.getUserMedia(constraints);
+        if (disposed) {
+          stream.getTracks().forEach(t => t.stop());
+          return;
+        }
+        debug('media ready: ' + (preStream ? 'pre-acquired' : 'getUserMedia') + ' (' + callType + '), turn=' + turnIce.length + ' servers');
         localStreamRef.current = stream;
         if (localVideoRef.current) {
           localVideoRef.current.srcObject = stream;
         }
 
-        const pc = new RTCPeerConnection(RTC_CONFIG);
+        const iceServers = [...RTC_CONFIG.iceServers, ...turnIce];
+        const pc = new RTCPeerConnection({ iceServers });
         pcRef.current = pc;
+        debug('peerConnection created, iceServers=' + iceServers.length + ' (mode=' + mode + ')');
 
         stream.getTracks().forEach(track => {
           pc.addTrack(track, stream);
         });
 
-        let answered = false;
-        const handleAnswered = () => {
-          answeredRef.current = true;
-          answered = true;
-        };
-
         pc.ontrack = (event) => {
-          handleAnswered();
+          answeredRef.current = true;
+          clearTimeoutIfAny();
+          stopPoll();
           setRemoteStream(event.streams[0]);
           if (remoteVideoRef.current) {
             remoteVideoRef.current.srcObject = event.streams[0];
           }
           setStatusText('Connected');
           setIsCallActive(true);
+          debug('REMOTE TRACK RECEIVED');
         };
 
+        let candidateCount = 0;
         pc.onicecandidate = (event) => {
-          if (event.candidate) {
-            const targetId = otherId;
-            if (targetId) {
-              callService.sendSignal({
-                from: uid,
-                to: targetId,
-                matchId,
-                type: 'ice-candidate',
-                callType,
-                data: JSON.stringify(event.candidate),
-              });
+          if (event.candidate && targetId && !disposed) {
+            candidateCount++;
+            if (candidateCount <= 5 || candidateCount % 10 === 0) {
+              debug('sent ICE candidate #' + candidateCount + ' (' + (event.candidate.type || '?') + ')');
             }
+            callService.sendSignal({
+              from: uid,
+              to: targetId,
+              matchId,
+              type: 'ice-candidate',
+              callType,
+              data: JSON.stringify(event.candidate),
+            });
           }
+        };
+
+        pc.oniceconnectionstatechange = () => {
+          debug('iceConnectionState: ' + pc.iceConnectionState);
         };
 
         pc.onconnectionstatechange = () => {
+          debug('connectionState: ' + pc.connectionState);
           if (pc.connectionState === 'failed' || pc.connectionState === 'disconnected') {
             setStatusText('Call ended');
             setIsCallActive(false);
+            clearTimeoutIfAny();
           }
         };
 
-        const targetId = otherId;
-
         const unsubFn = onSignal(async (signal: any) => {
+          if (disposed) return;
+          debug('signal received: type=' + signal.type + ' from=' + signal.from);
           if (signal.from !== targetId) return;
-          if (signal.type === 'answer' && signal.from === targetId) {
-            answeredRef.current = true;
-            try {
-              const answer = JSON.parse(signal.data);
-              if (answer.sdp) {
-                await pc.setRemoteDescription(new RTCSessionDescription(answer));
-              }
-            } catch {}
+          if (signal.type === 'answer' && mode === 'outgoing') {
+            await applyAnswer(signal);
+          } else if (signal.type === 'offer' && mode === 'incoming' && !remoteDescSet) {
+            await applyOfferAndAnswer(signal);
           } else if (signal.type === 'ice-candidate') {
             try {
               const candidate = JSON.parse(signal.data);
               if (candidate.candidate) {
-                await pc.addIceCandidate(new RTCIceCandidate(candidate));
+                await addCandidate(candidate);
               }
             } catch {}
           } else if (signal.type === 'end' && signal.from === targetId) {
@@ -163,8 +279,9 @@ export default function CallPage() {
               callType,
               data: JSON.stringify(offer),
             });
-            setTimeout(() => {
-              if (!answeredRef.current) {
+            debug('offer sent to ' + targetId + ' (sdp has ' + (offer.sdp?.match(/m=/g) || []).length + ' m-lines)');
+            timeoutId = setTimeout(() => {
+              if (!disposed && !answeredRef.current) {
                 setStatusText('Missed call');
                 setIsCallActive(false);
                 callLogService.createCallLog({
@@ -178,43 +295,70 @@ export default function CallPage() {
                 if (localStreamRef.current) localStreamRef.current.getTracks().forEach(t => t.stop());
                 if (pcRef.current) pcRef.current.close();
               }
-            }, 30000);
+            }, 60000);
           }
+
+          let pollTimer: ReturnType<typeof setInterval> | null = null;
+          const pollAnswer = async () => {
+            if (disposed || !targetId || answeredRef.current) return;
+            try {
+              const docs = (await callService.getSignals(uid)) as any[];
+              const answer = docs.find((d: any) => d.from === targetId && d.type === 'answer' && !remoteDescSet);
+              if (answer) {
+                debug('fallback poll found answer');
+                await applyAnswer(answer);
+              }
+              for (const d of docs) {
+                if (d.from === targetId && d.type === 'ice-candidate') {
+                  try {
+                    const cand = JSON.parse(d.data);
+                    if (cand.candidate) await addCandidate(cand);
+                  } catch {}
+                }
+              }
+            } catch {}
+          };
+          pollAnswer();
+          pollTimer = setInterval(pollAnswer, 5000);
         } else if (mode === 'incoming') {
           const offerId = searchParams.get('offerId') || '';
-          if (offerId) {
-            try {
-              const offerDoc = await callService.getSignals(uid);
-              const found = (offerDoc as any[]).find((d: any) => d.$id === offerId);
-              if (found) {
-                const offer = JSON.parse(found.data);
-                await pc.setRemoteDescription(new RTCSessionDescription(offer));
-                const answer = await pc.createAnswer();
-                await pc.setLocalDescription(answer);
-                await callService.sendSignal({
-                  from: uid,
-                  to: otherId,
-                  matchId,
-                  type: 'answer',
-                  callType,
-                  data: JSON.stringify(answer),
-                });
-                setStatusText('Connected');
+          try {
+            const docs = (await callService.getSignals(uid)) as any[];
+            debug('incoming getSignals: ' + docs.length + ' docs, offerId=' + offerId);
+            const offerDoc = offerId
+              ? docs.find((d: any) => d.$id === offerId)
+              : docs.find((d: any) => d.from === targetId && d.type === 'offer');
+            if (offerDoc && !remoteDescSet) {
+              debug('incoming offer found, applying');
+              await applyOfferAndAnswer(offerDoc);
+            } else if (!offerDoc) {
+              debug('incoming offer NOT FOUND');
+            }
+            for (const d of docs) {
+              if (d.from === targetId && d.type === 'ice-candidate') {
+                try {
+                  const cand = JSON.parse(d.data);
+                  if (cand.candidate) await addCandidate(cand);
+                } catch {}
               }
-            } catch {
+            }
+            await drainCandidates();
+            if (!offerDoc) {
               setStatusText('Connection failed');
             }
+          } catch {
+            setStatusText('Connection failed');
           }
         }
       } catch (err: any) {
+        debug('setup error: name=' + err?.name + ' msg=' + (err?.message || ''));
         const msg = err?.message || '';
-        const type = err?.type || '';
         if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-          setStatusText('Microphone permission denied');
-        } else if (msg.includes('collection') || msg.includes('not found') || err.code === 404) {
-          setStatusText('Missing callSignals collection in Appwrite');
-        } else if (msg.includes('permission') || type === 'permission' || err.code === 401) {
-          setStatusText('Appwrite permission error');
+          setStatusText(mediaErrorMessage(err));
+        } else if (msg.includes('not found') || err.code === 404) {
+          setStatusText('Call setup failed');
+        } else if (msg.includes('permission') || err.code === 401) {
+          setStatusText('Permission error');
         } else {
           setStatusText('Failed to start call');
         }
@@ -225,6 +369,9 @@ export default function CallPage() {
     setup();
 
     return () => {
+      disposed = true;
+      clearTimeoutIfAny();
+      stopPoll();
       if (unsubRef.current) unsubRef.current.unsubscribe();
       if (localStreamRef.current) {
         localStreamRef.current.getTracks().forEach(t => t.stop());
@@ -233,7 +380,7 @@ export default function CallPage() {
         pcRef.current.close();
       }
     };
-  }, [user?.$id, callType, mode, otherId, matchId, getOtherUserId, onSignal]);
+  }, [user?.$id, callType, mode, otherId, matchId, onSignal]);
 
   useEffect(() => {
     if (localStreamRef.current) {
@@ -270,8 +417,8 @@ export default function CallPage() {
         to: otherId,
         matchId,
         callType,
-        status: callDuration > 0 ? 'answered' : 'missed',
-        duration: callDuration,
+        status: durationRef.current > 0 ? 'answered' : 'missed',
+        duration: durationRef.current,
       }).catch(() => {});
     }
     if (localStreamRef.current) {
@@ -380,6 +527,11 @@ export default function CallPage() {
           </div>
         </button>
       </div>
+
+      <details style={{ position: 'fixed', bottom: 8, left: 8, zIndex: 999, maxWidth: '90vw', color: '#bbb', fontSize: 11, background: 'rgba(0,0,0,0.75)', borderRadius: 8, padding: '6px 10px' }}>
+        <summary style={{ cursor: 'pointer' }}>Debug ({debugLog.length})</summary>
+        <pre style={{ whiteSpace: 'pre-wrap', margin: '6px 0 0', maxHeight: 200, overflowY: 'auto', fontFamily: 'monospace' }}>{debugLog.join('\n')}</pre>
+      </details>
     </div>
   );
 }

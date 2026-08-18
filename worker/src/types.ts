@@ -6,6 +6,8 @@ export interface Env {
   GOOGLE_CLIENT_SECRET?: string;
   PAYSTACK_SECRET_KEY?: string;
   PAYSTACK_CALLBACK_URL?: string;
+  TURN_KEY_ID?: string;
+  TURN_KEY_TOKEN?: string;
   ChatRoom: DurableObjectNamespace;
   CallSignals: DurableObjectNamespace;
 }
@@ -34,6 +36,8 @@ export interface UserRow {
   data_analytics: number;
   superlikes_remaining: number;
   superlikes_date: string;
+  likes_remaining: number;
+  likes_date: string;
   google_sub: string | null;
   password_hash: string;
   password_salt: string;

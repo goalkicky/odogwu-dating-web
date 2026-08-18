@@ -7,7 +7,8 @@ import theme from '../../theme';
 import AnimatedCard, { AnimatedCardHandle } from '../../components/AnimatedCard';
 import ActionButton from '../../components/ActionButton';
 import GradientBackground from '../../components/GradientBackground';
-import { superlikeService } from '../../api/services';
+import { superlikeService, likeService, matchService } from '../../api/services';
+import { useAuth } from '../../store/AuthContext';
 
 const TAB_BAR_HEIGHT = 85;
 const HEADER_HEIGHT = 52;
@@ -53,17 +54,34 @@ const PLAN_BADGES = [
   { name: 'Platinum', count: '7/day', color: '#AF52DE' },
 ];
 
+const LIKE_PLAN_BADGES = [
+  { name: 'Premium', count: '∞', color: '#FF375F' },
+  { name: 'Surplus', count: '∞', color: '#FFD700', popular: true },
+  { name: 'Platinum', count: '∞', color: '#AF52DE' },
+];
+
+const MESSAGE_PLAN_BADGES = [
+  { name: 'Premium', count: 'Message', color: '#FF375F' },
+  { name: 'Surplus', count: 'Message', color: '#FFD700', popular: true },
+  { name: 'Platinum', count: 'Message', color: '#AF52DE' },
+];
+
 export default function DiscoveryScreen({ navigation }: any) {
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
+  const { user } = useAuth();
   const [users, setUsers] = useState(MOCK_USERS);
   const cardRef = useRef<AnimatedCardHandle>(null);
   const [superlikes, setSuperlikes] = useState({ remaining: 0, used: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
   const [showUpsell, setShowUpsell] = useState(false);
+  const [likes, setLikes] = useState({ remaining: 0, used: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
+  const [showLikeUpsell, setShowLikeUpsell] = useState(false);
+  const [showMessageUpsell, setShowMessageUpsell] = useState(false);
   const [proof, setProof] = useState<string | null>(null);
 
   useEffect(() => {
     superlikeService.getStatus().then(setSuperlikes).catch(() => {});
+    likeService.getStatus().then(setLikes).catch(() => {});
   }, []);
 
   const cardWidth = width * 0.9;
@@ -79,7 +97,26 @@ export default function DiscoveryScreen({ navigation }: any) {
   }, []);
 
   const handleSwipeLeft = useCallback(() => removeCurrent(), [removeCurrent]);
-  const handleSwipeRight = useCallback(() => removeCurrent(), [removeCurrent]);
+  const handleSwipeRight = useCallback(async () => {
+    const liked = users[0];
+    const isMock = !liked || (liked.id?.length ?? 0) < 20;
+    if (!likes.isPremium && (likes.remaining ?? 0) <= 0) {
+      setShowLikeUpsell(true);
+      removeCurrent();
+      return;
+    }
+    if (!isMock) {
+      try {
+        const res = await likeService.send(liked.id);
+        if (res && typeof res.remaining === 'number') setLikes(res);
+      } catch {
+        setShowLikeUpsell(true);
+      }
+    } else {
+      setLikes(prev => ({ ...prev, remaining: Math.max(0, prev.remaining - 1), used: prev.used + 1 }));
+    }
+    removeCurrent();
+  }, [users, likes, removeCurrent]);
 
   const handleSuperLike = useCallback(async () => {
     const liked = users[0];
@@ -107,9 +144,51 @@ export default function DiscoveryScreen({ navigation }: any) {
     cardRef.current?.superLike();
   }, [superlikes.remaining]);
 
+  const handleLikePress = useCallback(() => {
+    if (!likes.isPremium && (likes.remaining ?? 0) <= 0) {
+      setShowLikeUpsell(true);
+      return;
+    }
+    cardRef.current?.swipeRight();
+  }, [likes.isPremium, likes.remaining]);
+
   const handleReload = useCallback(() => {
     setUsers([...MOCK_USERS].sort(() => Math.random() - 0.5));
   }, []);
+
+  const openChatWith = useCallback((target: any, id: string) => {
+    navigation?.navigate('Chat', {
+      match: {
+        id,
+        name: target.fullName,
+        age: target.age,
+        photo: target.photos?.[0],
+        online: false,
+        lastMessage: '',
+        timestamp: '',
+      },
+    });
+  }, [navigation]);
+
+  const handleMessage = useCallback(async () => {
+    const target = users[0];
+    const isMock = !target || (target.id?.length ?? 0) < 20;
+    if (!likes.isPremium) {
+      setShowMessageUpsell(true);
+      return;
+    }
+    if (isMock) {
+      openChatWith(target, target.id);
+      return;
+    }
+    try {
+      const match = await matchService.createMatch((user as any)?.$id, target.id);
+      if (match?.id) openChatWith(target, match.id);
+      else setShowMessageUpsell(true);
+    } catch {
+      setShowMessageUpsell(true);
+    }
+  }, [users, likes.isPremium, user, openChatWith]);
 
   if (!currentUser) {
     return (
@@ -149,6 +228,10 @@ export default function DiscoveryScreen({ navigation }: any) {
         />
 
         <View style={styles.overlayActions}>
+          <ActionButton variant="boost" size={50} onPress={handleMessage}>
+            <Ionicons name="chatbubble-ellipses" size={24} color="white" />
+          </ActionButton>
+
           <ActionButton variant="secondary" size={50} onPress={handleReload}>
             <Ionicons name="refresh" size={24} color={theme.colors.accent} />
           </ActionButton>
@@ -166,9 +249,16 @@ export default function DiscoveryScreen({ navigation }: any) {
             </View>
           </View>
 
-          <ActionButton variant="primary" size={60} onPress={() => cardRef.current?.swipeRight()}>
-            <Ionicons name="heart" size={30} color="white" />
-          </ActionButton>
+          <View>
+            <ActionButton variant="primary" size={60} onPress={handleLikePress}>
+              <Ionicons name="heart" size={30} color="white" />
+            </ActionButton>
+            {!likes.isPremium && likes.dailyLimit > 0 && (
+              <View style={[styles.countBadge, { backgroundColor: (likes.remaining ?? 0) > 0 ? '#FF375F' : '#FF3B30' }]}>
+                <Text style={styles.countText}>{Math.max(0, likes.remaining ?? 0)}</Text>
+              </View>
+            )}
+          </View>
         </View>
 
         {proof && (
@@ -219,6 +309,88 @@ export default function DiscoveryScreen({ navigation }: any) {
             </View>
           </View>
         </Modal>
+
+        <Modal visible={showLikeUpsell} transparent animationType="fade" onRequestClose={() => setShowLikeUpsell(false)}>
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalCard}>
+              <TouchableOpacity style={styles.modalClose} onPress={() => setShowLikeUpsell(false)} hitSlop={{ top: 12, right: 12, bottom: 12, left: 12 }}>
+                <Ionicons name="close" size={18} color="white" />
+              </TouchableOpacity>
+
+              <LinearGradient colors={['#FF375F', '#FF3B30']} style={styles.modalIcon}>
+                <Ionicons name="heart" size={38} color="white" />
+              </LinearGradient>
+              <Text style={styles.modalTitle}>You&apos;re out of Likes</Text>
+              <Text style={styles.modalBody}>
+                You&apos;ve used all 10 of today&apos;s free likes. Premium members get unlimited likes — never miss out on a potential match again. ❤️
+              </Text>
+
+              <View style={styles.modalPlans}>
+                {LIKE_PLAN_BADGES.map((p) => (
+                  <View key={p.name} style={[styles.planChip, p.popular && styles.planChipPopular]}>
+                    {p.popular && <Text style={styles.planChipPopularTag}>POPULAR</Text>}
+                    <View style={styles.planChipRow}>
+                      <Ionicons name="heart" size={11} color={p.color} />
+                      <Text style={styles.planChipName}>{p.name}</Text>
+                    </View>
+                    <Text style={styles.planChipCount}>{p.count} Likes</Text>
+                  </View>
+                ))}
+              </View>
+
+              <TouchableOpacity
+                activeOpacity={0.85}
+                onPress={() => { setShowLikeUpsell(false); navigation?.navigate('PremiumTab'); }}
+                style={[styles.modalCta, { backgroundColor: '#FF375F' }]}
+              >
+                <Ionicons name="diamond" size={18} color="white" />
+                <Text style={styles.modalCtaText}>Get Unlimited Likes — from N4,900/mo</Text>
+              </TouchableOpacity>
+              <Text style={styles.modalFine}>Includes unlimited likes, boosts &amp; more · Cancel anytime</Text>
+            </View>
+          </View>
+        </Modal>
+
+        <Modal visible={showMessageUpsell} transparent animationType="fade" onRequestClose={() => setShowMessageUpsell(false)}>
+          <View style={styles.modalOverlay}>
+            <View style={[styles.modalCard, { borderColor: 'rgba(52,199,89,0.35)' }]}>
+              <TouchableOpacity style={styles.modalClose} onPress={() => setShowMessageUpsell(false)} hitSlop={{ top: 12, right: 12, bottom: 12, left: 12 }}>
+                <Ionicons name="close" size={18} color="white" />
+              </TouchableOpacity>
+
+              <LinearGradient colors={['#34C759', '#00A6FF']} style={styles.modalIcon}>
+                <Ionicons name="chatbubble-ellipses" size={38} color="white" />
+              </LinearGradient>
+              <Text style={styles.modalTitle}>Say Hi Before the Match</Text>
+              <Text style={styles.modalBody}>
+                Don&apos;t wait for a match to break the ice. Premium members can message anyone first — make the first move and stand out instantly. 💬
+              </Text>
+
+              <View style={styles.modalPlans}>
+                {MESSAGE_PLAN_BADGES.map((p) => (
+                  <View key={p.name} style={[styles.planChip, p.popular && styles.planChipPopular]}>
+                    {p.popular && <Text style={styles.planChipPopularTag}>POPULAR</Text>}
+                    <View style={styles.planChipRow}>
+                      <Ionicons name="chatbubble-ellipses" size={11} color={p.color} />
+                      <Text style={styles.planChipName}>{p.name}</Text>
+                    </View>
+                    <Text style={styles.planChipCount}>{p.count}</Text>
+                  </View>
+                ))}
+              </View>
+
+              <TouchableOpacity
+                activeOpacity={0.85}
+                onPress={() => { setShowMessageUpsell(false); navigation?.navigate('PremiumTab'); }}
+                style={[styles.modalCta, { backgroundColor: '#34C759' }]}
+              >
+                <Ionicons name="diamond" size={18} color="white" />
+                <Text style={styles.modalCtaText}>Get Premium — from N4,900/mo</Text>
+              </TouchableOpacity>
+              <Text style={styles.modalFine}>Includes unlimited likes, boosts &amp; more · Cancel anytime</Text>
+            </View>
+          </View>
+        </Modal>
       </View>
     </GradientBackground>
   );
@@ -261,7 +433,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 16,
+    gap: 12,
   },
   emptyContainer: {
     flex: 1,

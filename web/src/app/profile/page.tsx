@@ -4,14 +4,14 @@ import { useRouter } from 'next/navigation';
 import {
   DiamondIcon, SettingsIcon, BellIcon, ShieldIcon, HelpIcon,
   ChevronForwardIcon, ChevronBackIcon, EyeIcon, CallIcon, PencilIcon, CheckmarkIcon,
-  CameraIcon, PlusIcon, LocationIcon, CoinsIcon, InfiniteIcon, StarIcon, CheckmarkCircleIcon,
+  CameraIcon, PlusIcon, LocationIcon, CoinsIcon, InfiniteIcon, StarIcon, CheckmarkCircleIcon, HeartIcon,
 } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import Button from '@/components/Button';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
 import { useAuth } from '@/store/AuthContext';
-import { storageService, superlikeService } from '@/lib/cloudflare/services';
+import { storageService, superlikeService, likeService } from '@/lib/cloudflare/services';
 import { INTEREST_CATEGORIES } from '@/lib/interests';
 
 export default function ProfilePage() {
@@ -22,9 +22,11 @@ export default function ProfilePage() {
   const photoUrls = photos.map((id: string) => storageService.getFilePreview(id));
   const [photoIndex, setPhotoIndex] = useState(0);
   const [superlikes, setSuperlikes] = useState<any>({ remaining: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
+  const [likes, setLikes] = useState<any>({ remaining: 0, used: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
 
   useEffect(() => {
     superlikeService.getStatus().then(setSuperlikes).catch(() => {});
+    likeService.getStatus().then(setLikes).catch(() => {});
   }, []);
 
   const name = profile?.fullName || user?.name || 'User';
@@ -300,6 +302,67 @@ export default function ProfilePage() {
               >
                 <StarIcon size={16} color="white" />
                 Get Super Likes — stand out to matches
+              </button>
+            )}
+          </div>
+
+          {/* Likes wallet */}
+          <div
+            className="glass animate-fade-up"
+            style={{
+              borderRadius: 20, padding: '18px 20px',
+              border: (likes.remaining ?? 0) > 0 ? '1px solid rgba(255,55,95,0.35)' : '1px solid rgba(255,255,255,0.08)',
+              background: (likes.remaining ?? 0) > 0
+                ? 'linear-gradient(135deg, rgba(255,55,95,0.14), rgba(255,59,48,0.06))'
+                : undefined,
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
+              <div style={{ width: 42, height: 42, borderRadius: 14, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: (likes.remaining ?? 0) > 0 ? '0 4px 16px rgba(255,55,95,0.45)' : 'none' }}>
+                <HeartIcon size={20} color="white" />
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 15, fontWeight: 800, color: 'white' }}>Likes</div>
+                <div style={{ fontSize: 12.5, color: '#ABABAB', marginTop: 2 }}>
+                  {likes.isPremium
+                    ? 'Unlimited daily likes with premium'
+                    : likes.dailyLimit > 0
+                      ? `${Math.max(0, likes.remaining ?? 0)} of ${likes.dailyLimit} left today`
+                      : 'Daily likes with premium'}
+                </div>
+              </div>
+              <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                <div style={{ fontSize: 26, fontWeight: 900, color: (likes.remaining ?? 0) > 0 ? '#FF375F' : '#6B6B6B', lineHeight: 1 }}>
+                  {likes.isPremium ? <InfiniteIcon size={26} color="#FF375F" /> : Math.max(0, likes.remaining ?? 0)}
+                </div>
+                <div style={{ fontSize: 10, color: '#6B6B6B', fontWeight: 700, letterSpacing: 0.8, textTransform: 'uppercase', marginTop: 3 }}>{likes.isPremium ? 'unlimited' : 'left today'}</div>
+              </div>
+            </div>
+
+            {!likes.isPremium && likes.dailyLimit > 0 && (likes.remaining ?? 0) > 0 && (
+              <div style={{ marginTop: 12 }}>
+                <div style={{ height: 6, borderRadius: 9999, background: 'rgba(255,255,255,0.1)', overflow: 'hidden' }}>
+                  <div style={{ width: `${Math.min(100, ((likes.remaining ?? 0) / likes.dailyLimit) * 100)}%`, height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, #FF375F, #FF6B81)', transition: 'width 0.5s ease' }} />
+                </div>
+                <div style={{ fontSize: 11, color: '#6B6B6B', marginTop: 7 }}>
+                  Refills at midnight · {likes.dailyLimit} Likes a day
+                </div>
+              </div>
+            )}
+
+            {!likes.isPremium && likes.dailyLimit > 0 && (likes.remaining ?? 0) <= 0 && (
+              <button
+                onClick={() => router.push('/premium')}
+                className="lift"
+                style={{
+                  marginTop: 14, width: '100%', padding: '12px 16px', borderRadius: 14, border: 'none', cursor: 'pointer',
+                  background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+                  color: 'white', fontSize: 14, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  boxShadow: '0 8px 24px rgba(255,55,95,0.4)',
+                }}
+              >
+                <HeartIcon size={16} color="white" />
+                Get Unlimited Likes
               </button>
             )}
           </div>

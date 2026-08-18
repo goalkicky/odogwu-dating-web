@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useCallback, useEffect } from 'react';
-import { HeartIcon, CloseIcon, StarIcon, RefreshIcon, FilterIcon } from '@/components/Icons';
+import { useRouter } from 'next/navigation';
+import { HeartIcon, CloseIcon, StarIcon, RefreshIcon, FilterIcon, ChatIcon } from '@/components/Icons';
 import AnimatedCard from '@/components/AnimatedCard';
 import ActionButton from '@/components/ActionButton';
 import GradientBackground from '@/components/GradientBackground';
@@ -8,13 +9,16 @@ import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
 import ProfileModal from '@/components/ProfileModal';
 import SuperlikeUpsellModal from '@/components/SuperlikeUpsellModal';
+import LikeUpsellModal from '@/components/LikeUpsellModal';
+import MessageUpsellModal from '@/components/MessageUpsellModal';
 import { useMobile } from '@/lib/useMediaQuery';
 import { useAuth } from '@/store/AuthContext';
-import { userService, storageService, superlikeService } from '@/lib/cloudflare/services';
+import { userService, storageService, superlikeService, likeService, matchService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
 
 export default function DiscoverPage() {
   const { profile } = useAuth();
+  const router = useRouter();
   const isMobile = useMobile();
   const [users, setUsers] = useState<any[]>([]);
 
@@ -24,6 +28,9 @@ export default function DiscoverPage() {
   const [showProfileUser, setShowProfileUser] = useState<any>(null);
   const [superlikes, setSuperlikes] = useState<any>({ remaining: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
   const [showSuperlikeUpsell, setShowSuperlikeUpsell] = useState(false);
+  const [likes, setLikes] = useState<any>({ remaining: 0, used: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
+  const [showLikeUpsell, setShowLikeUpsell] = useState(false);
+  const [showMessageUpsell, setShowMessageUpsell] = useState(false);
 
   const baseGender = (profile?.interestedIn as string) || 'both';
   const defaultPrefs = { gender: baseGender, minAge: 18, maxAge: 60, maxDistance: 0 };
@@ -65,6 +72,7 @@ export default function DiscoverPage() {
 
   useEffect(() => {
     superlikeService.getStatus().then(setSuperlikes).catch(() => {});
+    likeService.getStatus().then(setLikes).catch(() => {});
   }, []);
 
   const nextUser = useCallback(() => {
@@ -85,17 +93,27 @@ export default function DiscoverPage() {
   }, [users, profile, nextUser]);
 
   const handleSwipeRight = useCallback(async () => {
-    setLastAction('like');
     const liked = users[0];
+    setLastAction('like');
+    if (!likes.isPremium && (likes.remaining ?? 0) <= 0) {
+      setShowLikeUpsell(true);
+      setTimeout(() => { setLastAction(null); nextUser(); }, 300);
+      return;
+    }
     if (liked && account) {
       try {
-        await userService.likeUser((profile as any).$id, liked.id);
+        const res = await userService.likeUser((profile as any).$id, liked.id);
+        if (res && typeof res.remaining === 'number') setLikes(res);
         const mutual = await userService.isMutualMatch((profile as any).$id, liked.id);
         if (mutual) setLastAction('match');
-      } catch {}
+      } catch (e: any) {
+        if (e?.status === 402 || e?.code === 'NO_LIKES' || String(e?.message || '').includes('like')) {
+          setShowLikeUpsell(true);
+        }
+      }
     }
     setTimeout(() => { setLastAction(null); nextUser(); }, 300);
-  }, [users, profile, nextUser]);
+  }, [users, profile, likes, nextUser]);
 
   const handleSuperLike = useCallback(async () => {
     const liked = users[0];
@@ -121,6 +139,29 @@ export default function DiscoverPage() {
   const handleReload = useCallback(() => {
     loadUsers();
   }, [loadUsers]);
+
+  const handleMessage = useCallback(async () => {
+    const target = users[0];
+    if (!target || !account) return;
+    if (!profile?.isPremium) {
+      setShowMessageUpsell(true);
+      return;
+    }
+    setLastAction('message');
+    try {
+      const match = await matchService.createMatch((profile as any).$id, target.id);
+      if (match?.id) {
+        router.push(`/chat/${match.id}`);
+      } else {
+        setShowMessageUpsell(true);
+      }
+    } catch (e: any) {
+      if (e?.status === 402 || e?.code === 'PREMIUM_REQUIRED' || String(e?.message || '').includes('premium')) {
+        setShowMessageUpsell(true);
+      }
+      setLastAction(null);
+    }
+  }, [users, profile, router]);
 
   if (loading) {
     return (
@@ -251,7 +292,10 @@ export default function DiscoverPage() {
               </div>
             )}
 
-            <div className="animate-fade-up" style={{ position: 'absolute', bottom: 10, left: 0, right: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14 }}>
+            <div className="animate-fade-up" style={{ position: 'absolute', bottom: 10, left: 0, right: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+              <ActionButton variant="boost" size={40} onPress={handleMessage}>
+                <ChatIcon size={18} color="white" />
+              </ActionButton>
               <ActionButton variant="secondary" size={46} onPress={handleReload}>
                 <RefreshIcon size={20} color="#FFD700" />
               </ActionButton>
@@ -272,9 +316,22 @@ export default function DiscoverPage() {
                   {superlikes.remaining}
                 </span>
               </div>
-              <ActionButton variant="primary" size={62} onPress={handleSwipeRight}>
-                <HeartIcon size={30} color="white" />
-              </ActionButton>
+              <div style={{ position: 'relative' }}>
+                <ActionButton variant="primary" size={62} onPress={handleSwipeRight}>
+                  <HeartIcon size={30} color="white" />
+                </ActionButton>
+                {!likes.isPremium && likes.dailyLimit > 0 && (
+                  <span style={{
+                    position: 'absolute', top: -4, right: -6, minWidth: 20, height: 20, padding: '0 5px', boxSizing: 'border-box',
+                    borderRadius: 9999, background: (likes.remaining ?? 0) > 0 ? 'linear-gradient(135deg, #FF375F, #FF6B81)' : '#FF3B30',
+                    color: 'white', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    boxShadow: (likes.remaining ?? 0) > 0 ? '0 2px 10px rgba(255,55,95,0.6)' : '0 2px 10px rgba(255,59,48,0.6)',
+                    border: '2px solid #0D0D0D',
+                  }}>
+                    {Math.max(0, likes.remaining ?? 0)}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -296,6 +353,14 @@ export default function DiscoverPage() {
 
         {showSuperlikeUpsell && (
           <SuperlikeUpsellModal onClose={() => setShowSuperlikeUpsell(false)} />
+        )}
+
+        {showLikeUpsell && (
+          <LikeUpsellModal onClose={() => setShowLikeUpsell(false)} />
+        )}
+
+        {showMessageUpsell && (
+          <MessageUpsellModal onClose={() => setShowMessageUpsell(false)} />
         )}
       </GradientBackground>
     </DesktopLayout>

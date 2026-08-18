@@ -14,6 +14,7 @@ const COIN_PACKS: Record<number, number> = { 10: 1000, 25: 2500, 50: 5000, 100: 
 const PLAN_COINS: Record<string, number> = { premium: 49, surplus: 79, platinum: 109 };
 const PLAN_NAMES: Record<string, string> = { premium: 'Odogwu Premium', surplus: 'Odogwu Surplus', platinum: 'Odogwu Platinum' };
 const SUPERLIKE_DAILY: Record<string, number> = { premium: 2, surplus: 5, platinum: 7 };
+const LIKES_DAILY = 10;
 const PREMIUM_DAYS = 30;
 const COIN_RATE_NAIRA = 100;
 const WAT_OFFSET_MS = 60 * 60 * 1000;
@@ -191,11 +192,13 @@ function superlikeRefillsAt(): string {
   return new Date(next.getTime() - WAT_OFFSET_MS).toISOString();
 }
 
+function premiumActive(user: UserRow | null): boolean {
+  return !!user?.is_premium && (!user.premium_expires_at || new Date(user.premium_expires_at).getTime() > Date.now());
+}
+
 function superlikeAllowance(user: UserRow | null): number {
-  if (!user) return 0;
-  const premiumActive = !!user.is_premium && (!user.premium_expires_at || new Date(user.premium_expires_at).getTime() > Date.now());
-  if (!premiumActive) return 0;
-  return SUPERLIKE_DAILY[user.premium_plan] ?? 2;
+  if (!premiumActive(user)) return 0;
+  return SUPERLIKE_DAILY[user!.premium_plan] ?? 2;
 }
 
 // Ensures the stored remaining count matches today's allowance (resets once per day).
@@ -224,10 +227,53 @@ function superlikeStatusDoc(user: UserRow): any {
   };
 }
 
+// ===== Likes wallet =====
+
+// Ensures the stored like count matches today's allowance. -1 = unlimited (premium).
+async function ensureLikes(env: Env, user: UserRow | null): Promise<UserRow | null> {
+  if (!user) return user;
+  const date = superlikeDate();
+  const unlimited = premiumActive(user);
+  const want = unlimited ? -1 : LIKES_DAILY;
+  const cur = user.likes_remaining ?? 0;
+  const stale =
+    user.likes_date !== date ||
+    (unlimited ? cur !== -1 : cur < 0 || cur > LIKES_DAILY);
+  if (stale) {
+    await env.DB.prepare(
+      'UPDATE users SET likes_remaining = ?, likes_date = ?, updated_at = ? WHERE id = ?'
+    ).bind(want, date, now(), user.id).run();
+    return { ...user, likes_remaining: want, likes_date: date };
+  }
+  return user;
+}
+
+function likeStatusDoc(user: UserRow): any {
+  const unlimited = premiumActive(user);
+  const remaining = unlimited ? -1 : Math.max(0, user.likes_remaining ?? 0);
+  return {
+    remaining,
+    used: unlimited ? 0 : Math.max(0, LIKES_DAILY - remaining),
+    dailyLimit: unlimited ? -1 : LIKES_DAILY,
+    refillsAt: unlimited ? '' : superlikeRefillsAt(),
+    isPremium: !!user.is_premium,
+  };
+}
+
+async function handleGetLikesStatus(env: Env, _req: Request, me: string): Promise<Response> {
+  const user = await ensureLikes(env, await getUserRow(env, me));
+  return json(likeStatusDoc(user!));
+}
+
 async function requireMatchMembership(env: Env, matchId: string, userId: string): Promise<MatchRow | null> {
   return (await env.DB.prepare(
     `SELECT * FROM matches WHERE id = ? AND (user_id = ? OR matched_user_id = ?)`
   ).bind(matchId, userId, userId).first()) as MatchRow | null;
+}
+
+// One conversation key per user pair, regardless of which direction created the match row.
+function pairKey(a: string, b: string): string {
+  return [a, b].sort().join('|');
 }
 
 async function isBlockedEitherWay(env: Env, a: string, b: string): Promise<boolean> {
@@ -621,16 +667,44 @@ async function handleCreateLike(env: Env, req: Request, me: string): Promise<Res
   const matchedUserId = String(body.matchedUserId || '');
   if (!matchedUserId || matchedUserId === me) return json({ error: 'Invalid user' }, 400);
   if (await isBlockedEitherWay(env, me, matchedUserId)) return json({ error: 'Cannot like a blocked user' }, 403);
+
+  const user = await ensureLikes(env, await getUserRow(env, me));
+  const status = likeStatusDoc(user!);
+
+  // Idempotent — if already liked, don't spend a like.
+  const alreadyLiked = !!(await env.DB.prepare(
+    'SELECT 1 FROM matches WHERE user_id = ? AND matched_user_id = ?'
+  ).bind(me, matchedUserId).first());
+  const mutual = !!(await env.DB.prepare(
+    'SELECT 1 FROM matches WHERE user_id = ? AND matched_user_id = ?'
+  ).bind(matchedUserId, me).first());
+  if (alreadyLiked) {
+    return json({ ...status, mutual, match: toMatchDoc({ id: '', user_id: me, matched_user_id: matchedUserId, matched_at: '' }) });
+  }
+
+  // Free users get LIKES_DAILY per day; premium members get unlimited.
+  if (!status.isPremium && status.remaining <= 0) {
+    return json({ error: 'You have used up all your likes for today. Upgrade to premium for unlimited likes.', code: 'NO_LIKES' }, 402);
+  }
+
+  if (!status.isPremium) {
+    const spent = await env.DB.prepare(
+      'UPDATE users SET likes_remaining = likes_remaining - 1, updated_at = ? WHERE id = ? AND likes_remaining >= 1'
+    ).bind(now(), me).run();
+    if (spent.meta.changes === 0) {
+      return json({ error: 'You have used up all your likes for today. Upgrade to premium for unlimited likes.', code: 'NO_LIKES' }, 402);
+    }
+  }
+
   const id = newId();
   const ts = now();
   await env.DB.prepare(
     'INSERT OR IGNORE INTO matches (id, user_id, matched_user_id, matched_at) VALUES (?, ?, ?, ?)'
   ).bind(id, me, matchedUserId, ts).run();
   const doc = toMatchDoc({ id, user_id: me, matched_user_id: matchedUserId, matched_at: ts });
-  const mutual = !!(await env.DB.prepare(
-    'SELECT 1 FROM matches WHERE user_id = ? AND matched_user_id = ?'
-  ).bind(matchedUserId, me).first());
-  return json({ ...doc, mutual });
+
+  const updated = await getUserRow(env, me);
+  return json({ ...likeStatusDoc(updated!), mutual, match: doc });
 }
 
 // ===== Super Likes =====
@@ -712,11 +786,23 @@ async function handleCreateMatch(env: Env, req: Request, me: string): Promise<Re
   const body = await req.json() as any;
   const userId = String(body.userId || me);
   const matchedUserId = String(body.matchedUserId || '');
+  if (!matchedUserId) return json({ error: 'matchedUserId is required' }, 400);
   if (await isBlockedEitherWay(env, userId, matchedUserId)) return json({ error: 'Cannot match a blocked user' }, 403);
+
+  const existing = await env.DB.prepare(
+    'SELECT * FROM matches WHERE (user_id = ? AND matched_user_id = ?) OR (user_id = ? AND matched_user_id = ?) LIMIT 1'
+  ).bind(userId, matchedUserId, matchedUserId, userId).first() as any;
+  if (existing) return json(toMatchDoc(existing));
+
+  const user = await getUserRow(env, userId);
+  if (!premiumActive(user)) {
+    return json({ error: 'Messaging before matching is a premium feature. Upgrade to send a message first.', code: 'PREMIUM_REQUIRED' }, 402);
+  }
+
   const id = newId();
   const ts = now();
   await env.DB.prepare(
-    'INSERT OR IGNORE INTO matches (id, user_id, matched_user_id, matched_at) VALUES (?, ?, ?, ?)'
+    'INSERT INTO matches (id, user_id, matched_user_id, matched_at) VALUES (?, ?, ?, ?)'
   ).bind(id, userId, matchedUserId, ts).run();
   return json(toMatchDoc({ id, user_id: userId, matched_user_id: matchedUserId, matched_at: ts }));
 }
@@ -732,6 +818,7 @@ async function handleSendMessage(env: Env, req: Request, me: string): Promise<Re
   if (!membership) return json({ error: 'Not a match participant' }, 403);
   const other = membership.user_id === me ? membership.matched_user_id : membership.user_id;
   if (await isBlockedEitherWay(env, me, other)) return json({ error: 'You blocked this user or were blocked' }, 403);
+  const roomKey = pairKey(membership.user_id, membership.matched_user_id);
 
   const id = newId();
   const ts = now();
@@ -739,7 +826,7 @@ async function handleSendMessage(env: Env, req: Request, me: string): Promise<Re
     `INSERT INTO messages (id, match_id, sender_id, text, type, media_url, reply_to, created_at)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
   ).bind(
-    id, matchId, senderId,
+    id, roomKey, senderId,
     String(body.text || ''),
     String(body.type || 'text'),
     String(body.mediaUrl || ''),
@@ -749,7 +836,7 @@ async function handleSendMessage(env: Env, req: Request, me: string): Promise<Re
 
   const row = await env.DB.prepare('SELECT * FROM messages WHERE id = ?').bind(id).first() as MessageRow;
   const doc = toMessageDoc(row);
-  await relayToRoom(env, matchId, { type: 'message', message: doc });
+  await relayToRoom(env, roomKey, { type: 'message', message: doc });
   return json(doc, 201);
 }
 
@@ -760,9 +847,10 @@ async function handleGetMessages(env: Env, req: Request, me: string): Promise<Re
   if (!membership) return json({ error: 'Not a match participant' }, 403);
   const other = membership.user_id === me ? membership.matched_user_id : membership.user_id;
   if (await isBlockedEitherWay(env, me, other)) return json({ error: 'Forbidden' }, 403);
+  const roomKey = pairKey(membership.user_id, membership.matched_user_id);
   const { results } = await env.DB.prepare(
     'SELECT * FROM messages WHERE match_id = ? ORDER BY created_at ASC LIMIT 2000'
-  ).bind(matchId).all();
+  ).bind(roomKey).all();
   return json({ documents: results.map(toMessageDoc) });
 }
 
@@ -863,6 +951,34 @@ async function handleGetCallLogs(env: Env, req: Request, me: string): Promise<Re
     'SELECT * FROM call_logs WHERE from_user = ? OR to_user = ? ORDER BY created_at DESC LIMIT 200'
   ).bind(me, me).all();
   return json({ documents: results.map(toCallLogDoc) });
+}
+
+async function handleCallTurn(env: Env): Promise<Response> {
+  const keyId = env.TURN_KEY_ID;
+  const keyToken = env.TURN_KEY_TOKEN;
+  if (!keyId || !keyToken) return json({ error: 'TURN not configured' }, 501);
+  try {
+    const res = await fetch(`https://rtc.live.cloudflare.com/v1/turn/keys/${encodeURIComponent(keyId)}/credentials/generate-ice-servers`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${keyToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ttl: 3600 }),
+    });
+    if (!res.ok) return json({ error: 'TURN unavailable' }, 502);
+    const data = await res.json() as any;
+    const iceServers = (Array.isArray(data?.iceServers) ? data.iceServers : [])
+      .map((s: any) => ({
+        ...s,
+        urls: Array.isArray(s.urls) ? s.urls.filter((u: string) => !/:53\b/.test(u)) : s.urls,
+      }))
+      .filter((s: any) => Array.isArray(s.urls) && s.urls.length > 0);
+    return json({ iceServers });
+  } catch (e) {
+    console.error('[call-turn] error:', e);
+    return json({ error: 'TURN unavailable' }, 502);
+  }
 }
 
 // ===== Media (R2) =====
@@ -1104,6 +1220,352 @@ async function handleUnblock(env: Env, req: Request, me: string, blockedId: stri
   return json({ ok: true });
 }
 
+// ===== Feed (Instagram-style timeline) =====
+
+function toFeedPostDoc(r: any, likedByMe = false, savedByMe = false): any {
+  let images: string[] = [];
+  try { images = JSON.parse(r.images || '[]'); } catch {}
+  return {
+    id: r.id,
+    userId: r.user_id,
+    userName: r.full_name || '',
+    userPhoto: r.user_photo || '',
+    images,
+    caption: r.caption || '',
+    visibility: r.visibility || 'public',
+    likesCount: r.likes_count ?? 0,
+    commentsCount: r.comments_count ?? 0,
+    likedByMe,
+    savedByMe,
+    createdAt: r.created_at,
+  };
+}
+
+function toFeedCommentDoc(r: any): any {
+  return {
+    id: r.id,
+    postId: r.post_id,
+    userId: r.user_id,
+    userName: r.full_name || '',
+    userPhoto: r.user_photo || '',
+    text: r.text || '',
+    createdAt: r.created_at,
+  };
+}
+
+// Resolves a list of posts with user info and the current user's like/save status.
+async function resolveFeedPosts(env: Env, rows: any[], me: string): Promise<any[]> {
+  if (rows.length === 0) return [];
+  const postIds = rows.map((r: any) => r.id);
+
+  // Batch-fetch user info for all post authors
+  const userIds = [...new Set(rows.map((r: any) => r.user_id))];
+  const placeholders = userIds.map(() => '?').join(',');
+  const { results: userRows } = await env.DB.prepare(
+    `SELECT id, full_name, photos FROM users WHERE id IN (${placeholders})`
+  ).bind(...userIds).all();
+  const userMap = new Map<string, any>();
+  for (const u of userRows) {
+    let photos: string[] = [];
+    try { photos = JSON.parse((u as any).photos || '[]'); } catch {}
+    userMap.set((u as any).id, { full_name: (u as any).full_name, photo: photos[0] || '' });
+  }
+
+  // Batch-fetch my likes for these posts
+  const likePlaceholders = postIds.map(() => '?').join(',');
+  const { results: myLikes } = await env.DB.prepare(
+    `SELECT post_id FROM feed_post_likes WHERE post_id IN (${likePlaceholders}) AND user_id = ?`
+  ).bind(...postIds, me).all();
+  const likedSet = new Set(myLikes.map((r: any) => r.post_id));
+
+  // Batch-fetch my saves for these posts
+  const { results: mySaves } = await env.DB.prepare(
+    `SELECT post_id FROM feed_post_saves WHERE post_id IN (${likePlaceholders}) AND user_id = ?`
+  ).bind(...postIds, me).all();
+  const savedSet = new Set(mySaves.map((r: any) => r.post_id));
+
+  // Build blocked user list to filter
+  const blockedByMe = new Set((await blockedIds(env, me)));
+  const iBlocked = new Set((await blockerIds(env, me)));
+
+  return rows
+    .filter((r: any) => !blockedByMe.has(r.user_id) && !iBlocked.has(r.user_id))
+    .map((r: any) => {
+      const u = userMap.get(r.user_id) || { full_name: '', photo: '' };
+      return toFeedPostDoc(
+        { ...r, full_name: u.full_name, user_photo: u.photo },
+        likedSet.has(r.id),
+        savedSet.has(r.id),
+      );
+    });
+}
+
+// Shared: resolve a list of comment rows with user info
+async function resolveFeedComments(env: Env, rows: any[]): Promise<any[]> {
+  if (rows.length === 0) return [];
+  const userIds = [...new Set(rows.map((r: any) => r.user_id))];
+  const placeholders = userIds.map(() => '?').join(',');
+  const { results: userRows } = await env.DB.prepare(
+    `SELECT id, full_name, photos FROM users WHERE id IN (${placeholders})`
+  ).bind(...userIds).all();
+  const userMap = new Map<string, any>();
+  for (const u of userRows) {
+    let photos: string[] = [];
+    try { photos = JSON.parse((u as any).photos || '[]'); } catch {}
+    userMap.set((u as any).id, { full_name: (u as any).full_name, photo: photos[0] || '' });
+  }
+  return rows.map((r: any) => {
+    const u = userMap.get(r.user_id) || { full_name: '', photo: '' };
+    return toFeedCommentDoc({ ...r, full_name: u.full_name, user_photo: u.photo });
+  });
+}
+
+async function handleGetFeed(env: Env, req: Request, me: string): Promise<Response> {
+  const url = new URL(req.url);
+  const cursor = url.searchParams.get('cursor') || '';
+  const visibility = url.searchParams.get('visibility') || 'all';
+  const limit = 20;
+
+  let sql = '';
+  const binds: any[] = [];
+
+  if (visibility === 'friends') {
+    // Only posts from mutual matches
+    sql = `SELECT p.*, u.full_name, u.photos
+           FROM feed_posts p
+           JOIN users u ON u.id = p.user_id
+           WHERE p.visibility = 'friends'
+             AND p.user_id IN (
+               SELECT matched_user_id FROM matches WHERE user_id = ?
+               INTERSECT
+               SELECT user_id FROM matches WHERE matched_user_id = ?
+             )
+             AND p.user_id NOT IN (SELECT blocked_id FROM blocks WHERE blocker_id = ?)
+             AND p.user_id NOT IN (SELECT blocker_id FROM blocks WHERE blocked_id = ?)`;
+    binds.push(me, me, me, me);
+  } else if (visibility === 'public') {
+    sql = `SELECT p.*, u.full_name, u.photos
+           FROM feed_posts p
+           JOIN users u ON u.id = p.user_id
+           WHERE p.visibility = 'public'
+             AND p.user_id NOT IN (SELECT blocked_id FROM blocks WHERE blocker_id = ?)
+             AND p.user_id NOT IN (SELECT blocker_id FROM blocks WHERE blocked_id = ?)`;
+    binds.push(me, me);
+  } else {
+    // 'all' — public posts + friends posts from my matches
+    sql = `SELECT p.*, u.full_name, u.photos
+           FROM feed_posts p
+           JOIN users u ON u.id = p.user_id
+           WHERE (
+             p.visibility = 'public'
+             OR (
+               p.visibility = 'friends'
+               AND p.user_id IN (
+                 SELECT matched_user_id FROM matches WHERE user_id = ?
+                 INTERSECT
+                 SELECT user_id FROM matches WHERE matched_user_id = ?
+               )
+             )
+           )
+           AND p.user_id NOT IN (SELECT blocked_id FROM blocks WHERE blocker_id = ?)
+           AND p.user_id NOT IN (SELECT blocker_id FROM blocks WHERE blocked_id = ?)`;
+    binds.push(me, me, me, me);
+  }
+
+  if (cursor) {
+    sql += ` AND p.created_at < (SELECT created_at FROM feed_posts WHERE id = ?)`;
+    binds.push(cursor);
+  }
+
+  sql += ` ORDER BY p.created_at DESC LIMIT ?`;
+  binds.push(limit + 1);
+
+  const { results } = await env.DB.prepare(sql).bind(...binds).all();
+  const hasMore = results.length > limit;
+  const rows = hasMore ? results.slice(0, limit) : results;
+
+  // Flatten photos from the joined query into user_photo field
+  const mappedRows = rows.map((r: any) => {
+    let photos: string[] = [];
+    try { photos = JSON.parse(r.photos || '[]'); } catch {}
+    return { ...r, user_photo: photos[0] || '' };
+  });
+
+  const posts = await resolveFeedPosts(env, mappedRows, me);
+  return json({ documents: posts, cursor: hasMore ? rows[rows.length - 1]?.id || '' : '' });
+}
+
+async function handleCreatePost(env: Env, req: Request, me: string): Promise<Response> {
+  const body = await req.json() as any;
+  const images = Array.isArray(body.images) ? body.images.map(String) : [];
+  const caption = String(body.caption || '').trim();
+  const visibility = (body.visibility === 'friends' ? 'friends' : 'public') as string;
+
+  if (images.length === 0) return json({ error: 'At least one image is required' }, 400);
+  if (images.length > 10) return json({ error: 'Maximum 10 images allowed' }, 400);
+  if (caption.length > 2200) return json({ error: 'Caption too long (max 2200 characters)' }, 400);
+
+  const id = newId();
+  const ts = now();
+  await env.DB.prepare(
+    `INSERT INTO feed_posts (id, user_id, images, caption, visibility, likes_count, comments_count, created_at) VALUES (?, ?, ?, ?, ?, 0, 0, ?)`
+  ).bind(id, me, JSON.stringify(images), caption, visibility, ts).run();
+
+  // Fetch user info for the response
+  const user = await getUserRow(env, me);
+  let userPhoto = '';
+  if (user) {
+    try { userPhoto = (JSON.parse(user.photos || '[]') as string[])[0] || ''; } catch {}
+  }
+
+  return json(toFeedPostDoc({
+    id, user_id: me, full_name: user?.full_name || '', user_photo: userPhoto,
+    images: JSON.stringify(images), caption, visibility,
+    likes_count: 0, comments_count: 0, created_at: ts,
+  }), 201);
+}
+
+async function handleDeletePost(env: Env, req: Request, me: string, postId: string): Promise<Response> {
+  void req;
+  const post = await env.DB.prepare('SELECT * FROM feed_posts WHERE id = ?').bind(postId).first() as any;
+  if (!post) return json({ error: 'Post not found' }, 404);
+  if (post.user_id !== me) return json({ error: 'Forbidden' }, 403);
+
+  await env.DB.prepare('DELETE FROM feed_posts WHERE id = ?').bind(postId).run();
+  await env.DB.prepare('DELETE FROM feed_post_likes WHERE post_id = ?').bind(postId).run();
+  await env.DB.prepare('DELETE FROM feed_post_saves WHERE post_id = ?').bind(postId).run();
+  await env.DB.prepare('DELETE FROM feed_comments WHERE post_id = ?').bind(postId).run();
+  return json({ ok: true });
+}
+
+async function handleLikePost(env: Env, req: Request, me: string, postId: string): Promise<Response> {
+  void req;
+  const post = await env.DB.prepare('SELECT * FROM feed_posts WHERE id = ?').bind(postId).first() as any;
+  if (!post) return json({ error: 'Post not found' }, 404);
+  if (post.user_id === me) return json({ error: 'Cannot like your own post' }, 400);
+
+  const existing = await env.DB.prepare(
+    'SELECT 1 FROM feed_post_likes WHERE post_id = ? AND user_id = ?'
+  ).bind(postId, me).first();
+  if (existing) return json({ ok: true, alreadyLiked: true });
+
+  const ts = now();
+  await env.DB.prepare(
+    'INSERT INTO feed_post_likes (post_id, user_id, created_at) VALUES (?, ?, ?)'
+  ).bind(postId, me, ts).run();
+  await env.DB.prepare(
+    'UPDATE feed_posts SET likes_count = likes_count + 1 WHERE id = ?'
+  ).bind(postId).run();
+
+  return json({ ok: true });
+}
+
+async function handleUnlikePost(env: Env, req: Request, me: string, postId: string): Promise<Response> {
+  void req;
+  const deleted = await env.DB.prepare(
+    'DELETE FROM feed_post_likes WHERE post_id = ? AND user_id = ?'
+  ).bind(postId, me).run();
+  if (deleted.meta.changes > 0) {
+    await env.DB.prepare(
+      'UPDATE feed_posts SET likes_count = MAX(0, likes_count - 1) WHERE id = ?'
+    ).bind(postId).run();
+  }
+  return json({ ok: true });
+}
+
+async function handleGetFeedComments(env: Env, req: Request, me: string): Promise<Response> {
+  void me;
+  const url = new URL(req.url);
+  const postId = url.searchParams.get('postId') || '';
+  const cursor = url.searchParams.get('cursor') || '';
+  if (!postId) return json({ error: 'postId required' }, 400);
+
+  let sql = `SELECT c.*, u.full_name, u.photos
+             FROM feed_comments c
+             JOIN users u ON u.id = c.user_id
+             WHERE c.post_id = ?`;
+  const binds: any[] = [postId];
+
+  if (cursor) {
+    sql += ` AND c.created_at > (SELECT created_at FROM feed_comments WHERE id = ?)`;
+    binds.push(cursor);
+  }
+
+  sql += ` ORDER BY c.created_at ASC LIMIT 50`;
+  const { results } = await env.DB.prepare(sql).bind(...binds).all();
+
+  const mapped = results.map((r: any) => {
+    let photos: string[] = [];
+    try { photos = JSON.parse(r.photos || '[]'); } catch {}
+    return { ...r, user_photo: photos[0] || '' };
+  });
+
+  const comments = await resolveFeedComments(env, mapped);
+  return json({ documents: comments });
+}
+
+async function handleAddFeedComment(env: Env, req: Request, me: string): Promise<Response> {
+  const body = await req.json() as any;
+  const postId = String(body.postId || '');
+  const text = String(body.text || '').trim();
+  if (!postId) return json({ error: 'postId required' }, 400);
+  if (!text) return json({ error: 'Comment text required' }, 400);
+  if (text.length > 1000) return json({ error: 'Comment too long (max 1000 characters)' }, 400);
+
+  const post = await env.DB.prepare('SELECT id FROM feed_posts WHERE id = ?').bind(postId).first();
+  if (!post) return json({ error: 'Post not found' }, 404);
+
+  const id = newId();
+  const ts = now();
+  await env.DB.prepare(
+    `INSERT INTO feed_comments (id, post_id, user_id, text, created_at) VALUES (?, ?, ?, ?, ?)`
+  ).bind(id, postId, me, text, ts).run();
+  await env.DB.prepare(
+    'UPDATE feed_posts SET comments_count = comments_count + 1 WHERE id = ?'
+  ).bind(postId).run();
+
+  const user = await getUserRow(env, me);
+  let userPhoto = '';
+  if (user) {
+    try { userPhoto = (JSON.parse(user.photos || '[]') as string[])[0] || ''; } catch {}
+  }
+
+  return json(toFeedCommentDoc({
+    id, post_id: postId, user_id: me, full_name: user?.full_name || '', user_photo: userPhoto, text, created_at: ts,
+  }), 201);
+}
+
+async function handleDeleteFeedComment(env: Env, req: Request, me: string, commentId: string): Promise<Response> {
+  void req;
+  const comment = await env.DB.prepare('SELECT * FROM feed_comments WHERE id = ?').bind(commentId).first() as any;
+  if (!comment) return json({ error: 'Comment not found' }, 404);
+  if (comment.user_id !== me) return json({ error: 'Forbidden' }, 403);
+
+  await env.DB.prepare('DELETE FROM feed_comments WHERE id = ?').bind(commentId).run();
+  await env.DB.prepare(
+    'UPDATE feed_posts SET comments_count = MAX(0, comments_count - 1) WHERE id = ?'
+  ).bind(comment.post_id).run();
+  return json({ ok: true });
+}
+
+async function handleSavePost(env: Env, req: Request, me: string, postId: string): Promise<Response> {
+  void req;
+  const post = await env.DB.prepare('SELECT id FROM feed_posts WHERE id = ?').bind(postId).first();
+  if (!post) return json({ error: 'Post not found' }, 404);
+
+  await env.DB.prepare(
+    'INSERT OR IGNORE INTO feed_post_saves (post_id, user_id, created_at) VALUES (?, ?, ?)'
+  ).bind(postId, me, now()).run();
+  return json({ ok: true });
+}
+
+async function handleUnsavePost(env: Env, req: Request, me: string, postId: string): Promise<Response> {
+  void req;
+  await env.DB.prepare('DELETE FROM feed_post_saves WHERE post_id = ? AND user_id = ?')
+    .bind(postId, me).run();
+  return json({ ok: true });
+}
+
 // ===== WebSocket upgrade handlers =====
 async function handleChatWS(req: Request, env: Env, url: URL): Promise<Response> {
   const token = url.searchParams.get('token');
@@ -1117,8 +1579,12 @@ async function handleChatWS(req: Request, env: Env, url: URL): Promise<Response>
   if (!membership) return json({ error: 'Not a match participant' }, 403);
   const other = membership.user_id === auth.user.id ? membership.matched_user_id : membership.user_id;
   if (await isBlockedEitherWay(env, auth.user.id, other)) return json({ error: 'Forbidden' }, 403);
-  const room = env.ChatRoom.get(env.ChatRoom.idFromName(matchId));
-  return room.fetch('http://chatroom/ws?uid=' + encodeURIComponent(auth.user.id));
+  const roomKey = pairKey(membership.user_id, membership.matched_user_id);
+  const room = env.ChatRoom.get(env.ChatRoom.idFromName(roomKey));
+  const wsReq = new Request('http://chatroom/ws?uid=' + encodeURIComponent(auth.user.id), {
+    headers: req.headers,
+  });
+  return room.fetch(wsReq);
 }
 
 async function handleCallWS(req: Request, env: Env, url: URL): Promise<Response> {
@@ -1131,7 +1597,10 @@ async function handleCallWS(req: Request, env: Env, url: URL): Promise<Response>
   const userId = url.searchParams.get('userId') || '';
   if (userId !== auth.user.id) return json({ error: 'Forbidden' }, 403);
   const relay = env.CallSignals.get(env.CallSignals.idFromName('global'));
-  return relay.fetch('http://calls/ws?uid=' + encodeURIComponent(auth.user.id));
+  const wsReq = new Request('http://calls/ws?uid=' + encodeURIComponent(auth.user.id), {
+    headers: req.headers,
+  });
+  return relay.fetch(wsReq);
 }
 
 // ===== Router =====
@@ -1177,6 +1646,7 @@ export default {
     if (path === '/api/discover' && req.method === 'GET') return handleDiscover(env, req, me);
 
     // Likes
+    if (path === '/api/likes/status' && req.method === 'GET') return handleGetLikesStatus(env, req, me);
     if (path === '/api/likes' && req.method === 'GET') return handleLikes(env, req, me);
     if (path === '/api/likes' && req.method === 'POST') return handleCreateLike(env, req, me);
 
@@ -1203,6 +1673,7 @@ export default {
     if (path === '/api/call-signals' && req.method === 'GET') return handleGetSignals(env, req);
     if (path === '/api/call-logs' && req.method === 'POST') return handleCreateCallLog(env, req, me);
     if (path === '/api/call-logs' && req.method === 'GET') return handleGetCallLogs(env, req, me);
+    if (path === '/api/call-turn' && req.method === 'GET') return handleCallTurn(env);
 
     // Wallet / coins
     if (path === '/api/wallet' && req.method === 'GET') return handleGetWallet(env, req, me);
@@ -1216,6 +1687,24 @@ export default {
     if (path === '/api/blocks' && req.method === 'POST') return handleCreateBlock(env, req, me);
     const blockMatch = path.match(/^\/api\/blocks\/([^/]+)$/);
     if (blockMatch && req.method === 'DELETE') return handleUnblock(env, req, me, decodeURIComponent(blockMatch[1]));
+
+    // Feed (posts)
+    if (path === '/api/feed' && req.method === 'GET') return handleGetFeed(env, req, me);
+    if (path === '/api/feed' && req.method === 'POST') return handleCreatePost(env, req, me);
+    const feedPostMatch = path.match(/^\/api\/feed\/([^/]+)$/);
+    if (feedPostMatch && req.method === 'DELETE') return handleDeletePost(env, req, me, decodeURIComponent(feedPostMatch[1]));
+    const feedLikeMatch = path.match(/^\/api\/feed\/([^/]+)\/like$/);
+    if (feedLikeMatch && req.method === 'POST') return handleLikePost(env, req, me, decodeURIComponent(feedLikeMatch[1]));
+    if (feedLikeMatch && req.method === 'DELETE') return handleUnlikePost(env, req, me, decodeURIComponent(feedLikeMatch[1]));
+    const feedSaveMatch = path.match(/^\/api\/feed\/([^/]+)\/save$/);
+    if (feedSaveMatch && req.method === 'POST') return handleSavePost(env, req, me, decodeURIComponent(feedSaveMatch[1]));
+    if (feedSaveMatch && req.method === 'DELETE') return handleUnsavePost(env, req, me, decodeURIComponent(feedSaveMatch[1]));
+
+    // Feed comments
+    if (path === '/api/feed/comments' && req.method === 'GET') return handleGetFeedComments(env, req, me);
+    if (path === '/api/feed/comments' && req.method === 'POST') return handleAddFeedComment(env, req, me);
+    const feedCommentMatch = path.match(/^\/api\/feed\/comments\/([^/]+)$/);
+    if (feedCommentMatch && req.method === 'DELETE') return handleDeleteFeedComment(env, req, me, decodeURIComponent(feedCommentMatch[1]));
 
     return json({ error: 'Not found' }, 404);
   },

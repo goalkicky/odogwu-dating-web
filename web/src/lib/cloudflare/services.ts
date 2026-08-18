@@ -135,6 +135,51 @@ function normalizeMessage(payload: any): Message {
   return payload as Message;
 }
 
+function subscribeWs(url: string, onMessage: (data: any) => void): { unsubscribe: () => Promise<void> } {
+  let closed = false;
+  let ws: WebSocket | null = null;
+  let retry = 0;
+  let timer: ReturnType<typeof setTimeout> | null = null;
+
+  const scheduleRetry = () => {
+    if (closed || timer) return;
+    const delay = Math.min(1000 * Math.pow(2, retry++), 15000);
+    timer = setTimeout(() => { timer = null; connect(); }, delay);
+  };
+
+  const connect = () => {
+    if (closed) return;
+    let s: WebSocket;
+    try {
+      s = new WebSocket(url);
+    } catch {
+      scheduleRetry();
+      return;
+    }
+    ws = s;
+    s.onopen = () => { retry = 0; console.log('[WS] open:', url.split('token=')[0]); };
+    s.onmessage = (ev) => {
+      try { onMessage(JSON.parse(ev.data as string)); } catch {}
+    };
+    s.onerror = () => { try { s.close(); } catch {} };
+    s.onclose = (ev) => {
+      console.log('[WS] close:', url.split('token=')[0], 'code=' + ev.code, ev.reason || '');
+      if (!closed) scheduleRetry();
+    };
+  };
+
+  connect();
+
+  return {
+    unsubscribe: () => new Promise<void>((resolve) => {
+      closed = true;
+      if (timer) clearTimeout(timer);
+      if (ws) { try { ws.close(); } catch {} }
+      setTimeout(resolve, 300);
+    }),
+  };
+}
+
 export const messageService = {
   sendMessage: async (matchId: string, senderId: string, data: { text?: string; type: string; mediaUrl?: string; replyTo?: any }) => {
     return apiFetch('/api/messages', {
@@ -156,20 +201,37 @@ export const messageService = {
   },
 
   subscribeToMessages: async (matchId: string, callback: (message: Message) => void) => {
-    const ws = new WebSocket(wsUrl(`/ws/chat?matchId=${encodeURIComponent(matchId)}`));
-    const unsubscribe = () => new Promise<void>((resolve) => {
-      if (ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING) { resolve(); return; }
-      ws.onclose = () => resolve();
-      ws.close();
-      setTimeout(resolve, 500);
+    let lastTs = '';
+    const emit = (m: Message) => {
+      if (!m?.id) return;
+      if (m.createdAt && m.createdAt > lastTs) lastTs = m.createdAt;
+      callback(m);
+    };
+    const ws = subscribeWs(wsUrl(`/ws/chat?matchId=${encodeURIComponent(matchId)}`), (data) => {
+      if (data.type === 'message') emit(normalizeMessage(data.message));
     });
-    ws.onmessage = (ev) => {
+
+    const poll = async () => {
       try {
-        const data = JSON.parse(ev.data as string);
-        if (data.type === 'message') callback(normalizeMessage(data.message));
+        const res = await apiFetch(`/api/messages?matchId=${encodeURIComponent(matchId)}`);
+        const docs: any[] = res?.documents || [];
+        if (lastTs === '' && docs.length > 30) docs.splice(0, docs.length - 30);
+        for (const d of docs) {
+          if (lastTs !== '' && (!d.createdAt || d.createdAt <= lastTs)) continue;
+          emit(normalizeMessage(d));
+        }
       } catch {}
     };
-    return { unsubscribe };
+    poll();
+    const pollTimer = setInterval(poll, 5000);
+
+    const unsub = ws.unsubscribe;
+    return {
+      unsubscribe: async () => {
+        clearInterval(pollTimer);
+        await unsub();
+      },
+    };
   },
 };
 
@@ -186,20 +248,10 @@ export const callService = {
   },
 
   subscribeToSignals: async (userId: string, callback: (signal: any) => void) => {
-    const ws = new WebSocket(wsUrl(`/ws/call?userId=${encodeURIComponent(userId)}`));
-    const unsubscribe = () => new Promise<void>((resolve) => {
-      if (ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING) { resolve(); return; }
-      ws.onclose = () => resolve();
-      ws.close();
-      setTimeout(resolve, 500);
+    const ws = subscribeWs(wsUrl(`/ws/call?userId=${encodeURIComponent(userId)}`), (data) => {
+      if (data && data.to) callback(data);
     });
-    ws.onmessage = (ev) => {
-      try {
-        const data = JSON.parse(ev.data as string);
-        if (data && data.to) callback(data);
-      } catch {}
-    };
-    return { unsubscribe };
+    return ws;
   },
 
   getSignals: async (userId: string) => {
@@ -224,6 +276,13 @@ export const callLogService = {
     void userId;
     const data = await apiFetch('/api/call-logs?user=1');
     return data?.documents || [];
+  },
+};
+
+export const turnService = {
+  getIceServers: async (): Promise<RTCIceServer[]> => {
+    const data = await apiFetch('/api/call-turn');
+    return data?.iceServers || [];
   },
 };
 
@@ -256,6 +315,64 @@ export const superlikeService = {
 
   send: async (matchedUserId: string) => {
     return apiFetch('/api/superlikes', { method: 'POST', json: { matchedUserId } });
+  },
+};
+
+export const likeService = {
+  getStatus: async () => {
+    return apiFetch('/api/likes/status');
+  },
+
+  send: async (matchedUserId: string) => {
+    return apiFetch('/api/likes', { method: 'POST', json: { matchedUserId } });
+  },
+};
+
+export const feedService = {
+  getFeed: async (cursor?: string, visibility?: 'public' | 'friends') => {
+    const params = new URLSearchParams();
+    if (cursor) params.set('cursor', cursor);
+    if (visibility) params.set('visibility', visibility);
+    const qs = params.toString();
+    return apiFetch(`/api/feed${qs ? '?' + qs : ''}`);
+  },
+
+  createPost: async (images: string[], caption: string, visibility: 'public' | 'friends') => {
+    return apiFetch('/api/feed', { method: 'POST', json: { images, caption, visibility } });
+  },
+
+  deletePost: async (postId: string) => {
+    return apiFetch(`/api/feed/${encodeURIComponent(postId)}`, { method: 'DELETE' });
+  },
+
+  likePost: async (postId: string) => {
+    return apiFetch(`/api/feed/${encodeURIComponent(postId)}/like`, { method: 'POST' });
+  },
+
+  unlikePost: async (postId: string) => {
+    return apiFetch(`/api/feed/${encodeURIComponent(postId)}/like`, { method: 'DELETE' });
+  },
+
+  getComments: async (postId: string, cursor?: string) => {
+    const params = new URLSearchParams({ postId });
+    if (cursor) params.set('cursor', cursor);
+    return apiFetch(`/api/feed/comments?${params.toString()}`);
+  },
+
+  addComment: async (postId: string, text: string) => {
+    return apiFetch('/api/feed/comments', { method: 'POST', json: { postId, text } });
+  },
+
+  deleteComment: async (commentId: string) => {
+    return apiFetch(`/api/feed/comments/${encodeURIComponent(commentId)}`, { method: 'DELETE' });
+  },
+
+  savePost: async (postId: string) => {
+    return apiFetch(`/api/feed/${encodeURIComponent(postId)}/save`, { method: 'POST' });
+  },
+
+  unsavePost: async (postId: string) => {
+    return apiFetch(`/api/feed/${encodeURIComponent(postId)}/save`, { method: 'DELETE' });
   },
 };
 
