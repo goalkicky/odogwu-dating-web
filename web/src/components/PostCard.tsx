@@ -100,7 +100,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
         <div className="grad-ring" style={{ flexShrink: 0 }}>
           <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg, #1A1A2E, #2A2A3E)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
             {post.userPhoto ? (
-              <img src={post.userPhoto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+              <img src={storageService.getFilePreview(post.userPhoto)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
             ) : (
               <span style={{ fontSize: 16, fontWeight: 700, color: '#FF375F' }}>{post.userName?.charAt(0)?.toUpperCase() || '?'}</span>
             )}

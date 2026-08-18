@@ -30,32 +30,32 @@ export default function CreatePostModal({ currentUserId, interest, onClose, onPo
     const toUpload = files.slice(0, remaining);
     if (toUpload.length === 0) return;
 
+    const placeholders = toUpload.map(() => '');
+    const newPreviews = toUpload.map(file => URL.createObjectURL(file));
+    setImages(prev => [...prev, ...placeholders]);
+    setPreviews(prev => [...prev, ...newPreviews]);
     setUploading(true);
-    const newKeys: string[] = [];
-    const newPreviews: string[] = [];
+    if (fileRef.current) fileRef.current.value = '';
 
-    for (const file of toUpload) {
+    for (let i = 0; i < toUpload.length; i++) {
       try {
-        const data = await storageService.uploadFile(file);
-        newKeys.push(data.key);
-        newPreviews.push(URL.createObjectURL(file));
+        const data = await storageService.uploadFile(toUpload[i]);
+        const idx = images.length + i;
+        setImages(prev => prev.map((k, j) => j === idx ? data.key : k));
       } catch {}
     }
 
-    setImages(prev => [...prev, ...newKeys]);
-    setPreviews(prev => [...prev, ...newPreviews]);
     setUploading(false);
-    if (fileRef.current) fileRef.current.value = '';
   }, [images.length]);
 
   const removeImage = useCallback((index: number) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
     setPreviews(prev => {
       URL.revokeObjectURL(prev[index]);
       return prev.filter((_, i) => i !== index);
     });
-    setActivePreview(prev => Math.max(0, Math.min(prev, images.length - 2)));
-  }, [images.length]);
+    setImages(prev => prev.filter((_, i) => i !== index));
+    setActivePreview(prev => Math.max(0, Math.min(prev, previews.length - 2)));
+  }, [previews.length]);
 
   const handlePost = useCallback(async () => {
     if (images.length === 0 || posting) return;
