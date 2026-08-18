@@ -1,19 +1,19 @@
 'use client';
 import React, { useState, useRef, useCallback } from 'react';
-import { CloseIcon, CameraIcon, GlobeIcon, PeopleIcon, ImagesIcon } from '@/components/Icons';
+import { CloseIcon, CameraIcon, ImagesIcon } from '@/components/Icons';
 import { feedService, storageService } from '@/lib/cloudflare/services';
 
 interface CreatePostModalProps {
   currentUserId: string;
+  interest: string;
   onClose: () => void;
   onPostCreated: () => void;
 }
 
-export default function CreatePostModal({ currentUserId, onClose, onPostCreated }: CreatePostModalProps) {
+export default function CreatePostModal({ currentUserId, interest, onClose, onPostCreated }: CreatePostModalProps) {
   const [images, setImages] = useState<string[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [caption, setCaption] = useState('');
-  const [visibility, setVisibility] = useState<'public' | 'friends'>('public');
   const [posting, setPosting] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [activePreview, setActivePreview] = useState(0);
@@ -61,11 +61,11 @@ export default function CreatePostModal({ currentUserId, onClose, onPostCreated 
     if (images.length === 0 || posting) return;
     setPosting(true);
     try {
-      await feedService.createPost(images, caption.trim(), visibility);
+      await feedService.createPost(images, caption.trim(), interest);
       onPostCreated();
     } catch {}
     setPosting(false);
-  }, [images, caption, visibility, posting, onPostCreated]);
+  }, [images, caption, interest, posting, onPostCreated]);
 
   const canPost = images.length > 0 && !posting && !uploading;
 
@@ -185,38 +185,11 @@ export default function CreatePostModal({ currentUserId, onClose, onPostCreated 
           </div>
         </div>
 
-        {/* Visibility toggle */}
+        {/* Interest tag */}
         <div style={{ padding: '12px 20px 20px' }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: '#6B6B6B', marginBottom: 8 }}>Who can see this?</div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button
-              onClick={() => setVisibility('public')}
-              style={{
-                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                padding: '10px 0', borderRadius: 12, cursor: 'pointer', fontSize: 13, fontWeight: 600,
-                border: visibility === 'public' ? '1.5px solid #FF375F' : '1px solid rgba(255,255,255,0.08)',
-                background: visibility === 'public' ? 'rgba(255,55,95,0.12)' : 'rgba(255,255,255,0.03)',
-                color: visibility === 'public' ? '#FF375F' : '#6B6B6B',
-                transition: 'all 0.2s',
-              }}
-            >
-              <GlobeIcon size={16} color={visibility === 'public' ? '#FF375F' : '#6B6B6B'} />
-              Public
-            </button>
-            <button
-              onClick={() => setVisibility('friends')}
-              style={{
-                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                padding: '10px 0', borderRadius: 12, cursor: 'pointer', fontSize: 13, fontWeight: 600,
-                border: visibility === 'friends' ? '1.5px solid #7C4DFF' : '1px solid rgba(255,255,255,0.08)',
-                background: visibility === 'friends' ? 'rgba(124,77,255,0.12)' : 'rgba(255,255,255,0.03)',
-                color: visibility === 'friends' ? '#7C4DFF' : '#6B6B6B',
-                transition: 'all 0.2s',
-              }}
-            >
-              <PeopleIcon size={16} color={visibility === 'friends' ? '#7C4DFF' : '#6B6B6B'} />
-              Friends Only
-            </button>
+          <div style={{ fontSize: 13, fontWeight: 600, color: '#6B6B6B', marginBottom: 8 }}>Posting to</div>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 9999, background: 'rgba(255,55,95,0.12)', border: '1px solid rgba(255,55,95,0.3)' }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#FF375F' }}>{interest}</span>
           </div>
         </div>
       </div>

@@ -329,16 +329,14 @@ export const likeService = {
 };
 
 export const feedService = {
-  getFeed: async (cursor?: string, visibility?: 'public' | 'friends') => {
-    const params = new URLSearchParams();
+  getFeed: async (interest: string, cursor?: string) => {
+    const params = new URLSearchParams({ interest });
     if (cursor) params.set('cursor', cursor);
-    if (visibility) params.set('visibility', visibility);
-    const qs = params.toString();
-    return apiFetch(`/api/feed${qs ? '?' + qs : ''}`);
+    return apiFetch(`/api/feed?${params.toString()}`);
   },
 
-  createPost: async (images: string[], caption: string, visibility: 'public' | 'friends') => {
-    return apiFetch('/api/feed', { method: 'POST', json: { images, caption, visibility } });
+  createPost: async (images: string[], caption: string, interest: string) => {
+    return apiFetch('/api/feed', { method: 'POST', json: { images, caption, interest } });
   },
 
   deletePost: async (postId: string) => {

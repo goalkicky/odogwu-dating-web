@@ -92,15 +92,14 @@ export default function ExplorePage() {
   const [feedLoading, setFeedLoading] = useState(true);
   const [feedCursor, setFeedCursor] = useState<string | null>(null);
   const [feedHasMore, setFeedHasMore] = useState(true);
-  const [feedFilter, setFeedFilter] = useState<'all' | 'public' | 'friends'>('all');
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [commentPost, setCommentPost] = useState<FeedPost | null>(null);
 
-  const loadFeed = useCallback(async (cursor?: string, filter?: 'all' | 'public' | 'friends') => {
+  const loadFeed = useCallback(async (cursor?: string) => {
+    if (!activeInterest) return;
     setFeedLoading(true);
     try {
-      const visibility = filter === 'all' ? undefined : filter === 'public' ? 'public' as const : 'friends' as const;
-      const data = await feedService.getFeed(cursor, visibility);
+      const data = await feedService.getFeed(activeInterest, cursor);
       const docs = (data?.documents || []) as FeedPost[];
       if (cursor) {
         setFeedPosts(prev => [...prev, ...docs]);
@@ -111,20 +110,28 @@ export default function ExplorePage() {
       setFeedHasMore(docs.length >= 10);
     } catch {}
     setFeedLoading(false);
-  }, []);
+  }, [activeInterest]);
 
-  useEffect(() => { loadFeed(undefined, feedFilter); }, [feedFilter, loadFeed]);
+  useEffect(() => {
+    if (activeInterest) {
+      loadFeed();
+    } else {
+      setFeedPosts([]);
+      setFeedCursor(null);
+      setFeedHasMore(true);
+    }
+  }, [activeInterest, loadFeed]);
 
   const loadMoreFeed = useCallback(() => {
     if (feedCursor && feedHasMore && !feedLoading) {
-      loadFeed(feedCursor, feedFilter);
+      loadFeed(feedCursor);
     }
-  }, [feedCursor, feedHasMore, feedLoading, feedFilter, loadFeed]);
+  }, [feedCursor, feedHasMore, feedLoading, loadFeed]);
 
   const handlePostCreated = useCallback(() => {
     setShowCreatePost(false);
-    loadFeed(undefined, feedFilter);
-  }, [feedFilter, loadFeed]);
+    loadFeed();
+  }, [loadFeed]);
 
   const handlePostDeleted = useCallback((postId: string) => {
     setFeedPosts(prev => prev.filter(p => p.id !== postId));
@@ -326,31 +333,6 @@ export default function ExplorePage() {
               >
                 <PlusIcon size={16} color="white" /> Post
               </button>
-            </div>
-
-            {/* Filter tabs */}
-            <div style={{ display: 'flex', gap: 6, marginBottom: 18 }}>
-              {([
-                { key: 'all' as const, label: 'All', icon: <GridIcon size={14} color={feedFilter === 'all' ? 'white' : '#6B6B6B'} /> },
-                { key: 'public' as const, label: 'Public', icon: <GlobeIcon size={14} color={feedFilter === 'public' ? 'white' : '#6B6B6B'} /> },
-                { key: 'friends' as const, label: 'Friends', icon: <PeopleIcon size={14} color={feedFilter === 'friends' ? 'white' : '#6B6B6B'} /> },
-              ]).map(tab => (
-                <button
-                  key={tab.key}
-                  onClick={() => setFeedFilter(tab.key)}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 6,
-                    padding: '7px 14px', borderRadius: 9999, border: 'none', cursor: 'pointer',
-                    fontSize: 12, fontWeight: 700,
-                    background: feedFilter === tab.key ? 'linear-gradient(135deg, rgba(255,55,95,0.2), rgba(124,77,255,0.15))' : 'rgba(255,255,255,0.04)',
-                    color: feedFilter === tab.key ? 'white' : '#6B6B6B',
-                    boxShadow: feedFilter === tab.key ? 'inset 0 0 0 1px rgba(255,55,95,0.3)' : 'inset 0 0 0 1px rgba(255,255,255,0.06)',
-                    transition: 'all 0.2s',
-                  }}
-                >
-                  {tab.icon} {tab.label}
-                </button>
-              ))}
             </div>
 
             {/* Feed posts */}
@@ -598,9 +580,10 @@ export default function ExplorePage() {
           />
         )}
 
-        {showCreatePost && (
+        {showCreatePost && activeInterest && (
           <CreatePostModal
             currentUserId={(profile as any)?.$id || ''}
+            interest={activeInterest}
             onClose={() => setShowCreatePost(false)}
             onPostCreated={handlePostCreated}
           />

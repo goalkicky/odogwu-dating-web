@@ -1323,68 +1323,27 @@ async function resolveFeedComments(env: Env, rows: any[]): Promise<any[]> {
 async function handleGetFeed(env: Env, req: Request, me: string): Promise<Response> {
   const url = new URL(req.url);
   const cursor = url.searchParams.get('cursor') || '';
-  const visibility = url.searchParams.get('visibility') || 'all';
+  const interest = url.searchParams.get('interest') || '';
   const limit = 20;
 
-  let sql = '';
-  const binds: any[] = [];
+  if (!interest) return json({ documents: [], cursor: '' });
 
-  if (visibility === 'friends') {
-    // Only posts from mutual matches
-    sql = `SELECT p.*, u.full_name, u.photos
-           FROM feed_posts p
-           JOIN users u ON u.id = p.user_id
-           WHERE p.visibility = 'friends'
-             AND p.user_id IN (
-               SELECT matched_user_id FROM matches WHERE user_id = ?
-               INTERSECT
-               SELECT user_id FROM matches WHERE matched_user_id = ?
-             )
-             AND p.user_id NOT IN (SELECT blocked_id FROM blocks WHERE blocker_id = ?)
-             AND p.user_id NOT IN (SELECT blocker_id FROM blocks WHERE blocked_id = ?)`;
-    binds.push(me, me, me, me);
-  } else if (visibility === 'public') {
-    sql = `SELECT p.*, u.full_name, u.photos
-           FROM feed_posts p
-           JOIN users u ON u.id = p.user_id
-           WHERE p.visibility = 'public'
-             AND p.user_id NOT IN (SELECT blocked_id FROM blocks WHERE blocker_id = ?)
-             AND p.user_id NOT IN (SELECT blocker_id FROM blocks WHERE blocked_id = ?)`;
-    binds.push(me, me);
-  } else {
-    // 'all' — public posts + friends posts from my matches
-    sql = `SELECT p.*, u.full_name, u.photos
-           FROM feed_posts p
-           JOIN users u ON u.id = p.user_id
-           WHERE (
-             p.visibility = 'public'
-             OR (
-               p.visibility = 'friends'
-               AND p.user_id IN (
-                 SELECT matched_user_id FROM matches WHERE user_id = ?
-                 INTERSECT
-                 SELECT user_id FROM matches WHERE matched_user_id = ?
-               )
-             )
-           )
-           AND p.user_id NOT IN (SELECT blocked_id FROM blocks WHERE blocker_id = ?)
-           AND p.user_id NOT IN (SELECT blocker_id FROM blocks WHERE blocked_id = ?)`;
-    binds.push(me, me, me, me);
-  }
-
-  if (cursor) {
-    sql += ` AND p.created_at < (SELECT created_at FROM feed_posts WHERE id = ?)`;
-    binds.push(cursor);
-  }
-
-  sql += ` ORDER BY p.created_at DESC LIMIT ?`;
+  const sql = `SELECT p.*, u.full_name, u.photos
+               FROM feed_posts p
+               JOIN users u ON u.id = p.user_id
+               WHERE p.interest = ?
+                 AND p.user_id NOT IN (SELECT blocked_id FROM blocks WHERE blocker_id = ?)
+                 AND p.user_id NOT IN (SELECT blocker_id FROM blocks WHERE blocked_id = ?)
+               ${cursor ? 'AND p.created_at < (SELECT created_at FROM feed_posts WHERE id = ?)' : ''}
+               ORDER BY p.created_at DESC LIMIT ?`;
+  const binds: any[] = [interest, me, me];
+  if (cursor) binds.push(cursor);
   binds.push(limit + 1);
 
   const { results } = await env.DB.prepare(sql).bind(...binds).all();
   const hasMore = results.length > limit;
   const rows = hasMore ? results.slice(0, limit) : results;
 
-  // Flatten photos from the joined query into user_photo field
   const mappedRows = rows.map((r: any) => {
     let photos: string[] = [];
     try { photos = JSON.parse(r.photos || '[]'); } catch {}
@@ -1399,17 +1358,18 @@ async function handleCreatePost(env: Env, req: Request, me: string): Promise<Res
   const body = await req.json() as any;
   const images = Array.isArray(body.images) ? body.images.map(String) : [];
   const caption = String(body.caption || '').trim();
-  const visibility = (body.visibility === 'friends' ? 'friends' : 'public') as string;
+  const interest = String(body.interest || '').trim();
 
   if (images.length === 0) return json({ error: 'At least one image is required' }, 400);
   if (images.length > 10) return json({ error: 'Maximum 10 images allowed' }, 400);
   if (caption.length > 2200) return json({ error: 'Caption too long (max 2200 characters)' }, 400);
+  if (!interest) return json({ error: 'Interest is required' }, 400);
 
   const id = newId();
   const ts = now();
   await env.DB.prepare(
-    `INSERT INTO feed_posts (id, user_id, images, caption, visibility, likes_count, comments_count, created_at) VALUES (?, ?, ?, ?, ?, 0, 0, ?)`
-  ).bind(id, me, JSON.stringify(images), caption, visibility, ts).run();
+    `INSERT INTO feed_posts (id, user_id, images, caption, visibility, interest, likes_count, comments_count, created_at) VALUES (?, ?, ?, ?, 'public', ?, 0, 0, ?)`
+  ).bind(id, me, JSON.stringify(images), caption, interest, ts).run();
 
   // Fetch user info for the response
   const user = await getUserRow(env, me);
@@ -1420,7 +1380,7 @@ async function handleCreatePost(env: Env, req: Request, me: string): Promise<Res
 
   return json(toFeedPostDoc({
     id, user_id: me, full_name: user?.full_name || '', user_photo: userPhoto,
-    images: JSON.stringify(images), caption, visibility,
+    images: JSON.stringify(images), caption, visibility: 'public',
     likes_count: 0, comments_count: 0, created_at: ts,
   }), 201);
 }
