@@ -104,7 +104,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 20px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
           <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg, #1A1A2E, #2A2A3E)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
             {post.userPhoto ? (
-              <img src={post.userPhoto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+              <img src={storageService.getFilePreview(post.userPhoto)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
             ) : (
               <span style={{ fontSize: 13, fontWeight: 700, color: '#FF375F' }}>{post.userName?.charAt(0)?.toUpperCase()}</span>
             )}
@@ -135,7 +135,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
                 <div key={comment.id} className="animate-fade-up" style={{ display: 'flex', gap: 10, padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
                   <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'linear-gradient(135deg, #1A1A2E, #2A2A3E)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                     {comment.userPhoto ? (
-                      <img src={comment.userPhoto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                      <img src={storageService.getFilePreview(comment.userPhoto)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                     ) : (
                       <span style={{ fontSize: 12, fontWeight: 700, color: '#FF375F' }}>{comment.userName?.charAt(0)?.toUpperCase()}</span>
                     )}

@@ -40,6 +40,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
   const totalImages = post.images?.length || 0;
 
   const handleLike = useCallback(async () => {
+    if (post.userId === currentUserId) return;
     const newLiked = !liked;
     setLiked(newLiked);
     setLikesCount(prev => newLiked ? prev + 1 : Math.max(0, prev - 1));
@@ -47,11 +48,11 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
     if (newLiked) {
       setLikeAnimating(true);
       setTimeout(() => setLikeAnimating(false), 800);
-      try { await feedService.likePost(post.id); } catch { setLiked(false); setLikesCount(prev => prev + 1); }
+      try { await feedService.likePost(post.id); } catch { setLiked(false); setLikesCount(prev => Math.max(0, prev - 1)); }
     } else {
       try { await feedService.unlikePost(post.id); } catch { setLiked(true); setLikesCount(prev => prev + 1); }
     }
-  }, [liked, post.id, onLikeToggle]);
+  }, [liked, post.id, post.userId, currentUserId, onLikeToggle]);
 
   const handleSave = useCallback(async () => {
     const newSaved = !saved;
@@ -65,10 +66,11 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
   }, [saved, post.id, onSaveToggle]);
 
   const handleDoubleTap = useCallback(() => {
+    if (post.userId === currentUserId) return;
     if (!liked) handleLike();
     setLikeAnimating(true);
     setTimeout(() => setLikeAnimating(false), 800);
-  }, [liked, handleLike]);
+  }, [liked, handleLike, post.userId, currentUserId]);
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -218,7 +220,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
       {/* Action bar */}
       <div style={{ padding: '12px 16px 0' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <button onClick={handleLike} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex', transition: 'transform 0.2s' }} className={likeAnimating ? 'feed-like-btn' : ''}>
+          <button onClick={handleLike} disabled={isOwn} style={{ background: 'none', border: 'none', cursor: isOwn ? 'default' : 'pointer', padding: 4, display: 'flex', transition: 'transform 0.2s', opacity: isOwn ? 0.3 : 1 }} className={likeAnimating ? 'feed-like-btn' : ''}>
             <HeartIcon size={24} color={liked ? '#FF375F' : 'white'} filled={liked} />
           </button>
           <button onClick={() => onComment(post)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex' }}>
