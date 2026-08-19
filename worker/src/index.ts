@@ -596,6 +596,12 @@ async function handleDiscover(env: Env, req: Request, me: string): Promise<Respo
   const minAge = Number(url.searchParams.get('minAge')) || 18;
   const maxAge = Number(url.searchParams.get('maxAge')) || 99;
   const maxDistance = Number(url.searchParams.get('maxDistance')) || 0;
+  const minHeight = Number(url.searchParams.get('minHeight')) || 0;
+  const maxHeight = Number(url.searchParams.get('maxHeight')) || 0;
+  const minWeight = Number(url.searchParams.get('minWeight')) || 0;
+  const maxWeight = Number(url.searchParams.get('maxWeight')) || 0;
+  const city = (url.searchParams.get('city') || '').trim().toLowerCase();
+  const relationshipGoals = (url.searchParams.get('relationshipGoals') || '').trim().toLowerCase();
 
   let sql = `SELECT * FROM users WHERE id != ? AND age BETWEEN ? AND ?
              AND id NOT IN (SELECT matched_user_id FROM matches WHERE user_id = ?)
@@ -624,6 +630,42 @@ async function handleDiscover(env: Env, req: Request, me: string): Promise<Respo
       .filter(d => typeof d.distanceKm === 'number' && d.distanceKm <= maxDistance)
       .sort((a, b) => (a.distanceKm || 0) - (b.distanceKm || 0));
   }
+
+  function heightToInches(h: string): number | null {
+    if (!h) return null;
+    const m = h.match(/^(\d+)'(\d+)"?$/);
+    if (!m) return null;
+    return Number(m[1]) * 12 + Number(m[2]);
+  }
+
+  if (minHeight > 0 || maxHeight > 0) {
+    docs = docs.filter(d => {
+      const inches = heightToInches(d.height);
+      if (inches === null) return false;
+      if (minHeight > 0 && inches < minHeight) return false;
+      if (maxHeight > 0 && inches > maxHeight) return false;
+      return true;
+    });
+  }
+
+  if (minWeight > 0 || maxWeight > 0) {
+    docs = docs.filter(d => {
+      const w = Number(d.weight);
+      if (!w) return false;
+      if (minWeight > 0 && w < minWeight) return false;
+      if (maxWeight > 0 && w > maxWeight) return false;
+      return true;
+    });
+  }
+
+  if (city) {
+    docs = docs.filter(d => (d.city || '').toLowerCase().includes(city));
+  }
+
+  if (relationshipGoals) {
+    docs = docs.filter(d => (d.relationshipGoals || '').toLowerCase() === relationshipGoals);
+  }
+
   return json({ documents: docs });
 }
 

@@ -33,14 +33,18 @@ export default function DiscoverPage() {
   const [showMessageUpsell, setShowMessageUpsell] = useState(false);
 
   const baseGender = (profile?.interestedIn as string) || 'both';
-  const defaultPrefs = { gender: baseGender, minAge: 18, maxAge: 60, maxDistance: 0 };
+  const defaultPrefs = { gender: baseGender, minAge: 18, maxAge: 60, maxDistance: 0, minHeight: 0, maxHeight: 0, minWeight: 0, maxWeight: 0, city: '', relationshipGoals: '' };
   const [prefs, setPrefs] = useState(defaultPrefs);
 
   const activeFilterCount =
     (prefs.gender !== baseGender ? 1 : 0) +
     (prefs.minAge !== 18 ? 1 : 0) +
     (prefs.maxAge !== 60 ? 1 : 0) +
-    (prefs.maxDistance > 0 ? 1 : 0);
+    (prefs.maxDistance > 0 ? 1 : 0) +
+    (prefs.minHeight > 0 || prefs.maxHeight > 0 ? 1 : 0) +
+    (prefs.minWeight > 0 || prefs.maxWeight > 0 ? 1 : 0) +
+    (prefs.city ? 1 : 0) +
+    (prefs.relationshipGoals ? 1 : 0);
 
   const loadUsers = useCallback(async () => {
     if (!profile || !account) return;
@@ -375,6 +379,17 @@ const GENDER_OPTIONS = [
 const AGE_MIN = 18;
 const AGE_MAX = 80;
 const DIST_MAX = 100;
+const HEIGHT_MIN = 48;
+const HEIGHT_MAX = 84;
+const WEIGHT_MIN = 30;
+const WEIGHT_MAX = 200;
+const RELATIONSHIP_GOALS = ['Flirting', 'Chatting', 'Serious Dating', 'Marriage'];
+
+function inchesToFtIn(inches: number): string {
+  const ft = Math.floor(inches / 12);
+  const inch = inches % 12;
+  return `${ft}'${inch}"`;
+}
 
 function FilterLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -385,8 +400,8 @@ function FilterLabel({ children }: { children: React.ReactNode }) {
 }
 
 function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
-  prefs: { gender: string; minAge: number; maxAge: number; maxDistance: number };
-  defaults: { gender: string; minAge: number; maxAge: number; maxDistance: number };
+  prefs: { gender: string; minAge: number; maxAge: number; maxDistance: number; minHeight: number; maxHeight: number; minWeight: number; maxWeight: number; city: string; relationshipGoals: string };
+  defaults: { gender: string; minAge: number; maxAge: number; maxDistance: number; minHeight: number; maxHeight: number; minWeight: number; maxWeight: number; city: string; relationshipGoals: string };
   onChange: (p: typeof prefs) => void;
   onApply: () => void;
   onClose: () => void;
@@ -395,6 +410,10 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
   const set = (patch: Partial<typeof draft>) => setDraft(d => ({ ...d, ...patch }));
 
   const distFill = (draft.maxDistance / DIST_MAX) * 100;
+  const heightFillMin = ((draft.minHeight || HEIGHT_MIN) - HEIGHT_MIN) / (HEIGHT_MAX - HEIGHT_MIN) * 100;
+  const heightFillMax = 1 - ((draft.maxHeight || HEIGHT_MAX) - HEIGHT_MIN) / (HEIGHT_MAX - HEIGHT_MIN);
+  const weightFillMin = ((draft.minWeight || WEIGHT_MIN) - WEIGHT_MIN) / (WEIGHT_MAX - WEIGHT_MIN) * 100;
+  const weightFillMax = 1 - ((draft.maxWeight || WEIGHT_MAX) - WEIGHT_MIN) / (WEIGHT_MAX - WEIGHT_MIN);
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'flex-end', background: 'rgba(0,0,0,0.6)', paddingTop: 40 }} onClick={onClose}>
@@ -510,6 +529,149 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
             <span style={{ fontSize: 11, color: '#6B6B6B' }}>Anywhere</span>
             <span style={{ fontSize: 11, color: '#6B6B6B' }}>100 km</span>
+          </div>
+        </div>
+
+        <div style={{ marginBottom: 30 }}>
+          <FilterLabel>Height Range</FilterLabel>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <span style={{ color: 'white', fontSize: 22, fontWeight: 800 }}>
+              {inchesToFtIn(draft.minHeight || HEIGHT_MIN)} – {inchesToFtIn(draft.maxHeight || HEIGHT_MAX)}
+            </span>
+            {((draft.minHeight > 0) || (draft.maxHeight > 0)) && (
+              <button onClick={() => set({ minHeight: 0, maxHeight: 0 })} style={{ background: 'none', border: 'none', color: '#FF6B8A', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                Any
+              </button>
+            )}
+          </div>
+          <div className="dual-slider-wrap">
+            <div className="dual-slider-track" />
+            <div
+              className="dual-slider-fill"
+              style={{
+                left: `${heightFillMin}%`,
+                right: `${heightFillMax * 100}%`,
+              }}
+            />
+            <input
+              type="range"
+              className="dual-slider"
+              min={HEIGHT_MIN}
+              max={HEIGHT_MAX}
+              value={draft.minHeight || HEIGHT_MIN}
+              onChange={e => {
+                const v = Math.min(Number(e.target.value), (draft.maxHeight || HEIGHT_MAX) - 1);
+                set({ minHeight: Math.max(HEIGHT_MIN, v) });
+              }}
+              style={{ zIndex: (draft.minHeight || HEIGHT_MIN) >= (draft.maxHeight || HEIGHT_MAX) - 1 ? 3 : 2 }}
+            />
+            <input
+              type="range"
+              className="dual-slider"
+              min={HEIGHT_MIN}
+              max={HEIGHT_MAX}
+              value={draft.maxHeight || HEIGHT_MAX}
+              onChange={e => {
+                const v = Math.max(Number(e.target.value), (draft.minHeight || HEIGHT_MIN) + 1);
+                set({ maxHeight: Math.min(HEIGHT_MAX, v) });
+              }}
+              style={{ zIndex: (draft.minHeight || HEIGHT_MIN) >= (draft.maxHeight || HEIGHT_MAX) - 1 ? 2 : 3 }}
+            />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
+            <span style={{ fontSize: 11, color: '#6B6B6B' }}>{inchesToFtIn(HEIGHT_MIN)}</span>
+            <span style={{ fontSize: 11, color: '#6B6B6B' }}>{inchesToFtIn(HEIGHT_MAX)}</span>
+          </div>
+        </div>
+
+        <div style={{ marginBottom: 30 }}>
+          <FilterLabel>Weight Range (kg)</FilterLabel>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <span style={{ color: 'white', fontSize: 22, fontWeight: 800 }}>
+              {draft.minWeight || WEIGHT_MIN} – {draft.maxWeight || WEIGHT_MAX} kg
+            </span>
+            {((draft.minWeight > 0) || (draft.maxWeight > 0)) && (
+              <button onClick={() => set({ minWeight: 0, maxWeight: 0 })} style={{ background: 'none', border: 'none', color: '#FF6B8A', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                Any
+              </button>
+            )}
+          </div>
+          <div className="dual-slider-wrap">
+            <div className="dual-slider-track" />
+            <div
+              className="dual-slider-fill"
+              style={{
+                left: `${weightFillMin}%`,
+                right: `${weightFillMax * 100}%`,
+              }}
+            />
+            <input
+              type="range"
+              className="dual-slider"
+              min={WEIGHT_MIN}
+              max={WEIGHT_MAX}
+              value={draft.minWeight || WEIGHT_MIN}
+              onChange={e => {
+                const v = Math.min(Number(e.target.value), (draft.maxWeight || WEIGHT_MAX) - 1);
+                set({ minWeight: Math.max(WEIGHT_MIN, v) });
+              }}
+              style={{ zIndex: (draft.minWeight || WEIGHT_MIN) >= (draft.maxWeight || WEIGHT_MAX) - 1 ? 3 : 2 }}
+            />
+            <input
+              type="range"
+              className="dual-slider"
+              min={WEIGHT_MIN}
+              max={WEIGHT_MAX}
+              value={draft.maxWeight || WEIGHT_MAX}
+              onChange={e => {
+                const v = Math.max(Number(e.target.value), (draft.minWeight || WEIGHT_MIN) + 1);
+                set({ maxWeight: Math.min(WEIGHT_MAX, v) });
+              }}
+              style={{ zIndex: (draft.minWeight || WEIGHT_MIN) >= (draft.maxWeight || WEIGHT_MAX) - 1 ? 2 : 3 }}
+            />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
+            <span style={{ fontSize: 11, color: '#6B6B6B' }}>{WEIGHT_MIN} kg</span>
+            <span style={{ fontSize: 11, color: '#6B6B6B' }}>{WEIGHT_MAX} kg</span>
+          </div>
+        </div>
+
+        <div style={{ marginBottom: 30 }}>
+          <FilterLabel>Location</FilterLabel>
+          <input
+            type="text"
+            value={draft.city}
+            onChange={e => set({ city: e.target.value })}
+            placeholder="Search by city"
+            style={{
+              width: '100%', padding: '13px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)',
+              background: 'rgba(255,255,255,0.06)', color: 'white', fontSize: 15, outline: 'none',
+              boxSizing: 'border-box',
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: 30 }}>
+          <FilterLabel>Relationship Goals</FilterLabel>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {RELATIONSHIP_GOALS.map(opt => {
+              const selected = draft.relationshipGoals === opt;
+              return (
+                <button
+                  key={opt}
+                  onClick={() => set({ relationshipGoals: selected ? '' : opt })}
+                  style={{
+                    padding: '10px 18px', borderRadius: 9999, fontSize: 13.5, fontWeight: 600, cursor: 'pointer',
+                    color: selected ? 'white' : '#ABABAB',
+                    background: selected ? 'linear-gradient(135deg, #FF375F, #FF6B8A)' : 'rgba(255,255,255,0.06)',
+                    border: selected ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  {opt}
+                </button>
+              );
+            })}
           </div>
         </div>
 
