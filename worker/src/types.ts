@@ -42,6 +42,9 @@ export interface UserRow {
   password_hash: string;
   password_salt: string;
   last_active: string;
+  height: string;
+  weight: string;
+  relationship_goals: string;
   created_at: string;
   updated_at: string;
 }

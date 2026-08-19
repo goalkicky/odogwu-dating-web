@@ -218,6 +218,37 @@ export default function ProfilePage() {
             )}
           </div>
 
+          {/* Other Personal Details */}
+          <div className="glass animate-fade-up" style={{ borderRadius: 20, overflow: 'hidden' }}>
+            <div style={{ padding: '16px 20px 0' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <h2 style={{ fontSize: 14, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 1.4, textTransform: 'uppercase' }}>Other Personal Details</h2>
+                <button onClick={() => router.push('/edit-profile')} aria-label="Edit personal details" style={{ width: 32, height: 32, borderRadius: 9999, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <PencilIcon size={14} color="#ABABAB" />
+                </button>
+              </div>
+            </div>
+            {[
+              { label: 'Height', value: profile?.height || '-' },
+              { label: 'Weight', value: profile?.weight ? `${profile.weight} kg` : '-' },
+              { label: 'Relationship Goals', value: profile?.relationshipGoals || '-', capitalize: true },
+            ].map((row, i, arr) => (
+              <button
+                key={row.label}
+                onClick={() => router.push('/edit-profile')}
+                style={{
+                  width: '100%', display: 'flex', alignItems: 'center', padding: '15px 20px',
+                  background: 'transparent', border: 'none', borderBottom: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+                  cursor: 'pointer', textAlign: 'left', gap: 12,
+                }}
+              >
+                <span style={{ width: 130, fontSize: 11, fontWeight: 700, letterSpacing: 1.2, textTransform: 'uppercase', color: '#6B6B6B', flexShrink: 0 }}>{row.label}</span>
+                <span style={{ flex: 1, fontSize: 15, fontWeight: 600, color: row.value === '-' ? '#6B6B6B' : 'white', textTransform: row.capitalize ? 'capitalize' : 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.value}</span>
+                <ChevronForwardIcon size={16} color="#4A4A4A" />
+              </button>
+            ))}
+          </div>
+
           {/* Profile completion */}
           <div className="glass animate-fade-up" style={{ borderRadius: 20, padding: '16px 20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

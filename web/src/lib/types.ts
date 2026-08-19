@@ -23,6 +23,9 @@ export interface UserProfile {
   showOnlineStatus?: boolean;
   profileVisibility?: 'everyone' | 'matches_only';
   dataAnalytics?: boolean;
+  height?: string;
+  weight?: string;
+  relationshipGoals?: string;
 }
 
 export interface Match {

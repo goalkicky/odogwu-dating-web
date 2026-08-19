@@ -57,6 +57,9 @@ function toProfile(r: any): any {
     showOnlineStatus: !!r.show_online_status,
     profileVisibility: r.profile_visibility || 'everyone',
     dataAnalytics: !!r.data_analytics,
+    height: r.height || '',
+    weight: r.weight || '',
+    relationshipGoals: r.relationship_goals || '',
     createdAt: r.created_at,
   };
 }
@@ -156,6 +159,9 @@ const PROFILE_FIELDS: Record<string, string> = {
   showOnlineStatus: 'show_online_status',
   profileVisibility: 'profile_visibility',
   dataAnalytics: 'data_analytics',
+  height: 'height',
+  weight: 'weight',
+  relationshipGoals: 'relationship_goals',
 };
 
 function mapProfileValues(data: Record<string, any>): { cols: string[]; vals: any[] } {

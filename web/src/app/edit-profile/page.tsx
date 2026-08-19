@@ -15,6 +15,17 @@ const INTERESTS = ['male', 'female', 'both', 'non-binary'] as const;
 const BIO_MAX = 500;
 const MAX_INTERESTS = 20;
 
+const HEIGHT_OPTIONS = (() => {
+  const opts: string[] = [];
+  for (let inches = 48; inches <= 84; inches++) {
+    const ft = Math.floor(inches / 12);
+    const inch = inches % 12;
+    opts.push(`${ft}'${inch}"`);
+  }
+  return opts;
+})();
+const RELATIONSHIP_GOALS = ['Flirting', 'Chatting', 'Serious Dating', 'Marriage'] as const;
+
 function calcAge(dob: string): number | null {
   if (!dob) return null;
   const d = new Date(dob);
@@ -70,10 +81,15 @@ export default function EditProfilePage() {
   const [gender, setGender] = useState(profile?.gender || '');
   const [interest, setInterest] = useState(profile?.interestedIn || '');
   const [interests, setInterests] = useState<string[]>(profile?.interests || []);
+  const [height, setHeight] = useState(profile?.height || '');
+  const [weight, setWeight] = useState(profile?.weight || '');
+  const [relationshipGoals, setRelationshipGoals] = useState(profile?.relationshipGoals || '');
   const [photos, setPhotos] = useState<string[]>(profile?.photos || []);
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [showGender, setShowGender] = useState(false);
   const [showInterest, setShowInterest] = useState(false);
+  const [showHeight, setShowHeight] = useState(false);
+  const [showRelationshipGoals, setShowRelationshipGoals] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [interestNote, setInterestNote] = useState('');
@@ -89,6 +105,9 @@ export default function EditProfilePage() {
     setGender(profile.gender || '');
     setInterest(profile.interestedIn || '');
     setInterests(profile.interests || []);
+    setHeight(profile.height || '');
+    setWeight(profile.weight || '');
+    setRelationshipGoals(profile.relationshipGoals || '');
     const p = profile.photos || [];
     setPhotos(p);
     Promise.all(p.map(id => storageService.ensurePublicRead(id).catch(() => {}))).catch(() => {});
@@ -163,6 +182,9 @@ export default function EditProfilePage() {
         gender,
         interestedIn: interest,
         interests,
+        height,
+        weight,
+        relationshipGoals,
       } as any);
       await refreshUser();
       router.back();
@@ -318,11 +340,44 @@ export default function EditProfilePage() {
 
         {error && <p style={{ color: '#FF3B30', fontSize: 13, textAlign: 'center', marginTop: 20 }}>{error}</p>}
 
+        {/* Other Personal Details */}
+        <SectionLabel>Other Personal Details</SectionLabel>
+        <div className="glass" style={{ borderRadius: 16, overflow: 'hidden', marginTop: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px 18px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: '#ABABAB' }}>Height</span>
+            <button onClick={() => setShowHeight(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, color: height ? 'white' : '#6B6B6B', fontSize: 15 }}>
+              {height || 'Select'}
+              <ChevronForwardIcon size={16} color="#4A4A4A" />
+            </button>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px 18px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: '#ABABAB' }}>Weight (kg)</span>
+            <input
+              type="number"
+              value={weight}
+              onChange={e => setWeight(e.target.value)}
+              placeholder="e.g. 70"
+              min="20"
+              max="300"
+              style={{ background: 'none', border: 'none', color: 'white', fontSize: 15, textAlign: 'right', outline: 'none', width: 100 }}
+            />
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px 18px' }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: '#ABABAB' }}>Relationship Goals</span>
+            <button onClick={() => setShowRelationshipGoals(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, color: relationshipGoals ? 'white' : '#6B6B6B', fontSize: 15, textTransform: 'capitalize' }}>
+              {relationshipGoals || 'Select'}
+              <ChevronForwardIcon size={16} color="#4A4A4A" />
+            </button>
+          </div>
+        </div>
+
         <Button title={saving ? 'Saving...' : 'Save Changes'} onPress={handleSave} variant="gradient" size="lg" style={{ width: '100%', marginTop: 28 }} disabled={saving} loading={saving} />
       </div>
 
       {showGender && <OptionPicker label="Gender" options={GENDERS} value={gender} onChange={setGender} onClose={() => setShowGender(false)} />}
       {showInterest && <OptionPicker label="Show Me" options={INTERESTS} value={interest} onChange={setInterest} onClose={() => setShowInterest(false)} />}
+      {showHeight && <OptionPicker label="Height" options={HEIGHT_OPTIONS} value={height} onChange={setHeight} onClose={() => setShowHeight(false)} />}
+      {showRelationshipGoals && <OptionPicker label="Relationship Goals" options={RELATIONSHIP_GOALS} value={relationshipGoals} onChange={setRelationshipGoals} onClose={() => setShowRelationshipGoals(false)} />}
 
       <TabBar />
     </GradientBackground>
