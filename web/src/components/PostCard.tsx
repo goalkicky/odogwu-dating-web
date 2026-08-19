@@ -22,9 +22,10 @@ interface PostCardProps {
   onSaveToggle: (postId: string, saved: boolean) => void;
   onComment: (post: FeedPost) => void;
   onDelete?: (postId: string) => void;
+  onProfileClick?: (userId: string, userName: string, userPhoto: string) => void;
 }
 
-export default function PostCard({ post, currentUserId, onLikeToggle, onSaveToggle, onComment, onDelete }: PostCardProps) {
+export default function PostCard({ post, currentUserId, onLikeToggle, onSaveToggle, onComment, onDelete, onProfileClick }: PostCardProps) {
   const [imageIndex, setImageIndex] = useState(0);
   const [likeAnimating, setLikeAnimating] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -99,7 +100,11 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
     <div className="animate-fade-up" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 20, overflow: 'hidden', marginBottom: 20 }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', padding: '14px 16px', gap: 12 }}>
-        <div className="grad-ring" style={{ flexShrink: 0 }}>
+        <div
+          className="grad-ring"
+          style={{ flexShrink: 0, cursor: onProfileClick ? 'pointer' : 'default' }}
+          onClick={onProfileClick ? () => onProfileClick(post.userId, post.userName, post.userPhoto) : undefined}
+        >
           <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg, #1A1A2E, #2A2A3E)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
             {post.userPhoto ? (
               <img src={storageService.getFilePreview(post.userPhoto)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />

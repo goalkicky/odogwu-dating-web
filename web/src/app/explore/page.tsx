@@ -16,6 +16,7 @@ import { INTEREST_CATEGORIES, interestCategory, InterestCategory } from '@/lib/i
 import PostCard from '@/components/PostCard';
 import CommentSheet from '@/components/CommentSheet';
 import CreatePostModal from '@/components/CreatePostModal';
+import FeedProfileModal from '@/components/FeedProfileModal';
 import { FeedPost } from '@/lib/types';
 
 const INTEREST_STYLE: Record<string, { emoji: string; c1: string; c2: string }> = {
@@ -95,6 +96,7 @@ export default function ExplorePage() {
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [commentPost, setCommentPost] = useState<FeedPost | null>(null);
   const [showInterestRestriction, setShowInterestRestriction] = useState(false);
+  const [profileModal, setProfileModal] = useState<{ userId: string; userName: string; userPhoto: string } | null>(null);
 
   const handleOpenCreatePost = useCallback(() => {
     if (!activeInterest) return;
@@ -155,6 +157,11 @@ export default function ExplorePage() {
   const handleCommentAdded = useCallback((postId: string) => {
     setFeedPosts(prev => prev.map(p => p.id === postId ? { ...p, commentsCount: p.commentsCount + 1 } : p));
   }, []);
+
+  const handleProfileClick = useCallback((userId: string, userName: string, userPhoto: string) => {
+    if (userId === (profile as any)?.$id) return;
+    setProfileModal({ userId, userName, userPhoto });
+  }, [profile]);
 
   const load = useCallback(async () => {
     if (!profile || !account) return;
@@ -385,6 +392,7 @@ export default function ExplorePage() {
                     onSaveToggle={handleSaveToggle}
                     onComment={(p) => setCommentPost(p)}
                     onDelete={handlePostDeleted}
+                    onProfileClick={handleProfileClick}
                   />
                 ))}
                 {feedHasMore && (
@@ -623,6 +631,16 @@ export default function ExplorePage() {
               </button>
             </div>
           </div>
+        )}
+
+        {profileModal && (
+          <FeedProfileModal
+            userId={profileModal.userId}
+            userName={profileModal.userName}
+            userPhoto={profileModal.userPhoto}
+            currentUserId={(profile as any)?.$id || ''}
+            onClose={() => setProfileModal(null)}
+          />
         )}
       </GradientBackground>
     </DesktopLayout>
