@@ -1,8 +1,6 @@
 'use client';
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { ChevronBackIcon, RefreshIcon, HeartIcon, CloseIcon, StarIcon, SearchIcon, CameraIcon, PlusIcon, GlobeIcon, PeopleIcon, GridIcon } from '@/components/Icons';
-import AnimatedCard from '@/components/AnimatedCard';
-import ActionButton from '@/components/ActionButton';
+import { ChevronBackIcon, RefreshIcon, SearchIcon, CameraIcon, PlusIcon, GridIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';

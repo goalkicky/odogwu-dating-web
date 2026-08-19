@@ -180,7 +180,7 @@ export default function FeedProfileModal({ userId, userName, userPhoto, currentU
           <div className="animate-pop" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 20 }}>
             {actionResult === 'match' ? (
               <div style={{ background: 'linear-gradient(135deg, #FF375F, #7C4DFF)', padding: '12px 28px', borderRadius: 9999, boxShadow: '0 8px 30px rgba(255,55,95,0.5)' }}>
-                <span style={{ color: 'white', fontWeight: 800, fontSize: 16 }}>It's a Match!</span>
+                <span style={{ color: 'white', fontWeight: 800, fontSize: 16 }}>It&apos;s a Match!</span>
               </div>
             ) : actionResult === 'liked' ? (
               <div style={{ background: 'linear-gradient(135deg, #34C759, #30D158)', padding: '12px 28px', borderRadius: 9999, boxShadow: '0 8px 30px rgba(52,199,89,0.5)' }}>
