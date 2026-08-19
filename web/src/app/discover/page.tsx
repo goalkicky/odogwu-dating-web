@@ -384,23 +384,6 @@ function FilterLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Stepper({ label, value, onDec, onInc }: { label: string; value: number; onDec: () => void; onInc: () => void }) {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-      <span style={{ fontSize: 11, fontWeight: 700, color: '#6B6B6B', letterSpacing: 1, textTransform: 'uppercase' }}>{label}</span>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 14, padding: '5px' }}>
-        <button onClick={onDec} aria-label={`Decrease ${label}`} style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,255,255,0.08)', border: 'none', color: 'white', fontSize: 20, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          −
-        </button>
-        <span style={{ color: 'white', fontSize: 22, fontWeight: 800, minWidth: 32, textAlign: 'center' }}>{value}</span>
-        <button onClick={onInc} aria-label={`Increase ${label}`} style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,255,255,0.08)', border: 'none', color: 'white', fontSize: 20, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          +
-        </button>
-      </div>
-    </div>
-  );
-}
-
 function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
   prefs: { gender: string; minAge: number; maxAge: number; maxDistance: number };
   defaults: { gender: string; minAge: number; maxAge: number; maxDistance: number };
@@ -410,11 +393,6 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
 }) {
   const [draft, setDraft] = useState(prefs);
   const set = (patch: Partial<typeof draft>) => setDraft(d => ({ ...d, ...patch }));
-
-  const clampAge = (min: number, max: number) => ({
-    minAge: Math.min(AGE_MAX, Math.max(AGE_MIN, Math.min(min, max))),
-    maxAge: Math.min(AGE_MAX, Math.max(AGE_MIN, Math.max(min, max))),
-  });
 
   const distFill = (draft.maxDistance / DIST_MAX) * 100;
 
@@ -462,10 +440,48 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
 
         <div style={{ marginBottom: 30 }}>
           <FilterLabel>Age Range</FilterLabel>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, justifyContent: 'center' }}>
-            <Stepper label="Min" value={draft.minAge} onDec={() => set(clampAge(draft.minAge - 1, draft.maxAge))} onInc={() => set(clampAge(draft.minAge + 1, draft.maxAge))} />
-            <span style={{ color: '#4A4A4A', fontSize: 22, fontWeight: 800 }}>—</span>
-            <Stepper label="Max" value={draft.maxAge} onDec={() => set(clampAge(draft.minAge, draft.maxAge - 1))} onInc={() => set(clampAge(draft.minAge, draft.maxAge + 1))} />
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <span style={{ color: 'white', fontSize: 22, fontWeight: 800 }}>
+              {draft.minAge} – {draft.maxAge}
+            </span>
+          </div>
+          <div className="dual-slider-wrap">
+            <div className="dual-slider-track" />
+            <div
+              className="dual-slider-fill"
+              style={{
+                left: `${((draft.minAge - AGE_MIN) / (AGE_MAX - AGE_MIN)) * 100}%`,
+                right: `${(1 - (draft.maxAge - AGE_MIN) / (AGE_MAX - AGE_MIN)) * 100}%`,
+              }}
+            />
+            <input
+              type="range"
+              className="dual-slider"
+              min={AGE_MIN}
+              max={AGE_MAX}
+              value={draft.minAge}
+              onChange={e => {
+                const v = Math.min(Number(e.target.value), draft.maxAge - 1);
+                set({ minAge: Math.max(AGE_MIN, v) });
+              }}
+              style={{ zIndex: draft.minAge >= draft.maxAge - 1 ? 3 : 2 }}
+            />
+            <input
+              type="range"
+              className="dual-slider"
+              min={AGE_MIN}
+              max={AGE_MAX}
+              value={draft.maxAge}
+              onChange={e => {
+                const v = Math.max(Number(e.target.value), draft.minAge + 1);
+                set({ maxAge: Math.min(AGE_MAX, v) });
+              }}
+              style={{ zIndex: draft.minAge >= draft.maxAge - 1 ? 2 : 3 }}
+            />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
+            <span style={{ fontSize: 11, color: '#6B6B6B' }}>{AGE_MIN}</span>
+            <span style={{ fontSize: 11, color: '#6B6B6B' }}>{AGE_MAX}</span>
           </div>
         </div>
 

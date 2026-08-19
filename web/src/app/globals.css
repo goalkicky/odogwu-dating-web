@@ -281,6 +281,72 @@ input[type="range"].slider::-moz-range-thumb {
   cursor: pointer;
 }
 
+/* ===== Dual-thumb range slider ===== */
+.dual-slider-wrap {
+  position: relative;
+  width: 100%;
+  height: 26px;
+  display: flex;
+  align-items: center;
+}
+.dual-slider-track {
+  position: absolute;
+  left: 0; right: 0;
+  height: 6px;
+  border-radius: 9999px;
+  background: #2A2A2A;
+  pointer-events: none;
+}
+.dual-slider-fill {
+  position: absolute;
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #FF375F, #FF6B8A);
+  pointer-events: none;
+}
+.dual-slider-wrap input[type="range"].dual-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  width: 100%;
+  height: 26px;
+  background: transparent;
+  outline: none;
+  pointer-events: none;
+  margin: 0;
+  z-index: 2;
+}
+.dual-slider-wrap input[type="range"].dual-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF375F, #FF6B8A);
+  border: 3px solid #fff;
+  box-shadow: 0 3px 12px rgba(255,55,95,0.6);
+  cursor: pointer;
+  pointer-events: all;
+  position: relative;
+  z-index: 3;
+}
+.dual-slider-wrap input[type="range"].dual-slider::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF375F, #FF6B8A);
+  border: 3px solid #fff;
+  box-shadow: 0 3px 12px rgba(255,55,95,0.6);
+  cursor: pointer;
+  pointer-events: all;
+}
+.dual-slider-wrap input[type="range"].dual-slider::-webkit-slider-runnable-track {
+  background: transparent;
+}
+.dual-slider-wrap input[type="range"].dual-slider::-moz-range-track {
+  background: transparent;
+}
+
 /* ===== Responsive Utilities ===== */
 @media (max-width: 768px) {
   .hide-mobile { display: none !important; }
