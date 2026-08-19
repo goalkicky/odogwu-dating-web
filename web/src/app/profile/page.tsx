@@ -50,6 +50,9 @@ export default function ProfilePage() {
     Boolean(profile?.interestedIn),
     Boolean(profile?.city),
     Boolean(profile?.interests?.length),
+    Boolean(profile?.height),
+    Boolean(profile?.weight),
+    Boolean(profile?.relationshipGoals),
   ];
   const completionPct = Math.round((completionFields.filter(Boolean).length / completionFields.length) * 100);
 
