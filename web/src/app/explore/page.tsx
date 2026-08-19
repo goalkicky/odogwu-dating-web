@@ -94,6 +94,17 @@ export default function ExplorePage() {
   const [feedHasMore, setFeedHasMore] = useState(true);
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [commentPost, setCommentPost] = useState<FeedPost | null>(null);
+  const [showInterestRestriction, setShowInterestRestriction] = useState(false);
+
+  const handleOpenCreatePost = useCallback(() => {
+    if (!activeInterest) return;
+    const userInterests = (profile as any)?.interests || [];
+    if (!userInterests.includes(activeInterest)) {
+      setShowInterestRestriction(true);
+      return;
+    }
+    setShowCreatePost(true);
+  }, [activeInterest, profile]);
 
   const loadFeed = useCallback(async (cursor?: string) => {
     if (!activeInterest) return;
@@ -322,7 +333,7 @@ export default function ExplorePage() {
                 <h2 style={{ fontSize: isMobile ? 22 : 24, fontWeight: 800, color: 'white', margin: 0 }}>Feed</h2>
               </div>
               <button
-                onClick={() => setShowCreatePost(true)}
+                onClick={handleOpenCreatePost}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 6,
                   padding: '8px 16px', borderRadius: 9999, border: 'none',
@@ -351,7 +362,7 @@ export default function ExplorePage() {
                   Be the first to share something about {activeInterest.toLowerCase()}.
                 </span>
                 <button
-                  onClick={() => setShowCreatePost(true)}
+                  onClick={handleOpenCreatePost}
                   style={{
                     marginTop: 4, display: 'flex', alignItems: 'center', gap: 8,
                     padding: '12px 24px', borderRadius: 9999, border: 'none',
@@ -587,6 +598,31 @@ export default function ExplorePage() {
             onClose={() => setShowCreatePost(false)}
             onPostCreated={handlePostCreated}
           />
+        )}
+
+        {showInterestRestriction && activeInterest && (
+          <div onClick={() => setShowInterestRestriction(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(6px)', padding: 16 }}>
+            <div onClick={(e) => e.stopPropagation()} className="feed-sheet-up" style={{ width: '100%', maxWidth: 380, background: 'rgba(16,16,22,0.97)', borderRadius: 24, border: '1px solid rgba(255,255,255,0.08)', padding: '32px 24px', textAlign: 'center' }}>
+              <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,55,95,0.15), rgba(124,77,255,0.12))', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', border: '1px solid rgba(255,55,95,0.2)' }}>
+                <span style={{ fontSize: 28 }}>🔒</span>
+              </div>
+              <h3 style={{ fontSize: 18, fontWeight: 800, color: 'white', margin: '0 0 10px' }}>Interest Required</h3>
+              <p style={{ fontSize: 14, color: '#6B6B6B', margin: '0 0 24px', lineHeight: 1.5 }}>
+                You can&apos;t post in <span style={{ color: '#FF375F', fontWeight: 700 }}>{activeInterest}</span> because you haven&apos;t added it to your interests yet.
+              </p>
+              <button
+                onClick={() => setShowInterestRestriction(false)}
+                style={{
+                  width: '100%', padding: '12px 0', borderRadius: 14, border: 'none',
+                  background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+                  color: 'white', fontSize: 14, fontWeight: 700, cursor: 'pointer',
+                  boxShadow: '0 6px 24px rgba(255,55,95,0.4)',
+                }}
+              >
+                Got it
+              </button>
+            </div>
+          </div>
         )}
       </GradientBackground>
     </DesktopLayout>
