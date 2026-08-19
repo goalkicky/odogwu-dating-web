@@ -95,6 +95,7 @@ export default function ExplorePage() {
   const [commentPost, setCommentPost] = useState<FeedPost | null>(null);
   const [showInterestRestriction, setShowInterestRestriction] = useState(false);
   const [profileModal, setProfileModal] = useState<{ userId: string; userName: string; userPhoto: string } | null>(null);
+  const [postCounts, setPostCounts] = useState<Record<string, number>>({});
 
   const handleOpenCreatePost = useCallback(() => {
     if (!activeInterest) return;
@@ -226,6 +227,8 @@ export default function ExplorePage() {
     setActiveInterest(null);
     setDeck([]);
     setLastAction(null);
+    // Fetch post counts for all interests in this category
+    feedService.getPostCounts(category.items).then(c => setPostCounts(c)).catch(() => {});
   }, []);
 
   const removeSwiped = useCallback((id: string) => {
@@ -456,6 +459,7 @@ export default function ExplorePage() {
                   const members = groups[interest] || [];
                   const count = members.length;
                   const cover = members[0]?.photos?.[0];
+                  const posts = postCounts[interest] || 0;
                   return (
                     <button
                       key={interest}
@@ -479,7 +483,7 @@ export default function ExplorePage() {
                         <div style={{ fontSize: 26, lineHeight: 1 }}>{style.emoji}</div>
                         <div style={{ fontSize: 19, fontWeight: 800, color: 'white', marginTop: 8, textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>{interest}</div>
                         <div style={{ fontSize: 12.5, fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 3, textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
-                          {count > 0 ? `${count} ${count === 1 ? 'person' : 'people'}` : 'No one yet'}
+                          {posts > 0 ? `${posts} ${posts === 1 ? 'post' : 'posts'}` : 'No post yet'}
                         </div>
                       </div>
                     </button>

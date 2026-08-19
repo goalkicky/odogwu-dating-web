@@ -372,6 +372,13 @@ export const feedService = {
   unsavePost: async (postId: string) => {
     return apiFetch(`/api/feed/${encodeURIComponent(postId)}/save`, { method: 'DELETE' });
   },
+
+  getPostCounts: async (interests: string[]) => {
+    if (interests.length === 0) return {};
+    const params = new URLSearchParams({ interests: interests.join(',') });
+    const data = await apiFetch(`/api/feed/counts?${params.toString()}`);
+    return data.counts as Record<string, number>;
+  },
 };
 
 async function compressImage(file: File, maxBytes = 15360): Promise<File> {

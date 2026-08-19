@@ -1320,6 +1320,24 @@ async function resolveFeedComments(env: Env, rows: any[]): Promise<any[]> {
   });
 }
 
+async function handleGetFeedCounts(env: Env, req: Request, me: string): Promise<Response> {
+  void me;
+  const url = new URL(req.url);
+  const interests = (url.searchParams.get('interests') || '').split(',').map(s => s.trim()).filter(Boolean);
+  if (interests.length === 0) return json({ counts: {} });
+
+  const placeholders = interests.map(() => '?').join(',');
+  const { results } = await env.DB.prepare(
+    `SELECT interest, COUNT(*) as cnt FROM feed_posts WHERE interest IN (${placeholders}) GROUP BY interest`
+  ).bind(...interests).all();
+
+  const counts: Record<string, number> = {};
+  for (const r of results as any[]) {
+    counts[r.interest] = r.cnt;
+  }
+  return json({ counts });
+}
+
 async function handleGetFeed(env: Env, req: Request, me: string): Promise<Response> {
   const url = new URL(req.url);
   const cursor = url.searchParams.get('cursor') || '';
@@ -1649,6 +1667,7 @@ export default {
     if (blockMatch && req.method === 'DELETE') return handleUnblock(env, req, me, decodeURIComponent(blockMatch[1]));
 
     // Feed (posts)
+    if (path === '/api/feed/counts' && req.method === 'GET') return handleGetFeedCounts(env, req, me);
     if (path === '/api/feed' && req.method === 'GET') return handleGetFeed(env, req, me);
     if (path === '/api/feed' && req.method === 'POST') return handleCreatePost(env, req, me);
     const feedPostMatch = path.match(/^\/api\/feed\/([^/]+)$/);
