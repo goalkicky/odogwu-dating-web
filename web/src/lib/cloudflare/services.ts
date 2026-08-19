@@ -23,6 +23,14 @@ export const authService = {
     return data;
   },
 
+  forgotPassword: async (email: string) => {
+    return apiFetch('/api/auth/forgot-password', { method: 'POST', json: { email } });
+  },
+
+  resetPassword: async (ticket: string, password: string) => {
+    return apiFetch('/api/auth/reset-password', { method: 'POST', json: { ticket, password } });
+  },
+
   createSession: async (_userId: string, secret: string) => {
     setToken(secret);
     const { user } = await apiFetch('/api/me');

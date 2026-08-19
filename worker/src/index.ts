@@ -1,6 +1,6 @@
 import { Env, UserRow, MatchRow, MessageRow } from './types';
 import {
-  newId, randomToken, hashToken, hashPassword, verifyPassword,
+  newId, randomToken, hashToken, hashPassword, verifyPassword, newTicket, verifyTicketAsync,
   requireUser, json, corsPreflight, now,
 } from './auth';
 import { ChatRoom, CallSignals } from './rooms';
@@ -373,6 +373,33 @@ async function handleLogin(env: Env, req: Request): Promise<Response> {
     profile: toProfile(user),
     hasProfile: isOnboarded(user),
   });
+}
+
+async function handleForgotPassword(env: Env, req: Request): Promise<Response> {
+  const body = await req.json() as any;
+  const email = String(body.email || '').trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: 'Invalid email' }, 400);
+  const user = await env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(email).first();
+  if (!user) return json({ message: 'If an account with that email exists, a reset code has been generated.' });
+  const ticket = await newTicket(env.SESSION_SECRET, { userId: user.id as string, purpose: 'reset-password', exp: String(Date.now() + 30 * 60 * 1000) });
+  const shortCode = ticket.split('.')[0].slice(0, 8).toUpperCase();
+  return json({ message: 'Reset code generated', ticket, shortCode });
+}
+
+async function handleResetPassword(env: Env, req: Request): Promise<Response> {
+  const body = await req.json() as any;
+  const ticket = String(body.ticket || '');
+  const newPassword = String(body.password || '');
+  if (!ticket || !newPassword) return json({ error: 'Ticket and password are required' }, 400);
+  if (newPassword.length < 8) return json({ error: 'Password must be at least 8 characters' }, 400);
+  const payload = await verifyTicketAsync(env.SESSION_SECRET, ticket);
+  if (!payload || payload.purpose !== 'reset-password') return json({ error: 'Invalid or expired reset ticket' }, 400);
+  const { salt, hash } = await (async () => {
+    const [s, h] = (await hashPassword(newPassword)).split(':');
+    return { salt: s, hash: h };
+  })();
+  await env.DB.prepare('UPDATE users SET password_salt = ?, password_hash = ? WHERE id = ?').bind(salt, hash, payload.userId).run();
+  return json({ message: 'Password updated successfully' });
 }
 
 async function handleLogout(env: Env, req: Request): Promise<Response> {
@@ -1648,6 +1675,8 @@ export default {
     // Auth (public)
     if (path === '/api/auth/register' && req.method === 'POST') return handleRegister(env, req);
     if (path === '/api/auth/login' && req.method === 'POST') return handleLogin(env, req);
+    if (path === '/api/auth/forgot-password' && req.method === 'POST') return handleForgotPassword(env, req);
+    if (path === '/api/auth/reset-password' && req.method === 'POST') return handleResetPassword(env, req);
     if (path === '/api/auth/logout' && req.method === 'POST') return handleLogout(env, req);
     if (path === '/api/auth/google' && req.method === 'POST') return handleGoogle(env, req);
     if (path === '/api/auth/google/start' && req.method === 'GET') return handleGoogleStart(env, req);

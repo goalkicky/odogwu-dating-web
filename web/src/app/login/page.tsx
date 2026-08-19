@@ -139,6 +139,14 @@ export default function LoginPage() {
                 style={inputStyle}
               />
             </div>
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
+              <button
+                onClick={() => router.push('/forgot-password')}
+                style={{ background: 'none', border: 'none', color: '#FF6B8A', fontSize: 13, fontWeight: 600, cursor: 'pointer', padding: '2px 0' }}
+              >
+                Forgot password?
+              </button>
+            </div>
             <Button
               title={submitting ? 'Signing in...' : 'Sign In'}
               onPress={handleEmailLogin}
