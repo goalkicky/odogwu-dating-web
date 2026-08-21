@@ -673,19 +673,21 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 10, position: 'sticky', bottom: 0, background: '#16161C', paddingTop: 12, paddingBottom: 8 }}>
-          <button
-            onClick={() => setDraft(defaults)}
-            style={{ padding: '14px 22px', borderRadius: 9999, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#D0D0D0', fontSize: 15, fontWeight: 700, cursor: 'pointer' }}
-          >
-            Reset
-          </button>
-          <button
-            onClick={() => { onChange(draft); onApply(); }}
-            style={{ flex: 1, padding: '14px 22px', borderRadius: 9999, border: 'none', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white', fontSize: 15, fontWeight: 800, cursor: 'pointer', boxShadow: '0 6px 24px rgba(255,55,95,0.4)' }}
-          >
-            Apply Filters
-          </button>
+        <div style={{ position: 'sticky', bottom: 0, background: '#16161C', paddingTop: 16, paddingBottom: 24, marginTop: 12 }}>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button
+              onClick={() => setDraft(defaults)}
+              style={{ padding: '16px 24px', borderRadius: 14, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#D0D0D0', fontSize: 15, fontWeight: 700, cursor: 'pointer', minWidth: 90 }}
+            >
+              Reset
+            </button>
+            <button
+              onClick={() => { onChange(draft); onApply(); }}
+              style={{ flex: 1, padding: '16px 24px', borderRadius: 14, border: 'none', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white', fontSize: 16, fontWeight: 800, cursor: 'pointer', boxShadow: '0 6px 24px rgba(255,55,95,0.4)' }}
+            >
+              Apply Filters
+            </button>
+          </div>
         </div>
       </div>
     </div>
