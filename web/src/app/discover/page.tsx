@@ -416,17 +416,18 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
   const weightFillMax = 1 - ((draft.maxWeight || WEIGHT_MAX) - WEIGHT_MIN) / (WEIGHT_MAX - WEIGHT_MIN);
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'flex-end', background: 'rgba(0,0,0,0.6)', paddingTop: 40 }} onClick={onClose}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'stretch', background: 'rgba(0,0,0,0.6)', paddingTop: 40 }} onClick={onClose}>
       <div
         onClick={e => e.stopPropagation()}
         className="animate-fade-up"
         style={{
           width: '100%', maxWidth: 520, margin: '0 auto',
-          background: '#16161C', borderRadius: '24px 24px 0 0',
+          background: '#16161C', borderRadius: 24,
           padding: '24px 24px 40px',
-          borderTop: '1px solid rgba(255,255,255,0.1)',
+          border: '1px solid rgba(255,255,255,0.1)',
           boxShadow: '0 -12px 60px rgba(0,0,0,0.6)',
-          maxHeight: '100%', overflowY: 'auto',
+          overflowY: 'auto',
+          margin: '0 auto',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
