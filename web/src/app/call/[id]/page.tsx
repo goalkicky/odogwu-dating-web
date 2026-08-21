@@ -36,7 +36,9 @@ export default function CallPage() {
   const [callDuration, setCallDuration] = useState(0);
   const [isCallActive, setIsCallActive] = useState(true);
   const [statusText, setStatusText] = useState(mode === 'outgoing' ? 'Calling...' : 'Connecting...');
+  const [timerActive, setTimerActive] = useState(false);
   const answeredRef = useRef(false);
+  const endedRef = useRef(false);
   const [otherName, setOtherName] = useState('User');
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
 
@@ -72,11 +74,11 @@ export default function CallPage() {
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
-    if (isCallActive) {
+    if (timerActive) {
       interval = setInterval(() => setCallDuration(prev => prev + 1), 1000);
     }
     return () => clearInterval(interval);
-  }, [isCallActive]);
+  }, [timerActive]);
 
   useEffect(() => {
     if (!user?.$id) return;
@@ -134,7 +136,6 @@ export default function CallPage() {
         if (!answer.sdp) return false;
         await pcRef.current!.setRemoteDescription(new RTCSessionDescription(answer));
         remoteDescSet = true;
-        answeredRef.current = true;
         clearTimeoutIfAny();
         stopPoll();
         debug('answer applied, remoteDescription set');
@@ -165,11 +166,9 @@ export default function CallPage() {
           });
           debug('answer sent to ' + targetId);
         }
-        setStatusText('Connected');
-        setIsCallActive(true);
-        answeredRef.current = true;
-        clearTimeoutIfAny();
-        await drainCandidates();
+          setStatusText('Connecting...');
+          clearTimeoutIfAny();
+          await drainCandidates();
       } catch (e) {
         debug('applyOfferAndAnswer failed: ' + (e as any)?.message);
         setStatusText('Connection failed');
@@ -203,15 +202,12 @@ export default function CallPage() {
         });
 
         pc.ontrack = (event) => {
-          answeredRef.current = true;
           clearTimeoutIfAny();
           stopPoll();
           setRemoteStream(event.streams[0]);
           if (remoteVideoRef.current) {
             remoteVideoRef.current.srcObject = event.streams[0];
           }
-          setStatusText('Connected');
-          setIsCallActive(true);
           debug('REMOTE TRACK RECEIVED');
         };
 
@@ -239,7 +235,14 @@ export default function CallPage() {
 
         pc.onconnectionstatechange = () => {
           debug('connectionState: ' + pc.connectionState);
-          if (pc.connectionState === 'failed' || pc.connectionState === 'disconnected') {
+          if (pc.connectionState === 'connected') {
+            answeredRef.current = true;
+            clearTimeoutIfAny();
+            stopPoll();
+            setStatusText('Connected');
+            setIsCallActive(true);
+            setTimerActive(true);
+          } else if (pc.connectionState === 'failed' || pc.connectionState === 'disconnected') {
             setStatusText('Call ended');
             setIsCallActive(false);
             clearTimeoutIfAny();
@@ -403,6 +406,8 @@ export default function CallPage() {
   };
 
   const handleEndCall = async () => {
+    if (endedRef.current) return;
+    endedRef.current = true;
     setIsCallActive(false);
     if (user?.$id && otherId) {
       await callService.sendSignal({
@@ -412,14 +417,14 @@ export default function CallPage() {
         type: 'end',
         data: JSON.stringify({ reason: 'ended' }),
       });
-      callLogService.createCallLog({
-        from: user.$id,
-        to: otherId,
-        matchId,
-        callType,
-        status: durationRef.current > 0 ? 'answered' : 'missed',
-        duration: durationRef.current,
-      }).catch(() => {});
+        callLogService.createCallLog({
+          from: user.$id,
+          to: otherId,
+          matchId,
+          callType,
+          status: answeredRef.current ? 'answered' : 'missed',
+          duration: answeredRef.current ? durationRef.current : 0,
+        }).catch(() => {});
     }
     if (localStreamRef.current) {
       localStreamRef.current.getTracks().forEach(t => t.stop());
