@@ -416,21 +416,18 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
   const weightFillMax = 1 - ((draft.maxWeight || WEIGHT_MAX) - WEIGHT_MIN) / (WEIGHT_MAX - WEIGHT_MIN);
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'stretch', background: 'rgba(0,0,0,0.6)', paddingTop: 40 }} onClick={onClose}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'stretch', background: '#16161C' }} onClick={onClose}>
       <div
         onClick={e => e.stopPropagation()}
-        className="animate-fade-up"
         style={{
           width: '100%', maxWidth: 520, margin: '0 auto',
-          background: '#16161C', borderRadius: 24,
+          background: '#16161C',
           padding: '24px 24px 40px',
-          border: '1px solid rgba(255,255,255,0.1)',
-          boxShadow: '0 -12px 60px rgba(0,0,0,0.6)',
+          height: '100vh',
           overflowY: 'auto',
-          margin: '0 auto',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, position: 'sticky', top: 0, background: '#16161C', paddingTop: 8, paddingBottom: 8, zIndex: 1 }}>
           <h3 style={{ fontSize: 20, fontWeight: 800, color: 'white', margin: 0 }}>Discovery Preferences</h3>
           <button onClick={onClose} aria-label="Close" style={{ width: 36, height: 36, borderRadius: 9999, background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <CloseIcon size={16} color="white" />
@@ -676,7 +673,7 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 10 }}>
+        <div style={{ display: 'flex', gap: 10, position: 'sticky', bottom: 0, background: '#16161C', paddingTop: 12, paddingBottom: 8 }}>
           <button
             onClick={() => setDraft(defaults)}
             style={{ padding: '14px 22px', borderRadius: 9999, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#D0D0D0', fontSize: 15, fontWeight: 700, cursor: 'pointer' }}
