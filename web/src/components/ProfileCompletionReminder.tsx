@@ -111,7 +111,7 @@ export default function ProfileCompletionReminder() {
         <p style={{ fontSize: 13, color: '#D0D0D0', margin: '0 0 12px', lineHeight: '18px' }}>
           {pct < 50
             ? 'Your profile is barely visible to others. Complete it to get more matches and likes!'
-            : 'You&apos;re almost there! A complete profile gets up to 10x more matches.'}
+            : "You're almost there! A complete profile gets up to 10x more matches."}
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 20 }}>
