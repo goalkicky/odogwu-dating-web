@@ -9,7 +9,7 @@ import {
 import GradientBackground from '@/components/GradientBackground';
 import ProfileModal from '@/components/ProfileModal';
 import { useAuth } from '@/store/AuthContext';
-import { messageService, storageService, matchService, userService, walletService, blockService } from '@/lib/cloudflare/services';
+import { messageService, storageService, matchService, userService, walletService, blockService, callLogService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
 import { captureStream, mediaConstraints, mediaErrorMessage } from '@/lib/media';
 import Button from '@/components/Button';
@@ -159,6 +159,7 @@ export default function ChatPage() {
   const matchId = params.id as string;
 
   const [messages, setMessages] = useState<Message[]>([]);
+  const [callLogs, setCallLogs] = useState<any[]>([]);
   const [inputText, setInputText] = useState('');
   const [showEmoji, setShowEmoji] = useState(false);
   const [replyTo, setReplyTo] = useState<{ id: string; text: string; senderId: string } | null>(null);
@@ -212,6 +213,9 @@ export default function ChatPage() {
       const msgs = (res.documents || []).map(docToMessage);
       setMessages(msgs);
     }).catch(() => {});
+    callLogService.getCallLogsForMatch(matchId).then(logs => {
+      setCallLogs(logs);
+    }).catch(() => {});
 
     messageService.subscribeToMessages(matchId, (msg) => {
       setMessages(prev => {
@@ -240,10 +244,24 @@ export default function ChatPage() {
   }, [messages]);
 
   const visibleMessages = useMemo(() => {
-    if (!searchOpen || !searchQuery.trim()) return messages;
-    const q = searchQuery.trim().toLowerCase();
-    return messages.filter(m => m.type === 'text' && m.text.toLowerCase().includes(q));
-  }, [messages, searchOpen, searchQuery]);
+    let msgs = messages;
+    if (searchOpen && searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      msgs = messages.filter(m => m.type === 'text' && m.text.toLowerCase().includes(q));
+    }
+    const items: Array<{ kind: 'msg'; msg: Message } | { kind: 'call'; log: any }> = msgs.map(m => ({ kind: 'msg' as const, msg: m }));
+    if (!searchOpen) {
+      for (const log of callLogs) {
+        items.push({ kind: 'call', log });
+      }
+    }
+    items.sort((a, b) => {
+      const ta = a.kind === 'msg' ? new Date(a.msg.createdAt).getTime() : new Date(a.log.createdAt).getTime();
+      const tb = b.kind === 'msg' ? new Date(b.msg.createdAt).getTime() : new Date(b.log.createdAt).getTime();
+      return ta - tb;
+    });
+    return items;
+  }, [messages, callLogs, searchOpen, searchQuery]);
 
   const handleSend = async () => {
     const text = inputText.trim();
@@ -595,15 +613,64 @@ export default function ChatPage() {
           </div>
         )}
 
-        {visibleMessages.map((msg, i) => {
+        {visibleMessages.map((item, i) => {
           const prev = visibleMessages[i - 1];
           const next = visibleMessages[i + 1];
+          const getItemTime = (it: typeof item) => it.kind === 'msg' ? it.msg.createdAt : it.log.createdAt;
+
+          const showDivider = !prev || !sameDay(getItemTime(prev), getItemTime(item));
+          const dividerTs = getItemTime(item);
+
+          if (item.kind === 'call') {
+            const log = item.log;
+            const isMe = log.from === userId;
+            const isVideo = log.callType === 'video';
+            const isMissed = log.status === 'missed';
+            const isDeclined = log.status === 'declined';
+            const icon = isVideo ? '📹' : '📞';
+            let statusLabel = '';
+            if (isMissed) statusLabel = isMe ? 'No answer' : 'Missed';
+            else if (isDeclined) statusLabel = 'Declined';
+            else statusLabel = log.duration > 0 ? formatDuration(log.duration) : 'Answered';
+            const statusColor = isMissed || isDeclined ? '#FF6B6B' : '#7CFFA0';
+
+            return (
+              <div key={`call-${log.$id || log.id}`}>
+                {showDivider && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '6px 0 14px' }}>
+                    <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+                    <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, color: '#7A7A7A', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', padding: '4px 12px', borderRadius: 9999 }}>{dateDivider(dividerTs)}</span>
+                    <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+                  </div>
+                )}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 12 }}>
+                  <div style={{
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)',
+                    borderRadius: 9999, padding: '6px 14px',
+                  }}>
+                    <span style={{ fontSize: 14 }}>{icon}</span>
+                    <span style={{ fontSize: 12, color: '#ABABAB', fontWeight: 600 }}>
+                      {isMe ? 'Outgoing' : 'Incoming'} {isVideo ? 'video' : 'voice'} call
+                    </span>
+                    <span style={{ fontSize: 12, color: statusColor, fontWeight: 700 }}>
+                      {statusLabel}
+                    </span>
+                  </div>
+                  <span style={{ fontSize: 10, color: '#6B6B6B', marginTop: 4, fontVariant: 'tabular-nums' }}>
+                    {formatTime(log.createdAt)}
+                  </span>
+                </div>
+              </div>
+            );
+          }
+
+          const msg = item.msg;
           const isMe = msg.senderId === userId;
-          const showDivider = !prev || !sameDay(prev.createdAt, msg.createdAt);
-          const sameGroupAsPrev = !!prev && prev.senderId === msg.senderId && sameDay(prev.createdAt, msg.createdAt)
-            && new Date(msg.createdAt).getTime() - new Date(prev.createdAt).getTime() < GROUP_GAP_MS;
-          const sameGroupAsNext = !!next && next.senderId === msg.senderId && sameDay(next.createdAt, msg.createdAt)
-            && new Date(next.createdAt).getTime() - new Date(msg.createdAt).getTime() < GROUP_GAP_MS;
+          const sameGroupAsPrev = prev && prev.kind === 'msg' && prev.msg.senderId === msg.senderId && sameDay(prev.msg.createdAt, msg.createdAt)
+            && new Date(msg.createdAt).getTime() - new Date(prev.msg.createdAt).getTime() < GROUP_GAP_MS;
+          const sameGroupAsNext = next && next.kind === 'msg' && next.msg.senderId === msg.senderId && sameDay(next.msg.createdAt, msg.createdAt)
+            && new Date(next.msg.createdAt).getTime() - new Date(msg.createdAt).getTime() < GROUP_GAP_MS;
           const showSender = !isMe && !sameGroupAsPrev;
           const showTime = !sameGroupAsNext;
           const isImage = msg.type === 'image';

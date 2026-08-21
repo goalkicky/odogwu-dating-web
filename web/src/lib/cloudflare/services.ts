@@ -291,6 +291,11 @@ export const callLogService = {
     const data = await apiFetch('/api/call-logs?user=1');
     return data?.documents || [];
   },
+
+  getCallLogsForMatch: async (matchId: string) => {
+    const data = await apiFetch(`/api/call-logs?matchId=${encodeURIComponent(matchId)}`);
+    return data?.documents || [];
+  },
 };
 
 export const turnService = {

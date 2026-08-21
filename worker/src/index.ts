@@ -1021,7 +1021,14 @@ async function handleCreateCallLog(env: Env, req: Request, me: string): Promise<
 }
 
 async function handleGetCallLogs(env: Env, req: Request, me: string): Promise<Response> {
-  void req;
+  const url = new URL(req.url);
+  const matchId = url.searchParams.get('matchId');
+  if (matchId) {
+    const { results } = await env.DB.prepare(
+      'SELECT * FROM call_logs WHERE match_id = ? AND (from_user = ? OR to_user = ?) ORDER BY created_at ASC'
+    ).bind(matchId, me, me).all();
+    return json({ documents: results.map(toCallLogDoc) });
+  }
   const { results } = await env.DB.prepare(
     'SELECT * FROM call_logs WHERE from_user = ? OR to_user = ? ORDER BY created_at DESC LIMIT 200'
   ).bind(me, me).all();
