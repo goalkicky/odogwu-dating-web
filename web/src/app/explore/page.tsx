@@ -533,7 +533,7 @@ export default function ExplorePage() {
                   const count = category.items.reduce((sum, it) => sum + (groups[it] || []).length, 0);
                   const firstInterest = category.items.find(it => (groups[it] || []).length > 0);
                   const style = firstInterest ? interestStyle(firstInterest) : category;
-                  const cover = firstInterest ? groups[firstInterest]?.[0]?.photos?.[0] : undefined;
+                  const bg = `/categories/${encodeURIComponent(category.label)}.jpeg`;
                   return (
                     <button
                       key={category.label}
@@ -544,10 +544,8 @@ export default function ExplorePage() {
                         aspectRatio: '4 / 5', background: `linear-gradient(160deg, ${style.c1}, ${style.c2})`, textAlign: 'left',
                       }}
                     >
-                      {cover && (
-                        <img src={cover} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                      )}
-                      <div style={{ position: 'absolute', inset: 0, background: cover ? 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.62) 100%)' : 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 100%)' }} />
+                      <img src={bg} alt={category.label} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.62) 100%)' }} />
                       {count > 0 && (
                         <div style={{ position: 'absolute', top: 12, right: 12, padding: '4px 10px', borderRadius: 9999, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(6px)', fontSize: 12, fontWeight: 800, color: 'white' }}>
                           {count}
