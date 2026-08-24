@@ -76,6 +76,7 @@ export interface FeedPost {
   likedByMe: boolean;
   savedByMe: boolean;
   createdAt: string;
+  interest?: string;
 }
 
 export interface FeedComment {

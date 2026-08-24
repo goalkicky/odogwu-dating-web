@@ -1320,6 +1320,7 @@ function toFeedPostDoc(r: any, likedByMe = false, savedByMe = false): any {
     likedByMe,
     savedByMe,
     createdAt: r.created_at,
+    interest: r.interest || '',
   };
 }
 
