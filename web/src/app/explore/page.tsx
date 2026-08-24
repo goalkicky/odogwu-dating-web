@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { ChevronBackIcon, RefreshIcon, CameraIcon, PlusIcon, GridIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
@@ -119,12 +119,19 @@ export default function ExplorePage() {
 
   const handlePostCreated = useCallback(() => {
     setShowCreatePost(false);
+    if (activeCategory) {
+      setPostCounts(prev => ({ ...prev, [activeCategory.label]: (prev[activeCategory.label] || 0) + 1 }));
+    }
     loadFeed();
-  }, [loadFeed]);
+  }, [activeCategory, loadFeed]);
 
   const handlePostDeleted = useCallback((postId: string) => {
+    const removed = feedPosts.find(p => p.id === postId);
     setFeedPosts(prev => prev.filter(p => p.id !== postId));
-  }, []);
+    if (removed?.interest) {
+      setPostCounts(prev => ({ ...prev, [removed.interest as string]: Math.max(0, (prev[removed.interest as string] || 0) - 1) }));
+    }
+  }, [feedPosts]);
 
   const handleLikeToggle = useCallback(() => {}, []);
 
@@ -169,27 +176,19 @@ export default function ExplorePage() {
     likeService.getStatus().then(setLikes).catch(() => {});
   }, []);
 
-  useEffect(() => {
+  const loadPostCounts = useCallback(() => {
     const keys = INTEREST_CATEGORIES.flatMap(c => [c.label, ...c.items]);
     feedService.getPostCounts(keys).then(setPostCounts).catch(() => {});
   }, []);
 
-  const groups = useMemo(() => {
-    const map: Record<string, ExploreUser[]> = {};
-    for (const u of users) {
-      for (const it of u.interests) {
-        if (!map[it]) map[it] = [];
-        map[it].push(u);
-      }
-    }
-    return map;
-  }, [users]);
+  useEffect(() => { loadPostCounts(); }, [loadPostCounts]);
 
   const backToCategories = useCallback(() => {
     setActiveCategory(null);
     setDeck([]);
     setLastAction(null);
-  }, []);
+    loadPostCounts();
+  }, [loadPostCounts]);
 
   // Clicking a category goes straight to that category's feed
   const openCategory = useCallback((category: InterestCategory) => {
@@ -402,7 +401,6 @@ export default function ExplorePage() {
             ) : (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
                 {INTEREST_CATEGORIES.map((category) => {
-                  const count = category.items.reduce((sum, it) => sum + (groups[it] || []).length, 0);
                   const posts = categoryPostCount(category);
                   const bg = `/categories/${encodeURIComponent(category.label)}.jpeg`;
                   return (
@@ -417,11 +415,6 @@ export default function ExplorePage() {
                     >
                       <img src={bg} alt={category.label} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.62) 100%)' }} />
-                      {count > 0 && (
-                        <div style={{ position: 'absolute', top: 12, right: 12, padding: '4px 10px', borderRadius: 9999, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(6px)', fontSize: 12, fontWeight: 800, color: 'white' }}>
-                          {count}
-                        </div>
-                      )}
                       <div style={{ position: 'absolute', left: 14, right: 14, bottom: 14 }}>
                         <div style={{ fontSize: 26, lineHeight: 1 }}>{category.emoji}</div>
                         <div style={{ fontSize: 19, fontWeight: 800, color: 'white', marginTop: 8, textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>{category.label}</div>
