@@ -37,9 +37,14 @@ export default function AnimatedCard({
   const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  const pressPosRef = useRef<{ x: number; y: number } | null>(null);
+  const movedRef = useRef(false);
 
   const handleDragStart = useCallback((clientX: number, clientY: number) => {
     if (!isFirst) return;
+    const rect = cardRef.current?.getBoundingClientRect();
+    pressPosRef.current = rect ? { x: clientX - rect.left, y: clientY - rect.top } : null;
+    movedRef.current = false;
     setDragStart({ x: clientX, y: clientY });
     setIsDragging(true);
   }, [isFirst]);
@@ -48,6 +53,7 @@ export default function AnimatedCard({
     if (!dragStart || !isDragging) return;
     const dx = clientX - dragStart.x;
     const dy = clientY - dragStart.y;
+    if (Math.abs(dx) > 8 || Math.abs(dy) > 8) movedRef.current = true;
     setOffset({ x: dx, y: dy });
   }, [dragStart, isDragging]);
 
@@ -65,11 +71,23 @@ export default function AnimatedCard({
       setOffset({ x: 0, y: -1000 });
       setTimeout(onSuperLike, 300);
     } else {
+      // Tap (no drag): left half of the picture -> previous photo, right half -> next photo (Tinder-style)
+      if (!movedRef.current && Math.abs(dx) < 8 && Math.abs(dy) < 8 && user.photos.length > 1) {
+        const rect = cardRef.current?.getBoundingClientRect();
+        const press = pressPosRef.current;
+        if (rect && press) {
+          if (press.x < rect.width / 2) {
+            setCurrentPhotoIndex(i => Math.max(i - 1, 0));
+          } else {
+            setCurrentPhotoIndex(i => Math.min(i + 1, user.photos.length - 1));
+          }
+        }
+      }
       setOffset({ x: 0, y: 0 });
     }
     setIsDragging(false);
     setDragStart(null);
-  }, [dragStart, offset, onSwipeLeft, onSwipeRight, onSuperLike]);
+  }, [dragStart, offset, onSwipeLeft, onSwipeRight, onSuperLike, user.photos]);
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => handleDragStart(e.clientX, e.clientY), [handleDragStart]);
   const handleMouseMove = useCallback((e: React.MouseEvent) => handleDragMove(e.clientX, e.clientY), [handleDragMove]);
@@ -174,7 +192,9 @@ export default function AnimatedCard({
         {user.photos?.slice(0, 5).map((_, i) => (
           <button
             key={i}
-            onClick={() => setCurrentPhotoIndex(i)}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            onClick={(e) => { e.stopPropagation(); setCurrentPhotoIndex(i); }}
             style={{
               flex: 1,
               height: '4px',
