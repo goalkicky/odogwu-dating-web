@@ -348,14 +348,14 @@ export const likeService = {
 };
 
 export const feedService = {
-  getFeed: async (interest: string, cursor?: string) => {
-    const params = new URLSearchParams({ interest });
+  getFeed: async (interests: string[], cursor?: string) => {
+    const params = new URLSearchParams({ interests: interests.join(',') });
     if (cursor) params.set('cursor', cursor);
     return apiFetch(`/api/feed?${params.toString()}`);
   },
 
-  createPost: async (images: string[], caption: string, interest: string) => {
-    return apiFetch('/api/feed', { method: 'POST', json: { images, caption, interest } });
+  createPost: async (images: string[], caption: string, category: string) => {
+    return apiFetch('/api/feed', { method: 'POST', json: { images, caption, interest: category } });
   },
 
   deletePost: async (postId: string) => {

@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { ChevronBackIcon, RefreshIcon, SearchIcon, CameraIcon, PlusIcon, GridIcon } from '@/components/Icons';
+import { ChevronBackIcon, RefreshIcon, CameraIcon, PlusIcon, GridIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
@@ -10,42 +10,12 @@ import { useMobile } from '@/lib/useMediaQuery';
 import { useAuth } from '@/store/AuthContext';
 import { userService, storageService, superlikeService, likeService, feedService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
-import { INTEREST_CATEGORIES, interestCategory, InterestCategory } from '@/lib/interests';
+import { INTEREST_CATEGORIES, InterestCategory } from '@/lib/interests';
 import PostCard from '@/components/PostCard';
 import CommentSheet from '@/components/CommentSheet';
 import CreatePostModal from '@/components/CreatePostModal';
 import FeedProfileModal from '@/components/FeedProfileModal';
 import { FeedPost } from '@/lib/types';
-
-const INTEREST_STYLE: Record<string, { emoji: string; c1: string; c2: string }> = {
-  Travel: { emoji: '✈️', c1: '#1E88E5', c2: '#4FC3F7' },
-  Food: { emoji: '🍜', c1: '#FF7043', c2: '#FFB74D' },
-  Music: { emoji: '🎵', c1: '#7C4DFF', c2: '#B388FF' },
-  Movies: { emoji: '🎬', c1: '#5C6BC0', c2: '#9FA8DA' },
-  Fitness: { emoji: '💪', c1: '#FF5252', c2: '#FF8A80' },
-  Hiking: { emoji: '🥾', c1: '#43A047', c2: '#81C784' },
-  Dancing: { emoji: '💃', c1: '#EC407A', c2: '#F48FB1' },
-  Cooking: { emoji: '🍳', c1: '#FB8C00', c2: '#FFCA28' },
-  Art: { emoji: '🎨', c1: '#AB47BC', c2: '#CE93D8' },
-  Photography: { emoji: '📷', c1: '#37474F', c2: '#78909C' },
-  Gaming: { emoji: '🎮', c1: '#3949AB', c2: '#7986CB' },
-  Reading: { emoji: '📚', c1: '#6D4C41', c2: '#A1887F' },
-  Sports: { emoji: '⚽', c1: '#2E7D32', c2: '#66BB6A' },
-  Fashion: { emoji: '👗', c1: '#D81B60', c2: '#F06292' },
-  Pets: { emoji: '🐾', c1: '#8D6E63', c2: '#BCAAA4' },
-  Coffee: { emoji: '☕', c1: '#4E342E', c2: '#8D6E63' },
-  Nature: { emoji: '🌿', c1: '#00897B', c2: '#4DB6AC' },
-  Yoga: { emoji: '🧘', c1: '#7E57C2', c2: '#B39DDB' },
-  Shopping: { emoji: '🛍️', c1: '#C2185B', c2: '#F06292' },
-  Tech: { emoji: '💻', c1: '#1565C0', c2: '#64B5F6' },
-  Beach: { emoji: '🏖️', c1: '#0277BD', c2: '#4DD0E1' },
-  Wine: { emoji: '🍷', c1: '#6A1B9A', c2: '#CE93D8' },
-};
-
-function interestStyle(interest: string) {
-  const match = INTEREST_STYLE[interest] || interestCategory(interest);
-  return match || { emoji: '🌟', c1: '#7C4DFF', c2: '#FF375F' };
-}
 
 interface ExploreUser {
   id: string;
@@ -77,10 +47,8 @@ export default function ExplorePage() {
   const [users, setUsers] = useState<ExploreUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<InterestCategory | null>(null);
-  const [activeInterest, setActiveInterest] = useState<string | null>(null);
   const [deck, setDeck] = useState<ExploreUser[]>([]);
   const [lastAction, setLastAction] = useState<string | null>(null);
-  const [search, setSearch] = useState('');
   const [superlikes, setSuperlikes] = useState<any>({ remaining: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
   const [showSuperlikeUpsell, setShowSuperlikeUpsell] = useState(false);
   const [likes, setLikes] = useState<any>({ remaining: 0, used: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
@@ -97,21 +65,30 @@ export default function ExplorePage() {
   const [profileModal, setProfileModal] = useState<{ userId: string; userName: string; userPhoto: string } | null>(null);
   const [postCounts, setPostCounts] = useState<Record<string, number>>({});
 
+  // Total posts published under a category (category tag + any of its interests)
+  const categoryPostCount = useCallback((category: InterestCategory) => {
+    return (
+      (postCounts[category.label] || 0) +
+      category.items.reduce((sum, it) => sum + (postCounts[it] || 0), 0)
+    );
+  }, [postCounts]);
+
   const handleOpenCreatePost = useCallback(() => {
-    if (!activeInterest) return;
-    const userInterests = (profile as any)?.interests || [];
-    if (!userInterests.includes(activeInterest)) {
+    if (!activeCategory) return;
+    const userInterests: string[] = (profile as any)?.interests || [];
+    const hasCategoryInterest = activeCategory.items.some(it => userInterests.includes(it));
+    if (!hasCategoryInterest) {
       setShowInterestRestriction(true);
       return;
     }
     setShowCreatePost(true);
-  }, [activeInterest, profile]);
+  }, [activeCategory, profile]);
 
   const loadFeed = useCallback(async (cursor?: string) => {
-    if (!activeInterest) return;
+    if (!activeCategory) return;
     setFeedLoading(true);
     try {
-      const data = await feedService.getFeed(activeInterest, cursor);
+      const data = await feedService.getFeed([activeCategory.label, ...activeCategory.items], cursor);
       const docs = (data?.documents || []) as FeedPost[];
       if (cursor) {
         setFeedPosts(prev => [...prev, ...docs]);
@@ -122,17 +99,17 @@ export default function ExplorePage() {
       setFeedHasMore(docs.length >= 10);
     } catch {}
     setFeedLoading(false);
-  }, [activeInterest]);
+  }, [activeCategory]);
 
   useEffect(() => {
-    if (activeInterest) {
+    if (activeCategory) {
       loadFeed();
     } else {
       setFeedPosts([]);
       setFeedCursor(null);
       setFeedHasMore(true);
     }
-  }, [activeInterest, loadFeed]);
+  }, [activeCategory, loadFeed]);
 
   const loadMoreFeed = useCallback(() => {
     if (feedCursor && feedHasMore && !feedLoading) {
@@ -192,6 +169,11 @@ export default function ExplorePage() {
     likeService.getStatus().then(setLikes).catch(() => {});
   }, []);
 
+  useEffect(() => {
+    const keys = INTEREST_CATEGORIES.flatMap(c => [c.label, ...c.items]);
+    feedService.getPostCounts(keys).then(setPostCounts).catch(() => {});
+  }, []);
+
   const groups = useMemo(() => {
     const map: Record<string, ExploreUser[]> = {};
     for (const u of users) {
@@ -203,32 +185,17 @@ export default function ExplorePage() {
     return map;
   }, [users]);
 
-  const openInterest = useCallback((interest: string) => {
-    setDeck([...(groups[interest] || [])]);
-    setActiveInterest(interest);
-    setLastAction(null);
-  }, [groups]);
-
-  const backToGrid = useCallback(() => {
-    setActiveInterest(null);
-    setDeck([]);
-    setLastAction(null);
-  }, []);
-
   const backToCategories = useCallback(() => {
     setActiveCategory(null);
-    setActiveInterest(null);
     setDeck([]);
     setLastAction(null);
   }, []);
 
+  // Clicking a category goes straight to that category's feed
   const openCategory = useCallback((category: InterestCategory) => {
     setActiveCategory(category);
-    setActiveInterest(null);
     setDeck([]);
     setLastAction(null);
-    // Fetch post counts for all interests in this category
-    feedService.getPostCounts(category.items).then(c => setPostCounts(c)).catch(() => {});
   }, []);
 
   const removeSwiped = useCallback((id: string) => {
@@ -290,7 +257,7 @@ export default function ExplorePage() {
         if (res.mutual) setLastAction('match');
       } catch (e: any) {
         if (e?.status === 402 || e?.code === 'NO_SUPERLIKES' || String(e?.message || '').includes('super like')) {
-          setShowSuperlikeUpsell(true);
+          setShowLikeUpsell(true);
         }
       }
       removeSwiped(liked.id);
@@ -299,7 +266,6 @@ export default function ExplorePage() {
   }, [current, superlikes, removeSwiped, advance]);
 
   const totalPeople = users.length;
-  const activeStyle = activeInterest ? interestStyle(activeInterest) : null;
 
   return (
     <DesktopLayout>
@@ -309,13 +275,13 @@ export default function ExplorePage() {
           padding: isMobile ? '18px 16px 110px' : '24px 16px 60px',
         }}
       >
-        {activeInterest && activeStyle ? (
-          /* ===== Feed timeline for a selected interest ===== */
+        {activeCategory ? (
+          /* ===== Feed timeline for the selected category ===== */
           <div className="animate-fade-up" style={{ maxWidth: 560, margin: '0 auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
               <button
-                onClick={backToGrid}
-                aria-label="Back to interests"
+                onClick={backToCategories}
+                aria-label="Back to categories"
                 className="glass lift"
                 style={{ width: 42, height: 42, borderRadius: 9999, border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
               >
@@ -323,13 +289,13 @@ export default function ExplorePage() {
               </button>
               <div style={{ minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ fontSize: 20 }}>{activeStyle.emoji}</span>
+                  <span style={{ fontSize: 20 }}>{activeCategory.emoji}</span>
                   <h1 style={{ fontSize: isMobile ? 24 : 26, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 0.4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {activeInterest}
+                    {activeCategory.label}
                   </h1>
                 </div>
                 <p style={{ fontSize: 13, color: '#6B6B6B', margin: '2px 0 0' }}>
-                  Timeline of posts about {activeInterest.toLowerCase()}.
+                  Posts published under {activeCategory.label}.
                 </p>
               </div>
             </div>
@@ -367,7 +333,7 @@ export default function ExplorePage() {
                 </div>
                 <span style={{ fontSize: 16, fontWeight: 700, color: 'white' }}>No posts yet</span>
                 <span style={{ fontSize: 13, color: '#6B6B6B', maxWidth: 280 }}>
-                  Be the first to share something about {activeInterest.toLowerCase()}.
+                  Be the first to share something in {activeCategory.label}.
                 </span>
                 <button
                   onClick={handleOpenCreatePost}
@@ -412,100 +378,6 @@ export default function ExplorePage() {
               </div>
             )}
           </div>
-        ) : activeCategory ? (
-          /* ===== Interest grid within a category ===== */
-          <div className="animate-fade-up" style={{ maxWidth: 560, margin: '0 auto' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
-              <button
-                onClick={backToCategories}
-                aria-label="Back to categories"
-                className="glass lift"
-                style={{ width: 42, height: 42, borderRadius: 9999, border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
-              >
-                <ChevronBackIcon size={20} color="white" />
-              </button>
-              <div style={{ minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ fontSize: 20 }}>{activeCategory.emoji}</span>
-                  <h1 style={{ fontSize: isMobile ? 24 : 26, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 0.4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {activeCategory.label}
-                  </h1>
-                </div>
-                <p style={{ fontSize: 13, color: '#6B6B6B', margin: '2px 0 0' }}>
-                  Pick an interest to find people who share it.
-                </p>
-              </div>
-            </div>
-
-            <div className="glass lift" style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px', borderRadius: 16, marginBottom: 18 }}>
-              <SearchIcon size={18} color="#6B6B6B" />
-              <input
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                placeholder="Search interests..."
-                style={{ flex: 1, background: 'none', border: 'none', outline: 'none', color: 'white', fontSize: 14, padding: '13px 0' }}
-              />
-            </div>
-
-            {loading ? (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '50vh', gap: 18 }}>
-                <div style={{ width: 56, height: 56, borderRadius: 18, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
-                <span className="neon-text" style={{ fontSize: 16, fontWeight: 700 }}>Finding people...</span>
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
-                {activeCategory.items.filter(it => it.toLowerCase().includes(search.trim().toLowerCase())).map((interest) => {
-                  const style = interestStyle(interest);
-                  const members = groups[interest] || [];
-                  const count = members.length;
-                  const cover = members[0]?.photos?.[0];
-                  const posts = postCounts[interest] || 0;
-                  return (
-                    <button
-                      key={interest}
-                      onClick={() => openInterest(interest)}
-                      className="lift"
-                      style={{
-                        position: 'relative', borderRadius: 20, overflow: 'hidden', border: 'none', cursor: 'pointer', padding: 0,
-                        aspectRatio: '4 / 5', background: `linear-gradient(160deg, ${style.c1}, ${style.c2})`, textAlign: 'left',
-                      }}
-                    >
-                      {cover && (
-                        <img src={cover} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                      )}
-                      <div style={{ position: 'absolute', inset: 0, background: cover ? 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.62) 100%)' : 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 100%)' }} />
-                      {count > 0 && (
-                        <div style={{ position: 'absolute', top: 12, right: 12, padding: '4px 10px', borderRadius: 9999, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(6px)', fontSize: 12, fontWeight: 800, color: 'white' }}>
-                          {count}
-                        </div>
-                      )}
-                      <div style={{ position: 'absolute', left: 14, right: 14, bottom: 14 }}>
-                        <div style={{ fontSize: 26, lineHeight: 1 }}>{style.emoji}</div>
-                        <div style={{ fontSize: 19, fontWeight: 800, color: 'white', marginTop: 8, textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>{interest}</div>
-                        <div style={{ fontSize: 12.5, fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 3, textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
-                          {posts > 0 ? `${posts} ${posts === 1 ? 'post' : 'posts'}` : 'No post yet'}
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-
-            {!loading && totalPeople === 0 && (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, marginTop: 24, textAlign: 'center' }}>
-                <span style={{ fontSize: 14, color: '#6B6B6B', maxWidth: 300 }}>
-                  No profiles are available right now. Check back soon.
-                </span>
-                <button onClick={load} className="glass" style={{ padding: '12px 26px', borderRadius: 9999, border: '1px solid rgba(255,255,255,0.12)', color: 'white', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <RefreshIcon size={16} color="#FF6B8A" />
-                    Refresh
-                  </div>
-                </button>
-              </div>
-            )}
-          </div>
         ) : (
           /* ===== Category grid ===== */
           <div className="animate-fade-up" style={{ maxWidth: 560, margin: '0 auto' }}>
@@ -519,7 +391,7 @@ export default function ExplorePage() {
               </div>
             </div>
             <p style={{ fontSize: 13, color: '#6B6B6B', margin: '0 0 16px' }}>
-              Pick a category to find people who share your interests.
+              Pick a category to see its feed.
             </p>
 
             {loading ? (
@@ -531,8 +403,7 @@ export default function ExplorePage() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
                 {INTEREST_CATEGORIES.map((category) => {
                   const count = category.items.reduce((sum, it) => sum + (groups[it] || []).length, 0);
-                  const firstInterest = category.items.find(it => (groups[it] || []).length > 0);
-                  const style = firstInterest ? interestStyle(firstInterest) : category;
+                  const posts = categoryPostCount(category);
                   const bg = `/categories/${encodeURIComponent(category.label)}.jpeg`;
                   return (
                     <button
@@ -541,7 +412,7 @@ export default function ExplorePage() {
                       className="lift"
                       style={{
                         position: 'relative', borderRadius: 20, overflow: 'hidden', border: 'none', cursor: 'pointer', padding: 0,
-                        aspectRatio: '4 / 5', background: `linear-gradient(160deg, ${style.c1}, ${style.c2})`, textAlign: 'left',
+                        aspectRatio: '4 / 5', background: `linear-gradient(160deg, ${category.c1}, ${category.c2})`, textAlign: 'left',
                       }}
                     >
                       <img src={bg} alt={category.label} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -555,7 +426,7 @@ export default function ExplorePage() {
                         <div style={{ fontSize: 26, lineHeight: 1 }}>{category.emoji}</div>
                         <div style={{ fontSize: 19, fontWeight: 800, color: 'white', marginTop: 8, textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>{category.label}</div>
                         <div style={{ fontSize: 12.5, fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 3, textShadow: '0 1px 6px rgba(0,0,0,0.5)' }}>
-                          {count > 0 ? `${count} ${count === 1 ? 'person' : 'people'}` : `${category.items.length} interests`}
+                          {posts > 0 ? `${posts} ${posts === 1 ? 'post' : 'posts'}` : 'No posts yet'}
                         </div>
                       </div>
                     </button>
@@ -599,24 +470,24 @@ export default function ExplorePage() {
           />
         )}
 
-        {showCreatePost && activeInterest && (
+        {showCreatePost && activeCategory && (
           <CreatePostModal
             currentUserId={(profile as any)?.$id || ''}
-            interest={activeInterest}
+            category={activeCategory.label}
             onClose={() => setShowCreatePost(false)}
             onPostCreated={handlePostCreated}
           />
         )}
 
-        {showInterestRestriction && activeInterest && (
+        {showInterestRestriction && activeCategory && (
           <div onClick={() => setShowInterestRestriction(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(6px)', padding: 16 }}>
             <div onClick={(e) => e.stopPropagation()} className="feed-sheet-up" style={{ width: '100%', maxWidth: 380, background: 'rgba(16,16,22,0.97)', borderRadius: 24, border: '1px solid rgba(255,255,255,0.08)', padding: '32px 24px', textAlign: 'center' }}>
               <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,55,95,0.15), rgba(124,77,255,0.12))', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', border: '1px solid rgba(255,55,95,0.2)' }}>
                 <span style={{ fontSize: 28 }}>🔒</span>
               </div>
-              <h3 style={{ fontSize: 18, fontWeight: 800, color: 'white', margin: '0 0 10px' }}>Interest Required</h3>
+              <h3 style={{ fontSize: 18, fontWeight: 800, color: 'white', margin: '0 0 10px' }}>Category Locked</h3>
               <p style={{ fontSize: 14, color: '#6B6B6B', margin: '0 0 24px', lineHeight: 1.5 }}>
-                You can&apos;t post in <span style={{ color: '#FF375F', fontWeight: 700 }}>{activeInterest}</span> because you haven&apos;t added it to your interests yet.
+                You can&apos;t post in <span style={{ color: '#FF375F', fontWeight: 700 }}>{activeCategory.label}</span> because you haven&apos;t added any of its interests to your profile yet.
               </p>
               <button
                 onClick={() => setShowInterestRestriction(false)}

@@ -5,12 +5,12 @@ import { feedService, storageService } from '@/lib/cloudflare/services';
 
 interface CreatePostModalProps {
   currentUserId: string;
-  interest: string;
+  category: string;
   onClose: () => void;
   onPostCreated: () => void;
 }
 
-export default function CreatePostModal({ currentUserId, interest, onClose, onPostCreated }: CreatePostModalProps) {
+export default function CreatePostModal({ currentUserId, category, onClose, onPostCreated }: CreatePostModalProps) {
   const [images, setImages] = useState<string[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [caption, setCaption] = useState('');
@@ -61,11 +61,11 @@ export default function CreatePostModal({ currentUserId, interest, onClose, onPo
     if (images.length === 0 || posting) return;
     setPosting(true);
     try {
-      await feedService.createPost(images, caption.trim(), interest);
+      await feedService.createPost(images, caption.trim(), category);
       onPostCreated();
     } catch {}
     setPosting(false);
-  }, [images, caption, interest, posting, onPostCreated]);
+  }, [images, caption, category, posting, onPostCreated]);
 
   const canPost = images.length > 0 && !posting && !uploading;
 
@@ -185,11 +185,11 @@ export default function CreatePostModal({ currentUserId, interest, onClose, onPo
           </div>
         </div>
 
-        {/* Interest tag */}
+        {/* Category tag */}
         <div style={{ padding: '12px 20px 20px' }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: '#6B6B6B', marginBottom: 8 }}>Posting to</div>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 9999, background: 'rgba(255,55,95,0.12)', border: '1px solid rgba(255,55,95,0.3)' }}>
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#FF375F' }}>{interest}</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#FF375F' }}>{category}</span>
           </div>
         </div>
       </div>

@@ -1423,20 +1423,23 @@ async function handleGetFeedCounts(env: Env, req: Request, me: string): Promise<
 async function handleGetFeed(env: Env, req: Request, me: string): Promise<Response> {
   const url = new URL(req.url);
   const cursor = url.searchParams.get('cursor') || '';
-  const interest = url.searchParams.get('interest') || '';
+  // Accepts a list of tags (a category plus the interests that belong to it).
+  // A post is only ever visible in the feed(s) of the category it was published under.
+  const rawTags = url.searchParams.get('interests') || url.searchParams.get('interest') || '';
+  const tags = rawTags.split(',').map(s => s.trim()).filter(Boolean);
   const limit = 20;
 
-  if (!interest) return json({ documents: [], cursor: '' });
+  if (tags.length === 0) return json({ documents: [], cursor: '' });
 
   const sql = `SELECT p.*, u.full_name, u.photos
                FROM feed_posts p
                JOIN users u ON u.id = p.user_id
-               WHERE p.interest = ?
+               WHERE p.interest IN (${tags.map(() => '?').join(',')})
                  AND p.user_id NOT IN (SELECT blocked_id FROM blocks WHERE blocker_id = ?)
                  AND p.user_id NOT IN (SELECT blocker_id FROM blocks WHERE blocked_id = ?)
                ${cursor ? 'AND p.created_at < (SELECT created_at FROM feed_posts WHERE id = ?)' : ''}
                ORDER BY p.created_at DESC LIMIT ?`;
-  const binds: any[] = [interest, me, me];
+  const binds: any[] = [...tags, me, me];
   if (cursor) binds.push(cursor);
   binds.push(limit + 1);
 
