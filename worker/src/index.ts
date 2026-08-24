@@ -1409,14 +1409,25 @@ async function handleGetFeedCounts(env: Env, req: Request, me: string): Promise<
   const interests = (url.searchParams.get('interests') || '').split(',').map(s => s.trim()).filter(Boolean);
   if (interests.length === 0) return json({ counts: {} });
 
-  const placeholders = interests.map(() => '?').join(',');
-  const { results } = await env.DB.prepare(
-    `SELECT interest, COUNT(*) as cnt FROM feed_posts WHERE interest IN (${placeholders}) GROUP BY interest`
-  ).bind(...interests).all();
+  // D1 allows a maximum of 100 bound parameters per query
+  const CHUNK_SIZE = 90;
+  const statements = [];
+  for (let i = 0; i < interests.length; i += CHUNK_SIZE) {
+    const chunk = interests.slice(i, i + CHUNK_SIZE);
+    const placeholders = chunk.map(() => '?').join(',');
+    statements.push(
+      env.DB.prepare(
+        `SELECT interest, COUNT(*) as cnt FROM feed_posts WHERE interest IN (${placeholders}) GROUP BY interest`
+      ).bind(...chunk)
+    );
+  }
 
+  const batches = await env.DB.batch(statements);
   const counts: Record<string, number> = {};
-  for (const r of results as any[]) {
-    counts[r.interest] = r.cnt;
+  for (const batch of batches) {
+    for (const r of batch.results as any[]) {
+      counts[r.interest] = r.cnt;
+    }
   }
   return json({ counts });
 }
