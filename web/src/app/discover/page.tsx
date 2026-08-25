@@ -11,6 +11,7 @@ import ProfileModal from '@/components/ProfileModal';
 import SuperlikeUpsellModal from '@/components/SuperlikeUpsellModal';
 import LikeUpsellModal from '@/components/LikeUpsellModal';
 import MessageUpsellModal from '@/components/MessageUpsellModal';
+import MatchPopup from '@/components/MatchPopup';
 import { useMobile } from '@/lib/useMediaQuery';
 import { useAuth } from '@/store/AuthContext';
 import { userService, storageService, superlikeService, likeService, matchService } from '@/lib/cloudflare/services';
@@ -31,6 +32,8 @@ export default function DiscoverPage() {
   const [likes, setLikes] = useState<any>({ remaining: 0, used: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
   const [showLikeUpsell, setShowLikeUpsell] = useState(false);
   const [showMessageUpsell, setShowMessageUpsell] = useState(false);
+  const [matchPopupUser, setMatchPopupUser] = useState<any>(null);
+  const [matchPopupId, setMatchPopupId] = useState<string | undefined>(undefined);
 
   const baseGender = (profile?.interestedIn as string) || 'both';
   const defaultPrefs = { gender: baseGender, minAge: 18, maxAge: 60, maxDistance: 0, minHeight: 0, maxHeight: 0, minWeight: 0, maxWeight: 0, city: '', relationshipGoals: '' };
@@ -108,8 +111,12 @@ export default function DiscoverPage() {
       try {
         const res = await userService.likeUser((profile as any).$id, liked.id);
         if (res && typeof res.remaining === 'number') setLikes(res);
-        const mutual = await userService.isMutualMatch((profile as any).$id, liked.id);
-        if (mutual) setLastAction('match');
+        if (res?.mutual) {
+          setLastAction(null);
+          setMatchPopupUser(liked);
+          setMatchPopupId(res.match?.$id);
+          return;
+        }
       } catch (e: any) {
         if (e?.status === 402 || e?.code === 'NO_LIKES' || String(e?.message || '').includes('like')) {
           setShowLikeUpsell(true);
@@ -130,7 +137,12 @@ export default function DiscoverPage() {
       try {
         const res = await superlikeService.send(liked.id);
         setSuperlikes(res);
-        if (res.mutual) setLastAction('match');
+        if (res.mutual) {
+          setLastAction(null);
+          setMatchPopupUser(liked);
+          setMatchPopupId(res.match?.$id);
+          return;
+        }
       } catch (e: any) {
         if (e?.status === 402 || e?.code === 'NO_SUPERLIKES' || String(e?.message || '').includes('super like')) {
           setShowSuperlikeUpsell(true);
@@ -280,19 +292,13 @@ export default function DiscoverPage() {
               />
             </div>
 
-            {lastAction && (
-              <div className="animate-pop" style={{ position: 'absolute', bottom: 92, left: 0, right: 0, display: 'flex', justifyContent: 'center', animation: lastAction === 'match' ? 'popIn 0.4s cubic-bezier(0.34,1.56,0.64,1)' : 'fadeUp 0.3s ease' }}>
-                {lastAction === 'match' ? (
-                  <div style={{ background: 'linear-gradient(135deg, #FF375F, #7C4DFF)', padding: '10px 24px', borderRadius: 9999, boxShadow: '0 8px 30px rgba(255,55,95,0.5), 0 0 40px rgba(124,77,255,0.35)', whiteSpace: 'nowrap' }}>
-                    <span style={{ color: 'white', fontWeight: 800, fontSize: 15, letterSpacing: 0.5 }}>✨ It&apos;s a Match!</span>
-                  </div>
-                ) : (
-                  <div className="glass-strong" style={{ padding: '8px 20px', borderRadius: 9999, whiteSpace: 'nowrap' }}>
-                    <span style={{ color: 'white', fontWeight: 700, fontSize: 14 }}>
-                      {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : `Super Liked ${current.fullName.split(' ')[0] || 'them'}! 💙`}
-                    </span>
-                  </div>
-                )}
+            {lastAction && lastAction !== 'match' && (
+              <div className="animate-pop" style={{ position: 'absolute', bottom: 92, left: 0, right: 0, display: 'flex', justifyContent: 'center', animation: 'fadeUp 0.3s ease' }}>
+                <div className="glass-strong" style={{ padding: '8px 20px', borderRadius: 9999, whiteSpace: 'nowrap' }}>
+                  <span style={{ color: 'white', fontWeight: 700, fontSize: 14 }}>
+                    {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : `Super Liked ${current.fullName.split(' ')[0] || 'them'}! 💙`}
+                  </span>
+                </div>
               </div>
             )}
 
@@ -365,6 +371,15 @@ export default function DiscoverPage() {
 
         {showMessageUpsell && (
           <MessageUpsellModal onClose={() => setShowMessageUpsell(false)} />
+        )}
+
+        {matchPopupUser && (
+          <MatchPopup
+            matchedUser={matchPopupUser}
+            matchId={matchPopupId}
+            myPhotoUrl={(profile as any)?._photoUrl || ((profile as any)?.photos?.[0] ? storageService.getFilePreview((profile as any).photos[0]) : '')}
+            onClose={() => { setMatchPopupUser(null); setMatchPopupId(undefined); nextUser(); }}
+          />
         )}
       </GradientBackground>
     </DesktopLayout>
