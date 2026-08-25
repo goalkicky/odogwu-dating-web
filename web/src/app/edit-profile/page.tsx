@@ -48,22 +48,24 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 function OptionPicker({ label, options, value, onChange, onClose }: { label: string; options: readonly string[]; value: string; onChange: (v: string) => void; onClose: () => void }) {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'flex-end', background: 'rgba(0,0,0,0.6)' }} onClick={onClose}>
-      <div onClick={e => e.stopPropagation()} style={{ width: '100%', background: '#1A1A1A', borderRadius: '20px 20px 0 0', padding: '24px 24px 40px' }}>
-        <h3 style={{ fontSize: 18, fontWeight: 700, color: 'white', marginBottom: 16, textAlign: 'center' }}>{label}</h3>
-        {options.map(opt => (
-          <button
-            key={opt}
-            onClick={() => { onChange(opt); onClose(); }}
-            style={{
-              width: '100%', padding: '14px 16px', background: value === opt ? 'rgba(255,55,95,0.15)' : 'transparent',
-              border: `1px solid ${value === opt ? '#FF375F' : 'rgba(255,255,255,0.08)'}`,
-              borderRadius: 12, color: 'white', fontSize: 16, cursor: 'pointer', textAlign: 'center', marginBottom: 8, textTransform: 'capitalize',
-              fontWeight: value === opt ? 700 : 400,
-            }}
-          >
-            {opt}
-          </button>
-        ))}
+      <div onClick={e => e.stopPropagation()} style={{ width: '100%', maxHeight: '80vh', background: '#1A1A1A', borderRadius: '20px 20px 0 0', padding: '24px 24px 40px', display: 'flex', flexDirection: 'column' }}>
+        <h3 style={{ fontSize: 18, fontWeight: 700, color: 'white', marginBottom: 16, textAlign: 'center', flexShrink: 0 }}>{label}</h3>
+        <div style={{ overflowY: 'auto', flex: 1, WebkitOverflowScrolling: 'touch' }}>
+          {options.map(opt => (
+            <button
+              key={opt}
+              onClick={() => { onChange(opt); onClose(); }}
+              style={{
+                width: '100%', padding: '14px 16px', background: value === opt ? 'rgba(255,55,95,0.15)' : 'transparent',
+                border: `1px solid ${value === opt ? '#FF375F' : 'rgba(255,255,255,0.08)'}`,
+                borderRadius: 12, color: 'white', fontSize: 16, cursor: 'pointer', textAlign: 'center', marginBottom: 8, textTransform: 'capitalize',
+                fontWeight: value === opt ? 700 : 400,
+              }}
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
