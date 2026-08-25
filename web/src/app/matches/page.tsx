@@ -165,6 +165,9 @@ export default function MatchesPage() {
                   const photoUrl = mp._photoUrl || '';
                   const name = mp.fullName || 'User';
                   const age = mp.age || '';
+                  const lm = item.lastMessage;
+                  const isMe = lm && lm.senderId === (user as any)?.$id;
+                  const preview = lm ? (isMe ? `You: ${lm.text}` : lm.text) : 'Say hello! 👋';
                   return (
                     <Link
                       key={item.$id}
@@ -189,7 +192,7 @@ export default function MatchesPage() {
                           {age && <span style={{ fontSize: 14, color: '#6B6B6B' }}>{age}</span>}
                         </div>
                         <span style={{ fontSize: 14, color: '#ABABAB', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          Say hello! 👋
+                          {preview}
                         </span>
                       </div>
                       <ChevronForwardIcon size={18} color="#4A4A4A" />

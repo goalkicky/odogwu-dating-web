@@ -841,24 +841,35 @@ async function handleGetMatches(env: Env, req: Request, me: string): Promise<Res
      ORDER BY m.matched_at DESC`
   ).bind(me, me, me).all();
 
-  // Which matches already have a conversation (messages are keyed by pair key;
-  // coin-gift messages were historically stored under the raw match id).
+  // Per match: conversation presence + last message in one pass.
   const keys = Array.from(new Set(results.flatMap((d: any) => [pairKey(d.user_id, d.matched_user_id), d.id])));
   const convoSet = new Set<string>();
-  for (let i = 0; i < keys.length; i += 90) { // D1 allows max 100 bound params per query
+  const lastMessageMap: Record<string, { senderId: string; text: string; createdAt: string }> = {};
+  for (let i = 0; i < keys.length; i += 90) {
     const chunk = keys.slice(i, i + 90);
     const placeholders = chunk.map(() => '?').join(',');
     const { results: rows } = await env.DB.prepare(
-      `SELECT DISTINCT match_id FROM messages WHERE match_id IN (${placeholders})`
+      `SELECT match_id, sender_id, text, created_at FROM (
+         SELECT match_id, sender_id, text, created_at,
+                ROW_NUMBER() OVER (PARTITION BY match_id ORDER BY created_at DESC, rowid DESC) AS rn
+         FROM messages WHERE match_id IN (${placeholders})
+       ) WHERE rn = 1`
     ).bind(...chunk).all();
-    for (const r of rows as any[]) convoSet.add(r.match_id);
+    for (const r of rows as any[]) {
+      convoSet.add(r.match_id);
+      lastMessageMap[r.match_id] = { senderId: r.sender_id, text: r.text || '', createdAt: r.created_at };
+    }
   }
 
   const docs = await Promise.all(results.map(async (d: any) => {
+    const pk = pairKey(d.user_id, d.matched_user_id);
+    const hasConvo = convoSet.has(pk) || convoSet.has(d.id);
+    const last = lastMessageMap[pk] || lastMessageMap[d.id] || null;
     const p = await getUserRow(env, d.matched_user_id);
     return {
       ...toMatchDoc(d),
-      hasConversation: convoSet.has(pairKey(d.user_id, d.matched_user_id)) || convoSet.has(d.id),
+      hasConversation: hasConvo,
+      lastMessage: last ? { senderId: last.senderId, text: last.text, createdAt: last.createdAt } : null,
       matchedUser: p ? publicize(toProfile(p)) : null,
     };
   }));
