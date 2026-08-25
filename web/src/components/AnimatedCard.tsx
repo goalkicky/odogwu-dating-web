@@ -219,14 +219,18 @@ export default function AnimatedCard({
           style={{
             position: 'absolute', top: '50px', right: '16px', zIndex: 10,
             width: 40, height: 40, borderRadius: 9999,
-            background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.25)',
+            background: 'linear-gradient(135deg, rgba(255,55,95,0.6), rgba(124,77,255,0.6))',
+            border: '1px solid rgba(255,255,255,0.3)',
             backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 4px 16px rgba(0,0,0,0.35)',
+            boxShadow: '0 4px 20px rgba(255,55,95,0.35), 0 0 30px rgba(124,77,255,0.2)',
+            transition: 'transform 0.15s ease, box-shadow 0.15s ease',
           }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.12)'; e.currentTarget.style.boxShadow = '0 6px 28px rgba(255,55,95,0.5), 0 0 40px rgba(124,77,255,0.35)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(255,55,95,0.35), 0 0 30px rgba(124,77,255,0.2)'; }}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>
           </svg>
         </button>
       )}
