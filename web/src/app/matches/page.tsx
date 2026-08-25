@@ -110,7 +110,13 @@ export default function MatchesPage() {
                 </p>
               </div>
             ) : (
-              <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap' }}>
+              <div
+                className="hscroll"
+                style={{
+                  display: 'flex', gap: 18, flexWrap: 'nowrap',
+                  overflowX: 'auto', paddingBottom: 8,
+                  WebkitOverflowScrolling: 'touch' as any,
+                }}>
                 {newMatches.map((item: any) => {
                   const mp = item.matchedUser || {};
                   const photoUrl = mp._photoUrl || '';
@@ -120,7 +126,7 @@ export default function MatchesPage() {
                       key={item.$id}
                       href={`/chat/${item.$id}`}
                       className="lift"
-                      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, minWidth: 84, textDecoration: 'none' }}
+                      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, width: 84, flexShrink: 0, textDecoration: 'none' }}
                     >
                       <div style={{ position: 'relative' }}>
                         <div className="grad-ring" style={{ width: 84, height: 84, display: 'flex', boxShadow: '0 6px 24px rgba(255,55,95,0.25)' }}>

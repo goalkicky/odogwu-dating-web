@@ -225,6 +225,15 @@ body {
   50% { background-position: 100% 100%; }
 }
 
+/* ===== Horizontal scroll row (hidden scrollbar) ===== */
+.hscroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hscroll::-webkit-scrollbar {
+  display: none;
+}
+
 ::-webkit-scrollbar {
   width: 4px;
 }
