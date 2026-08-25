@@ -42,7 +42,8 @@ export default function MatchesPage() {
   }, [profile, user]);
 
   const q = searchQuery.toLowerCase();
-  const newMatches = matches.filter((m: any) => m.matchedUser && (m.matchedUser.fullName || '').toLowerCase().includes(q));
+  // Matches with an existing conversation leave the "New Matches" row and live in Messages only
+  const newMatches = matches.filter((m: any) => !m.hasConversation && m.matchedUser && (m.matchedUser.fullName || '').toLowerCase().includes(q));
   const conversationMatches = matches.filter((m: any) => m.matchedUser && (m.matchedUser.fullName || '').toLowerCase().includes(q));
 
   const avatar = (photoUrl: string, name: string, size: number) => (

@@ -840,9 +840,27 @@ async function handleGetMatches(env: Env, req: Request, me: string): Promise<Res
        AND NOT EXISTS (SELECT 1 FROM blocks b WHERE (b.blocker_id = ? AND b.blocked_id = m.matched_user_id) OR (b.blocker_id = m.matched_user_id AND b.blocked_id = ?))
      ORDER BY m.matched_at DESC`
   ).bind(me, me, me).all();
+
+  // Which matches already have a conversation (messages are keyed by pair key;
+  // coin-gift messages were historically stored under the raw match id).
+  const keys = Array.from(new Set(results.flatMap((d: any) => [pairKey(d.user_id, d.matched_user_id), d.id])));
+  const convoSet = new Set<string>();
+  for (let i = 0; i < keys.length; i += 90) { // D1 allows max 100 bound params per query
+    const chunk = keys.slice(i, i + 90);
+    const placeholders = chunk.map(() => '?').join(',');
+    const { results: rows } = await env.DB.prepare(
+      `SELECT DISTINCT match_id FROM messages WHERE match_id IN (${placeholders})`
+    ).bind(...chunk).all();
+    for (const r of rows as any[]) convoSet.add(r.match_id);
+  }
+
   const docs = await Promise.all(results.map(async (d: any) => {
     const p = await getUserRow(env, d.matched_user_id);
-    return { ...toMatchDoc(d), matchedUser: p ? publicize(toProfile(p)) : null };
+    return {
+      ...toMatchDoc(d),
+      hasConversation: convoSet.has(pairKey(d.user_id, d.matched_user_id)) || convoSet.has(d.id),
+      matchedUser: p ? publicize(toProfile(p)) : null,
+    };
   }));
   return json({ documents: docs });
 }
