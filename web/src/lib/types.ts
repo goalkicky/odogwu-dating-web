@@ -73,6 +73,7 @@ export interface FeedPost {
   visibility: 'public' | 'friends';
   likesCount: number;
   commentsCount: number;
+  sharesCount?: number;
   likedByMe: boolean;
   savedByMe: boolean;
   createdAt: string;

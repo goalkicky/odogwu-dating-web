@@ -247,22 +247,24 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
             disabled={isOwn}
             style={{
               background: 'none', border: 'none', cursor: isOwn ? 'default' : 'pointer',
-              padding: '4px 10px 4px 0', display: 'flex', alignItems: 'center',
+              padding: '4px 6px 4px 0', display: 'flex', alignItems: 'center', gap: 4,
               transition: 'transform 0.15s ease', opacity: isOwn ? 0.3 : 1,
             }}
             className={likeAnimating ? 'feed-like-btn' : ''}
           >
             <HeartIcon size={26} color={liked ? '#FF3040' : 'white'} filled={liked} />
+            {likesCount > 0 && <span style={{ fontSize: 13, fontWeight: 600, color: 'white' }}>{likesCount.toLocaleString()}</span>}
           </button>
           <button
             onClick={() => onComment(post)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 10px', display: 'flex', alignItems: 'center' }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 6px', display: 'flex', alignItems: 'center', gap: 4 }}
           >
             <CommentIcon size={26} color="white" />
+            {post.commentsCount > 0 && <span style={{ fontSize: 13, fontWeight: 600, color: 'white' }}>{post.commentsCount.toLocaleString()}</span>}
           </button>
           <button
             onClick={() => setShowShare(true)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 10px', display: 'flex', alignItems: 'center' }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 6px', display: 'flex', alignItems: 'center', gap: 4 }}
           >
             <ShareIcon size={24} color="white" />
           </button>
