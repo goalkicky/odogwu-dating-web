@@ -1861,8 +1861,10 @@ export default {
     if (path === '/api/feed' && req.method === 'GET') return handleGetFeed(env, req, me);
     if (path === '/api/feed' && req.method === 'POST') return handleCreatePost(env, req, me);
     const feedPostMatch = path.match(/^\/api\/feed\/([^/]+)$/);
-    if (feedPostMatch && req.method === 'GET') return handleGetFeedPost(env, me, decodeURIComponent(feedPostMatch[1]));
-    if (feedPostMatch && req.method === 'DELETE') return handleDeletePost(env, req, me, decodeURIComponent(feedPostMatch[1]));
+    const feedPostId = feedPostMatch ? decodeURIComponent(feedPostMatch[1]) : '';
+    const isSubRoute = feedPostId && ['counts', 'comments'].includes(feedPostId);
+    if (feedPostMatch && req.method === 'GET' && !isSubRoute) return handleGetFeedPost(env, me, feedPostId);
+    if (feedPostMatch && req.method === 'DELETE') return handleDeletePost(env, req, me, feedPostId);
     const feedLikeMatch = path.match(/^\/api\/feed\/([^/]+)\/like$/);
     if (feedLikeMatch && req.method === 'POST') return handleLikePost(env, req, me, decodeURIComponent(feedLikeMatch[1]));
     if (feedLikeMatch && req.method === 'DELETE') return handleUnlikePost(env, req, me, decodeURIComponent(feedLikeMatch[1]));
