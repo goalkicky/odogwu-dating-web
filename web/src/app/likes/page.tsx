@@ -53,7 +53,11 @@ export default function LikesPage() {
       if (res?.mutual) {
         const liker = likers.find(d => d.userId === likerId);
         if (liker?.matchedUser) {
-          setMatchPopupUser(liker.matchedUser);
+          const mp = liker.matchedUser;
+          setMatchPopupUser({
+            ...mp,
+            photos: (mp.photos || []).map((fid: string) => storageService.getFilePreview(fid)),
+          });
           setMatchPopupId(res.match?.$id);
         }
       }
