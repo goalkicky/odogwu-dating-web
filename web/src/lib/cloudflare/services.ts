@@ -389,6 +389,10 @@ export const feedService = {
     return apiFetch('/api/feed/comments', { method: 'POST', json: { postId, text, replyTo: replyTo || '' } });
   },
 
+  sharePost: async (postId: string) => {
+    return apiFetch(`/api/feed/${encodeURIComponent(postId)}/share`, { method: 'POST' });
+  },
+
   deleteComment: async (commentId: string) => {
     return apiFetch(`/api/feed/comments/${encodeURIComponent(commentId)}`, { method: 'DELETE' });
   },

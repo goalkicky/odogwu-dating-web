@@ -264,6 +264,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
             style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 12px', display: 'flex', alignItems: 'center', gap: 5 }}
           >
             <ShareIcon size={24} color="white" />
+            {(post.sharesCount || 0) > 0 && <span style={{ fontSize: 14, fontWeight: 600, color: 'white' }}>{(post.sharesCount || 0).toLocaleString()}</span>}
           </button>
           <div style={{ flex: 1 }} />
           <button

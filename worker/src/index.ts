@@ -1346,6 +1346,7 @@ function toFeedPostDoc(r: any, likedByMe = false, savedByMe = false): any {
     visibility: r.visibility || 'public',
     likesCount: r.likes_count ?? 0,
     commentsCount: r.comments_count ?? 0,
+    sharesCount: r.shares_count ?? 0,
     likedByMe,
     savedByMe,
     createdAt: r.created_at,
@@ -1714,6 +1715,12 @@ async function handleDeleteFeedComment(env: Env, req: Request, me: string, comme
   return json({ ok: true });
 }
 
+async function handleSharePost(env: Env, req: Request, me: string, postId: string): Promise<Response> {
+  void req;
+  await env.DB.prepare('UPDATE feed_posts SET shares_count = shares_count + 1 WHERE id = ?').bind(postId).run();
+  return json({ ok: true });
+}
+
 async function handleSavePost(env: Env, req: Request, me: string, postId: string): Promise<Response> {
   void req;
   const post = await env.DB.prepare('SELECT id FROM feed_posts WHERE id = ?').bind(postId).first();
@@ -1873,6 +1880,8 @@ export default {
     const feedSaveMatch = path.match(/^\/api\/feed\/([^/]+)\/save$/);
     if (feedSaveMatch && req.method === 'POST') return handleSavePost(env, req, me, decodeURIComponent(feedSaveMatch[1]));
     if (feedSaveMatch && req.method === 'DELETE') return handleUnsavePost(env, req, me, decodeURIComponent(feedSaveMatch[1]));
+    const feedShareMatch = path.match(/^\/api\/feed\/([^/]+)\/share$/);
+    if (feedShareMatch && req.method === 'POST') return handleSharePost(env, req, me, decodeURIComponent(feedShareMatch[1]));
 
     // Feed comments
     if (path === '/api/feed/comments' && req.method === 'GET') return handleGetFeedComments(env, req, me);
