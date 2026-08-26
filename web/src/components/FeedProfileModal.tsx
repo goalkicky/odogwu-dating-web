@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { CloseIcon, HeartIcon, StarIcon } from '@/components/Icons';
 import { userService, superlikeService, likeService, storageService } from '@/lib/cloudflare/services';
+import { apiFetch } from '@/lib/cloudflare/config';
 
 interface FeedProfileModalProps {
   userId: string;
@@ -10,9 +11,10 @@ interface FeedProfileModalProps {
   currentUserId: string;
   onClose: () => void;
   onMatch?: () => void;
+  hideActions?: boolean;
 }
 
-export default function FeedProfileModal({ userId, userName, userPhoto, currentUserId, onClose, onMatch }: FeedProfileModalProps) {
+export default function FeedProfileModal({ userId, userName, userPhoto, currentUserId, onClose, onMatch, hideActions }: FeedProfileModalProps) {
   const [photos, setPhotos] = useState<string[]>([]);
   const [age, setAge] = useState<number>(0);
   const [bio, setBio] = useState('');
@@ -23,6 +25,7 @@ export default function FeedProfileModal({ userId, userName, userPhoto, currentU
   const [superlikes, setSuperlikes] = useState<any>({ remaining: 0 });
   const [likes, setLikes] = useState<any>({ remaining: 0, dailyLimit: 0, isPremium: false });
   const [currentPhoto, setCurrentPhoto] = useState(0);
+  const [alreadyActed, setAlreadyActed] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -40,7 +43,13 @@ export default function FeedProfileModal({ userId, userName, userPhoto, currentU
     })();
     superlikeService.getStatus().then(setSuperlikes).catch(() => {});
     likeService.getStatus().then(setLikes).catch(() => {});
-  }, [userId]);
+    // Check if already liked or superliked this user
+    if (!hideActions) {
+      apiFetch(`/api/likes?user=${encodeURIComponent(currentUserId)}&other=${encodeURIComponent(userId)}`).then((r: any) => {
+        if (r.likedByA) setAlreadyActed(true);
+      }).catch(() => {});
+    }
+  }, [userId, currentUserId, hideActions]);
 
   const handleLike = useCallback(async () => {
     if (actionLoading || actionResult) return;
@@ -149,7 +158,12 @@ export default function FeedProfileModal({ userId, userName, userPhoto, currentU
           </div>
         </div>
 
-        {/* Action buttons */}
+        {/* Action buttons — hidden if already liked/superliked */}
+        {(hideActions || alreadyActed) ? (
+          <div style={{ padding: '20px 20px 24px', textAlign: 'center' }}>
+            <span style={{ fontSize: 14, color: '#6B6B6B', fontWeight: 600 }}>You&apos;ve already liked this profile</span>
+          </div>
+        ) : (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, padding: '16px 20px 20px' }}>
           {/* Pass */}
           <button onClick={handlePass} disabled={!!actionResult} style={{ width: 52, height: 52, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.05)', cursor: actionResult ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: actionResult ? 0.4 : 1 }}>
@@ -174,6 +188,7 @@ export default function FeedProfileModal({ userId, userName, userPhoto, currentU
             )}
           </button>
         </div>
+        )}
 
         {/* Action result toast */}
         {actionResult && (

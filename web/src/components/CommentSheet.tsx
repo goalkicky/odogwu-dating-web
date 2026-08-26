@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { CloseIcon, SendIcon, TrashIcon } from '@/components/Icons';
 import { feedService, storageService } from '@/lib/cloudflare/services';
 import { FeedPost, FeedComment } from '@/lib/types';
+import FeedProfileModal from '@/components/FeedProfileModal';
 
 function timeAgo(dateStr: string): string {
   const now = Date.now();
@@ -29,6 +30,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
   const [sending, setSending] = useState(false);
   const [replyTo, setReplyTo] = useState<FeedComment | null>(null);
   const [expandedReplies, setExpandedReplies] = useState<Set<string>>(new Set());
+  const [profileUser, setProfileUser] = useState<{ userId: string; userName: string; userPhoto: string } | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -107,13 +109,16 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
 
   const CommentRow = ({ comment, isReply = false }: { comment: FeedComment; isReply?: boolean }) => (
     <div className="animate-fade-up" style={{ display: 'flex', gap: 10, padding: isReply ? '8px 0' : '10px 0', paddingLeft: isReply ? 0 : 0, borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
-      <div style={{ width: isReply ? 28 : 32, height: isReply ? 28 : 32, borderRadius: '50%', background: 'linear-gradient(135deg, #1A1A2E, #2A2A3E)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+      <button
+        onClick={() => comment.userId !== currentUserId && setProfileUser({ userId: comment.userId, userName: comment.userName, userPhoto: comment.userPhoto })}
+        style={{ width: isReply ? 28 : 32, height: isReply ? 28 : 32, borderRadius: '50%', background: 'linear-gradient(135deg, #1A1A2E, #2A2A3E)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: 'none', cursor: comment.userId === currentUserId ? 'default' : 'pointer', padding: 0 }}
+      >
         {comment.userPhoto ? (
           <img src={storageService.getFilePreview(comment.userPhoto)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
         ) : (
           <span style={{ fontSize: isReply ? 11 : 12, fontWeight: 700, color: '#FF375F' }}>{comment.userName?.charAt(0)?.toUpperCase()}</span>
         )}
-      </div>
+      </button>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div>
           <span style={{ fontSize: 13, fontWeight: 700, color: 'white', marginRight: 6 }}>{comment.userName}</span>
@@ -143,6 +148,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
   );
 
   return (
+    <>
     <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 100, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
       <div onClick={(e) => e.stopPropagation()} className="feed-sheet-up" style={{ width: '100%', maxWidth: 520, maxHeight: '75vh', background: 'rgba(16,16,22,0.97)', borderTopLeftRadius: 24, borderTopRightRadius: 24, display: 'flex', flexDirection: 'column', border: '1px solid rgba(255,255,255,0.08)', borderBottom: 'none' }}>
         {/* Header */}
@@ -266,5 +272,17 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
         </div>
       </div>
     </div>
+
+      {/* Profile modal */}
+      {profileUser && (
+        <FeedProfileModal
+          userId={profileUser.userId}
+          userName={profileUser.userName}
+          userPhoto={profileUser.userPhoto}
+          currentUserId={currentUserId}
+          onClose={() => setProfileUser(null)}
+        />
+      )}
+    </>
   );
 }
