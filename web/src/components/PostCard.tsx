@@ -4,6 +4,7 @@ import { HeartIcon, CommentIcon, ShareIcon, BookmarkIcon, EllipsisIcon, CloseIco
 import { feedService, storageService } from '@/lib/cloudflare/services';
 import { FeedPost, FeedComment } from '@/lib/types';
 import ShareSheet from '@/components/ShareSheet';
+import LikersSheet from '@/components/LikersSheet';
 
 function timeAgo(dateStr: string): string {
   const now = Date.now();
@@ -34,6 +35,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
   const [likesCount, setLikesCount] = useState(post.likesCount);
   const [saved, setSaved] = useState(post.savedByMe);
   const [showShare, setShowShare] = useState(false);
+  const [showLikers, setShowLikers] = useState(false);
   const [previewComments, setPreviewComments] = useState<FeedComment[]>([]);
   const [expanded, setExpanded] = useState(false);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
@@ -247,41 +249,44 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
             disabled={isOwn}
             style={{
               background: 'none', border: 'none', cursor: isOwn ? 'default' : 'pointer',
-              padding: '4px 6px 4px 0', display: 'flex', alignItems: 'center', gap: 4,
+              padding: '4px 12px 4px 0', display: 'flex', alignItems: 'center', gap: 6,
               transition: 'transform 0.15s ease', opacity: isOwn ? 0.3 : 1,
             }}
             className={likeAnimating ? 'feed-like-btn' : ''}
           >
             <HeartIcon size={26} color={liked ? '#FF3040' : 'white'} filled={liked} />
-            {likesCount > 0 && <span style={{ fontSize: 13, fontWeight: 600, color: 'white' }}>{likesCount.toLocaleString()}</span>}
           </button>
           <button
             onClick={() => onComment(post)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 6px', display: 'flex', alignItems: 'center', gap: 4 }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 12px', display: 'flex', alignItems: 'center', gap: 6 }}
           >
             <CommentIcon size={26} color="white" />
-            {post.commentsCount > 0 && <span style={{ fontSize: 13, fontWeight: 600, color: 'white' }}>{post.commentsCount.toLocaleString()}</span>}
           </button>
           <button
             onClick={() => setShowShare(true)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 6px', display: 'flex', alignItems: 'center', gap: 4 }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 12px', display: 'flex', alignItems: 'center', gap: 6 }}
           >
             <ShareIcon size={24} color="white" />
           </button>
           <div style={{ flex: 1 }} />
           <button
             onClick={handleSave}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0 4px 10px', display: 'flex', alignItems: 'center' }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0 4px 12px', display: 'flex', alignItems: 'center' }}
           >
             <BookmarkIcon size={26} color={saved ? '#FFD700' : 'white'} filled={saved} />
           </button>
         </div>
       </div>
 
-      {/* Likes — Instagram-style text */}
+      {/* Likes — Instagram-style text, clickable */}
       {likesText && (
         <div style={{ padding: '6px 14px 0' }}>
-          <span style={{ fontSize: 14, fontWeight: 600, color: 'white' }}>{likesText}</span>
+          <button
+            onClick={() => setShowLikers(true)}
+            style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontSize: 14, fontWeight: 600, color: 'white', textAlign: 'left' }}
+          >
+            {likesText}
+          </button>
         </div>
       )}
 
@@ -352,6 +357,11 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
       {/* Share sheet */}
       {showShare && (
         <ShareSheet postId={post.id} postCaption={post.caption} currentUserId={currentUserId} onClose={() => setShowShare(false)} />
+      )}
+
+      {/* Likers sheet */}
+      {showLikers && (
+        <LikersSheet postId={post.id} onClose={() => setShowLikers(false)} />
       )}
     </div>
   );

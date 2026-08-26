@@ -370,6 +370,10 @@ export const feedService = {
     return apiFetch(`/api/feed/${encodeURIComponent(postId)}/like`, { method: 'DELETE' });
   },
 
+  getLikers: async (postId: string) => {
+    return apiFetch(`/api/feed/${encodeURIComponent(postId)}/likers`);
+  },
+
   getComments: async (postId: string, cursor?: string, limit?: number) => {
     const params = new URLSearchParams({ postId });
     if (cursor) params.set('cursor', cursor);

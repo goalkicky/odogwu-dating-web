@@ -1577,6 +1577,26 @@ async function handleUnlikePost(env: Env, req: Request, me: string, postId: stri
   return json({ ok: true });
 }
 
+async function handleGetPostLikers(env: Env, req: Request, me: string, postId: string): Promise<Response> {
+  void me;
+  const url = new URL(req.url);
+  const limit = Math.min(Math.max(parseInt(url.searchParams.get('limit') || '30', 10) || 30, 1), 100);
+  const { results } = await env.DB.prepare(
+    `SELECT u.id, u.full_name, u.photos, u.city, l.created_at
+     FROM feed_post_likes l
+     JOIN users u ON u.id = l.user_id
+     WHERE l.post_id = ?
+     ORDER BY l.created_at DESC
+     LIMIT ${limit}`
+  ).bind(postId).all();
+  const docs = results.map((r: any) => {
+    let photos: string[] = [];
+    try { photos = JSON.parse(r.photos || '[]'); } catch {}
+    return { id: r.id, fullName: r.full_name || '', userPhoto: photos[0] || '', city: r.city || '', likedAt: r.created_at };
+  });
+  return json({ documents: docs });
+}
+
 async function handleGetFeedComments(env: Env, req: Request, me: string): Promise<Response> {
   void me;
   const url = new URL(req.url);
@@ -1804,6 +1824,8 @@ export default {
     const feedLikeMatch = path.match(/^\/api\/feed\/([^/]+)\/like$/);
     if (feedLikeMatch && req.method === 'POST') return handleLikePost(env, req, me, decodeURIComponent(feedLikeMatch[1]));
     if (feedLikeMatch && req.method === 'DELETE') return handleUnlikePost(env, req, me, decodeURIComponent(feedLikeMatch[1]));
+    const feedLikersMatch = path.match(/^\/api\/feed\/([^/]+)\/likers$/);
+    if (feedLikersMatch && req.method === 'GET') return handleGetPostLikers(env, req, me, decodeURIComponent(feedLikersMatch[1]));
     const feedSaveMatch = path.match(/^\/api\/feed\/([^/]+)\/save$/);
     if (feedSaveMatch && req.method === 'POST') return handleSavePost(env, req, me, decodeURIComponent(feedSaveMatch[1]));
     if (feedSaveMatch && req.method === 'DELETE') return handleUnsavePost(env, req, me, decodeURIComponent(feedSaveMatch[1]));
