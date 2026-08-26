@@ -211,8 +211,9 @@ export default function ExplorePage() {
     setLastAction('dislike');
     const rejected = current;
     if (rejected) {
-      try { await userService.likeExists((profile as any).$id, rejected.id); } catch {}
       removeSwiped(rejected.id);
+      // Fire API call in background — don't await
+      userService.likeExists((profile as any).$id, rejected.id).catch(() => {});
     }
     setTimeout(() => { setLastAction(null); advance(); }, 300);
   }, [current, profile, removeSwiped, advance]);
@@ -227,17 +228,18 @@ export default function ExplorePage() {
       return;
     }
     if (liked) {
-      try {
-        const res = await userService.likeUser((profile as any).$id, liked.id);
+      removeSwiped(liked.id);
+      // Fire API calls in background — don't await
+      userService.likeUser((profile as any).$id, liked.id).then((res) => {
         if (res && typeof res.remaining === 'number') setLikes(res);
-        const mutual = await userService.isMutualMatch((profile as any).$id, liked.id);
+        return userService.isMutualMatch((profile as any).$id, liked.id);
+      }).then((mutual) => {
         if (mutual) setLastAction('match');
-      } catch (e: any) {
+      }).catch((e) => {
         if (e?.status === 402 || e?.code === 'NO_LIKES' || String(e?.message || '').includes('like')) {
           setShowLikeUpsell(true);
         }
-      }
-      removeSwiped(liked.id);
+      });
     }
     setTimeout(() => { setLastAction(null); advance(); }, 300);
   }, [current, profile, likes, removeSwiped, advance]);
@@ -250,16 +252,16 @@ export default function ExplorePage() {
     }
     setLastAction('superlike');
     if (liked) {
-      try {
-        const res = await superlikeService.send(liked.id);
+      removeSwiped(liked.id);
+      // Fire API call in background — don't await
+      superlikeService.send(liked.id).then((res) => {
         setSuperlikes(res);
         if (res.mutual) setLastAction('match');
-      } catch (e: any) {
+      }).catch((e) => {
         if (e?.status === 402 || e?.code === 'NO_SUPERLIKES' || String(e?.message || '').includes('super like')) {
           setShowLikeUpsell(true);
         }
-      }
-      removeSwiped(liked.id);
+      });
     }
     setTimeout(() => { setLastAction(null); advance(); }, 300);
   }, [current, superlikes, removeSwiped, advance]);
