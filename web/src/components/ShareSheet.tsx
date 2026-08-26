@@ -20,7 +20,16 @@ export default function ShareSheet({ postId, postCaption, currentUserId, onClose
     (async () => {
       try {
         const data = await matchService.getUserMatches(currentUserId);
-        setMatches(data?.documents || []);
+        const docs = (data?.documents || []) as any[];
+        // Only show users you've actually chatted with, sorted by most recent message
+        const chatted = docs
+          .filter((m: any) => m.hasConversation)
+          .sort((a: any, b: any) => {
+            const aTime = a.lastMessage?.createdAt || '';
+            const bTime = b.lastMessage?.createdAt || '';
+            return bTime.localeCompare(aTime);
+          });
+        setMatches(chatted);
       } catch {}
       setLoading(false);
     })();
