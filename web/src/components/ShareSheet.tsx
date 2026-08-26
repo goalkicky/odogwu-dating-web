@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
 import { CloseIcon, SendIcon, CopyIcon, CheckmarkIcon } from '@/components/Icons';
-import { matchService, storageService } from '@/lib/cloudflare/services';
+import { matchService, messageService, storageService } from '@/lib/cloudflare/services';
 
 interface ShareSheetProps {
   postId: string;
@@ -63,8 +63,13 @@ export default function ShareSheet({ postId, postCaption, currentUserId, onClose
   }, [postId, postCaption]);
 
   const handleForward = useCallback(async (matchId: string) => {
-    setSentTo(prev => new Set(prev).add(matchId));
-  }, []);
+    const url = `${window.location.origin}/post/${postId}`;
+    const text = `Check out this post: ${url}`;
+    try {
+      await messageService.sendMessage(matchId, currentUserId, { text, type: 'text' });
+      setSentTo(prev => new Set(prev).add(matchId));
+    } catch {}
+  }, [postId, currentUserId]);
 
   return (
     <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 100, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
