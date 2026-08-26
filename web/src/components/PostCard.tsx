@@ -112,15 +112,6 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
     } catch {}
   }, [post.id, onDelete]);
 
-  const likesText = (() => {
-    if (likesCount === 0) return null;
-    if (liked) {
-      if (likesCount === 1) return 'Liked by you';
-      return `Liked by you and ${(likesCount - 1).toLocaleString()} ${(likesCount - 1) === 1 ? 'other' : 'others'}`;
-    }
-    return `${likesCount.toLocaleString()} ${likesCount === 1 ? 'like' : 'likes'}`;
-  })();
-
   return (
     <div className="animate-fade-up" style={{ background: '#000', marginBottom: 12, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
       {/* Header */}
@@ -241,30 +232,36 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
         </div>
       )}
 
-      {/* Action bar — Instagram-exact */}
+      {/* Action bar — Instagram-exact: icon + count inline */}
       <div style={{ padding: '10px 14px 0' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
+          {/* Heart + count */}
           <button
-            onClick={handleLike}
+            onClick={() => { if (!isOwn) setShowLikers(true); }}
             disabled={isOwn}
             style={{
               background: 'none', border: 'none', cursor: isOwn ? 'default' : 'pointer',
-              padding: '4px 12px 4px 0', display: 'flex', alignItems: 'center', gap: 6,
-              transition: 'transform 0.15s ease', opacity: isOwn ? 0.3 : 1,
+              padding: '4px 12px 4px 0', display: 'flex', alignItems: 'center', gap: 5,
+              opacity: isOwn ? 0.3 : 1,
             }}
-            className={likeAnimating ? 'feed-like-btn' : ''}
           >
-            <HeartIcon size={26} color={liked ? '#FF3040' : 'white'} filled={liked} />
+            <div onClick={(e) => { if (!isOwn) { e.stopPropagation(); handleLike(); } }} style={{ display: 'flex', alignItems: 'center' }}>
+              <HeartIcon size={26} color={liked ? '#FF3040' : 'white'} filled={liked} className={likeAnimating ? 'feed-like-btn' : ''} />
+            </div>
+            {likesCount > 0 && <span style={{ fontSize: 14, fontWeight: 600, color: 'white' }}>{likesCount.toLocaleString()}</span>}
           </button>
+          {/* Comment + count */}
           <button
             onClick={() => onComment(post)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 12px', display: 'flex', alignItems: 'center', gap: 6 }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 12px', display: 'flex', alignItems: 'center', gap: 5 }}
           >
             <CommentIcon size={26} color="white" />
+            {post.commentsCount > 0 && <span style={{ fontSize: 14, fontWeight: 600, color: 'white' }}>{post.commentsCount.toLocaleString()}</span>}
           </button>
+          {/* Share + count */}
           <button
             onClick={() => setShowShare(true)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 12px', display: 'flex', alignItems: 'center', gap: 6 }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 12px', display: 'flex', alignItems: 'center', gap: 5 }}
           >
             <ShareIcon size={24} color="white" />
           </button>
@@ -277,18 +274,6 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
           </button>
         </div>
       </div>
-
-      {/* Likes — Instagram-style text, clickable */}
-      {likesText && (
-        <div style={{ padding: '6px 14px 0' }}>
-          <button
-            onClick={() => setShowLikers(true)}
-            style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontSize: 14, fontWeight: 600, color: 'white', textAlign: 'left' }}
-          >
-            {likesText}
-          </button>
-        </div>
-      )}
 
       {/* Caption */}
       {post.caption && (
