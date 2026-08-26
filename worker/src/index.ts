@@ -1361,6 +1361,7 @@ function toFeedCommentDoc(r: any): any {
     userName: r.full_name || '',
     userPhoto: r.user_photo || '',
     text: r.text || '',
+    replyTo: r.reply_to || '',
     createdAt: r.created_at,
   };
 }
@@ -1625,14 +1626,35 @@ async function handleGetFeedComments(env: Env, req: Request, me: string): Promis
     return { ...r, user_photo: photos[0] || '' };
   });
 
-  const comments = await resolveFeedComments(env, mapped);
-  return json({ documents: comments });
+  const flat = await resolveFeedComments(env, mapped);
+
+  // Nest replies under parent comments (Instagram-style threaded display)
+  const topLevel: any[] = [];
+  const replyMap = new Map<string, any[]>();
+  for (const c of flat) {
+    if (c.replyTo) {
+      const arr = replyMap.get(c.replyTo) || [];
+      arr.push(c);
+      replyMap.set(c.replyTo, arr);
+    } else {
+      topLevel.push(c);
+    }
+  }
+  // Attach replies and replyCount to each top-level comment
+  for (const c of topLevel) {
+    const replies = replyMap.get(c.id) || [];
+    c.replies = replies;
+    c.replyCount = replies.length;
+  }
+
+  return json({ documents: topLevel });
 }
 
 async function handleAddFeedComment(env: Env, req: Request, me: string): Promise<Response> {
   const body = await req.json() as any;
   const postId = String(body.postId || '');
   const text = String(body.text || '').trim();
+  const replyTo = String(body.replyTo || '');
   if (!postId) return json({ error: 'postId required' }, 400);
   if (!text) return json({ error: 'Comment text required' }, 400);
   if (text.length > 1000) return json({ error: 'Comment too long (max 1000 characters)' }, 400);
@@ -1640,11 +1662,17 @@ async function handleAddFeedComment(env: Env, req: Request, me: string): Promise
   const post = await env.DB.prepare('SELECT id FROM feed_posts WHERE id = ?').bind(postId).first();
   if (!post) return json({ error: 'Post not found' }, 404);
 
+  // Validate replyTo parent exists in same post
+  if (replyTo) {
+    const parent = await env.DB.prepare('SELECT id FROM feed_comments WHERE id = ? AND post_id = ?').bind(replyTo, postId).first();
+    if (!parent) return json({ error: 'Parent comment not found' }, 404);
+  }
+
   const id = newId();
   const ts = now();
   await env.DB.prepare(
-    `INSERT INTO feed_comments (id, post_id, user_id, text, created_at) VALUES (?, ?, ?, ?, ?)`
-  ).bind(id, postId, me, text, ts).run();
+    `INSERT INTO feed_comments (id, post_id, user_id, text, reply_to, created_at) VALUES (?, ?, ?, ?, ?, ?)`
+  ).bind(id, postId, me, text, replyTo, ts).run();
   await env.DB.prepare(
     'UPDATE feed_posts SET comments_count = comments_count + 1 WHERE id = ?'
   ).bind(postId).run();
@@ -1656,7 +1684,7 @@ async function handleAddFeedComment(env: Env, req: Request, me: string): Promise
   }
 
   return json(toFeedCommentDoc({
-    id, post_id: postId, user_id: me, full_name: user?.full_name || '', user_photo: userPhoto, text, created_at: ts,
+    id, post_id: postId, user_id: me, full_name: user?.full_name || '', user_photo: userPhoto, text, reply_to: replyTo, created_at: ts,
   }), 201);
 }
 

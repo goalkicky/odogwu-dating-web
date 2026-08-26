@@ -381,8 +381,8 @@ export const feedService = {
     return apiFetch(`/api/feed/comments?${params.toString()}`);
   },
 
-  addComment: async (postId: string, text: string) => {
-    return apiFetch('/api/feed/comments', { method: 'POST', json: { postId, text } });
+  addComment: async (postId: string, text: string, replyTo?: string) => {
+    return apiFetch('/api/feed/comments', { method: 'POST', json: { postId, text, replyTo: replyTo || '' } });
   },
 
   deleteComment: async (commentId: string) => {

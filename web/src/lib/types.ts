@@ -87,7 +87,10 @@ export interface FeedComment {
   userName: string;
   userPhoto: string;
   text: string;
+  replyTo: string;
   createdAt: string;
+  replies?: FeedComment[];
+  replyCount?: number;
 }
 
 export type PremiumPlan = 'premium' | 'surplus' | 'platinum';
