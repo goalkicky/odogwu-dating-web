@@ -354,6 +354,10 @@ export const feedService = {
     return apiFetch(`/api/feed?${params.toString()}`);
   },
 
+  getPost: async (postId: string) => {
+    return apiFetch(`/api/feed/${encodeURIComponent(postId)}`);
+  },
+
   createPost: async (images: string[], caption: string, category: string) => {
     return apiFetch('/api/feed', { method: 'POST', json: { images, caption, interest: category } });
   },

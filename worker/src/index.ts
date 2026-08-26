@@ -1462,6 +1462,19 @@ async function handleGetFeedCounts(env: Env, req: Request, me: string): Promise<
   return json({ counts });
 }
 
+async function handleGetFeedPost(env: Env, me: string, postId: string): Promise<Response> {
+  const { results } = await env.DB.prepare(
+    `SELECT p.*, u.full_name, u.photos FROM feed_posts p JOIN users u ON u.id = p.user_id WHERE p.id = ?`
+  ).bind(postId).all();
+  if (results.length === 0) return json({ error: 'Post not found' }, 404);
+  const r = results[0] as any;
+  let photos: string[] = [];
+  try { photos = JSON.parse(r.photos || '[]'); } catch {}
+  const mapped = { ...r, user_photo: photos[0] || '' };
+  const posts = await resolveFeedPosts(env, [mapped], me);
+  return json({ document: posts[0] || null });
+}
+
 async function handleGetFeed(env: Env, req: Request, me: string): Promise<Response> {
   const url = new URL(req.url);
   const cursor = url.searchParams.get('cursor') || '';
@@ -1848,6 +1861,7 @@ export default {
     if (path === '/api/feed' && req.method === 'GET') return handleGetFeed(env, req, me);
     if (path === '/api/feed' && req.method === 'POST') return handleCreatePost(env, req, me);
     const feedPostMatch = path.match(/^\/api\/feed\/([^/]+)$/);
+    if (feedPostMatch && req.method === 'GET') return handleGetFeedPost(env, me, decodeURIComponent(feedPostMatch[1]));
     if (feedPostMatch && req.method === 'DELETE') return handleDeletePost(env, req, me, decodeURIComponent(feedPostMatch[1]));
     const feedLikeMatch = path.match(/^\/api\/feed\/([^/]+)\/like$/);
     if (feedLikeMatch && req.method === 'POST') return handleLikePost(env, req, me, decodeURIComponent(feedLikeMatch[1]));

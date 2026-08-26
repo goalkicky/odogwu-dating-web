@@ -27,7 +27,7 @@ export default function ShareSheet({ postId, postCaption, currentUserId, onClose
   }, [currentUserId]);
 
   const handleCopyLink = useCallback(async () => {
-    const url = `${window.location.origin}/explore?post=${postId}`;
+    const url = `${window.location.origin}/post/${postId}`;
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
@@ -46,7 +46,7 @@ export default function ShareSheet({ postId, postCaption, currentUserId, onClose
   }, [postId]);
 
   const handleShareNative = useCallback(async () => {
-    const url = `${window.location.origin}/explore?post=${postId}`;
+    const url = `${window.location.origin}/post/${postId}`;
     if (navigator.share) {
       try {
         await navigator.share({ title: 'Check out this post', text: postCaption || '', url });
