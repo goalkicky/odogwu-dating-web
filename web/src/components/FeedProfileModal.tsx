@@ -96,12 +96,12 @@ export default function FeedProfileModal({ userId, userName, userPhoto, currentU
 
   return (
     <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(8px)', padding: 16 }}>
-      <div onClick={(e) => e.stopPropagation()} className="feed-sheet-up" style={{ width: '100%', maxWidth: 400, maxHeight: '90vh', background: '#111', borderRadius: 28, overflow: 'hidden', position: 'relative', border: '1px solid rgba(255,255,255,0.1)' }}>
+      <div onClick={(e) => e.stopPropagation()} className="feed-sheet-up" style={{ width: '100%', maxWidth: 400, maxHeight: '90dvh', background: '#111', borderRadius: 28, overflow: 'hidden', position: 'relative', border: '1px solid rgba(255,255,255,0.1)' }}>
 
         {/* Close button */}
         <button
           onClick={onClose}
-          style={{ position: 'absolute', top: 12, right: 12, zIndex: 10, width: 36, height: 36, borderRadius: '50%', background: 'rgba(0,0,0,0.5)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(6px)' }}
+          style={{ position: 'absolute', top: 12, right: 12, zIndex: 10, width: 40, height: 40, borderRadius: '50%', background: 'rgba(0,0,0,0.5)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(6px)' }}
         >
           <CloseIcon size={18} color="white" />
         </button>

@@ -78,7 +78,7 @@ export default function ShareSheet({ postId, postCaption, currentUserId, onClose
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px 12px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
           <h3 style={{ fontSize: 16, fontWeight: 800, color: 'white', margin: 0 }}>Share</h3>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex' }}>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8, display: 'flex' }}>
             <CloseIcon size={20} color="#6B6B6B" />
           </button>
         </div>
@@ -102,7 +102,7 @@ export default function ShareSheet({ postId, postCaption, currentUserId, onClose
         </div>
 
         {/* Matches list */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '8px 0' }}>
+        <div style={{ flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch', padding: '8px 0' }}>
           <div style={{ padding: '8px 20px 6px' }}>
             <span style={{ fontSize: 13, fontWeight: 700, color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: 1 }}>Send to</span>
           </div>

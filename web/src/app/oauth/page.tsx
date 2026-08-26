@@ -35,7 +35,7 @@ export default function OAuthCallback() {
 
   if (error) {
     return (
-      <div style={{ minHeight: '100vh', background: '#0D0D0D', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16, padding: 24 }}>
+      <div style={{ minHeight: '100svh', background: '#0D0D0D', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16, padding: 24 }}>
         <p style={{ color: '#FF4444', fontSize: 15, textAlign: 'center' }}>{error}</p>
         <button onClick={() => router.push('/login')} style={{ padding: '12px 32px', borderRadius: 9999, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white', border: 'none', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>
           Back to Login
@@ -45,7 +45,7 @@ export default function OAuthCallback() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0D0D0D', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16, padding: 24 }}>
+    <div style={{ minHeight: '100svh', background: '#0D0D0D', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16, padding: 24 }}>
       <p style={{ color: '#ABABAB', fontSize: 15 }}>Signing you in...</p>
     </div>
   );

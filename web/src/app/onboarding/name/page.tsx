@@ -26,7 +26,7 @@ export default function NamePage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0D0D0D, #1A0000, #0D0D0D)', display: 'flex', flexDirection: 'column', padding: '60px 24px 0' }}>
+    <div style={{ minHeight: '100svh', background: 'linear-gradient(135deg, #0D0D0D, #1A0000, #0D0D0D)', display: 'flex', flexDirection: 'column', padding: '60px 24px 0' }}>
       <OnboardingProgress currentStep={0} totalSteps={6} />
 
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>

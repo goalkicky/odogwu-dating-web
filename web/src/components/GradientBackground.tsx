@@ -16,7 +16,7 @@ export default function GradientBackground({
   return (
     <div
       style={{
-        minHeight: '100vh',
+        minHeight: '100svh',
         position: 'relative',
         overflow: 'hidden',
         background: colors || 'linear-gradient(180deg, #08080C 0%, #0D0D0D 100%)',

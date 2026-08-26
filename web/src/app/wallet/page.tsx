@@ -97,7 +97,7 @@ function WalletContent() {
 
   return (
     <DesktopLayout>
-      <GradientBackground style={{ minHeight: '100vh', padding: '24px 16px 110px' }}>
+      <GradientBackground style={{ minHeight: '100svh', padding: '24px 16px 110px' }}>
       <div>
         <div className="animate-fade-up" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>

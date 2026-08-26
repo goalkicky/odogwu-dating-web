@@ -44,7 +44,7 @@ function ResetPasswordContent() {
 
   if (!ticket) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', padding: '0 24px', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ minHeight: '100svh', display: 'flex', flexDirection: 'column', padding: '0 24px', position: 'relative', overflow: 'hidden' }}>
         <VideoCarouselBackground />
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative', zIndex: 1 }}>
           <p style={{ color: '#ABABAB', fontSize: 15, textAlign: 'center' }}>Invalid reset link. Please request a new code.</p>
@@ -61,7 +61,7 @@ function ResetPasswordContent() {
 
   if (success) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', padding: '0 24px', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ minHeight: '100svh', display: 'flex', flexDirection: 'column', padding: '0 24px', position: 'relative', overflow: 'hidden' }}>
         <VideoCarouselBackground />
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative', zIndex: 1 }}>
           <div style={{ width: 64, height: 64, borderRadius: 9999, background: 'linear-gradient(135deg, #34C759, #30B350)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
@@ -82,7 +82,7 @@ function ResetPasswordContent() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', padding: '0 24px', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ minHeight: '100svh', display: 'flex', flexDirection: 'column', padding: '0 24px', position: 'relative', overflow: 'hidden' }}>
       <VideoCarouselBackground />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingTop: '60px', position: 'relative', zIndex: 1, maxWidth: 420, width: '100%', margin: '0 auto' }}>
         <h1 style={{ fontSize: 28, fontWeight: 800, color: 'white', margin: '0 0 6px' }}>New Password</h1>
@@ -131,7 +131,7 @@ function ResetPasswordContent() {
 
 export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#0D0D0D' }} />}>
+    <Suspense fallback={<div style={{ minHeight: '100svh', background: '#0D0D0D' }} />}>
       <ResetPasswordContent />
     </Suspense>
   );

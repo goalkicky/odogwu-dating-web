@@ -143,7 +143,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
         <div style={{ position: 'relative' }}>
           <button
             onClick={() => setShowMenu(!showMenu)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
             <EllipsisIcon size={16} color="#A0A0A0" />
           </button>
@@ -241,7 +241,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
             disabled={isOwn}
             style={{
               background: 'none', border: 'none', cursor: isOwn ? 'default' : 'pointer',
-              padding: '4px 12px 4px 0', display: 'flex', alignItems: 'center', gap: 5,
+              padding: '8px 12px 8px 0', display: 'flex', alignItems: 'center', gap: 5,
               opacity: isOwn ? 0.3 : 1,
             }}
           >
@@ -253,7 +253,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
           {/* Comment + count */}
           <button
             onClick={() => onComment(post)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 12px', display: 'flex', alignItems: 'center', gap: 5 }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 5 }}
           >
             <CommentIcon size={26} color="white" />
             {post.commentsCount > 0 && <span style={{ fontSize: 14, fontWeight: 600, color: 'white' }}>{post.commentsCount.toLocaleString()}</span>}
@@ -261,7 +261,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
           {/* Share + count */}
           <button
             onClick={() => setShowShare(true)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 12px', display: 'flex', alignItems: 'center', gap: 5 }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 5 }}
           >
             <ShareIcon size={24} color="white" />
             {(post.sharesCount || 0) > 0 && <span style={{ fontSize: 14, fontWeight: 600, color: 'white' }}>{(post.sharesCount || 0).toLocaleString()}</span>}
@@ -269,7 +269,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
           <div style={{ flex: 1 }} />
           <button
             onClick={handleSave}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0 4px 12px', display: 'flex', alignItems: 'center' }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '8px 0 8px 12px', display: 'flex', alignItems: 'center' }}
           >
             <BookmarkIcon size={26} color={saved ? '#FFD700' : 'white'} filled={saved} />
           </button>
@@ -334,7 +334,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
         </div>
         <button
           onClick={() => onComment(post)}
-          style={{ flex: 1, background: 'none', border: 'none', padding: '6px 0', color: '#A0A0A0', fontSize: 14, cursor: 'pointer', textAlign: 'left' }}
+          style={{ flex: 1, background: 'none', border: 'none', padding: '10px 0', color: '#A0A0A0', fontSize: 14, cursor: 'pointer', textAlign: 'left' }}
         >
           Add a comment...
         </button>

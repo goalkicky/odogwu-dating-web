@@ -26,11 +26,11 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
       {/* Desktop layout — hidden on mobile */}
       <div className="desktop-layout-desktop">
         <div style={{
-          maxWidth: 1400, margin: '0 auto', minHeight: '100vh',
+          maxWidth: 1400, margin: '0 auto', minHeight: '100svh',
           display: 'flex', background: 'linear-gradient(180deg, #08080C, #0D0D0D)',
         }}>
           {/* Sidebar */}
-          <aside className="sidebar" style={{ width: 240, flexShrink: 0, display: 'flex', flexDirection: 'column', paddingTop: 40, gap: 4, position: 'sticky', top: 0, height: '100vh', alignSelf: 'flex-start' }}>
+          <aside className="sidebar" style={{ width: 240, flexShrink: 0, display: 'flex', flexDirection: 'column', paddingTop: 40, gap: 4, position: 'sticky', top: 0, height: '100svh', alignSelf: 'flex-start' }}>
             {/* Logo */}
             <div style={{ padding: '0 24px 32px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>

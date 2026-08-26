@@ -68,7 +68,7 @@ export default function SinglePostPage() {
 
   return (
     <GradientBackground>
-      <div style={{ minHeight: '100vh', paddingBottom: 80 }}>
+      <div style={{ minHeight: '100svh', paddingBottom: 80 }}>
         {/* Back bar */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', position: 'sticky', top: 0, zIndex: 20, background: 'rgba(10,10,18,0.85)', backdropFilter: 'blur(12px)' }}>
           <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex' }}>

@@ -87,7 +87,7 @@ export default function LandingPage() {
 
       {/* ===== HERO ===== */}
       <section style={{
-        position: 'relative', minHeight: '100vh',
+        position: 'relative', minHeight: '100svh',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         padding: isMobile ? '100px 16px 60px' : '120px 24px 80px',
         overflow: 'hidden',

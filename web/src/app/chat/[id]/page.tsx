@@ -496,7 +496,7 @@ export default function ChatPage() {
       <div className="chat-screen" style={{ display: 'flex', flexDirection: 'column', minHeight: 0, position: 'relative' }}>
       {/* ===== Header ===== */}
       <header style={{
-        flexShrink: 0, padding: '50px 12px 10px', borderBottom: '1px solid rgba(255,255,255,0.07)',
+        flexShrink: 0, padding: 'calc(50px + env(safe-area-inset-top, 0px)) 12px 10px', borderBottom: '1px solid rgba(255,255,255,0.07)',
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 30,
         background: 'linear-gradient(180deg, rgba(8,8,12,0.85), rgba(13,13,13,0.7))',
         backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)',
@@ -843,7 +843,7 @@ export default function ChatPage() {
       </div>
 
       {/* ===== Fixed footer ===== */}
-      <div style={{ position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 20, background: 'linear-gradient(180deg, rgba(13,13,13,0.85), #0D0D0D 45%)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', boxShadow: '0 -8px 24px rgba(0,0,0,0.35)' }}>
+      <div style={{ position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 20, background: 'linear-gradient(180deg, rgba(13,13,13,0.85), #0D0D0D 45%)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', boxShadow: '0 -8px 24px rgba(0,0,0,0.35)', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
       {/* ===== Quick replies ===== */}
       {!searchOpen && !isRecording && messages.length > 0 && inputText.trim() === '' && (
         <div style={{ display: 'flex', gap: 8, padding: '4px 12px 8px', overflowX: 'auto' }}>

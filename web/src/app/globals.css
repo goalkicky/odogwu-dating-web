@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+html, body {
+  height: 100%;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* Prevent iOS zoom on inputs */
+input, textarea, select {
+  font-size: 16px !important;
+}
+
 :root {
   --background: #0D0D0D;
   --foreground: #FFFFFF;
@@ -123,7 +135,7 @@ body {
 /* ===== Floating tab bar ===== */
 .tabbar {
   position: fixed;
-  bottom: 16px;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
   left: 0; right: 0;
   display: flex;
   justify-content: center;
@@ -154,10 +166,11 @@ body {
   color: #6B6B6B;
   font-size: 10px;
   font-weight: 600;
-  padding: 7px 15px;
+  padding: 10px 14px;
   border-radius: 9999px;
   transition: all 0.22s ease;
   white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
 }
 .tabbar-link:hover { color: #D0D0D0; }
 .tabbar-link.active {
@@ -229,6 +242,8 @@ body {
 .hscroll {
   scrollbar-width: none;
   -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
 }
 .hscroll::-webkit-scrollbar {
   display: none;

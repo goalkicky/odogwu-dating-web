@@ -272,7 +272,7 @@ export default function ExplorePage() {
     <DesktopLayout>
       <GradientBackground
         style={{
-          minHeight: '100vh',
+          minHeight: '100svh',
           padding: isMobile ? '18px 16px 110px' : '24px 16px 60px',
         }}
       >

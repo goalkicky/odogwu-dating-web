@@ -35,7 +35,7 @@ export default function PrivacyPolicyPage() {
   const router = useRouter();
 
   return (
-    <GradientBackground style={{ minHeight: '100vh', padding: '24px 16px 85px' }}>
+    <GradientBackground style={{ minHeight: '100svh', padding: '24px 16px 85px' }}>
       <div style={{ padding: '60px 24px 24px', maxWidth: 720, margin: '0 auto' }}>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#FF375F', fontSize: 15, fontWeight: 600, cursor: 'pointer', padding: '8px 0', marginBottom: 8 }}>
           ← Back

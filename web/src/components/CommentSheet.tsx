@@ -154,7 +154,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px 12px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
           <h3 style={{ fontSize: 16, fontWeight: 800, color: 'white', margin: 0 }}>Comments</h3>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex' }}>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8, display: 'flex' }}>
             <CloseIcon size={20} color="#6B6B6B" />
           </button>
         </div>
@@ -177,7 +177,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
         </div>
 
         {/* Comments list */}
-        <div ref={listRef} style={{ flex: 1, overflowY: 'auto', padding: '8px 20px', minHeight: 200, maxHeight: 'calc(75vh - 180px)' }}>
+        <div ref={listRef} style={{ flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch', padding: '8px 20px', minHeight: 200, maxHeight: 'calc(75dvh - 180px)' }}>
           {loading ? (
             <div style={{ display: 'flex', justifyContent: 'center', padding: 40 }}>
               <div style={{ width: 28, height: 28, borderRadius: 10, border: '2px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
@@ -262,7 +262,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
             disabled={!text.trim() || sending}
             style={{
               background: text.trim() ? 'linear-gradient(135deg, #FF375F, #FF3B30)' : 'rgba(255,255,255,0.06)',
-              border: 'none', borderRadius: 9999, width: 36, height: 36, cursor: text.trim() ? 'pointer' : 'default',
+              border: 'none', borderRadius: 9999, width: 40, height: 40, cursor: text.trim() ? 'pointer' : 'default',
               display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s',
               opacity: text.trim() ? 1 : 0.4,
             }}

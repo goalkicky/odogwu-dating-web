@@ -63,7 +63,7 @@ export default function PremiumPage() {
 
   return (
     <DesktopLayout>
-      <GradientBackground style={{ minHeight: '100vh', padding: '24px 16px 110px' }}>
+      <GradientBackground style={{ minHeight: '100svh', padding: '24px 16px 110px' }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
       <div className="animate-fade-up">
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '28px 24px 26px' }}>
