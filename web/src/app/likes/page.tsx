@@ -5,6 +5,7 @@ import { HeartIcon, EyeIcon, DiamondIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
 import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
+import MatchPopup from '@/components/MatchPopup';
 import { useAuth } from '@/store/AuthContext';
 import { matchService, storageService, userService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
@@ -13,18 +14,16 @@ export default function LikesPage() {
   const { profile } = useAuth();
   const [likers, setLikers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [jwt, setJwt] = useState('');
   const [likingId, setLikingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [matchPopupUser, setMatchPopupUser] = useState<any>(null);
+  const [matchPopupId, setMatchPopupId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (!profile) return;
     const uid = (profile as any).$id;
-    account?.createJWT()
-      .then(async tokenRes => {
-        const token = tokenRes.jwt;
-        setJwt(token);
-        const docs = await matchService.getWhoLikedMe(uid);
+    matchService.getWhoLikedMe(uid)
+      .then(docs => {
         const withPhotos = docs.map((d: any) => {
           const mp = d.matchedUser;
           if (!mp) return d;
@@ -46,11 +45,18 @@ export default function LikesPage() {
     if (!account || !profile) return;
     setLikingId(likerId);
     try {
-      await userService.likeUser((profile as any).$id, likerId);
+      const res = await userService.likeUser((profile as any).$id, likerId);
       setLikers(prev => prev.filter(d => {
         const otherId = d.userId;
         return otherId !== likerId;
       }));
+      if (res?.mutual) {
+        const liker = likers.find(d => d.userId === likerId);
+        if (liker?.matchedUser) {
+          setMatchPopupUser(liker.matchedUser);
+          setMatchPopupId(res.match?.$id);
+        }
+      }
     } catch {}
     setLikingId(null);
   };
@@ -189,6 +195,15 @@ export default function LikesPage() {
         )}
       </div>
       <TabBar />
+
+      {matchPopupUser && (
+        <MatchPopup
+          matchedUser={matchPopupUser}
+          matchId={matchPopupId}
+          myPhotoUrl={(profile as any)?.photos?.[0] ? storageService.getFilePreview((profile as any).photos[0]) : ''}
+          onClose={() => { setMatchPopupUser(null); setMatchPopupId(undefined); }}
+        />
+      )}
       </GradientBackground>
     </DesktopLayout>
   );
