@@ -186,7 +186,7 @@ export default function MatchesPage() {
                         </div>
                         <span style={{ position: 'absolute', bottom: 2, right: 2, width: 12, height: 12, borderRadius: 9999, background: '#34C759', border: '2px solid #16161C', boxShadow: '0 0 10px #34C759' }} />
                       </div>
-                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
+                      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3 }}>
                         <div style={{ display: 'flex', gap: 6, alignItems: 'baseline' }}>
                           <span style={{ fontSize: 16, fontWeight: 700, color: 'white' }}>{name}</span>
                           {age && <span style={{ fontSize: 14, color: '#6B6B6B' }}>{age}</span>}
