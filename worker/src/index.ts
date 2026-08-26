@@ -1582,6 +1582,7 @@ async function handleGetFeedComments(env: Env, req: Request, me: string): Promis
   const url = new URL(req.url);
   const postId = url.searchParams.get('postId') || '';
   const cursor = url.searchParams.get('cursor') || '';
+  const limit = Math.min(Math.max(parseInt(url.searchParams.get('limit') || '50', 10) || 50, 1), 200);
   if (!postId) return json({ error: 'postId required' }, 400);
 
   let sql = `SELECT c.*, u.full_name, u.photos
@@ -1595,7 +1596,7 @@ async function handleGetFeedComments(env: Env, req: Request, me: string): Promis
     binds.push(cursor);
   }
 
-  sql += ` ORDER BY c.created_at ASC LIMIT 50`;
+  sql += ` ORDER BY c.created_at ASC LIMIT ${limit}`;
   const { results } = await env.DB.prepare(sql).bind(...binds).all();
 
   const mapped = results.map((r: any) => {
