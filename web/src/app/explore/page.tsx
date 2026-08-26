@@ -15,6 +15,7 @@ import PostCard from '@/components/PostCard';
 import CommentSheet from '@/components/CommentSheet';
 import CreatePostModal from '@/components/CreatePostModal';
 import FeedProfileModal from '@/components/FeedProfileModal';
+import MatchPopup from '@/components/MatchPopup';
 import { FeedPost } from '@/lib/types';
 
 interface ExploreUser {
@@ -64,6 +65,8 @@ export default function ExplorePage() {
   const [showInterestRestriction, setShowInterestRestriction] = useState(false);
   const [profileModal, setProfileModal] = useState<{ userId: string; userName: string; userPhoto: string } | null>(null);
   const [postCounts, setPostCounts] = useState<Record<string, number>>({});
+  const [matchPopupUser, setMatchPopupUser] = useState<any>(null);
+  const [matchPopupId, setMatchPopupId] = useState<string | undefined>(undefined);
 
   // Total posts published under a category (category tag + any of its interests)
   const categoryPostCount = useCallback((category: InterestCategory) => {
@@ -232,9 +235,10 @@ export default function ExplorePage() {
       // Fire API calls in background — don't await
       userService.likeUser((profile as any).$id, liked.id).then((res) => {
         if (res && typeof res.remaining === 'number') setLikes(res);
-        return userService.isMutualMatch((profile as any).$id, liked.id);
-      }).then((mutual) => {
-        if (mutual) setLastAction('match');
+        if (res?.mutual) {
+          setMatchPopupUser(liked);
+          setMatchPopupId(res.match?.$id);
+        }
       }).catch((e) => {
         if (e?.status === 402 || e?.code === 'NO_LIKES' || String(e?.message || '').includes('like')) {
           setShowLikeUpsell(true);
@@ -256,7 +260,10 @@ export default function ExplorePage() {
       // Fire API call in background — don't await
       superlikeService.send(liked.id).then((res) => {
         setSuperlikes(res);
-        if (res.mutual) setLastAction('match');
+        if (res.mutual) {
+          setMatchPopupUser(liked);
+          setMatchPopupId(res.match?.$id);
+        }
       }).catch((e) => {
         if (e?.status === 402 || e?.code === 'NO_SUPERLIKES' || String(e?.message || '').includes('super like')) {
           setShowLikeUpsell(true);
@@ -506,6 +513,15 @@ export default function ExplorePage() {
             userPhoto={profileModal.userPhoto}
             currentUserId={(profile as any)?.$id || ''}
             onClose={() => setProfileModal(null)}
+          />
+        )}
+
+        {matchPopupUser && (
+          <MatchPopup
+            matchedUser={matchPopupUser}
+            matchId={matchPopupId}
+            myPhotoUrl={(profile as any)?.photos?.[0] ? storageService.getFilePreview((profile as any).photos[0]) : ''}
+            onClose={() => { setMatchPopupUser(null); setMatchPopupId(undefined); }}
           />
         )}
       </GradientBackground>
