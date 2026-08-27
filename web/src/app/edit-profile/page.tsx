@@ -197,7 +197,7 @@ export default function EditProfilePage() {
   };
 
   return (
-    <GradientBackground style={{ minHeight: '100svh', padding: '0 16px 100px', overflow: 'visible' }}>
+    <GradientBackground style={{ minHeight: '100svh', padding: '0 16px 160px', overflow: 'visible' }}>
       <input ref={fileInputRef} type="file" accept="image/*" onChange={handlePhotoPick} style={{ display: 'none' }} />
 
       {/* Sticky Tinder-style header */}
