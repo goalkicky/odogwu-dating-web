@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { ChevronBackIcon, PlusIcon, CloseCircleIcon, ChevronForwardIcon } from '@/components/Icons';
 import Button from '@/components/Button';
 import GradientBackground from '@/components/GradientBackground';
-import TabBar from '@/components/TabBar';
 import { useAuth } from '@/store/AuthContext';
 import { authService, userService, storageService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
@@ -197,7 +196,7 @@ export default function EditProfilePage() {
   };
 
   return (
-    <GradientBackground style={{ minHeight: '100svh', padding: '0 16px 140px' }}>
+    <GradientBackground style={{ minHeight: '100svh', padding: '0 16px 48px' }}>
       <input ref={fileInputRef} type="file" accept="image/*" onChange={handlePhotoPick} style={{ display: 'none' }} />
 
       {/* Sticky Tinder-style header */}
@@ -381,7 +380,6 @@ export default function EditProfilePage() {
       {showHeight && <OptionPicker label="Height" options={HEIGHT_OPTIONS} value={height} onChange={setHeight} onClose={() => setShowHeight(false)} />}
       {showRelationshipGoals && <OptionPicker label="Relationship Goals" options={RELATIONSHIP_GOALS} value={relationshipGoals} onChange={setRelationshipGoals} onClose={() => setShowRelationshipGoals(false)} />}
 
-      <TabBar />
     </GradientBackground>
   );
 }
