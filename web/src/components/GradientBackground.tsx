@@ -28,7 +28,7 @@ export default function GradientBackground({
         <div className="aurora aurora-2" />
         <div className="aurora aurora-3" />
       </div>
-      <div style={{ position: 'relative', zIndex: 1, height: '100%' }}>{children}</div>
+      <div style={{ position: 'relative', zIndex: 1 }}>{children}</div>
     </div>
   );
 }
