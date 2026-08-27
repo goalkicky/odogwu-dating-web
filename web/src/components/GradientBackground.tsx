@@ -18,16 +18,17 @@ export default function GradientBackground({
       style={{
         minHeight: '100svh',
         position: 'relative',
-        overflow: 'hidden',
         background: colors || 'linear-gradient(180deg, #08080C 0%, #0D0D0D 100%)',
         ...style,
       }}
       className={className}
     >
-      <div className="aurora aurora-1" />
-      <div className="aurora aurora-2" />
-      <div className="aurora aurora-3" />
-      <div style={{ position: 'relative', zIndex: 1, height: '100%' }}>{children}</div>
+      <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+        <div className="aurora aurora-1" />
+        <div className="aurora aurora-2" />
+        <div className="aurora aurora-3" />
+      </div>
+      <div style={{ position: 'relative', zIndex: 1 }}>{children}</div>
     </div>
   );
 }
