@@ -1,9 +1,18 @@
 @import "tailwindcss";
 
-html, body {
-  min-height: 100%;
+html {
+  height: 100%;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+body {
+  height: 100%;
+  overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
 }
