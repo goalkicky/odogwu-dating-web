@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import GradientBackground from '@/components/GradientBackground';
-import TabBar from '@/components/TabBar';
 import { blockService, storageService } from '@/lib/cloudflare/services';
 
 export default function BlockedUsersPage() {
@@ -33,7 +32,7 @@ export default function BlockedUsersPage() {
   };
 
   return (
-    <GradientBackground style={{ minHeight: '100svh', padding: '24px 16px 85px' }}>
+    <GradientBackground style={{ minHeight: '100svh', padding: '24px 16px 48px' }}>
       <div style={{ padding: '60px 24px 24px' }}>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#FF375F', fontSize: 15, fontWeight: 600, cursor: 'pointer', padding: '8px 0', marginBottom: 8 }}>
           ← Back
@@ -90,7 +89,6 @@ export default function BlockedUsersPage() {
           </div>
         )}
       </div>
-      <TabBar />
     </GradientBackground>
   );
 }

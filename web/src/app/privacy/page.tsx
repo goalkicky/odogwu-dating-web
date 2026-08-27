@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronForwardIcon, EyeIcon, GlobeIcon, InfoIcon, PersonIcon } from '@/components/Icons';
 import GradientBackground from '@/components/GradientBackground';
-import TabBar from '@/components/TabBar';
 import { useAuth } from '@/store/AuthContext';
 import { userService, blockService } from '@/lib/cloudflare/services';
 
@@ -67,7 +66,7 @@ export default function PrivacyPage() {
   };
 
   return (
-    <GradientBackground style={{ minHeight: '100svh', padding: '24px 16px 85px' }}>
+    <GradientBackground style={{ minHeight: '100svh', padding: '24px 16px 48px' }}>
       <div style={{ padding: '60px 24px 24px' }}>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#FF375F', fontSize: 15, fontWeight: 600, cursor: 'pointer', padding: '8px 0', marginBottom: 8 }}>
           ← Back
@@ -160,7 +159,6 @@ export default function PrivacyPage() {
           </button>
         </div>
       </div>
-      <TabBar />
     </GradientBackground>
   );
 }
