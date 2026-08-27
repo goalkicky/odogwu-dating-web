@@ -134,7 +134,7 @@ export default function LikesPage() {
               />
             </div>
           </div>
-          <div className="animate-fade-up" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div className="animate-fade-up" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
             {likers.filter((item: any) => {
               const q = searchQuery.toLowerCase();
               if (!q) return true;
@@ -146,50 +146,57 @@ export default function LikesPage() {
               const name = mp.fullName || 'User';
               const age = mp.age || '';
               return (
-                <div key={item.$id} className="glass lift" style={{
-                  display: 'flex', alignItems: 'center', padding: 14, borderRadius: 18, gap: 14,
+                <div key={item.$id} className="lift" style={{
+                  position: 'relative', borderRadius: 26, overflow: 'hidden',
+                  background: '#1A1A1A', aspectRatio: '3/4',
                 }}>
-                  <div style={{ position: 'relative' }}>
-                    <div className="grad-ring" style={{ width: 66, height: 66, display: 'flex' }}>
-                      <div style={{ width: 60, height: 60, borderRadius: '50%', overflow: 'hidden', backgroundColor: '#16161C', flexShrink: 0 }}>
-                        {photoUrl ? (
-                          <img src={photoUrl} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: isPremium ? 'none' : 'blur(9px) scale(1.15)', transition: 'filter 0.4s' }} />
-                        ) : (
-                          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <span style={{ color: '#6B6B6B', fontSize: 22, fontWeight: 700 }}>{name[0]}</span>
-                          </div>
-                        )}
+                  {photoUrl ? (
+                    <img src={photoUrl} alt={name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: isPremium ? 'none' : 'blur(12px) scale(1.2)', transition: 'filter 0.4s' }} />
+                  ) : (
+                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#16161C' }}>
+                      <span style={{ color: '#6B6B6B', fontSize: 40, fontWeight: 700 }}>{name[0]}</span>
+                    </div>
+                  )}
+
+                  {!isPremium && (
+                    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.25)' }}>
+                      <div style={{ padding: '6px 14px', borderRadius: 9999, background: 'rgba(13,13,16,0.85)', border: '1px solid rgba(255,215,0,0.4)', fontSize: 11, fontWeight: 800, color: '#FFD700', letterSpacing: 0.5, backdropFilter: 'blur(4px)' }}>
+                        🔒 PREMIUM
                       </div>
                     </div>
-                    {!isPremium && (
-                      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <div style={{ padding: '4px 10px', borderRadius: 9999, background: 'rgba(13,13,16,0.85)', border: '1px solid rgba(255,215,0,0.4)', fontSize: 10, fontWeight: 800, color: '#FFD700', letterSpacing: 0.5, backdropFilter: 'blur(4px)' }}>
-                          🔒 PREMIUM
-                        </div>
-                      </div>
-                    )}
+                  )}
+
+                  <div style={{
+                    position: 'absolute', left: 0, right: 0, top: '45%', bottom: 0,
+                    background: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.85) 100%)',
+                  }} />
+
+                  <div style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: 14 }}>
+                    <div style={{ fontSize: 17, fontWeight: 800, color: 'white', textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}>
+                      {name}
+                      {age ? <span style={{ fontWeight: 600, marginLeft: 5 }}>{age}</span> : null}
+                    </div>
                   </div>
-                  <div style={{ flex: 1 }}>
-                    <span style={{ fontSize: 16, fontWeight: 700, color: 'white' }}>{name}</span>
-                    {age && <span style={{ fontSize: 14, color: '#6B6B6B', marginLeft: 6 }}>{age}</span>}
-                  </div>
+
                   <button
                     onClick={() => handleLikeBack(mp.$id || mp.id)}
                     disabled={likingId === (mp.$id || mp.id)}
+                    aria-label="Like back"
                     style={{
-                      padding: '11px 22px', borderRadius: 9999, border: 'none',
+                      position: 'absolute', right: 12, bottom: 12,
+                      width: 40, height: 40, borderRadius: '50%', border: 'none',
                       background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
-                      color: 'white', fontSize: 14, fontWeight: 800, cursor: 'pointer',
+                      color: 'white', cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
                       opacity: likingId === (mp.$id || mp.id) ? 0.5 : 1,
-                      display: 'flex', alignItems: 'center', gap: 7,
-                      boxShadow: '0 6px 22px rgba(255,55,95,0.4)',
+                      boxShadow: '0 0 18px rgba(255,55,95,0.65), 0 6px 16px rgba(255,55,95,0.4)',
                       transition: 'transform 0.15s ease',
                     }}
-                    onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.04)')}
+                    onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.08)')}
                     onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
                   >
-                    <HeartIcon size={16} color="white" />
-                    Like Back
+                    <HeartIcon size={20} color="white" />
                   </button>
                 </div>
               );
