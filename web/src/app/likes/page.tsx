@@ -7,7 +7,7 @@ import TabBar from '@/components/TabBar';
 import DesktopLayout from '@/components/DesktopLayout';
 import MatchPopup from '@/components/MatchPopup';
 import { useAuth } from '@/store/AuthContext';
-import { matchService, storageService, userService } from '@/lib/cloudflare/services';
+import { matchService, storageService, userService, likeService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
 
 export default function LikesPage() {
@@ -18,6 +18,7 @@ export default function LikesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [matchPopupUser, setMatchPopupUser] = useState<any>(null);
   const [matchPopupId, setMatchPopupId] = useState<string | undefined>(undefined);
+  const [isPremium, setIsPremium] = useState(false);
 
   useEffect(() => {
     if (!profile) return;
@@ -39,6 +40,9 @@ export default function LikesPage() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
+    likeService.getStatus()
+      .then((s: any) => setIsPremium(!!s?.isPremium))
+      .catch(() => setIsPremium(!!profile?.isPremium));
   }, [profile]);
 
   const handleLikeBack = async (likerId: string) => {
@@ -64,8 +68,6 @@ export default function LikesPage() {
     } catch {}
     setLikingId(null);
   };
-
-  const isPremium = !!profile?.isPremium;
 
   return (
     <DesktopLayout>

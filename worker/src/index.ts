@@ -229,7 +229,7 @@ function superlikeStatusDoc(user: UserRow): any {
     used: Math.max(0, dailyLimit - remaining),
     dailyLimit,
     refillsAt: superlikeRefillsAt(),
-    isPremium: !!user.is_premium,
+    isPremium: premiumActive(user),
   };
 }
 
@@ -262,7 +262,7 @@ function likeStatusDoc(user: UserRow): any {
     used: unlimited ? 0 : Math.max(0, LIKES_DAILY - remaining),
     dailyLimit: unlimited ? -1 : LIKES_DAILY,
     refillsAt: unlimited ? '' : superlikeRefillsAt(),
-    isPremium: !!user.is_premium,
+    isPremium: premiumActive(user),
   };
 }
 
