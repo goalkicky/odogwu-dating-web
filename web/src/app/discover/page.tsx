@@ -182,8 +182,8 @@ export default function DiscoverPage() {
   if (loading) {
     return (
       <DesktopLayout>
-        <GradientBackground style={{ height: '100dvh', minHeight: 0, overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: isMobile ? '12px 14px 108px' : '24px 16px', gap: 18 }}>
+        <GradientBackground style={{ minHeight: '100vh' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 18 }}>
             <div style={{ width: 56, height: 56, borderRadius: 18, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
             <span className="neon-text" style={{ fontSize: 16, fontWeight: 700 }}>Loading profiles...</span>
           </div>
@@ -196,8 +196,8 @@ export default function DiscoverPage() {
   if (users.length === 0) {
     return (
       <DesktopLayout>
-        <GradientBackground style={{ height: '100dvh', minHeight: 0, overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: isMobile ? '12px 14px 108px' : '24px 16px', gap: 16 }}>
+        <GradientBackground style={{ minHeight: '100vh' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 16 }}>
             <div className="glass" style={{ width: 96, height: 96, borderRadius: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 40px rgba(255,55,95,0.15)' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FF6B8A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 1 0 0-8c-2 0-4 1.33-6 4Z"/>
@@ -222,11 +222,12 @@ export default function DiscoverPage() {
       <GradientBackground
         style={{
           height: isMobile ? '100dvh' : 'auto',
-          minHeight: isMobile ? 0 : '100dvh',
+          minHeight: '100dvh',
           overflow: 'hidden',
+          padding: isMobile ? '12px 14px 108px' : '24px 16px',
         }}
       >
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', padding: isMobile ? '12px 14px 108px' : '24px 16px', gap: 0 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 0 }}>
           <div className="animate-fade-up" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: isMobile ? 12 : 20 }}>
             <div>
               <h1 style={{ fontSize: isMobile ? 26 : 30, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 0.5 }}>
@@ -437,7 +438,7 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
           width: '100%', maxWidth: 520, margin: '0 auto',
           background: '#16161C',
           padding: '24px 24px 40px',
-          height: '100svh',
+          height: '100vh',
           overflowY: 'auto',
         }}
       >
