@@ -263,10 +263,50 @@ export default function HomePage() {
           .tmpl-active-grid { grid-template-columns: repeat(2, 1fr); }
           .tmpl-profile-card { height: 196px; }
         }
+
+        @media (min-width: 768px) {
+          html, body { background: #ececec; }
+          .tmpl-app {
+            max-width: none;
+            padding: 34px 40px 45px 295px;
+            background: #fff;
+          }
+          .tmpl-app > .tmpl-topbar { display: none; }
+          .tmpl-premium,
+          .tmpl-quick-nav,
+          .tmpl-section,
+          .tmpl-love-banner {
+            max-width: 1240px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+          }
+          .tmpl-premium { margin-top: 20px; height: 118px; padding: 20px 28px; }
+          .tmpl-quick-nav {
+            grid-template-columns: repeat(4, 105px);
+            gap: 45px;
+            margin: 8px auto 40px;
+          }
+          .tmpl-round-photo { width: 105px; border-width: 4px; padding: 5px; }
+          .tmpl-round-photo.location svg { width: 57px; height: 57px; }
+          .tmpl-section h2 { font-size: 21px; margin-bottom: 14px; }
+          .tmpl-stories { gap: 15px; }
+          .tmpl-story-card { height: 340px; flex: 1 1 0; flex-basis: auto; }
+          .tmpl-love-banner { height: 130px; margin-top: 32px; padding: 20px 30px; }
+          .tmpl-active-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+          .tmpl-profile-card { height: 285px; }
+          .tmpl-bottom-nav { display: none; }
+        }
+
+        @media (min-width: 1300px) {
+          .tmpl-premium, .tmpl-section, .tmpl-love-banner { max-width: 1320px; }
+          .tmpl-quick-nav { max-width: 1320px; }
+          .tmpl-story-card { height: 365px; }
+          .tmpl-profile-card { height: 310px; }
+        }
       `}</style>
       <style jsx>{`
         @media (min-width: 768px) {
-          .tmpl-mobile-only { display: none !important; }
           .tmpl-desktop-only { display: block !important; }
           .tmpl-mobile-only .tmpl-topbar { display: none !important; }
         }
