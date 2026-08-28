@@ -5,6 +5,7 @@ import { HeartIcon, EyeIcon, DiamondIcon, PersonIcon, CompassIcon } from '@/comp
 import PremiumPopup from '@/components/PremiumPopup';
 
 const NAV_ITEMS = [
+  { label: 'Home', icon: <svg viewBox="0 0 48 48" style={{ width: 22, height: 22 }} fill="white" stroke="white" strokeWidth="1.6"><path d="M8 22 24 9l16 13v17H29V28H19v11H8Z"/></svg>, href: '/home' },
   { label: 'Discover', icon: <img src="https://kamsirmdlabs.com/img/logo.png" alt="" style={{ width: 22, height: 22, borderRadius: 6, objectFit: 'cover' }} />, href: '/discover' },
   { label: 'Explore', icon: <CompassIcon size={22} color="white" />, href: '/explore' },
   { label: 'Matches', icon: <HeartIcon size={22} color="white" />, href: '/matches' },

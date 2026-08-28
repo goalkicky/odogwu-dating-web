@@ -70,7 +70,7 @@ export default function LandingPage() {
   useEffect(() => {
     if (loading) return;
     if (isAuthenticated) {
-      router.replace(isOnboarded ? '/discover' : '/onboarding/name');
+      router.replace(isOnboarded ? '/home' : '/onboarding/name');
     }
   }, [loading, isAuthenticated, isOnboarded, router]);
 
