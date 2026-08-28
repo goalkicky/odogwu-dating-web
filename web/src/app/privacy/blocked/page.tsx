@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import GradientBackground from '@/components/GradientBackground';
+import AppShell from '@/components/AppShell';
 import { blockService, storageService } from '@/lib/cloudflare/services';
 
 export default function BlockedUsersPage() {
@@ -32,13 +32,13 @@ export default function BlockedUsersPage() {
   };
 
   return (
-    <GradientBackground style={{ minHeight: '100svh', padding: '24px 16px 48px' }}>
-      <div style={{ padding: '60px 24px 24px' }}>
+    <AppShell>
+      <div>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#FF375F', fontSize: 15, fontWeight: 600, cursor: 'pointer', padding: '8px 0', marginBottom: 8 }}>
           ← Back
         </button>
-        <h1 style={{ fontSize: 28, fontWeight: 800, color: 'white', margin: '0 0 8px' }}>Blocked Users</h1>
-        <p style={{ fontSize: 14, color: '#6B6B6B', margin: '0 0 24px' }}>
+        <h1 style={{ fontSize: 28, fontWeight: 800, color: '#151515', margin: '0 0 8px' }}>Blocked Users</h1>
+        <p style={{ fontSize: 14, color: '#8A8A8F', margin: '0 0 24px' }}>
           Blocked people can&apos;t see your profile, like or message you.
         </p>
 
@@ -47,8 +47,8 @@ export default function BlockedUsersPage() {
             <div style={{ width: 36, height: 36, borderRadius: 12, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
           </div>
         ) : blocks.length === 0 ? (
-          <div style={{ backgroundColor: 'rgba(255,255,255,0.08)', padding: 24, borderRadius: 18, textAlign: 'center' }}>
-            <p style={{ color: '#6B6B6B', fontSize: 14, margin: 0 }}>You haven&apos;t blocked anyone yet.</p>
+          <div style={{ backgroundColor: '#F6F6F9', padding: 24, borderRadius: 18, textAlign: 'center' }}>
+            <p style={{ color: '#8A8A8F', fontSize: 14, margin: 0 }}>You haven&apos;t blocked anyone yet.</p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -57,7 +57,7 @@ export default function BlockedUsersPage() {
               const name = p.fullName || 'User';
               const initial = (name[0] || 'U').toUpperCase();
               return (
-                <div key={b.$id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 16 }}>
+                <div key={b.$id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, backgroundColor: '#F6F6F9', borderRadius: 16 }}>
                   {b._photoUrl ? (
                     <img src={b._photoUrl} alt={name} style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }} />
                   ) : (
@@ -66,8 +66,8 @@ export default function BlockedUsersPage() {
                     </div>
                   )}
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 15, fontWeight: 700, color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</div>
-                    <div style={{ fontSize: 12, color: '#6B6B6B' }}>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: '#151515', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</div>
+                    <div style={{ fontSize: 12, color: '#8A8A8F' }}>
                       {p.age ? `${p.age} years` : 'Blocked user'}
                     </div>
                   </div>
@@ -89,6 +89,6 @@ export default function BlockedUsersPage() {
           </div>
         )}
       </div>
-    </GradientBackground>
+    </AppShell>
   );
 }

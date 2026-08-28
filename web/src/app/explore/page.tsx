@@ -1,9 +1,7 @@
 'use client';
 import React, { useState, useCallback, useEffect } from 'react';
 import { ChevronBackIcon, RefreshIcon, CameraIcon, PlusIcon, GridIcon } from '@/components/Icons';
-import GradientBackground from '@/components/GradientBackground';
-import TabBar from '@/components/TabBar';
-import DesktopLayout from '@/components/DesktopLayout';
+import AppShell from '@/components/AppShell';
 import SuperlikeUpsellModal from '@/components/SuperlikeUpsellModal';
 import LikeUpsellModal from '@/components/LikeUpsellModal';
 import { useMobile } from '@/lib/useMediaQuery';
@@ -55,7 +53,6 @@ export default function ExplorePage() {
   const [likes, setLikes] = useState<any>({ remaining: 0, used: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
   const [showLikeUpsell, setShowLikeUpsell] = useState(false);
 
-  // Feed state
   const [feedPosts, setFeedPosts] = useState<FeedPost[]>([]);
   const [feedLoading, setFeedLoading] = useState(true);
   const [feedCursor, setFeedCursor] = useState<string | null>(null);
@@ -68,7 +65,6 @@ export default function ExplorePage() {
   const [matchPopupUser, setMatchPopupUser] = useState<any>(null);
   const [matchPopupId, setMatchPopupId] = useState<string | undefined>(undefined);
 
-  // Total posts published under a category (category tag + any of its interests)
   const categoryPostCount = useCallback((category: InterestCategory) => {
     return (
       (postCounts[category.label] || 0) +
@@ -193,7 +189,6 @@ export default function ExplorePage() {
     loadPostCounts();
   }, [loadPostCounts]);
 
-  // Clicking a category goes straight to that category's feed
   const openCategory = useCallback((category: InterestCategory) => {
     setActiveCategory(category);
     setDeck([]);
@@ -215,7 +210,6 @@ export default function ExplorePage() {
     const rejected = current;
     if (rejected) {
       removeSwiped(rejected.id);
-      // Fire API call in background — don't await
       userService.likeExists((profile as any).$id, rejected.id).catch(() => {});
     }
     setTimeout(() => { setLastAction(null); advance(); }, 300);
@@ -232,7 +226,6 @@ export default function ExplorePage() {
     }
     if (liked) {
       removeSwiped(liked.id);
-      // Fire API calls in background — don't await
       userService.likeUser((profile as any).$id, liked.id).then((res) => {
         if (res && typeof res.remaining === 'number') setLikes(res);
         if (res?.mutual) {
@@ -257,7 +250,6 @@ export default function ExplorePage() {
     setLastAction('superlike');
     if (liked) {
       removeSwiped(liked.id);
-      // Fire API call in background — don't await
       superlikeService.send(liked.id).then((res) => {
         setSuperlikes(res);
         if (res.mutual) {
@@ -276,43 +268,36 @@ export default function ExplorePage() {
   const totalPeople = users.length;
 
   return (
-    <DesktopLayout>
-      <GradientBackground
-        style={{
-          minHeight: '100svh',
-          padding: isMobile ? '18px 16px 110px' : '24px 16px 60px',
-        }}
-      >
+    <AppShell>
+      <div style={{ minHeight: '100svh', padding: isMobile ? '18px 16px 110px' : '24px 16px 60px' }}>
         {activeCategory ? (
-          /* ===== Feed timeline for the selected category ===== */
           <div className="animate-fade-up" style={{ maxWidth: 560, margin: '0 auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
               <button
                 onClick={backToCategories}
                 aria-label="Back to categories"
-                className="glass lift"
-                style={{ width: 42, height: 42, borderRadius: 9999, border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+                className="lift"
+                style={{ width: 42, height: 42, borderRadius: 9999, border: '1px solid #EDEDF1', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, background: '#fff', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}
               >
-                <ChevronBackIcon size={20} color="white" />
+                <ChevronBackIcon size={20} color="#151515" />
               </button>
               <div style={{ minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ fontSize: 20 }}>{activeCategory.emoji}</span>
-                  <h1 style={{ fontSize: isMobile ? 24 : 26, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 0.4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  <h1 style={{ fontSize: isMobile ? 24 : 26, fontWeight: 800, color: '#151515', margin: 0, letterSpacing: 0.4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {activeCategory.label}
                   </h1>
                 </div>
-                <p style={{ fontSize: 13, color: '#6B6B6B', margin: '2px 0 0' }}>
+                <p style={{ fontSize: 13, color: '#8A8A8F', margin: '2px 0 0' }}>
                   Posts published under {activeCategory.label}.
                 </p>
               </div>
             </div>
 
-            {/* Feed header + create */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <GridIcon size={20} color="#FF375F" />
-                <h2 style={{ fontSize: isMobile ? 22 : 24, fontWeight: 800, color: 'white', margin: 0 }}>Feed</h2>
+                <h2 style={{ fontSize: isMobile ? 22 : 24, fontWeight: 800, color: '#151515', margin: 0 }}>Feed</h2>
               </div>
               <button
                 onClick={handleOpenCreatePost}
@@ -328,7 +313,6 @@ export default function ExplorePage() {
               </button>
             </div>
 
-            {/* Feed posts */}
             {feedLoading && feedPosts.length === 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '30vh', gap: 18 }}>
                 <div style={{ width: 48, height: 48, borderRadius: 16, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
@@ -336,11 +320,11 @@ export default function ExplorePage() {
               </div>
             ) : feedPosts.length === 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 0', gap: 12, textAlign: 'center' }}>
-                <div style={{ width: 72, height: 72, borderRadius: 22, background: 'linear-gradient(135deg, rgba(255,55,95,0.12), rgba(124,77,255,0.08))', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.06)' }}>
-                  <CameraIcon size={32} color="#6B6B6B" />
+                <div style={{ width: 72, height: 72, borderRadius: 22, background: 'linear-gradient(135deg, rgba(255,55,95,0.12), rgba(124,77,255,0.08))', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #EDEDF1' }}>
+                  <CameraIcon size={32} color="#8A8A8F" />
                 </div>
-                <span style={{ fontSize: 16, fontWeight: 700, color: 'white' }}>No posts yet</span>
-                <span style={{ fontSize: 13, color: '#6B6B6B', maxWidth: 280 }}>
+                <span style={{ fontSize: 16, fontWeight: 700, color: '#151515' }}>No posts yet</span>
+                <span style={{ fontSize: 13, color: '#8A8A8F', maxWidth: 280 }}>
                   Be the first to share something in {activeCategory.label}.
                 </span>
                 <button
@@ -375,8 +359,8 @@ export default function ExplorePage() {
                     onClick={loadMoreFeed}
                     disabled={feedLoading}
                     style={{
-                      width: '100%', padding: '14px 0', borderRadius: 14, border: '1px solid rgba(255,255,255,0.06)',
-                      background: 'rgba(255,255,255,0.03)', color: '#6B6B6B', fontSize: 13, fontWeight: 600,
+                      width: '100%', padding: '14px 0', borderRadius: 14, border: '1px solid #EDEDF1',
+                      background: '#F5F5F7', color: '#8A8A8F', fontSize: 13, fontWeight: 600,
                       cursor: feedLoading ? 'default' : 'pointer', opacity: feedLoading ? 0.5 : 1,
                     }}
                   >
@@ -387,18 +371,17 @@ export default function ExplorePage() {
             )}
           </div>
         ) : (
-          /* ===== Category grid ===== */
           <div className="animate-fade-up" style={{ maxWidth: 560, margin: '0 auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-              <h1 style={{ fontSize: isMobile ? 26 : 30, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 0.5 }}>
+              <h1 style={{ fontSize: isMobile ? 26 : 30, fontWeight: 800, color: '#151515', margin: 0, letterSpacing: 0.5 }}>
                 Explore<span style={{ color: '#FF375F' }}>.</span>
               </h1>
-              <div className="glass" style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 14px', borderRadius: 9999 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 14px', borderRadius: 9999, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
                 <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#34C759', boxShadow: '0 0 10px #34C759' }} />
-                <span style={{ color: '#ABABAB', fontSize: 13, fontWeight: 600 }}>{totalPeople} people</span>
+                <span style={{ color: '#8A8A8F', fontSize: 13, fontWeight: 600 }}>{totalPeople} people</span>
               </div>
             </div>
-            <p style={{ fontSize: 13, color: '#6B6B6B', margin: '0 0 16px' }}>
+            <p style={{ fontSize: 13, color: '#8A8A8F', margin: '0 0 16px' }}>
               Pick a category to see its feed.
             </p>
 
@@ -439,10 +422,10 @@ export default function ExplorePage() {
 
             {!loading && totalPeople === 0 && (
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, marginTop: 24, textAlign: 'center' }}>
-                <span style={{ fontSize: 14, color: '#6B6B6B', maxWidth: 300 }}>
+                <span style={{ fontSize: 14, color: '#8A8A8F', maxWidth: 300 }}>
                   No profiles are available right now. Check back soon.
                 </span>
-                <button onClick={load} className="glass" style={{ padding: '12px 26px', borderRadius: 9999, border: '1px solid rgba(255,255,255,0.12)', color: 'white', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+                <button onClick={load} style={{ padding: '12px 26px', borderRadius: 9999, border: '1px solid #EDEDF1', background: '#fff', boxShadow: '0 1px 4px rgba(20,20,25,0.03)', color: '#151515', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <RefreshIcon size={16} color="#FF6B8A" />
                     Refresh
@@ -452,8 +435,6 @@ export default function ExplorePage() {
             )}
           </div>
         )}
-
-        {isMobile && <TabBar />}
 
         {showSuperlikeUpsell && (
           <SuperlikeUpsellModal onClose={() => setShowSuperlikeUpsell(false)} />
@@ -483,12 +464,12 @@ export default function ExplorePage() {
 
         {showInterestRestriction && activeCategory && (
           <div onClick={() => setShowInterestRestriction(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(6px)', padding: 16 }}>
-            <div onClick={(e) => e.stopPropagation()} className="feed-sheet-up" style={{ width: '100%', maxWidth: 380, background: 'rgba(16,16,22,0.97)', borderRadius: 24, border: '1px solid rgba(255,255,255,0.08)', padding: '32px 24px', textAlign: 'center' }}>
+            <div onClick={(e) => e.stopPropagation()} className="feed-sheet-up" style={{ width: '100%', maxWidth: 380, background: '#fff', borderRadius: 24, border: '1px solid #EDEDF1', padding: '32px 24px', textAlign: 'center' }}>
               <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,55,95,0.15), rgba(124,77,255,0.12))', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', border: '1px solid rgba(255,55,95,0.2)' }}>
                 <span style={{ fontSize: 28 }}>🔒</span>
               </div>
-              <h3 style={{ fontSize: 18, fontWeight: 800, color: 'white', margin: '0 0 10px' }}>Category Locked</h3>
-              <p style={{ fontSize: 14, color: '#6B6B6B', margin: '0 0 24px', lineHeight: 1.5 }}>
+              <h3 style={{ fontSize: 18, fontWeight: 800, color: '#151515', margin: '0 0 10px' }}>Category Locked</h3>
+              <p style={{ fontSize: 14, color: '#8A8A8F', margin: '0 0 24px', lineHeight: 1.5 }}>
                 You can&apos;t post in <span style={{ color: '#FF375F', fontWeight: 700 }}>{activeCategory.label}</span> because you haven&apos;t added any of its interests to your profile yet.
               </p>
               <button
@@ -524,7 +505,7 @@ export default function ExplorePage() {
             onClose={() => { setMatchPopupUser(null); setMatchPopupId(undefined); }}
           />
         )}
-      </GradientBackground>
-    </DesktopLayout>
+      </div>
+    </AppShell>
   );
 }

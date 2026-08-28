@@ -2,8 +2,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronForwardIcon, BellIcon, ShieldIcon, HelpIcon } from '@/components/Icons';
-import GradientBackground from '@/components/GradientBackground';
-import TabBar from '@/components/TabBar';
+import AppShell from '@/components/AppShell';
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -12,23 +11,23 @@ export default function SettingsPage() {
     {
       title: 'Account',
       items: [
-        { icon: <BellIcon size={22} color="#ABABAB" />, label: 'Notifications', onClick: () => router.push('/notifications') },
-        { icon: <ShieldIcon size={22} color="#ABABAB" />, label: 'Privacy', onClick: () => router.push('/privacy') },
-        { icon: <HelpIcon size={22} color="#ABABAB" />, label: 'Help & Support', onClick: () => router.push('/faq') },
+        { icon: <BellIcon size={22} color="#8A8A8F" />, label: 'Notifications', onClick: () => router.push('/notifications') },
+        { icon: <ShieldIcon size={22} color="#8A8A8F" />, label: 'Privacy', onClick: () => router.push('/privacy') },
+        { icon: <HelpIcon size={22} color="#8A8A8F" />, label: 'Help & Support', onClick: () => router.push('/faq') },
       ],
     },
   ];
 
   return (
-    <GradientBackground style={{ minHeight: '100svh', padding: '24px 16px 85px' }}>
-      <div style={{ padding: '60px 24px 24px' }}>
+    <AppShell>
+      <div style={{ padding: '0 24px 24px' }}>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#FF375F', fontSize: 15, fontWeight: 600, cursor: 'pointer', padding: '8px 0', marginBottom: 8 }}>
           ← Back
         </button>
-        <h1 style={{ fontSize: 28, fontWeight: 800, color: 'white', margin: '0 0 24px' }}>Settings</h1>
+        <h1 style={{ fontSize: 28, fontWeight: 800, color: '#151515', margin: '0 0 24px' }}>Settings</h1>
         {sections.map((section, i) => (
           <div key={i} style={{ marginBottom: 28 }}>
-            <h2 style={{ fontSize: 13, fontWeight: 700, color: '#6B6B6B', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8, paddingLeft: 4 }}>{section.title}</h2>
+            <h2 style={{ fontSize: 13, fontWeight: 700, color: '#8A8A8F', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8, paddingLeft: 4 }}>{section.title}</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 2, borderRadius: 12, overflow: 'hidden' }}>
               {section.items.map((item, j) => (
                 <button
@@ -36,20 +35,19 @@ export default function SettingsPage() {
                   onClick={item.onClick}
                   style={{
                     display: 'flex', alignItems: 'center', padding: '14px 16px',
-                    backgroundColor: 'rgba(255,255,255,0.08)', border: 'none', cursor: 'pointer',
+                    backgroundColor: '#F6F6F9', border: 'none', cursor: 'pointer',
                     textAlign: 'left', width: '100%', gap: 12,
                   }}
                 >
                   {item.icon}
-                  <span style={{ flex: 1, fontSize: 15, color: 'white' }}>{item.label}</span>
-                  <ChevronForwardIcon size={18} color="#6B6B6B" />
+                  <span style={{ flex: 1, fontSize: 15, color: '#151515' }}>{item.label}</span>
+                  <ChevronForwardIcon size={18} color="#8A8A8F" />
                 </button>
               ))}
             </div>
           </div>
         ))}
       </div>
-      <TabBar />
-    </GradientBackground>
+    </AppShell>
   );
 }

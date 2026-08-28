@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ChevronBackIcon } from '@/components/Icons';
-import GradientBackground from '@/components/GradientBackground';
+import AppShell from '@/components/AppShell';
 import PostCard from '@/components/PostCard';
 import CommentSheet from '@/components/CommentSheet';
 import { useAuth } from '@/store/AuthContext';
@@ -67,17 +67,15 @@ export default function SinglePostPage() {
   }, [router]);
 
   return (
-    <GradientBackground>
-      <div style={{ minHeight: '100svh', paddingBottom: 80 }}>
-        {/* Back bar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', position: 'sticky', top: 0, zIndex: 20, background: 'rgba(10,10,18,0.85)', backdropFilter: 'blur(12px)' }}>
+    <AppShell>
+      <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0', position: 'sticky', top: 0, zIndex: 20, background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)' }}>
           <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex' }}>
-            <ChevronBackIcon size={24} color="white" />
+            <ChevronBackIcon size={24} color="#151515" />
           </button>
-          <span style={{ fontSize: 17, fontWeight: 700, color: 'white' }}>Post</span>
+          <span style={{ fontSize: 17, fontWeight: 700, color: '#151515' }}>Post</span>
         </div>
 
-        {/* Content */}
         <div style={{ maxWidth: 620, margin: '0 auto' }}>
           {loading ? (
             <div style={{ display: 'flex', justifyContent: 'center', padding: 60 }}>
@@ -86,8 +84,8 @@ export default function SinglePostPage() {
           ) : error || !post ? (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 20px', gap: 12 }}>
               <span style={{ fontSize: 40 }}>📭</span>
-              <span style={{ fontSize: 16, fontWeight: 700, color: 'white' }}>Post not found</span>
-              <span style={{ fontSize: 13, color: '#6B6B6B' }}>This post may have been deleted or is not available.</span>
+              <span style={{ fontSize: 16, fontWeight: 700, color: '#151515' }}>Post not found</span>
+              <span style={{ fontSize: 13, color: '#8A8A8F' }}>This post may have been deleted or is not available.</span>
               <button onClick={() => router.back()} style={{ marginTop: 8, padding: '10px 24px', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', borderRadius: 9999, color: 'white', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>
                 Go Back
               </button>
@@ -104,11 +102,10 @@ export default function SinglePostPage() {
           )}
         </div>
 
-        {/* Comment sheet */}
         {commentPost && user?.$id && (
           <CommentSheet post={commentPost} currentUserId={user.$id} onClose={() => setCommentPost(null)} onCommentAdded={handleCommentAdded} />
         )}
       </div>
-    </GradientBackground>
+    </AppShell>
   );
 }

@@ -3,9 +3,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CoinsIcon, DiamondIcon } from '@/components/Icons';
 import Button from '@/components/Button';
-import GradientBackground from '@/components/GradientBackground';
-import TabBar from '@/components/TabBar';
-import DesktopLayout from '@/components/DesktopLayout';
+import AppShell from '@/components/AppShell';
 import { walletService } from '@/lib/cloudflare/services';
 
 const PACKS = [
@@ -96,51 +94,50 @@ function WalletContent() {
     .reduce((sum, t) => sum + (t.meta?.amountKobo || 0) / 100, 0);
 
   return (
-    <DesktopLayout>
-      <GradientBackground style={{ minHeight: '100svh', padding: '24px 16px 110px' }}>
+    <AppShell>
       <div>
         <div className="animate-fade-up" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <div className="grad-ring" style={{ display: 'flex' }}>
-              <CoinsIcon size={22} color="white" />
+              <CoinsIcon size={22} color="#d20a19" />
             </div>
             <div>
-              <span style={{ fontSize: 24, fontWeight: 800, color: 'white' }}>Wallet</span>
+              <span style={{ fontSize: 24, fontWeight: 800, color: '#151515' }}>Wallet</span>
               <div style={{ fontSize: 12, color: '#FFD700', fontWeight: 700, marginTop: 1 }}>1 coin = N100</div>
             </div>
           </div>
-          <div className="glass" style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', borderRadius: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', borderRadius: 14, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
             <CoinsIcon size={18} color="#FFD700" />
-            <span style={{ fontSize: 18, fontWeight: 800, color: 'white' }}>{coins}</span>
-            <span style={{ fontSize: 12, color: '#6B6B6B', fontWeight: 600 }}>coins</span>
+            <span style={{ fontSize: 18, fontWeight: 800, color: '#151515' }}>{coins}</span>
+            <span style={{ fontSize: 12, color: '#8A8A8F', fontWeight: 600 }}>coins</span>
           </div>
         </div>
 
         {verifying && (
-          <div className="glass animate-fade-up" style={{ marginBottom: 18, padding: 16, borderRadius: 16, display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div className="animate-fade-up" style={{ marginBottom: 18, padding: 16, borderRadius: 16, display: 'flex', alignItems: 'center', gap: 12, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
             <div style={{ width: 22, height: 22, borderRadius: '50%', border: '3px solid rgba(255,215,0,0.2)', borderTopColor: '#FFD700', animation: 'spin 0.8s linear infinite' }} />
-            <span style={{ color: '#ABABAB', fontSize: 14 }}>Verifying your payment…</span>
+            <span style={{ color: '#8A8A8F', fontSize: 14 }}>Verifying your payment…</span>
           </div>
         )}
 
         {notice && (
-          <div className="glass animate-fade-up" style={{ marginBottom: 18, padding: 14, borderRadius: 14, background: 'linear-gradient(135deg, rgba(255,215,0,0.12), rgba(255,55,95,0.08))', border: '1px solid rgba(255,215,0,0.25)' }}>
-            <span style={{ color: '#E8E8E8', fontSize: 13.5 }}>{notice}</span>
+          <div className="animate-fade-up" style={{ marginBottom: 18, padding: 14, borderRadius: 14, background: 'linear-gradient(135deg, rgba(255,215,0,0.12), rgba(255,55,95,0.08))', border: '1px solid rgba(255,215,0,0.25)' }}>
+            <span style={{ color: '#151515', fontSize: 13.5 }}>{notice}</span>
           </div>
         )}
 
         <div className="animate-fade-up" style={{ marginBottom: 26 }}>
-          <div className="glass" style={{ padding: 24, borderRadius: 24, background: 'linear-gradient(135deg, rgba(255,215,0,0.12), rgba(255,55,95,0.06)), rgba(255,255,255,0.03)', border: '1px solid rgba(255,215,0,0.2)' }}>
+          <div style={{ padding: 24, borderRadius: 24, background: 'linear-gradient(135deg, rgba(255,215,0,0.12), rgba(255,55,95,0.06)), #fff', border: '1px solid rgba(255,215,0,0.2)', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
               <div style={{ width: 52, height: 52, borderRadius: 16, background: 'linear-gradient(135deg, #FFD700, #FF9500)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 26px rgba(255,215,0,0.35)' }}>
                 <CoinsIcon size={26} color="#1A1A1A" />
               </div>
               <div>
                 <span style={{ fontSize: 13, color: '#FFD700', fontWeight: 700, letterSpacing: 1 }}>COIN BALANCE</span>
-                <div style={{ fontSize: 34, fontWeight: 800, color: 'white', marginTop: 2 }}>
-                  {coins} <span style={{ fontSize: 16, color: '#ABABAB', fontWeight: 600 }}>coins</span>
+                <div style={{ fontSize: 34, fontWeight: 800, color: '#151515', marginTop: 2 }}>
+                  {coins} <span style={{ fontSize: 16, color: '#8A8A8F', fontWeight: 600 }}>coins</span>
                 </div>
-                <div style={{ fontSize: 12.5, color: '#ABABAB', marginTop: 2 }}>
+                <div style={{ fontSize: 12.5, color: '#8A8A8F', marginTop: 2 }}>
                   ≈ {formatNaira(coins * 100)}
                 </div>
               </div>
@@ -154,21 +151,21 @@ function WalletContent() {
 
         <div id="packs" className="animate-fade-up" style={{ marginBottom: 28 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-            <h2 style={{ fontSize: 20, fontWeight: 800, color: 'white', margin: 0 }}>Buy coins</h2>
-            <span style={{ fontSize: 12.5, color: '#6B6B6B' }}>Secure checkout via Paystack</span>
+            <h2 style={{ fontSize: 20, fontWeight: 800, color: '#151515', margin: 0 }}>Buy coins</h2>
+            <span style={{ fontSize: 12.5, color: '#8A8A8F' }}>Secure checkout via Paystack</span>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 12 }}>
             {PACKS.map((pack, i) => (
               <div
                 key={pack.coins}
-                className="glass lift"
-                style={{ padding: 18, borderRadius: 18, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, animation: `fadeUp 0.4s ease both`, animationDelay: `${i * 0.05}s` }}
+                className="lift"
+                style={{ padding: 18, borderRadius: 18, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, animation: `fadeUp 0.4s ease both`, animationDelay: `${i * 0.05}s`, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}
               >
                 <div style={{ width: 46, height: 46, borderRadius: 14, background: 'linear-gradient(135deg, #FFD700, #FF9500)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 18px rgba(255,215,0,0.3)' }}>
                   <CoinsIcon size={22} color="#1A1A1A" />
                 </div>
-                <div style={{ fontSize: 22, fontWeight: 800, color: 'white' }}>{pack.coins}</div>
-                <div style={{ fontSize: 12.5, color: '#6B6B6B' }}>{formatNaira(pack.naira)}</div>
+                <div style={{ fontSize: 22, fontWeight: 800, color: '#151515' }}>{pack.coins}</div>
+                <div style={{ fontSize: 12.5, color: '#8A8A8F' }}>{formatNaira(pack.naira)}</div>
                 <Button
                   title={initializing === String(pack.coins) ? 'Starting…' : 'Buy'}
                   variant="gradient"
@@ -184,42 +181,42 @@ function WalletContent() {
         </div>
 
         <div className="animate-fade-up">
-          <h2 style={{ fontSize: 20, fontWeight: 800, color: 'white', margin: '0 0 14px' }}>History</h2>
+          <h2 style={{ fontSize: 20, fontWeight: 800, color: '#151515', margin: '0 0 14px' }}>History</h2>
           {loading ? (
-            <div className="glass" style={{ padding: 30, borderRadius: 18, textAlign: 'center' }}>
-              <span style={{ color: '#6B6B6B', fontSize: 14 }}>Loading…</span>
+            <div style={{ padding: 30, borderRadius: 18, textAlign: 'center', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
+              <span style={{ color: '#8A8A8F', fontSize: 14 }}>Loading…</span>
             </div>
           ) : transactions.length === 0 ? (
-            <div className="glass" style={{ padding: 34, borderRadius: 18, textAlign: 'center' }}>
-              <CoinsIcon size={34} color="#3A3A3A" />
-              <div style={{ color: '#6B6B6B', fontSize: 14, marginTop: 10 }}>No transactions yet. Buy coins to get started.</div>
+            <div style={{ padding: 34, borderRadius: 18, textAlign: 'center', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
+              <CoinsIcon size={34} color="#C0C0C5" />
+              <div style={{ color: '#8A8A8F', fontSize: 14, marginTop: 10 }}>No transactions yet. Buy coins to get started.</div>
             </div>
           ) : (
-            <div className="glass" style={{ borderRadius: 18, overflow: 'hidden' }}>
+            <div style={{ borderRadius: 18, overflow: 'hidden', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
               {transactions.map((t, i) => {
                 const isCredit = t.type === 'purchase' || t.type === 'gift_in';
                 const label = TX_LABELS[t.type] || t.type;
                 return (
-                  <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', borderBottom: i < transactions.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
+                  <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', borderBottom: i < transactions.length - 1 ? '1px solid #F0F0F3' : 'none' }}>
                     <div style={{ width: 38, height: 38, borderRadius: 12, background: isCredit ? 'rgba(52,199,89,0.12)' : 'rgba(255,55,95,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       <CoinsIcon size={18} color={isCredit ? '#34C759' : '#FF6B8A'} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 13.5, fontWeight: 700, color: 'white' }}>{label}</div>
-                      <div style={{ fontSize: 11.5, color: '#6B6B6B', marginTop: 1 }}>{new Date(t.createdAt).toLocaleString()}</div>
+                      <div style={{ fontSize: 13.5, fontWeight: 700, color: '#151515' }}>{label}</div>
+                      <div style={{ fontSize: 11.5, color: '#8A8A8F', marginTop: 1 }}>{new Date(t.createdAt).toLocaleString()}</div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
                       <div style={{ fontSize: 15, fontWeight: 800, color: isCredit ? '#34C759' : '#FF6B8A' }}>
                         {isCredit ? '+' : '-'}{t.amount}
                       </div>
-                      <div style={{ fontSize: 11, color: '#6B6B6B' }}>balance {t.balanceAfter}</div>
+                      <div style={{ fontSize: 11, color: '#8A8A8F' }}>balance {t.balanceAfter}</div>
                     </div>
                   </div>
                 );
               })}
               {totalSpent > 0 && (
-                <div style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.02)' }}>
-                  <span style={{ fontSize: 12, color: '#6B6B6B' }}>
+                <div style={{ padding: '12px 16px', background: '#FAFAFA' }}>
+                  <span style={{ fontSize: 12, color: '#8A8A8F' }}>
                     Total spent: {formatNaira(totalSpent)}
                   </span>
                 </div>
@@ -229,15 +226,12 @@ function WalletContent() {
         </div>
 
         <div style={{ padding: '26px 10px 0', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-          <DiamondIcon size={15} color="#6B6B6B" />
-          <span style={{ fontSize: 12, color: '#6B6B6B' }}>
+          <DiamondIcon size={15} color="#8A8A8F" />
+          <span style={{ fontSize: 12, color: '#8A8A8F' }}>
             Use coins to gift your matches or subscribe to Premium.
           </span>
         </div>
-
-        <TabBar />
       </div>
-      </GradientBackground>
-    </DesktopLayout>
+    </AppShell>
   );
 }

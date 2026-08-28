@@ -2,9 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { HeartIcon, EyeIcon, DiamondIcon } from '@/components/Icons';
-import GradientBackground from '@/components/GradientBackground';
-import TabBar from '@/components/TabBar';
-import DesktopLayout from '@/components/DesktopLayout';
+import AppShell from '@/components/AppShell';
 import MatchPopup from '@/components/MatchPopup';
 import { useAuth } from '@/store/AuthContext';
 import { matchService, storageService, userService, likeService } from '@/lib/cloudflare/services';
@@ -70,32 +68,31 @@ export default function LikesPage() {
   };
 
   return (
-    <DesktopLayout>
-      <GradientBackground style={{ minHeight: '100svh', padding: '24px 16px 110px' }}>
+    <AppShell>
       <div>
         {/* Hero header */}
-        <div className="glass animate-fade-up" style={{ borderRadius: 24, padding: 24, marginBottom: 22, background: 'linear-gradient(135deg, rgba(255,55,95,0.12), rgba(124,77,255,0.1)), rgba(255,255,255,0.03)', border: '1px solid rgba(255,55,95,0.2)', display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div style={{ width: 52, height: 52, borderRadius: 16, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 28px rgba(255,55,95,0.45)', animation: 'glowPulse 3s ease infinite' }}>
+        <div className="animate-fade-up" style={{ borderRadius: 24, padding: 24, marginBottom: 22, background: '#fff', border: '1px solid #EFEFF3', boxShadow: '0 2px 10px rgba(20,20,25,0.04)', display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ width: 52, height: 52, borderRadius: 16, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 28px rgba(255,55,95,0.45)' }}>
             <EyeIcon size={26} color="white" />
           </div>
           <div style={{ flex: 1 }}>
-            <h1 style={{ fontSize: 22, fontWeight: 800, color: 'white', margin: 0 }}>Who Likes You</h1>
-            <p style={{ fontSize: 13, color: '#ABABAB', margin: '3px 0 0' }}>
+            <h1 style={{ fontSize: 22, fontWeight: 800, color: '#151515', margin: 0 }}>Who Likes You</h1>
+            <p style={{ fontSize: 13, color: '#8A8A8F', margin: '3px 0 0' }}>
               {likers.length > 0 ? `${likers.length} ${likers.length === 1 ? 'person' : 'people'} can't stop thinking about you` : 'Your likes will appear here'}
             </p>
           </div>
-          <div style={{ fontSize: 24, fontWeight: 800, color: 'white', padding: '6px 16px', borderRadius: 9999, background: 'rgba(255,255,255,0.08)' }}>
+          <div style={{ fontSize: 24, fontWeight: 800, color: '#d20a19', padding: '6px 16px', borderRadius: 9999, background: '#FFF0F4' }}>
             {likers.length}
           </div>
         </div>
 
         {/* Premium upsell */}
         {!isPremium && likers.length > 0 && (
-          <div className="animate-fade-up" style={{ marginBottom: 18, borderRadius: 18, padding: 16, background: 'linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,55,95,0.08))', border: '1px solid rgba(255,215,0,0.25)', display: 'flex', alignItems: 'center', gap: 12 }}>
-            <DiamondIcon size={22} color="#FFD700" />
+          <div className="animate-fade-up" style={{ marginBottom: 18, borderRadius: 18, padding: 16, background: '#FFFDF0', border: '1px solid #F5E8B8', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <DiamondIcon size={22} color="#E0A800" />
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, fontWeight: 700, color: 'white' }}>Unlock who liked you</div>
-              <div style={{ fontSize: 12, color: '#ABABAB' }}>See names &amp; clear photos instantly</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#151515' }}>Unlock who liked you</div>
+              <div style={{ fontSize: 12, color: '#8A8A8F' }}>See names &amp; clear photos instantly</div>
             </div>
             <Link href="/premium" style={{ padding: '9px 18px', borderRadius: 9999, background: 'linear-gradient(135deg, #FFD700, #FF9500)', color: '#1A1A1A', fontSize: 13, fontWeight: 800, textDecoration: 'none', boxShadow: '0 4px 18px rgba(255,215,0,0.35)' }}>
               Go Premium
@@ -106,15 +103,15 @@ export default function LikesPage() {
         {loading ? (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 70, gap: 16 }}>
             <div style={{ width: 40, height: 40, borderRadius: 14, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
-            <span style={{ color: '#ABABAB', fontSize: 15 }}>Loading...</span>
+            <span style={{ color: '#8A8A8F', fontSize: 15 }}>Loading...</span>
           </div>
         ) : likers.length === 0 ? (
-          <div className="glass animate-fade-up" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 70, gap: 14, borderRadius: 24 }}>
+          <div className="animate-fade-up" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 70, gap: 14, borderRadius: 24, background: '#fff', border: '1px solid #EFEFF3', boxShadow: '0 2px 10px rgba(20,20,25,0.04)' }}>
             <div style={{ width: 80, height: 80, borderRadius: 24, background: 'rgba(255,55,95,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <EyeIcon size={40} color="#FF6B8A" />
             </div>
-            <span style={{ fontSize: 20, fontWeight: 800, color: 'white' }}>No likes yet</span>
-            <span style={{ fontSize: 14, color: '#6B6B6B', textAlign: 'center', maxWidth: 280 }}>Keep swiping on Discover to get more likes!</span>
+            <span style={{ fontSize: 20, fontWeight: 800, color: '#151515' }}>No likes yet</span>
+            <span style={{ fontSize: 14, color: '#8A8A8F', textAlign: 'center', maxWidth: 280 }}>Keep swiping on Discover to get more likes!</span>
             <Link href="/discover" style={{ marginTop: 6, padding: '12px 28px', borderRadius: 9999, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white', fontSize: 14, fontWeight: 700, textDecoration: 'none', boxShadow: '0 6px 24px rgba(255,55,95,0.4)' }}>
               Start Swiping
             </Link>
@@ -122,8 +119,8 @@ export default function LikesPage() {
         ) : (
           <>
           <div className="animate-fade-up" style={{ marginBottom: 16 }}>
-            <div className="glass" style={{ position: 'relative', borderRadius: 16 }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B6B6B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
+            <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', background: '#fff', border: '1px solid #EDEDF1' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A8A8F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
                 <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
               </svg>
               <input
@@ -131,7 +128,7 @@ export default function LikesPage() {
                 value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
                 style={{
                   width: '100%', padding: '14px 16px 14px 44px', borderRadius: 16,
-                  border: 'none', background: 'transparent', color: 'white', fontSize: 15, outline: 'none', boxSizing: 'border-box',
+                  border: 'none', background: 'transparent', color: '#151515', fontSize: 15, outline: 'none', boxSizing: 'border-box',
                 }}
               />
             </div>
@@ -156,8 +153,8 @@ export default function LikesPage() {
                     <img src={photoUrl} alt={name}
                       style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: isPremium ? 'none' : 'blur(12px) scale(1.2)', transition: 'filter 0.4s' }} />
                   ) : (
-                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#16161C' }}>
-                      <span style={{ color: '#6B6B6B', fontSize: 40, fontWeight: 700 }}>{name[0]}</span>
+                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F3F3F6' }}>
+                      <span style={{ color: '#8A8A8F', fontSize: 40, fontWeight: 700 }}>{name[0]}</span>
                     </div>
                   )}
 
@@ -207,8 +204,6 @@ export default function LikesPage() {
           </>
         )}
       </div>
-      <TabBar />
-
       {matchPopupUser && (
         <MatchPopup
           matchedUser={matchPopupUser}
@@ -217,7 +212,6 @@ export default function LikesPage() {
           onClose={() => { setMatchPopupUser(null); setMatchPopupId(undefined); }}
         />
       )}
-      </GradientBackground>
-    </DesktopLayout>
+    </AppShell>
   );
 }

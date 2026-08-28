@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import GradientBackground from '@/components/GradientBackground';
+import AppShell from '@/components/AppShell';
 
 const sections = [
   {
@@ -34,23 +34,23 @@ export default function PrivacyPolicyPage() {
   const router = useRouter();
 
   return (
-    <GradientBackground style={{ minHeight: '100svh', padding: '24px 16px 48px' }}>
-      <div style={{ padding: '60px 24px 24px', maxWidth: 720, margin: '0 auto' }}>
+    <AppShell>
+      <div style={{ maxWidth: 720, margin: '0 auto' }}>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#FF375F', fontSize: 15, fontWeight: 600, cursor: 'pointer', padding: '8px 0', marginBottom: 8 }}>
           ← Back
         </button>
-        <h1 style={{ fontSize: 28, fontWeight: 800, color: 'white', margin: '0 0 8px' }}>Privacy Policy</h1>
-        <p style={{ fontSize: 13, color: '#6B6B6B', margin: '0 0 24px' }}>Last updated: August 2026</p>
+        <h1 style={{ fontSize: 28, fontWeight: 800, color: '#151515', margin: '0 0 8px' }}>Privacy Policy</h1>
+        <p style={{ fontSize: 13, color: '#8A8A8F', margin: '0 0 24px' }}>Last updated: August 2026</p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {sections.map((s, i) => (
-            <div key={i} style={{ padding: 18, borderRadius: 16, backgroundColor: 'rgba(255,255,255,0.08)' }}>
-              <h2 style={{ fontSize: 16, fontWeight: 800, color: 'white', margin: '0 0 6px' }}>{s.title}</h2>
-              <p style={{ fontSize: 14, lineHeight: 1.6, color: '#ABABAB', margin: 0 }}>{s.body}</p>
+            <div key={i} style={{ padding: 18, borderRadius: 16, backgroundColor: '#F6F6F9' }}>
+              <h2 style={{ fontSize: 16, fontWeight: 800, color: '#151515', margin: '0 0 6px' }}>{s.title}</h2>
+              <p style={{ fontSize: 14, lineHeight: 1.6, color: '#8A8A8F', margin: 0 }}>{s.body}</p>
             </div>
           ))}
         </div>
       </div>
-    </GradientBackground>
+    </AppShell>
   );
 }

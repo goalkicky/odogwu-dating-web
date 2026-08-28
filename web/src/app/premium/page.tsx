@@ -3,9 +3,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { DiamondIcon, CheckmarkCircleIcon, InfiniteIcon, StarIcon, FlashIcon, GlobeIcon, EyeIcon, ChatIcon, CoinsIcon } from '@/components/Icons';
 import Button from '@/components/Button';
-import GradientBackground from '@/components/GradientBackground';
-import TabBar from '@/components/TabBar';
-import DesktopLayout from '@/components/DesktopLayout';
+import AppShell from '@/components/AppShell';
 import { useAuth } from '@/store/AuthContext';
 import { authService, userService, walletService } from '@/lib/cloudflare/services';
 
@@ -62,29 +60,28 @@ export default function PremiumPage() {
   };
 
   return (
-    <DesktopLayout>
-      <GradientBackground style={{ minHeight: '100svh', padding: '24px 16px 110px' }}>
+    <AppShell>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
       <div className="animate-fade-up">
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '28px 24px 26px' }}>
           <div style={{ width: 74, height: 74, borderRadius: 22, background: 'linear-gradient(135deg, #FFD700, #FF375F)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, boxShadow: '0 0 44px rgba(255,55,95,0.5)', animation: 'floaty 4s ease-in-out infinite' }}>
             <DiamondIcon size={34} color="white" />
           </div>
-          <h1 style={{ fontSize: 36, fontWeight: 800, color: 'white', letterSpacing: 1, margin: 0 }}>
+          <h1 style={{ fontSize: 36, fontWeight: 800, color: '#151515', letterSpacing: 1, margin: 0 }}>
             Go <span className="neon-text">Premium</span>
           </h1>
-          <p style={{ fontSize: 15, color: '#ABABAB', marginTop: 8 }}>Unlock the full Odogwu Dating experience</p>
+          <p style={{ fontSize: 15, color: '#8A8A8F', marginTop: 8 }}>Unlock the full Odogwu Dating experience</p>
         </div>
 
         <div style={{ padding: '0 0 20px' }}>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
             {FEATURES.map((f, i) => (
-              <div key={i} className="glass lift" style={{ width: 168, padding: 16, borderRadius: 18, display: 'flex', flexDirection: 'column', gap: 10, animation: `fadeUp 0.5s ease both`, animationDelay: `${i * 0.05}s` }}>
+              <div key={i} className="lift" style={{ width: 168, padding: 16, borderRadius: 18, display: 'flex', flexDirection: 'column', gap: 10, animation: `fadeUp 0.5s ease both`, animationDelay: `${i * 0.05}s`, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
                 <div style={{ width: 42, height: 42, borderRadius: 13, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(255,55,95,0.35)' }}>
                   {f.icon}
                 </div>
-                <span style={{ fontSize: 14, fontWeight: 700, color: 'white' }}>{f.title}</span>
-                <span style={{ fontSize: 12, color: '#6B6B6B', lineHeight: '16px' }}>{f.desc}</span>
+                <span style={{ fontSize: 14, fontWeight: 700, color: '#151515' }}>{f.title}</span>
+                <span style={{ fontSize: 12, color: '#8A8A8F', lineHeight: '16px' }}>{f.desc}</span>
               </div>
             ))}
           </div>
@@ -92,7 +89,7 @@ export default function PremiumPage() {
       </div>
 
       <div className="animate-fade-up" style={{ padding: '10px 0 0' }}>
-        <h2 style={{ fontSize: 22, fontWeight: 800, color: 'white', marginBottom: 20, textAlign: 'center' }}>
+        <h2 style={{ fontSize: 22, fontWeight: 800, color: '#151515', marginBottom: 20, textAlign: 'center' }}>
           Choose your plan
         </h2>
         <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'stretch' }}>
@@ -109,19 +106,18 @@ export default function PremiumPage() {
                   borderRadius: 26,
                   border: popular
                     ? '2px solid transparent'
-                    : selected ? `2px solid ${plan.color[0]}` : '1px solid rgba(255,255,255,0.1)',
+                    : selected ? `2px solid ${plan.color[0]}` : '1px solid #EDEDF1',
                   background: selected
-                    ? `linear-gradient(135deg, ${plan.color[0]}22, ${plan.color[1]}11), rgba(20,20,26,0.9)`
-                    : 'rgba(20,20,26,0.7)',
+                    ? `linear-gradient(135deg, ${plan.color[0]}22, ${plan.color[1]}11), #fff`
+                    : '#fff',
                   overflow: 'hidden',
                   cursor: 'pointer',
                   textAlign: 'left',
                   padding: 0,
                   position: 'relative',
                   boxShadow: selected
-                    ? `0 16px 48px rgba(0,0,0,0.5), 0 0 36px ${plan.color[0]}33`
-                    : '0 12px 36px rgba(0,0,0,0.4)',
-                  backdropFilter: 'blur(16px)',
+                    ? `0 16px 48px rgba(0,0,0,0.1), 0 0 36px ${plan.color[0]}33`
+                    : '0 12px 36px rgba(0,0,0,0.06)',
                   animation: `fadeUp 0.5s ease both`,
                   animationDelay: `${0.1 + idx * 0.08}s`,
                 }}
@@ -136,25 +132,25 @@ export default function PremiumPage() {
                 {popular && (
                   <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, #FF375F, #FFD700, #7C4DFF)', zIndex: 2 }} />
                 )}
-                <div style={{ padding: '26px 24px 18px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <div style={{ padding: '26px 24px 18px', borderBottom: '1px solid #F0F0F3' }}>
                   <div style={{ fontSize: 12, fontWeight: 800, color: plan.color[0], textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>
                     {plan.name.replace('Odogwu ', '')}
                   </div>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                    <span style={{ fontSize: 32, fontWeight: 800, color: 'white', letterSpacing: 0.5 }}>{plan.price}</span>
-                    <span style={{ fontSize: 14, color: '#6B6B6B' }}>{plan.period}</span>
+                    <span style={{ fontSize: 32, fontWeight: 800, color: '#151515', letterSpacing: 0.5 }}>{plan.price}</span>
+                    <span style={{ fontSize: 14, color: '#8A8A8F' }}>{plan.period}</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 6 }}>
                     <CoinsIcon size={13} color="#FFD700" />
                     <span style={{ fontSize: 12.5, color: '#FFD700', fontWeight: 700 }}>{plan.coins} coins</span>
-                    <span style={{ fontSize: 12, color: '#6B6B6B' }}>or pay with coins</span>
+                    <span style={{ fontSize: 12, color: '#8A8A8F' }}>or pay with coins</span>
                   </div>
                 </div>
                 <div style={{ padding: '18px 24px 8px', display: 'flex', flexDirection: 'column', gap: 11 }}>
                   {plan.features.map((f, i) => (
                     <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
                       <CheckmarkCircleIcon size={17} color={plan.color[0]} />
-                      <span style={{ fontSize: 13.5, color: selected ? '#E0E0E0' : '#ABABAB', lineHeight: '18px' }}>{f}</span>
+                      <span style={{ fontSize: 13.5, color: selected ? '#151515' : '#8A8A8F', lineHeight: '18px' }}>{f}</span>
                     </div>
                   ))}
                 </div>
@@ -163,13 +159,13 @@ export default function PremiumPage() {
                     <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
                       <button
                         onClick={() => setPayMethod('card')}
-                        style={{ flex: 1, padding: '8px 0', borderRadius: 9999, cursor: 'pointer', fontSize: 13, fontWeight: 700, background: payMethod === 'card' ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.04)', border: payMethod === 'card' ? '1px solid rgba(255,255,255,0.25)' : '1px solid rgba(255,255,255,0.08)', color: 'white' }}
+                        style={{ flex: 1, padding: '8px 0', borderRadius: 9999, cursor: 'pointer', fontSize: 13, fontWeight: 700, background: payMethod === 'card' ? '#F0F0F3' : '#F8F8FA', border: payMethod === 'card' ? '1px solid #D0D0D5' : '1px solid #EDEDF1', color: '#151515' }}
                       >
                         Card
                       </button>
                       <button
                         onClick={() => { setPayMethod('coins'); walletService.getWallet().then(w => setMyCoins(w?.coins ?? 0)).catch(() => {}); }}
-                        style={{ flex: 1, padding: '8px 0', borderRadius: 9999, cursor: 'pointer', fontSize: 13, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, background: payMethod === 'coins' ? 'rgba(255,215,0,0.14)' : 'rgba(255,255,255,0.04)', border: payMethod === 'coins' ? '1px solid rgba(255,215,0,0.45)' : '1px solid rgba(255,255,255,0.08)', color: payMethod === 'coins' ? '#FFD700' : '#ABABAB' }}
+                        style={{ flex: 1, padding: '8px 0', borderRadius: 9999, cursor: 'pointer', fontSize: 13, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, background: payMethod === 'coins' ? 'rgba(255,215,0,0.14)' : '#F8F8FA', border: payMethod === 'coins' ? '1px solid rgba(255,215,0,0.45)' : '1px solid #EDEDF1', color: payMethod === 'coins' ? '#FFD700' : '#8A8A8F' }}
                       >
                         <CoinsIcon size={14} color="#FFD700" /> Coins
                       </button>
@@ -199,17 +195,14 @@ export default function PremiumPage() {
       </div>
 
       <div className="animate-fade-up" style={{ padding: 36, textAlign: 'center' }}>
-        <div className="glass" style={{ display: 'inline-block', padding: '14px 28px', borderRadius: 9999 }}>
-          <p style={{ color: '#6B6B6B', fontSize: 12, lineHeight: '18px', margin: 0 }}>
+        <div style={{ display: 'inline-block', padding: '14px 28px', borderRadius: 9999, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
+          <p style={{ color: '#8A8A8F', fontSize: 12, lineHeight: '18px', margin: 0 }}>
             Subscription automatically renews. Cancel anytime.{'\n'}
-            <span style={{ color: '#ABABAB' }}>Terms of Service • Privacy Policy</span>
+            <span style={{ color: '#8A8A8F' }}>Terms of Service • Privacy Policy</span>
           </p>
         </div>
       </div>
-
-      <TabBar />
       </div>
-    </GradientBackground>
-    </DesktopLayout>
+    </AppShell>
   );
 }

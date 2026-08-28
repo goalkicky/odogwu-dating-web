@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronBackIcon, CallIcon, VideoIcon, CheckmarkCircleIcon, CloseCircleIcon, EllipsisIcon } from '@/components/Icons';
-import GradientBackground from '@/components/GradientBackground';
-import TabBar from '@/components/TabBar';
+import AppShell from '@/components/AppShell';
 import { useAuth } from '@/store/AuthContext';
 import { callLogService, userService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
@@ -64,7 +63,7 @@ export default function CallLogsPage() {
 
   const getStatusIcon = (status: string, isOutgoing: boolean) => {
     if (status === 'answered') return <CheckmarkCircleIcon size={18} color="#34C759" />;
-    if (status === 'missed') return isOutgoing ? <EllipsisIcon size={18} color="#ABABAB" /> : <CloseCircleIcon size={18} color="#FF3B30" />;
+    if (status === 'missed') return isOutgoing ? <EllipsisIcon size={18} color="#8A8A8F" /> : <CloseCircleIcon size={18} color="#FF3B30" />;
     return <CloseCircleIcon size={18} color="#FF3B30" />;
   };
 
@@ -75,56 +74,54 @@ export default function CallLogsPage() {
   };
 
   return (
-    <GradientBackground style={{ minHeight: '100svh', padding: '24px 16px 85px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', padding: '56px 16px 12px', gap: 12 }}>
+    <AppShell>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-          <ChevronBackIcon size={28} color="white" />
+          <ChevronBackIcon size={28} color="#151515" />
         </button>
-        <span style={{ fontSize: 20, fontWeight: 700, color: 'white' }}>Call Log</span>
+        <span style={{ fontSize: 20, fontWeight: 700, color: '#151515' }}>Call Log</span>
       </div>
 
       {loading ? (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 60 }}>
-          <span style={{ color: '#ABABAB', fontSize: 16 }}>Loading...</span>
+          <span style={{ color: '#8A8A8F', fontSize: 16 }}>Loading...</span>
         </div>
       ) : logs.length === 0 ? (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 60, gap: 16 }}>
-          <CallIcon size={48} color="#6B6B6B" />
-          <span style={{ color: '#6B6B6B', fontSize: 16 }}>No call history yet</span>
+          <CallIcon size={48} color="#C0C0C5" />
+          <span style={{ color: '#8A8A8F', fontSize: 16 }}>No call history yet</span>
         </div>
       ) : (
-        <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {logs.map((log) => {
             const isOutgoing = log.from === user?.$id;
             return (
-              <div key={log.$id} style={{ display: 'flex', alignItems: 'center', padding: '14px 8px', gap: 14, borderBottom: '1px solid #2A2A2A' }}>
+              <div key={log.$id} style={{ display: 'flex', alignItems: 'center', padding: '14px 8px', gap: 14, borderBottom: '1px solid #F0F0F3' }}>
                 <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <span style={{ color: 'white', fontWeight: 700, fontSize: 18 }}>{log.otherName?.[0] || '?'}</span>
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ fontSize: 16, fontWeight: 600, color: 'white' }}>{log.otherName}</span>
+                    <span style={{ fontSize: 16, fontWeight: 600, color: '#151515' }}>{log.otherName}</span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                      {!isOutgoing && log.callType === 'video' ? <VideoIcon size={14} color="#ABABAB" /> : <CallIcon size={14} color="#ABABAB" />}
+                      {!isOutgoing && log.callType === 'video' ? <VideoIcon size={14} color="#8A8A8F" /> : <CallIcon size={14} color="#8A8A8F" />}
                     </span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
                     {getStatusIcon(log.status, isOutgoing)}
-                    <span style={{ fontSize: 13, color: log.status === 'missed' && !isOutgoing ? '#FF3B30' : '#ABABAB' }}>
+                    <span style={{ fontSize: 13, color: log.status === 'missed' && !isOutgoing ? '#FF3B30' : '#8A8A8F' }}>
                       {isOutgoing ? 'Outgoing' : 'Incoming'}
                       {getStatusText(log.status, isOutgoing) && ` · ${getStatusText(log.status, isOutgoing)}`}
                       {log.duration > 0 && ` · ${formatDuration(log.duration)}`}
                     </span>
                   </div>
                 </div>
-                <span style={{ fontSize: 12, color: '#6B6B6B', flexShrink: 0 }}>{formatDate(log.createdAt)}</span>
+                <span style={{ fontSize: 12, color: '#8A8A8F', flexShrink: 0 }}>{formatDate(log.createdAt)}</span>
               </div>
             );
           })}
         </div>
       )}
-
-      <TabBar />
-    </GradientBackground>
+    </AppShell>
   );
 }

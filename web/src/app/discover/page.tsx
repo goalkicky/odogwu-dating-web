@@ -4,9 +4,7 @@ import { useRouter } from 'next/navigation';
 import { HeartIcon, CloseIcon, StarIcon, RefreshIcon, FilterIcon, ChatIcon } from '@/components/Icons';
 import AnimatedCard from '@/components/AnimatedCard';
 import ActionButton from '@/components/ActionButton';
-import GradientBackground from '@/components/GradientBackground';
-import TabBar from '@/components/TabBar';
-import DesktopLayout from '@/components/DesktopLayout';
+import AppShell from '@/components/AppShell';
 import ProfileModal from '@/components/ProfileModal';
 import SuperlikeUpsellModal from '@/components/SuperlikeUpsellModal';
 import LikeUpsellModal from '@/components/LikeUpsellModal';
@@ -181,76 +179,63 @@ export default function DiscoverPage() {
 
   if (loading) {
     return (
-      <DesktopLayout>
-        <GradientBackground style={{ minHeight: '100vh' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 18 }}>
-            <div style={{ width: 56, height: 56, borderRadius: 18, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
-            <span className="neon-text" style={{ fontSize: 16, fontWeight: 700 }}>Loading profiles...</span>
-          </div>
-          {isMobile && <TabBar />}
-        </GradientBackground>
-      </DesktopLayout>
+      <AppShell>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 18 }}>
+          <div style={{ width: 56, height: 56, borderRadius: 18, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
+          <span className="neon-text" style={{ fontSize: 16, fontWeight: 700 }}>Loading profiles...</span>
+        </div>
+      </AppShell>
     );
   }
 
   if (users.length === 0) {
     return (
-      <DesktopLayout>
-        <GradientBackground style={{ minHeight: '100vh' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 16 }}>
-            <div className="glass" style={{ width: 96, height: 96, borderRadius: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 40px rgba(255,55,95,0.15)' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FF6B8A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 1 0 0-8c-2 0-4 1.33-6 4Z"/>
-              </svg>
-            </div>
-            <span className="animate-pop" style={{ fontSize: 22, fontWeight: 800, color: 'white' }}>No more profiles</span>
-            <span style={{ fontSize: 14, color: '#6B6B6B', textAlign: 'center', maxWidth: 260 }}>
-              You&apos;ve seen everyone nearby. Check back later for fresh faces.
-            </span>
-            <button onClick={loadUsers} style={{ padding: '12px 28px', borderRadius: 9999, border: 'none', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 6px 24px rgba(255,55,95,0.4)' }}>Refresh</button>
+      <AppShell>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 16 }}>
+          <div style={{ width: 96, height: 96, borderRadius: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FF6B8A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 1 0 0-8c-2 0-4 1.33-6 4Z"/>
+            </svg>
           </div>
-          {isMobile && <TabBar />}
-        </GradientBackground>
-      </DesktopLayout>
+          <span className="animate-pop" style={{ fontSize: 22, fontWeight: 800, color: '#151515' }}>No more profiles</span>
+          <span style={{ fontSize: 14, color: '#8A8A8F', textAlign: 'center', maxWidth: 260 }}>
+            You&apos;ve seen everyone nearby. Check back later for fresh faces.
+          </span>
+          <button onClick={loadUsers} style={{ padding: '12px 28px', borderRadius: 9999, border: 'none', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 6px 24px rgba(255,55,95,0.4)' }}>Refresh</button>
+        </div>
+      </AppShell>
     );
   }
 
   const current = users[0];
 
   return (
-    <DesktopLayout>
-      <GradientBackground
-        style={{
-          height: isMobile ? '100dvh' : 'auto',
-          minHeight: '100dvh',
-          overflow: 'hidden',
-          padding: isMobile ? '12px 14px 108px' : '24px 16px',
-        }}
-      >
+    <AppShell>
+      <div style={{ display: 'flex', flexDirection: 'column', height: isMobile ? '100dvh' : 'auto', minHeight: '100dvh', overflow: 'hidden', padding: isMobile ? '12px 14px 108px' : '24px 16px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 0 }}>
           <div className="animate-fade-up" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: isMobile ? 12 : 20 }}>
             <div>
-              <h1 style={{ fontSize: isMobile ? 26 : 30, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 0.5 }}>
+              <h1 style={{ fontSize: isMobile ? 26 : 30, fontWeight: 800, color: '#151515', margin: 0, letterSpacing: 0.5 }}>
                 Discover<span style={{ color: '#FF375F' }}>.</span>
               </h1>
-              <p style={{ fontSize: 13, color: '#6B6B6B', margin: '2px 0 0' }}>
+              <p style={{ fontSize: 13, color: '#8A8A8F', margin: '2px 0 0' }}>
                 {users.length > 0 ? `${users.length} profiles ready for you` : ''}
               </p>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div className="glass" style={{ padding: '6px 12px', borderRadius: 9999, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ padding: '6px 12px', borderRadius: 9999, display: 'flex', alignItems: 'center', gap: 8, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
                 <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#34C759', boxShadow: '0 0 10px #34C759' }} />
-                <span style={{ color: '#ABABAB', fontSize: 13, fontWeight: 600 }}>Live</span>
+                <span style={{ color: '#8A8A8F', fontSize: 13, fontWeight: 600 }}>Live</span>
               </div>
               <button
                 onClick={() => setShowFilters(true)}
-                className="glass lift"
+                className="lift"
                 aria-label="Filter preferences"
                 style={{
                   display: 'flex', alignItems: 'center', gap: 8,
                   padding: '8px 14px', borderRadius: 9999, position: 'relative',
-                  color: '#D0D0D0', fontSize: 13, fontWeight: 600,
-                  cursor: 'pointer',
+                  color: '#65656A', fontSize: 13, fontWeight: 600,
+                  cursor: 'pointer', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)',
                 }}
               >
                 <FilterIcon size={16} color="#FF6B8A" />
@@ -260,7 +245,7 @@ export default function DiscoverPage() {
                     position: 'absolute', top: -6, right: -6, minWidth: 20, height: 20, padding: '0 5px', boxSizing: 'border-box',
                     borderRadius: 9999, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white',
                     fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    boxShadow: '0 2px 10px rgba(255,55,95,0.6)', border: '2px solid #0D0D0D',
+                    boxShadow: '0 2px 10px rgba(255,55,95,0.6)', border: '2px solid #fff',
                   }}>
                     {activeFilterCount}
                   </span>
@@ -294,8 +279,8 @@ export default function DiscoverPage() {
 
             {lastAction && lastAction !== 'match' && (
               <div className="animate-pop" style={{ position: 'absolute', bottom: 92, left: 0, right: 0, display: 'flex', justifyContent: 'center', animation: 'fadeUp 0.3s ease' }}>
-                <div className="glass-strong" style={{ padding: '8px 20px', borderRadius: 9999, whiteSpace: 'nowrap' }}>
-                  <span style={{ color: 'white', fontWeight: 700, fontSize: 14 }}>
+                <div style={{ padding: '8px 20px', borderRadius: 9999, whiteSpace: 'nowrap', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
+                  <span style={{ color: '#151515', fontWeight: 700, fontSize: 14 }}>
                     {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : `Super Liked ${current.fullName.split(' ')[0] || 'them'}! 💙`}
                   </span>
                 </div>
@@ -321,7 +306,7 @@ export default function DiscoverPage() {
                   borderRadius: 9999, background: superlikes.remaining > 0 ? 'linear-gradient(135deg, #4FC3F7, #0288D1)' : '#FF3B30',
                   color: 'white', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
                   boxShadow: superlikes.remaining > 0 ? '0 2px 10px rgba(79,195,247,0.6)' : '0 2px 10px rgba(255,59,48,0.6)',
-                  border: '2px solid #0D0D0D',
+                  border: '2px solid #fff',
                 }}>
                   {superlikes.remaining}
                 </span>
@@ -336,7 +321,7 @@ export default function DiscoverPage() {
                     borderRadius: 9999, background: (likes.remaining ?? 0) > 0 ? 'linear-gradient(135deg, #FF375F, #FF6B81)' : '#FF3B30',
                     color: 'white', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
                     boxShadow: (likes.remaining ?? 0) > 0 ? '0 2px 10px rgba(255,55,95,0.6)' : '0 2px 10px rgba(255,59,48,0.6)',
-                    border: '2px solid #0D0D0D',
+                    border: '2px solid #fff',
                   }}>
                     {Math.max(0, likes.remaining ?? 0)}
                   </span>
@@ -345,7 +330,6 @@ export default function DiscoverPage() {
             </div>
           </div>
         </div>
-        {isMobile && <TabBar />}
 
         {showFilters && (
           <FilterPanel
@@ -381,8 +365,8 @@ export default function DiscoverPage() {
             onClose={() => { setMatchPopupUser(null); setMatchPopupId(undefined); nextUser(); }}
           />
         )}
-      </GradientBackground>
-    </DesktopLayout>
+      </div>
+    </AppShell>
   );
 }
 
@@ -408,7 +392,7 @@ function inchesToFtIn(inches: number): string {
 
 function FilterLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: 1.2, textTransform: 'uppercase', color: '#8A8A8A', margin: '0 0 12px' }}>
+    <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: 1.2, textTransform: 'uppercase', color: '#8A8A8F', margin: '0 0 12px' }}>
       {children}
     </p>
   );
@@ -431,21 +415,21 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
   const weightFillMax = 1 - ((draft.maxWeight || WEIGHT_MAX) - WEIGHT_MIN) / (WEIGHT_MAX - WEIGHT_MIN);
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'stretch', background: '#16161C' }} onClick={onClose}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'stretch', background: '#F7F7FA' }} onClick={onClose}>
       <div
         onClick={e => e.stopPropagation()}
         style={{
           width: '100%', maxWidth: 520, margin: '0 auto',
-          background: '#16161C',
+          background: '#fff',
           padding: '24px 24px 40px',
           height: '100vh',
           overflowY: 'auto',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, position: 'sticky', top: 0, background: '#16161C', paddingTop: 8, paddingBottom: 8, zIndex: 1 }}>
-          <h3 style={{ fontSize: 20, fontWeight: 800, color: 'white', margin: 0 }}>Discovery Preferences</h3>
-          <button onClick={onClose} aria-label="Close" style={{ width: 36, height: 36, borderRadius: 9999, background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <CloseIcon size={16} color="white" />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, position: 'sticky', top: 0, background: '#fff', paddingTop: 8, paddingBottom: 8, zIndex: 1 }}>
+          <h3 style={{ fontSize: 20, fontWeight: 800, color: '#151515', margin: 0 }}>Discovery Preferences</h3>
+          <button onClick={onClose} aria-label="Close" style={{ width: 36, height: 36, borderRadius: 9999, background: '#F3F3F6', border: '1px solid #EDEDF1', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <CloseIcon size={16} color="#151515" />
           </button>
         </div>
 
@@ -458,9 +442,9 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
                 onClick={() => set({ gender: opt.value })}
                 style={{
                   flex: 1, padding: '13px 0', borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: 'pointer',
-                  color: draft.gender === opt.value ? 'white' : '#ABABAB',
-                  background: draft.gender === opt.value ? 'linear-gradient(135deg, #FF375F, #FF6B8A)' : 'rgba(255,255,255,0.06)',
-                  border: draft.gender === opt.value ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                  color: draft.gender === opt.value ? 'white' : '#8A8A8F',
+                  background: draft.gender === opt.value ? 'linear-gradient(135deg, #FF375F, #FF6B8A)' : '#F3F3F6',
+                  border: draft.gender === opt.value ? 'none' : '1px solid #EDEDF1',
                   boxShadow: draft.gender === opt.value ? '0 4px 18px rgba(255,55,95,0.35)' : 'none',
                 }}
               >
@@ -473,7 +457,7 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
         <div style={{ marginBottom: 30 }}>
           <FilterLabel>Age Range</FilterLabel>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ color: 'white', fontSize: 22, fontWeight: 800 }}>
+            <span style={{ color: '#151515', fontSize: 22, fontWeight: 800 }}>
               {draft.minAge} – {draft.maxAge}
             </span>
           </div>
@@ -512,15 +496,15 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
             />
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
-            <span style={{ fontSize: 11, color: '#6B6B6B' }}>{AGE_MIN}</span>
-            <span style={{ fontSize: 11, color: '#6B6B6B' }}>{AGE_MAX}</span>
+            <span style={{ fontSize: 11, color: '#8A8A8F' }}>{AGE_MIN}</span>
+            <span style={{ fontSize: 11, color: '#8A8A8F' }}>{AGE_MAX}</span>
           </div>
         </div>
 
         <div style={{ marginBottom: 30 }}>
           <FilterLabel>Distance</FilterLabel>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ color: 'white', fontSize: 22, fontWeight: 800 }}>
+            <span style={{ color: '#151515', fontSize: 22, fontWeight: 800 }}>
               {draft.maxDistance === 0 ? 'Anywhere' : `${draft.maxDistance} km`}
             </span>
             {draft.maxDistance > 0 && (
@@ -540,15 +524,15 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
             style={{ ['--fill' as any]: `${distFill}%` }}
           />
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
-            <span style={{ fontSize: 11, color: '#6B6B6B' }}>Anywhere</span>
-            <span style={{ fontSize: 11, color: '#6B6B6B' }}>100 km</span>
+            <span style={{ fontSize: 11, color: '#8A8A8F' }}>Anywhere</span>
+            <span style={{ fontSize: 11, color: '#8A8A8F' }}>100 km</span>
           </div>
         </div>
 
         <div style={{ marginBottom: 30 }}>
           <FilterLabel>Height Range</FilterLabel>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ color: 'white', fontSize: 22, fontWeight: 800 }}>
+            <span style={{ color: '#151515', fontSize: 22, fontWeight: 800 }}>
               {inchesToFtIn(draft.minHeight || HEIGHT_MIN)} – {inchesToFtIn(draft.maxHeight || HEIGHT_MAX)}
             </span>
             {((draft.minHeight > 0) || (draft.maxHeight > 0)) && (
@@ -592,15 +576,15 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
             />
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
-            <span style={{ fontSize: 11, color: '#6B6B6B' }}>{inchesToFtIn(HEIGHT_MIN)}</span>
-            <span style={{ fontSize: 11, color: '#6B6B6B' }}>{inchesToFtIn(HEIGHT_MAX)}</span>
+            <span style={{ fontSize: 11, color: '#8A8A8F' }}>{inchesToFtIn(HEIGHT_MIN)}</span>
+            <span style={{ fontSize: 11, color: '#8A8A8F' }}>{inchesToFtIn(HEIGHT_MAX)}</span>
           </div>
         </div>
 
         <div style={{ marginBottom: 30 }}>
           <FilterLabel>Weight Range (kg)</FilterLabel>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ color: 'white', fontSize: 22, fontWeight: 800 }}>
+            <span style={{ color: '#151515', fontSize: 22, fontWeight: 800 }}>
               {draft.minWeight || WEIGHT_MIN} – {draft.maxWeight || WEIGHT_MAX} kg
             </span>
             {((draft.minWeight > 0) || (draft.maxWeight > 0)) && (
@@ -644,8 +628,8 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
             />
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
-            <span style={{ fontSize: 11, color: '#6B6B6B' }}>{WEIGHT_MIN} kg</span>
-            <span style={{ fontSize: 11, color: '#6B6B6B' }}>{WEIGHT_MAX} kg</span>
+            <span style={{ fontSize: 11, color: '#8A8A8F' }}>{WEIGHT_MIN} kg</span>
+            <span style={{ fontSize: 11, color: '#8A8A8F' }}>{WEIGHT_MAX} kg</span>
           </div>
         </div>
 
@@ -657,8 +641,8 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
             onChange={e => set({ city: e.target.value })}
             placeholder="Search by city"
             style={{
-              width: '100%', padding: '13px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)',
-              background: 'rgba(255,255,255,0.06)', color: 'white', fontSize: 15, outline: 'none',
+              width: '100%', padding: '13px 16px', borderRadius: 12, border: '1px solid #EDEDF1',
+              background: '#F3F3F6', color: '#151515', fontSize: 15, outline: 'none',
               boxSizing: 'border-box',
             }}
           />
@@ -675,9 +659,9 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
                   onClick={() => set({ relationshipGoals: selected ? '' : opt })}
                   style={{
                     padding: '10px 18px', borderRadius: 9999, fontSize: 13.5, fontWeight: 600, cursor: 'pointer',
-                    color: selected ? 'white' : '#ABABAB',
-                    background: selected ? 'linear-gradient(135deg, #FF375F, #FF6B8A)' : 'rgba(255,255,255,0.06)',
-                    border: selected ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                    color: selected ? 'white' : '#8A8A8F',
+                    background: selected ? 'linear-gradient(135deg, #FF375F, #FF6B8A)' : '#F3F3F6',
+                    border: selected ? 'none' : '1px solid #EDEDF1',
                     transition: 'all 0.15s ease',
                   }}
                 >
@@ -688,11 +672,11 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
           </div>
         </div>
 
-        <div style={{ position: 'sticky', bottom: 0, background: '#16161C', paddingTop: 16, paddingBottom: 24, marginTop: 12 }}>
+        <div style={{ position: 'sticky', bottom: 0, background: '#fff', paddingTop: 16, paddingBottom: 24, marginTop: 12 }}>
           <div style={{ display: 'flex', gap: 10 }}>
             <button
               onClick={() => setDraft(defaults)}
-              style={{ padding: '16px 24px', borderRadius: 14, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#D0D0D0', fontSize: 15, fontWeight: 700, cursor: 'pointer', minWidth: 90 }}
+              style={{ padding: '16px 24px', borderRadius: 14, background: '#F3F3F6', border: '1px solid #EDEDF1', color: '#65656A', fontSize: 15, fontWeight: 700, cursor: 'pointer', minWidth: 90 }}
             >
               Reset
             </button>
