@@ -27,6 +27,30 @@ function StoryAvatar({ photo, name }: { photo: string; name: string }) {
   return <div style={{ position: 'absolute', inset: 0, ...GRAD_PLACEHOLDER, background: 'linear-gradient(135deg, #d9164b, #7c4dff)' }}>{name[0]}</div>;
 }
 
+const MOCK_STORIES: { id: string; name: string; ago: string; caption: string; bg: string }[] = [
+  { id: 'mock-1', name: 'Nnenna', ago: '2h ago', caption: 'Sunset vibes 😍', bg: 'linear-gradient(150deg, #ff9a9e, #fad0c4 60%, #fbc2eb)' },
+  { id: 'mock-2', name: 'Amaka', ago: '3h ago', caption: 'Beach day 🏖️', bg: 'linear-gradient(150deg, #a1c4fd, #c2e9fb 70%, #96e6a1)' },
+  { id: 'mock-3', name: 'Kelechi', ago: '4h ago', caption: 'New week ⚡', bg: 'linear-gradient(150deg, #f6d365, #fda085 70%, #ff8177)' },
+  { id: 'mock-4', name: 'Chioma', ago: '5h ago', caption: 'Good morning 💗', bg: 'linear-gradient(150deg, #d299c2, #fef9d7 60%, #f7cde4)' },
+  { id: 'mock-5', name: 'Tobi', ago: '6h ago', caption: 'Grateful 🙏', bg: 'linear-gradient(150deg, #84fab0, #8fd3f4 70%, #a6c1ee)' },
+  { id: 'mock-6', name: 'Adaeze', ago: '7h ago', caption: 'City lights ✨', bg: 'linear-gradient(150deg, #667eea, #764ba2 70%, #f093fb)' },
+];
+
+function MockStoryCard({ s }: { s: (typeof MOCK_STORIES)[number] }) {
+  return (
+    <button
+      className="tmpl-story-card"
+      onClick={() => undefined}
+      aria-label={`${s.name} story`}
+    >
+      <span aria-hidden="true" style={{ position: 'absolute', inset: 0, display: 'block', background: s.bg }} />
+      <div className="tmpl-shade"></div>
+      <div className="tmpl-story-user"><span>◉</span><div>{s.name}<small>{s.ago}</small></div></div>
+      <p>{s.caption}</p>
+    </button>
+  );
+}
+
 export default function HomePage() {
   const { profile, isAuthenticated, loading } = useAuth();
   const isMobile = useMobile();
@@ -350,21 +374,18 @@ export default function HomePage() {
           <section className="tmpl-section">
             <h2>Top Stories <span>🔥</span></h2>
             <div className="tmpl-stories">
-              {stories.length === 0 && (
-                <div style={{ color: '#999', fontSize: 14, padding: '20px 4px', flex: '1 0 100%' }}>
-                  No stories yet. Follow the feed to see what&apos;s new!
-                </div>
-              )}
-              {stories.map((s: any) => (
-                <Link key={s.id} href={`/post/${s.id}`} className="tmpl-story-card">
-                  {s.photo
-                    ? <img src={s.photo} alt="" />
-                    : <StoryAvatar photo="" name={s.name[0]} />}
-                  <div className="tmpl-shade"></div>
-                  <div className="tmpl-story-user"><span>◉</span><div>{s.name}<small>{s.ago}</small></div></div>
-                  <p>{s.caption}</p>
-                </Link>
-              ))}
+              {stories.length === 0
+                ? MOCK_STORIES.map(s => <MockStoryCard key={s.id} s={s} />)
+                : stories.map((s: any) => (
+                    <Link key={s.id} href={`/post/${s.id}`} className="tmpl-story-card">
+                      {s.photo
+                        ? <img src={s.photo} alt="" />
+                        : <StoryAvatar photo="" name={s.name[0]} />}
+                      <div className="tmpl-shade"></div>
+                      <div className="tmpl-story-user"><span>◉</span><div>{s.name}<small>{s.ago}</small></div></div>
+                      <p>{s.caption}</p>
+                    </Link>
+                  ))}
             </div>
           </section>
 
