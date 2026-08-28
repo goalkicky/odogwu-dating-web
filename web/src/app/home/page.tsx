@@ -83,8 +83,6 @@ export default function HomePage() {
     }).catch(() => {});
   }, [loading, isAuthenticated, profile, uid]);
 
-  const profileComplete = !!(profile?.age && profile?.gender && profile?.photos?.length);
-
   const go = (href: string) => router.push(href);
 
   return (
@@ -370,16 +368,14 @@ export default function HomePage() {
             </div>
           </section>
 
-          {!profileComplete && (
-            <section className="tmpl-love-banner">
-              <div className="tmpl-hearts">💗</div>
-              <div>
-                <h3>Love is better together <span>💕</span></h3>
-                <p>Complete your profile, increase your<br />visibility and find your perfect match.</p>
-              </div>
-              <button className="tmpl-outline-btn" onClick={() => go('/edit-profile')}>Complete Profile</button>
-            </section>
-          )}
+          <section className="tmpl-love-banner">
+            <div className="tmpl-hearts">💗</div>
+            <div>
+              <h3>Love is better together <span>💕</span></h3>
+              <p>Complete your profile, increase your<br />visibility and find your perfect match.</p>
+            </div>
+            <button className="tmpl-outline-btn" onClick={() => go('/edit-profile')}>Complete Profile</button>
+          </section>
 
           <section className="tmpl-section">
             <h2>Recently Active</h2>
