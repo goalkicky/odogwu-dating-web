@@ -111,22 +111,22 @@ export default function HomePage() {
         .tmpl-messages-top { position: relative; width: 50px; height: 50px; margin-top: 31px; background: none; border: 0; cursor: pointer; color: #171717; padding: 0; }
         .tmpl-messages-top svg { width: 40px; height: 40px; }
         .tmpl-messages-top em { position: absolute; right: 0; top: -4px; background: #d71945; color: #fff; width: 24px; height: 24px; border-radius: 50%; font-style: normal; font-size: 13px; display: grid; place-items: center; font-weight: 700; }
-        .tmpl-premium { height: 105px; background: #fff1f5; border-radius: 18px; display: flex; align-items: center; padding: 17px 22px; margin-bottom: 18px; }
+        .tmpl-premium { min-height: 105px; height: auto; background: #fff1f5; border-radius: 18px; display: flex; align-items: center; padding: 17px 22px; margin-bottom: 18px; }
         .tmpl-crown { width: 65px; height: 65px; background: #df164c; color: #ffd12a; border-radius: 50%; display: grid; place-items: center; font-size: 42px; margin-right: 18px; flex-shrink: 0; }
         .tmpl-premium-copy { flex: 1; }
         .tmpl-premium h3 { font-size: 21px; margin: 0 0 5px; color: #151515; }
         .tmpl-premium p { font-size: 16px; line-height: 23px; color: #555; margin: 0; }
         .tmpl-pink-btn { background: #d9164b; color: #fff; border-radius: 28px; padding: 15px 27px; font-size: 16px; border: 0; cursor: pointer; font-weight: 600; }
-        .tmpl-quick-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin: 3px 10px 26px; }
-        .tmpl-quick { position: relative; display: flex; flex-direction: column; align-items: center; color: #171717; background: none; border: 0; cursor: pointer; padding: 0; }
-        .tmpl-round-photo { width: 111px; height: 111px; border: 4px solid #d30e42; border-radius: 50%; padding: 5px; display: block; position: relative; background: #fff; box-sizing: border-box; overflow: hidden; }
+        .tmpl-quick-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin: 3px 0 26px; }
+        .tmpl-quick { position: relative; display: flex; flex-direction: column; align-items: center; color: #171717; background: none; border: 0; cursor: pointer; padding: 0; min-width: 0; }
+        .tmpl-round-photo { width: 111px; max-width: 100%; height: auto; aspect-ratio: 1/1; border: 4px solid #d30e42; border-radius: 50%; padding: 5px; display: block; position: relative; background: #fff; box-sizing: border-box; overflow: hidden; }
         .tmpl-round-photo.dashed { border-style: dashed; border-color: #ec6690; }
-        .tmpl-round-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+        .tmpl-round-photo > img, .tmpl-round-photo > div { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
         .tmpl-round-photo.location { display: grid; place-items: center; border-color: #c7a523; }
         .tmpl-round-photo.location svg { width: 57px; height: 57px; fill: #df164b; }
-        .tmpl-quick label { font-size: 16px; font-weight: 500; margin-top: 10px; color: #171717; }
-        .tmpl-badge, .tmpl-plus { position: absolute; right: 8px; top: 79px; background: #d9184b; color: #fff; border-radius: 50%; width: 32px; height: 32px; display: grid; place-items: center; font-size: 15px; font-weight: 700; z-index: 2; }
-        .tmpl-plus { font-size: 25px; width: 31px; height: 31px; font-weight: 400; }
+        .tmpl-quick label { font-size: 16px; font-weight: 500; margin-top: 10px; color: #171717; text-align: center; line-height: 1.2; }
+        .tmpl-badge, .tmpl-plus { position: absolute; right: 0; top: 78%; background: #d9184b; color: #fff; border-radius: 50%; width: 34px; height: 34px; display: grid; place-items: center; font-size: 15px; font-weight: 700; z-index: 3; transform: translate(15%, -15%); }
+        .tmpl-plus { font-size: 25px; font-weight: 400; }
         .tmpl-section h2 { font-size: 20px; margin: 0 0 10px; font-weight: 700; color: #151515; }
         .tmpl-section h2 span { font-size: 19px; }
         .tmpl-stories { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 4px; }
@@ -174,22 +174,72 @@ export default function HomePage() {
         .tmpl-sb-extra button { background: none; border: 0; cursor: pointer; color: #65656a; font-size: 15px; text-align: left; padding: 0; }
 
         @media (max-width: 560px) {
-          .tmpl-app { padding-left: 22px; padding-right: 22px; }
-          .tmpl-brand-name { font-size: 34px; }
-          .tmpl-brand-mark { width: 55px; height: 55px; }
-          .tmpl-brand-sub { font-size: 10px; }
-          .tmpl-quick-nav { gap: 12px; margin-left: 0; margin-right: 0; }
-          .tmpl-round-photo { width: 82px; height: 82px; }
-          .tmpl-badge, .tmpl-plus { top: 58px; width: 27px; height: 27px; }
-          .tmpl-plus { font-size: 22px; }
-          .tmpl-quick label { font-size: 13px; }
+          .tmpl-app { padding-left: 18px; padding-right: 18px; }
+          .tmpl-brand-name { font-size: 30px; line-height: 28px; }
+          .tmpl-brand-mark { width: 48px; height: 48px; border-width: 5px; }
+          .tmpl-brand-mark:before { width: 13px; height: 13px; border-width: 4px; left: -4px; top: -4px; }
+          .tmpl-brand-mark i { width: 12px; height: 12px; border-width: 3px; right: 6px; top: 3px; }
+          .tmpl-brand-sub { font-size: 8px; letter-spacing: 3px; margin-top: 6px; }
+          .tmpl-topbar { height: 92px; }
+          .tmpl-menu { margin-top: 24px; }
+          .tmpl-menu span { width: 28px; }
+          .tmpl-messages-top { width: 44px; height: 44px; margin-top: 24px; }
+          .tmpl-messages-top svg { width: 34px; height: 34px; }
+          .tmpl-messages-top em { width: 21px; height: 21px; font-size: 12px; right: -2px; }
+          .tmpl-quick-nav { gap: 10px; margin-left: 0; margin-right: 0; }
+          .tmpl-round-photo { width: 100%; border-width: 3px; padding: 3px; }
+          .tmpl-round-photo.location svg { width: 50%; height: 50%; }
+          .tmpl-badge, .tmpl-plus { width: 29px; height: 29px; font-size: 13px; }
+          .tmpl-plus { font-size: 21px; }
+          .tmpl-quick label { font-size: 12px; margin-top: 7px; }
+          .tmpl-section h2 { font-size: 18px; }
+          .tmpl-section h2 span { font-size: 17px; }
           .tmpl-stories { gap: 6px; }
-          .tmpl-story-card { height: 290px; flex-basis: 132px; }
-          .tmpl-love-banner { padding: 14px; gap: 10px; }
-          .tmpl-love-banner p { font-size: 12px; }
-          .tmpl-outline-btn { padding: 12px 13px; font-size: 12px; }
-          .tmpl-active-grid { gap: 10px; }
-          .tmpl-profile-card { height: 195px; }
+          .tmpl-story-card { height: 240px; flex-basis: 128px; flex-grow: 1; }
+          .tmpl-story-user { font-size: 12px; left: 8px; top: 10px; }
+          .tmpl-story-user span { width: 24px; height: 24px; }
+          .tmpl-story-card p { font-size: 12px; left: 10px; }
+          .tmpl-love-banner { height: auto; min-height: 118px; padding: 14px; gap: 10px; flex-wrap: wrap; }
+          .tmpl-love-banner .tmpl-hearts { font-size: 42px; }
+          .tmpl-love-banner h3 { font-size: 16px; }
+          .tmpl-love-banner p { font-size: 12px; line-height: 18px; }
+          .tmpl-outline-btn { margin-left: auto; padding: 13px 16px; font-size: 12px; }
+          .tmpl-active-grid { grid-template-columns: repeat(3, 1fr); gap: 9px; }
+          .tmpl-profile-card { height: 168px; }
+          .tmpl-profile-card div { font-size: 13px; left: 9px; bottom: 9px; }
+          .tmpl-profile-card i { width: 10px; height: 10px; right: 9px; top: 9px; }
+          .tmpl-bottom-nav { height: 88px; padding: 6px 10px 10px; }
+          .tmpl-nav-item { height: 62px; font-size: 12px; gap: 4px; }
+          .tmpl-nav-item svg { width: 26px; height: 26px; }
+          .tmpl-nav-center { width: 66px; height: 66px; font-size: 48px; }
+          .tmpl-nav-icon-wrap b { width: 18px; height: 18px; font-size: 10px; }
+        }
+
+        @media (max-width: 400px) {
+          .tmpl-app { padding-left: 14px; padding-right: 14px; padding-bottom: 96px; }
+          .tmpl-brand-name { font-size: 26px; }
+          .tmpl-brand-mark { width: 42px; height: 42px; }
+          .tmpl-brand-sub { font-size: 7px; letter-spacing: 2px; }
+          .tmpl-topbar { height: 80px; }
+          .tmpl-menu { margin-top: 20px; }
+          .tmpl-menu span { width: 24px; }
+          .tmpl-messages-top { width: 38px; height: 38px; margin-top: 20px; }
+          .tmpl-messages-top svg { width: 30px; height: 30px; }
+          .tmpl-premium { padding: 12px 12px; }
+          .tmpl-crown { width: 48px; height: 48px; font-size: 30px; margin-right: 12px; }
+          .tmpl-premium h3 { font-size: 17px; }
+          .tmpl-premium p { font-size: 13px; line-height: 18px; }
+          .tmpl-pink-btn { padding: 12px 18px; font-size: 14px; }
+          .tmpl-quick-nav { gap: 6px; }
+          .tmpl-badge, .tmpl-plus { width: 27px; height: 27px; font-size: 12px; }
+          .tmpl-plus { font-size: 19px; }
+          .tmpl-quick label { font-size: 11px; }
+          .tmpl-story-card { flex-basis: 108px; height: 200px; }
+          .tmpl-love-banner { flex-direction: column; align-items: flex-start; gap: 8px; }
+          .tmpl-love-banner .tmpl-hearts { font-size: 34px; }
+          .tmpl-outline-btn { margin-left: 0; width: 100%; text-align: center; }
+          .tmpl-active-grid { grid-template-columns: repeat(2, 1fr); }
+          .tmpl-profile-card { height: 196px; }
         }
       `}</style>
       <style jsx>{`
@@ -270,28 +320,32 @@ export default function HomePage() {
 
           <section className="tmpl-quick-nav">
             <button className="tmpl-quick" onClick={() => go('/edit-profile')}>
-              <span className="tmpl-round-photo dashed" style={{ overflow: 'hidden' }}>
+              <span className="tmpl-round-photo dashed">
                 <StoryAvatar photo={profilePhoto} name={initial} />
+                <b className="tmpl-plus">+</b>
               </span>
-              <b className="tmpl-plus">+</b><label>Your Story</label>
+              <label>Your Story</label>
             </button>
             <button className="tmpl-quick" onClick={() => go('/likes')}>
-              <span className="tmpl-round-photo" style={{ overflow: 'hidden' }}>
+              <span className="tmpl-round-photo">
                 <StoryAvatar photo={profilePhoto} name={initial} />
+                <b className="tmpl-badge">{likesCount}</b>
               </span>
-              <b className="tmpl-badge">{likesCount}</b><label>Likes You</label>
+              <label>Likes You</label>
             </button>
             <button className="tmpl-quick" onClick={() => go('/matches')}>
-              <span className="tmpl-round-photo" style={{ overflow: 'hidden' }}>
+              <span className="tmpl-round-photo">
                 <StoryAvatar photo={profilePhoto} name={initial} />
+                <b className="tmpl-badge">{matchesCount}</b>
               </span>
-              <b className="tmpl-badge">{matchesCount}</b><label>Matches</label>
+              <label>Matches</label>
             </button>
             <button className="tmpl-quick" onClick={() => go('/discover')}>
               <span className="tmpl-round-photo location">
                 <svg viewBox="0 0 64 64"><path d="M32 7c-12 0-21 9-21 21 0 15 21 29 21 29s21-14 21-29C53 16 44 7 32 7Zm0 29a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"/></svg>
+                <b className="tmpl-badge">{nearby.length}</b>
               </span>
-              <b className="tmpl-badge">{nearby.length}</b><label>Nearby</label>
+              <label>Nearby</label>
             </button>
           </section>
 
