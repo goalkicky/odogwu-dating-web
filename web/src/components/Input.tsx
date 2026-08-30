@@ -23,7 +23,7 @@ export default function Input({ label, error, prefix, ...props }: InputProps) {
           display: 'flex',
           alignItems: 'center',
           backgroundColor: '#1A1A1A',
-          border: `1.5px solid ${error ? '#FF3B30' : '#2A2A2A'}`,
+          border: `1.5px solid ${error ? '#FF4530' : '#2A2A2A'}`,
           borderRadius: '12px',
           padding: '0 16px',
         }}
@@ -43,7 +43,7 @@ export default function Input({ label, error, prefix, ...props }: InputProps) {
           {...props}
         />
       </div>
-      {error && <span style={{ color: '#FF3B30', fontSize: '12px', marginLeft: '4px' }}>{error}</span>}
+      {error && <span style={{ color: '#FF4530', fontSize: '12px', marginLeft: '4px' }}>{error}</span>}
     </div>
   );
 }

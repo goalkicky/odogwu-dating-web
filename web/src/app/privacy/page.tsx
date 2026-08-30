@@ -15,7 +15,7 @@ function Switch({ checked, onToggle, disabled }: { checked: boolean; onToggle: (
       style={{
         width: 48, height: 28, borderRadius: 9999, border: 'none', padding: 0, position: 'relative',
         cursor: disabled ? 'default' : 'pointer', flexShrink: 0, transition: 'background 0.2s',
-        background: checked ? 'linear-gradient(135deg, #FF375F, #7C4DFF)' : '#D0D0D5',
+        background: checked ? 'linear-gradient(135deg, #FF2E5F, #B44CFF)' : '#D0D0D5',
         opacity: disabled ? 0.6 : 1,
       }}
     >
@@ -68,8 +68,8 @@ export default function PrivacyPage() {
   return (
     <AppShell>
       <div>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#FF375F', fontSize: 15, fontWeight: 600, cursor: 'pointer', padding: '8px 0', marginBottom: 8 }}>
-          ← Back
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#FF2E5F', fontSize: 15, fontWeight: 600, cursor: 'pointer', padding: '8px 0', marginBottom: 8 }}>
+          â† Back
         </button>
         <h1 style={{ fontSize: 28, fontWeight: 800, color: '#151515', margin: '0 0 24px' }}>Privacy</h1>
 
@@ -78,7 +78,7 @@ export default function PrivacyPage() {
             Who can see you
           </div>
           <div style={rowStyle}>
-            <EyeIcon size={20} color="#FF6B8A" />
+            <EyeIcon size={20} color="#FF7BA0" />
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 15, color: '#151515' }}>Profile Visibility</div>
               <div style={{ fontSize: 12, color: '#8A8A8F', marginTop: 2 }}>
@@ -92,7 +92,7 @@ export default function PrivacyPage() {
               style={{
                 flex: 1, padding: '10px 0', borderRadius: 10, border: 'none', cursor: 'pointer',
                 fontSize: 13, fontWeight: 700, transition: 'all 0.2s',
-                background: visibility === 'everyone' ? 'linear-gradient(135deg, #FF375F, #7C4DFF)' : '#EDEDF1',
+                background: visibility === 'everyone' ? 'linear-gradient(135deg, #FF2E5F, #B44CFF)' : '#EDEDF1',
                 color: visibility === 'everyone' ? 'white' : '#8A8A8F',
               }}
             >
@@ -103,7 +103,7 @@ export default function PrivacyPage() {
               style={{
                 flex: 1, padding: '10px 0', borderRadius: 10, border: 'none', cursor: 'pointer',
                 fontSize: 13, fontWeight: 700, transition: 'all 0.2s',
-                background: visibility === 'matches_only' ? 'linear-gradient(135deg, #FF375F, #7C4DFF)' : '#EDEDF1',
+                background: visibility === 'matches_only' ? 'linear-gradient(135deg, #FF2E5F, #B44CFF)' : '#EDEDF1',
                 color: visibility === 'matches_only' ? 'white' : '#8A8A8F',
               }}
             >
@@ -117,7 +117,7 @@ export default function PrivacyPage() {
             Your activity
           </div>
           <div style={rowStyle}>
-            <GlobeIcon size={20} color="#FF6B8A" />
+            <GlobeIcon size={20} color="#FF7BA0" />
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 15, color: '#151515' }}>Online Status</div>
               <div style={{ fontSize: 12, color: '#8A8A8F', marginTop: 2 }}>
@@ -127,7 +127,7 @@ export default function PrivacyPage() {
             <Switch checked={showOnline} disabled={saving} onToggle={() => { setShowOnline(!showOnline); persist({ showOnlineStatus: !showOnline }); }} />
           </div>
           <div style={rowStyle}>
-            <InfoIcon size={20} color="#FF6B8A" />
+            <InfoIcon size={20} color="#FF7BA0" />
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 15, color: '#151515' }}>Data & Analytics</div>
               <div style={{ fontSize: 12, color: '#8A8A8F', marginTop: 2 }}>
@@ -140,7 +140,7 @@ export default function PrivacyPage() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2, borderRadius: 12, overflow: 'hidden' }}>
           <button onClick={() => router.push('/privacy/blocked')} style={{ ...rowStyle, cursor: 'pointer' }}>
-            <PersonIcon size={20} color="#FF6B8A" />
+            <PersonIcon size={20} color="#FF7BA0" />
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 15, color: '#151515' }}>Blocked Users</div>
               <div style={{ fontSize: 12, color: '#8A8A8F', marginTop: 2 }}>
@@ -150,7 +150,7 @@ export default function PrivacyPage() {
             <ChevronForwardIcon size={18} color="#8A8A8F" />
           </button>
           <button onClick={() => router.push('/privacy/policy')} style={{ ...rowStyle, cursor: 'pointer' }}>
-            <EyeIcon size={20} color="#FF6B8A" />
+            <EyeIcon size={20} color="#FF7BA0" />
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 15, color: '#151515' }}>Privacy Policy</div>
               <div style={{ fontSize: 12, color: '#8A8A8F', marginTop: 2 }}>Read how we handle your data</div>

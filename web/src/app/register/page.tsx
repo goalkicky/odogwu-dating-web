@@ -70,7 +70,7 @@ export default function RegisterPage() {
 
         <p style={{ color: '#6B6B6B', fontSize: 13, textAlign: 'center' }}>
           Already have an account?{' '}
-          <button onClick={() => router.push('/login')} style={{ background: 'none', border: 'none', color: '#FF6B8A', fontWeight: 600, cursor: 'pointer', fontSize: 13, padding: 0 }}>
+          <button onClick={() => router.push('/login')} style={{ background: 'none', border: 'none', color: '#FF7BA0', fontWeight: 600, cursor: 'pointer', fontSize: 13, padding: 0 }}>
             Sign in
           </button>
         </p>

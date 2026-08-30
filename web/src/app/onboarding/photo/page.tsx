@@ -102,7 +102,7 @@ export default function PhotoPage() {
       <OnboardingProgress currentStep={5} totalSteps={6} />
 
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
-        <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, #FF3B30, #FF375F)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, #FF4530, #FF2E5F)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <CameraIcon size={36} color="white" />
         </div>
       </div>
@@ -134,7 +134,7 @@ export default function PhotoPage() {
                 height: 130,
                 borderRadius: 12,
                 backgroundColor: '#1A1A1A',
-                border: `1.5px dashed ${hasPhoto ? '#FF375F' : '#2A2A2A'}`,
+                border: `1.5px dashed ${hasPhoto ? '#FF2E5F' : '#2A2A2A'}`,
                 overflow: 'hidden',
                 cursor: 'pointer',
                 position: 'relative',
@@ -159,9 +159,9 @@ export default function PhotoPage() {
         })}
       </div>
 
-      <p style={{ color: '#6B6B6B', fontSize: 12, textAlign: 'center', marginTop: 12 }}>Tap to add • Tap again to remove</p>
+      <p style={{ color: '#6B6B6B', fontSize: 12, textAlign: 'center', marginTop: 12 }}>Tap to add Ã¢â‚¬Â¢ Tap again to remove</p>
 
-      {error && <p style={{ color: '#FF3B30', fontSize: 13, textAlign: 'center', marginTop: 12, padding: '8px 12px', background: 'rgba(255,59,48,0.1)', borderRadius: 8 }}>{error}</p>}
+      {error && <p style={{ color: '#FF4530', fontSize: 13, textAlign: 'center', marginTop: 12, padding: '8px 12px', background: 'rgba(255,69,48,0.1)', borderRadius: 8 }}>{error}</p>}
 
       <div style={{ flex: 1 }} />
       <Button

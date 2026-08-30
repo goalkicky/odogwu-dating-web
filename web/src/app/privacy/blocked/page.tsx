@@ -34,8 +34,8 @@ export default function BlockedUsersPage() {
   return (
     <AppShell>
       <div>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#FF375F', fontSize: 15, fontWeight: 600, cursor: 'pointer', padding: '8px 0', marginBottom: 8 }}>
-          ← Back
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#FF2E5F', fontSize: 15, fontWeight: 600, cursor: 'pointer', padding: '8px 0', marginBottom: 8 }}>
+          Ã¢â€ Â Back
         </button>
         <h1 style={{ fontSize: 28, fontWeight: 800, color: '#151515', margin: '0 0 8px' }}>Blocked Users</h1>
         <p style={{ fontSize: 14, color: '#8A8A8F', margin: '0 0 24px' }}>
@@ -44,7 +44,7 @@ export default function BlockedUsersPage() {
 
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', padding: 60 }}>
-            <div style={{ width: 36, height: 36, borderRadius: 12, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
+            <div style={{ width: 36, height: 36, borderRadius: 12, border: '3px solid rgba(255,46,95,0.2)', borderTopColor: '#FF2E5F', animation: 'spin 0.8s linear infinite' }} />
           </div>
         ) : blocks.length === 0 ? (
           <div style={{ backgroundColor: '#F6F6F9', padding: 24, borderRadius: 18, textAlign: 'center' }}>
@@ -61,7 +61,7 @@ export default function BlockedUsersPage() {
                   {b._photoUrl ? (
                     <img src={b._photoUrl} alt={name} style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }} />
                   ) : (
-                    <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #7C4DFF)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 800, fontSize: 20 }}>
+                    <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 800, fontSize: 20 }}>
                       {initial}
                     </div>
                   )}
@@ -76,12 +76,12 @@ export default function BlockedUsersPage() {
                     disabled={unblocking === b.blockedId}
                     style={{
                       padding: '8px 16px', borderRadius: 9999, border: 'none', cursor: 'pointer',
-                      fontSize: 13, fontWeight: 700, color: '#FF375F',
-                      background: 'rgba(255,55,95,0.12)', flexShrink: 0,
+                      fontSize: 13, fontWeight: 700, color: '#FF2E5F',
+                      background: 'rgba(255,46,95,0.12)', flexShrink: 0,
                       opacity: unblocking === b.blockedId ? 0.6 : 1,
                     }}
                   >
-                    {unblocking === b.blockedId ? 'Unblocking…' : 'Unblock'}
+                    {unblocking === b.blockedId ? 'UnblockingÃ¢â‚¬Â¦' : 'Unblock'}
                   </button>
                 </div>
               );

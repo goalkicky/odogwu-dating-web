@@ -43,7 +43,7 @@ export default function ForgotPasswordPage() {
 
           <div style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.14)', borderRadius: 14, padding: '16px 20px', marginBottom: 20, textAlign: 'center' }}>
             <p style={{ fontSize: 11, color: '#6B6B6B', margin: '0 0 8px', textTransform: 'uppercase', letterSpacing: 1.2, fontWeight: 700 }}>Your reset code</p>
-            <p style={{ fontSize: 28, fontWeight: 800, color: '#FF6B8A', margin: 0, fontFamily: 'monospace', letterSpacing: 4 }}>{shortCode}</p>
+            <p style={{ fontSize: 28, fontWeight: 800, color: '#FF7BA0', margin: 0, fontFamily: 'monospace', letterSpacing: 4 }}>{shortCode}</p>
           </div>
 
           <p style={{ fontSize: 12, color: '#6B6B6B', margin: '0 0 20px', lineHeight: '18px' }}>
@@ -60,7 +60,7 @@ export default function ForgotPasswordPage() {
 
           <button
             onClick={() => router.push('/login')}
-            style={{ background: 'none', border: 'none', color: '#FF6B8A', fontSize: 14, fontWeight: 600, cursor: 'pointer', padding: '4px 8px', alignSelf: 'center' }}
+            style={{ background: 'none', border: 'none', color: '#FF7BA0', fontSize: 14, fontWeight: 600, cursor: 'pointer', padding: '4px 8px', alignSelf: 'center' }}
           >
             Back to sign in
           </button>
@@ -99,7 +99,7 @@ export default function ForgotPasswordPage() {
 
         <button
           onClick={() => router.push('/login')}
-          style={{ background: 'none', border: 'none', color: '#FF6B8A', fontSize: 14, fontWeight: 600, cursor: 'pointer', padding: '4px 8px', alignSelf: 'center' }}
+          style={{ background: 'none', border: 'none', color: '#FF7BA0', fontSize: 14, fontWeight: 600, cursor: 'pointer', padding: '4px 8px', alignSelf: 'center' }}
         >
           Back to sign in
         </button>

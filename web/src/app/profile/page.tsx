@@ -69,13 +69,13 @@ export default function ProfilePage() {
   ];
 
   const menuItems = [
-    { icon: <PencilIcon size={20} color="#FF6B8A" />, label: 'Edit Profile', onClick: () => router.push('/edit-profile') },
-    { icon: <EyeIcon size={20} color="#4FC3F7" />, label: 'Who Likes You', onClick: () => router.push('/likes') },
-    { icon: <CallIcon size={20} color="#34C759" />, label: 'Call Log', onClick: () => router.push('/call-logs') },
-    { icon: <CoinsIcon size={20} color="#FFD700" />, label: 'Wallet', onClick: () => router.push('/wallet') },
+    { icon: <PencilIcon size={20} color="#FF7BA0" />, label: 'Edit Profile', onClick: () => router.push('/edit-profile') },
+    { icon: <EyeIcon size={20} color="#22E5FF" />, label: 'Who Likes You', onClick: () => router.push('/likes') },
+    { icon: <CallIcon size={20} color="#3DFC77" />, label: 'Call Log', onClick: () => router.push('/call-logs') },
+    { icon: <CoinsIcon size={20} color="#FFE600" />, label: 'Wallet', onClick: () => router.push('/wallet') },
     { icon: <SettingsIcon size={20} color="#65656A" />, label: 'Settings', onClick: () => router.push('/settings') },
-    { icon: <BellIcon size={20} color="#FFD700" />, label: 'Notifications', onClick: () => router.push('/notifications') },
-    { icon: <ShieldIcon size={20} color="#7C4DFF" />, label: 'Privacy', onClick: () => router.push('/privacy') },
+    { icon: <BellIcon size={20} color="#FFE600" />, label: 'Notifications', onClick: () => router.push('/notifications') },
+    { icon: <ShieldIcon size={20} color="#B44CFF" />, label: 'Privacy', onClick: () => router.push('/privacy') },
     { icon: <HelpIcon size={20} color="#8A8A8F" />, label: 'Help & Support', onClick: () => router.push('/faq') },
   ];
 
@@ -96,7 +96,7 @@ export default function ProfilePage() {
               onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0'; }}
             />
           ) : (
-            <button onClick={() => router.push('/edit-profile')} style={{ width: '100%', height: 420, background: 'linear-gradient(160deg, rgba(255,55,95,0.14), rgba(108,99,255,0.1)), rgba(255,255,255,0.02)', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, color: '#8A8A8F' }}>
+            <button onClick={() => router.push('/edit-profile')} style={{ width: '100%', height: 420, background: 'linear-gradient(160deg, rgba(255,46,95,0.14), rgba(108,99,255,0.1)), rgba(255,255,255,0.02)', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, color: '#8A8A8F' }}>
                 <div style={{ width: 64, height: 64, borderRadius: 9999, background: 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <PlusIcon size={30} color="#151515" />
                 </div>
@@ -114,7 +114,7 @@ export default function ProfilePage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                 <h1 style={{ fontSize: 34, fontWeight: 800, color: 'white', margin: 0, letterSpacing: 0.3, textShadow: '0 2px 14px rgba(0,0,0,0.5)' }}>{displayName}</h1>
                 {profile?.verified && (
-                  <div style={{ width: 24, height: 24, borderRadius: 9999, background: 'linear-gradient(135deg, #4FC3F7, #0288D1)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 12px rgba(79,195,247,0.7)', flexShrink: 0 }}>
+                  <div style={{ width: 24, height: 24, borderRadius: 9999, background: 'linear-gradient(135deg, #22E5FF, #0AA6CE)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 12px rgba(79,195,247,0.7)', flexShrink: 0 }}>
                     <CheckmarkIcon size={14} color="white" />
                   </div>
                 )}
@@ -192,8 +192,8 @@ export default function ProfilePage() {
                       {items.map((it) => (
                         <span key={it} style={{
                           padding: '8px 16px', borderRadius: 9999, fontSize: 13, fontWeight: 600, color: 'white',
-                          background: 'linear-gradient(135deg, rgba(255,55,95,0.18), rgba(108,99,255,0.16))',
-                          border: '1px solid rgba(255,55,95,0.35)',
+                          background: 'linear-gradient(135deg, rgba(255,46,95,0.18), rgba(108,99,255,0.16))',
+                          border: '1px solid rgba(255,46,95,0.35)',
                         }}>
                           {it}
                         </span>
@@ -244,10 +244,10 @@ export default function ProfilePage() {
         <div className="animate-fade-up" style={{ borderRadius: 20, padding: '16px 20px', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ fontSize: 14, fontWeight: 800, color: '#151515', letterSpacing: 1.4, textTransform: 'uppercase' }}>Profile completion</span>
-            <span style={{ fontSize: 13, fontWeight: 800, color: completionPct === 100 ? '#34C759' : '#FF6B8A' }}>{completionPct}%</span>
+            <span style={{ fontSize: 13, fontWeight: 800, color: completionPct === 100 ? '#3DFC77' : '#FF7BA0' }}>{completionPct}%</span>
           </div>
           <div style={{ height: 6, borderRadius: 9999, background: '#F3F3F6', marginTop: 12, overflow: 'hidden' }}>
-            <div style={{ width: `${completionPct}%`, height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, #FF375F, #FF6B8A)', transition: 'width 0.6s ease' }} />
+            <div style={{ width: `${completionPct}%`, height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, #FF2E5F, #FF7BA0)', transition: 'width 0.6s ease' }} />
           </div>
         </div>
 
@@ -281,7 +281,7 @@ export default function ProfilePage() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
-            <div style={{ width: 42, height: 42, borderRadius: 14, background: 'linear-gradient(135deg, #4FC3F7, #0288D1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: superlikes.remaining > 0 ? '0 4px 16px rgba(79,195,247,0.45)' : 'none' }}>
+            <div style={{ width: 42, height: 42, borderRadius: 14, background: 'linear-gradient(135deg, #22E5FF, #0AA6CE)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: superlikes.remaining > 0 ? '0 4px 16px rgba(79,195,247,0.45)' : 'none' }}>
               <StarIcon size={20} color="white" />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
@@ -293,7 +293,7 @@ export default function ProfilePage() {
               </div>
             </div>
             <div style={{ textAlign: 'right', flexShrink: 0 }}>
-              <div style={{ fontSize: 26, fontWeight: 900, color: superlikes.remaining > 0 ? '#4FC3F7' : '#8A8A8F', lineHeight: 1 }}>
+              <div style={{ fontSize: 26, fontWeight: 900, color: superlikes.remaining > 0 ? '#22E5FF' : '#8A8A8F', lineHeight: 1 }}>
                 {superlikes.remaining}
               </div>
               <div style={{ fontSize: 10, color: '#8A8A8F', fontWeight: 700, letterSpacing: 0.8, textTransform: 'uppercase', marginTop: 3 }}>left today</div>
@@ -303,10 +303,10 @@ export default function ProfilePage() {
           {superlikes.dailyLimit > 0 && superlikes.remaining > 0 && (
             <div style={{ marginTop: 12 }}>
               <div style={{ height: 6, borderRadius: 9999, background: '#F3F3F6', overflow: 'hidden' }}>
-                <div style={{ width: `${Math.min(100, (superlikes.remaining / superlikes.dailyLimit) * 100)}%`, height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, #4FC3F7, #0288D1)', transition: 'width 0.5s ease' }} />
+                <div style={{ width: `${Math.min(100, (superlikes.remaining / superlikes.dailyLimit) * 100)}%`, height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, #22E5FF, #0AA6CE)', transition: 'width 0.5s ease' }} />
               </div>
               <div style={{ fontSize: 11, color: '#8A8A8F', marginTop: 7 }}>
-                Refills at midnight · {superlikes.dailyLimit} Super Likes a day
+                Refills at midnight Ã‚Â· {superlikes.dailyLimit} Super Likes a day
               </div>
             </div>
           )}
@@ -317,13 +317,13 @@ export default function ProfilePage() {
               className="lift"
               style={{
                 marginTop: 14, width: '100%', padding: '12px 16px', borderRadius: 14, border: 'none', cursor: 'pointer',
-                background: 'linear-gradient(135deg, #4FC3F7, #0288D1)',
+                background: 'linear-gradient(135deg, #22E5FF, #0AA6CE)',
                 color: 'white', fontSize: 14, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                 boxShadow: '0 8px 24px rgba(79,195,247,0.4)',
               }}
             >
               <StarIcon size={16} color="white" />
-              Get Super Likes — stand out to matches
+              Get Super Likes Ã¢â‚¬â€ stand out to matches
             </button>
           )}
         </div>
@@ -333,14 +333,14 @@ export default function ProfilePage() {
           style={{
             borderRadius: 20, padding: '18px 20px',
             background: (likes.remaining ?? 0) > 0
-              ? 'linear-gradient(135deg, rgba(255,55,95,0.14), rgba(255,59,48,0.06))'
+              ? 'linear-gradient(135deg, rgba(255,46,95,0.14), rgba(255,69,48,0.06))'
               : '#fff',
-            border: (likes.remaining ?? 0) > 0 ? '1px solid rgba(255,55,95,0.35)' : '1px solid #EDEDF1',
+            border: (likes.remaining ?? 0) > 0 ? '1px solid rgba(255,46,95,0.35)' : '1px solid #EDEDF1',
             boxShadow: (likes.remaining ?? 0) > 0 ? undefined : '0 1px 4px rgba(20,20,25,0.03)',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
-            <div style={{ width: 42, height: 42, borderRadius: 14, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: (likes.remaining ?? 0) > 0 ? '0 4px 16px rgba(255,55,95,0.45)' : 'none' }}>
+            <div style={{ width: 42, height: 42, borderRadius: 14, background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: (likes.remaining ?? 0) > 0 ? '0 4px 16px rgba(255,46,95,0.45)' : 'none' }}>
               <HeartIcon size={20} color="white" />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
@@ -354,8 +354,8 @@ export default function ProfilePage() {
               </div>
             </div>
             <div style={{ textAlign: 'right', flexShrink: 0 }}>
-              <div style={{ fontSize: 26, fontWeight: 900, color: (likes.remaining ?? 0) > 0 ? '#FF375F' : '#8A8A8F', lineHeight: 1 }}>
-                {likes.isPremium ? <InfiniteIcon size={26} color="#FF375F" /> : Math.max(0, likes.remaining ?? 0)}
+              <div style={{ fontSize: 26, fontWeight: 900, color: (likes.remaining ?? 0) > 0 ? '#FF2E5F' : '#8A8A8F', lineHeight: 1 }}>
+                {likes.isPremium ? <InfiniteIcon size={26} color="#FF2E5F" /> : Math.max(0, likes.remaining ?? 0)}
               </div>
               <div style={{ fontSize: 10, color: '#8A8A8F', fontWeight: 700, letterSpacing: 0.8, textTransform: 'uppercase', marginTop: 3 }}>{likes.isPremium ? 'unlimited' : 'left today'}</div>
             </div>
@@ -364,10 +364,10 @@ export default function ProfilePage() {
           {!likes.isPremium && likes.dailyLimit > 0 && (likes.remaining ?? 0) > 0 && (
             <div style={{ marginTop: 12 }}>
               <div style={{ height: 6, borderRadius: 9999, background: '#F3F3F6', overflow: 'hidden' }}>
-                <div style={{ width: `${Math.min(100, ((likes.remaining ?? 0) / likes.dailyLimit) * 100)}%`, height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, #FF375F, #FF6B81)', transition: 'width 0.5s ease' }} />
+                <div style={{ width: `${Math.min(100, ((likes.remaining ?? 0) / likes.dailyLimit) * 100)}%`, height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, #FF2E5F, #FF7BA0)', transition: 'width 0.5s ease' }} />
               </div>
               <div style={{ fontSize: 11, color: '#8A8A8F', marginTop: 7 }}>
-                Refills at midnight · {likes.dailyLimit} Likes a day
+                Refills at midnight Ã‚Â· {likes.dailyLimit} Likes a day
               </div>
             </div>
           )}
@@ -378,9 +378,9 @@ export default function ProfilePage() {
               className="lift"
               style={{
                 marginTop: 14, width: '100%', padding: '12px 16px', borderRadius: 14, border: 'none', cursor: 'pointer',
-                background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+                background: 'linear-gradient(135deg, #FF2E5F, #FF4530)',
                 color: 'white', fontSize: 14, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                boxShadow: '0 8px 24px rgba(255,55,95,0.4)',
+                boxShadow: '0 8px 24px rgba(255,46,95,0.4)',
               }}
             >
               <HeartIcon size={16} color="white" />
@@ -390,15 +390,15 @@ export default function ProfilePage() {
         </div>
 
         {profile?.isPremium ? (
-          <div className="animate-fade-up" style={{ borderRadius: 20, padding: '16px 20px', border: '1px solid rgba(255,215,0,0.35)', background: 'linear-gradient(135deg, rgba(255,215,0,0.14), rgba(255,149,0,0.08))' }}>
+          <div className="animate-fade-up" style={{ borderRadius: 20, padding: '16px 20px', border: '1px solid rgba(255,230,0,0.35)', background: 'linear-gradient(135deg, rgba(255,230,0,0.14), rgba(255,149,0,0.08))' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
-              <div style={{ width: 42, height: 42, borderRadius: 14, background: 'linear-gradient(135deg, #FFD700, #FF9500)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 16px rgba(255,215,0,0.4)' }}>
+              <div style={{ width: 42, height: 42, borderRadius: 14, background: 'linear-gradient(135deg, #FFE600, #FFB62B)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 16px rgba(255,230,0,0.4)' }}>
                 <DiamondIcon size={20} color="white" />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 15, fontWeight: 800, color: '#151515' }}>Premium Active</div>
                 <div style={{ fontSize: 12.5, color: '#8A8A8F', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {premiumPlanName}{premiumExpiry ? ` · renews ${premiumExpiry}` : ''}
+                  {premiumPlanName}{premiumExpiry ? ` Ã‚Â· renews ${premiumExpiry}` : ''}
                 </div>
               </div>
               <Button title="Manage" onPress={() => router.push('/premium')} variant="gradient" size="sm" />
@@ -410,32 +410,32 @@ export default function ProfilePage() {
             className="lift animate-fade-up"
             style={{
               position: 'relative', borderRadius: 24, overflow: 'hidden', padding: 0,
-              border: '1px solid rgba(255,215,0,0.4)', cursor: 'pointer', textAlign: 'left',
+              border: '1px solid rgba(255,230,0,0.4)', cursor: 'pointer', textAlign: 'left',
               background: '#fff',
-              boxShadow: '0 14px 44px rgba(20,20,25,0.06), inset 0 0 0 1px rgba(255,215,0,0.15)',
+              boxShadow: '0 14px 44px rgba(20,20,25,0.06), inset 0 0 0 1px rgba(255,230,0,0.15)',
             }}
           >
-            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, transparent 0%, #FFD700 20%, #FF375F 40%, #7C4DFF 60%, #FFD700 80%, transparent 100%)', backgroundSize: '200% 100%', animation: 'shimmer 2.8s linear infinite' }} />
-            <div style={{ position: 'absolute', top: -70, left: -40, width: 190, height: 190, borderRadius: 9999, background: 'rgba(255,215,0,0.16)', filter: 'blur(55px)', pointerEvents: 'none' }} />
-            <div style={{ position: 'absolute', bottom: -80, right: -30, width: 210, height: 210, borderRadius: 9999, background: 'rgba(255,55,95,0.2)', filter: 'blur(55px)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, transparent 0%, #FFE600 20%, #FF2E5F 40%, #B44CFF 60%, #FFE600 80%, transparent 100%)', backgroundSize: '200% 100%', animation: 'shimmer 2.8s linear infinite' }} />
+            <div style={{ position: 'absolute', top: -70, left: -40, width: 190, height: 190, borderRadius: 9999, background: 'rgba(255,230,0,0.16)', filter: 'blur(55px)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', bottom: -80, right: -30, width: 210, height: 210, borderRadius: 9999, background: 'rgba(255,46,95,0.2)', filter: 'blur(55px)', pointerEvents: 'none' }} />
 
             <div style={{ position: 'relative', zIndex: 1, padding: '22px 20px 18px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{ width: 48, height: 48, borderRadius: 15, background: 'linear-gradient(135deg, #FFD700, #FF9500)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 8px 24px rgba(255,215,0,0.45)', animation: 'floaty 3.5s ease-in-out infinite' }}>
+                <div style={{ width: 48, height: 48, borderRadius: 15, background: 'linear-gradient(135deg, #FFE600, #FFB62B)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 8px 24px rgba(255,230,0,0.45)', animation: 'floaty 3.5s ease-in-out infinite' }}>
                   <DiamondIcon size={24} color="white" />
                 </div>
                 <div style={{ flex: 1 }}>
                   <div className="neon-text" style={{ fontSize: 22, fontWeight: 900, letterSpacing: 0.5, lineHeight: 1.1, color: '#151515' }}>Go Premium</div>
                   <div style={{ fontSize: 12.5, color: '#8A8A8F', marginTop: 3 }}>Unlock the full Odogwu Dating experience</div>
                 </div>
-                <div style={{ padding: '5px 10px', borderRadius: 9999, background: 'rgba(255,215,0,0.14)', border: '1px solid rgba(255,215,0,0.4)', fontSize: 10.5, fontWeight: 800, color: '#FFD700', letterSpacing: 1, whiteSpace: 'nowrap' }}>BEST VALUE</div>
+                <div style={{ padding: '5px 10px', borderRadius: 9999, background: 'rgba(255,230,0,0.14)', border: '1px solid rgba(255,230,0,0.4)', fontSize: 10.5, fontWeight: 800, color: '#FFE600', letterSpacing: 1, whiteSpace: 'nowrap' }}>BEST VALUE</div>
               </div>
 
               <div style={{ display: 'flex', gap: 8, marginTop: 18 }}>
                 {[
-                  { icon: <InfiniteIcon size={18} color="#FF6B8A" />, label: 'Unlimited\nLikes' },
-                  { icon: <EyeIcon size={18} color="#4FC3F7" />, label: 'See who\nlikes you' },
-                  { icon: <StarIcon size={18} color="#FFD700" />, label: 'Super\nLikes' },
+                  { icon: <InfiniteIcon size={18} color="#FF7BA0" />, label: 'Unlimited\nLikes' },
+                  { icon: <EyeIcon size={18} color="#22E5FF" />, label: 'See who\nlikes you' },
+                  { icon: <StarIcon size={18} color="#FFE600" />, label: 'Super\nLikes' },
                 ].map((b, i) => (
                   <div key={i} style={{ flex: 1, borderRadius: 14, padding: '12px 6px', background: '#F8F8FA', border: '1px solid #EDEDF1', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 }}>
                     <div style={{ width: 32, height: 32, borderRadius: 10, background: '#F3F3F6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -446,14 +446,14 @@ export default function ProfilePage() {
                 ))}
               </div>
 
-              <div style={{ marginTop: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, borderRadius: 15, padding: '14px 18px', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', boxShadow: '0 10px 30px rgba(255,55,95,0.45)', animation: 'glowPulse 2.6s ease-in-out infinite' }}>
-                <span style={{ fontSize: 15.5, fontWeight: 800, color: 'white', letterSpacing: 0.3 }}>Subscribe now · from N4,900/mo</span>
+              <div style={{ marginTop: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, borderRadius: 15, padding: '14px 18px', background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', boxShadow: '0 10px 30px rgba(255,46,95,0.45)', animation: 'glowPulse 2.6s ease-in-out infinite' }}>
+                <span style={{ fontSize: 15.5, fontWeight: 800, color: 'white', letterSpacing: 0.3 }}>Subscribe now Ã‚Â· from N4,900/mo</span>
                 <ChevronForwardIcon size={18} color="white" />
               </div>
 
               <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-                <CheckmarkCircleIcon size={13} color="#34C759" />
-                <span style={{ fontSize: 11.5, color: '#8A8A8F' }}>Trusted by 2,000+ Odogwu Dating members · Cancel anytime</span>
+                <CheckmarkCircleIcon size={13} color="#3DFC77" />
+                <span style={{ fontSize: 11.5, color: '#8A8A8F' }}>Trusted by 2,000+ Odogwu Dating members Ã‚Â· Cancel anytime</span>
               </div>
             </div>
           </button>

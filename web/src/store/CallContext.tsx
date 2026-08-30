@@ -150,7 +150,7 @@ function IncomingCallOverlay({ call, onDismiss }: { call: IncomingCall; onDismis
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       gap: 32, padding: 24
     }}>
-      <div style={{ width: 100, height: 100, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ width: 100, height: 100, borderRadius: '50%', background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <span style={{ fontSize: 40, fontWeight: 800, color: 'white' }}>{call.callerName[0]}</span>
       </div>
       <h1 style={{ fontSize: 28, fontWeight: 700, color: 'white', margin: 0 }}>{call.callerName}</h1>
@@ -158,12 +158,12 @@ function IncomingCallOverlay({ call, onDismiss }: { call: IncomingCall; onDismis
         Incoming {call.callType === 'video' ? 'video' : 'audio'} call...
       </p>
       <div style={{ display: 'flex', gap: 40, marginTop: 40 }}>
-        <button onClick={handleDecline} style={{ width: 72, height: 72, borderRadius: '50%', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #FF3B30, #FF6B6B)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <button onClick={handleDecline} style={{ width: 72, height: 72, borderRadius: '50%', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #FF4530, #FF6B6B)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: 'rotate(135deg)' }}>
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
           </svg>
         </button>
-        <button onClick={handleAccept} style={{ width: 72, height: 72, borderRadius: '50%', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #34C759, #30D158)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <button onClick={handleAccept} style={{ width: 72, height: 72, borderRadius: '50%', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #3DFC77, #3DFC77)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
           </svg>

@@ -82,7 +82,7 @@ export default function CreatePostModal({ currentUserId, category, onClose, onPo
             onClick={handlePost}
             disabled={!canPost}
             style={{
-              background: canPost ? 'linear-gradient(135deg, #FF375F, #FF3B30)' : 'rgba(255,255,255,0.06)',
+              background: canPost ? 'linear-gradient(135deg, #FF2E5F, #FF4530)' : 'rgba(255,255,255,0.06)',
               border: 'none', borderRadius: 9999, padding: '8px 20px', color: 'white',
               fontSize: 14, fontWeight: 700, cursor: canPost ? 'pointer' : 'default',
               opacity: canPost ? 1 : 0.4, transition: 'all 0.2s',
@@ -123,8 +123,8 @@ export default function CreatePostModal({ currentUserId, category, onClose, onPo
                       onClick={() => setActivePreview(i)}
                       style={{
                         width: 7, height: 7, borderRadius: 9999, cursor: 'pointer',
-                        background: i === activePreview ? '#FF375F' : 'rgba(255,255,255,0.4)',
-                        transition: 'all 0.2s', boxShadow: i === activePreview ? '0 0 6px rgba(255,55,95,0.6)' : 'none',
+                        background: i === activePreview ? '#FF2E5F' : 'rgba(255,255,255,0.4)',
+                        transition: 'all 0.2s', boxShadow: i === activePreview ? '0 0 6px rgba(255,46,95,0.6)' : 'none',
                       }}
                     />
                   ))}
@@ -146,7 +146,7 @@ export default function CreatePostModal({ currentUserId, category, onClose, onPo
               style={{ width: '100%', height: '100%', background: 'rgba(255,255,255,0.02)', border: '2px dashed rgba(255,255,255,0.1)', borderRadius: 0, cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12 }}
             >
               {uploading ? (
-                <div style={{ width: 40, height: 40, borderRadius: 14, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
+                <div style={{ width: 40, height: 40, borderRadius: 14, border: '3px solid rgba(255,46,95,0.2)', borderTopColor: '#FF2E5F', animation: 'spin 0.8s linear infinite' }} />
               ) : (
                 <CameraIcon size={48} color="#6B6B6B" />
               )}
@@ -188,8 +188,8 @@ export default function CreatePostModal({ currentUserId, category, onClose, onPo
         {/* Category tag */}
         <div style={{ padding: '12px 20px 20px' }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: '#6B6B6B', marginBottom: 8 }}>Posting to</div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 9999, background: 'rgba(255,55,95,0.12)', border: '1px solid rgba(255,55,95,0.3)' }}>
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#FF375F' }}>{category}</span>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 9999, background: 'rgba(255,46,95,0.12)', border: '1px solid rgba(255,46,95,0.3)' }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#FF2E5F' }}>{category}</span>
           </div>
         </div>
       </div>

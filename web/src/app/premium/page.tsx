@@ -8,8 +8,8 @@ import { useAuth } from '@/store/AuthContext';
 import { authService, userService, walletService } from '@/lib/cloudflare/services';
 
 const PLANS = [
-  { id: 'premium', name: 'Odogwu Premium', price: 'N4,900', period: '/month', coins: 49, color: ['#FF375F', '#FF6B8A'], features: ['Send unlimited likes', 'Complete ad-free swiping experience', 'Filter your preferences', 'Unlimited rewinds to reconsider profiles', 'Voice and video calling', '2x Super Likes daily'] },
-  { id: 'surplus', name: 'Odogwu Surplus', price: 'N7,900', period: '/month', coins: 79, color: ['#FFD700', '#FFA500'], features: ['Send unlimited likes', 'See who likes you', 'Change to any preferred location (Passport mode)', 'Complete ad-free swiping experience', 'Filter your preferences', 'Profile boosts for 10x visibility', 'Unlimited rewinds to reconsider profiles', 'Voice and video calling', '5x Super Likes daily'], popular: true },
+  { id: 'premium', name: 'Odogwu Premium', price: 'N4,900', period: '/month', coins: 49, color: ['#FF2E5F', '#FF7BA0'], features: ['Send unlimited likes', 'Complete ad-free swiping experience', 'Filter your preferences', 'Unlimited rewinds to reconsider profiles', 'Voice and video calling', '2x Super Likes daily'] },
+  { id: 'surplus', name: 'Odogwu Surplus', price: 'N7,900', period: '/month', coins: 79, color: ['#FFE600', '#FFA500'], features: ['Send unlimited likes', 'See who likes you', 'Change to any preferred location (Passport mode)', 'Complete ad-free swiping experience', 'Filter your preferences', 'Profile boosts for 10x visibility', 'Unlimited rewinds to reconsider profiles', 'Voice and video calling', '5x Super Likes daily'], popular: true },
   { id: 'platinum', name: 'Odogwu Platinum', price: 'N10,900', period: '/month', coins: 109, color: ['#AF52DE', '#6C63FF'], features: ['Send unlimited likes', 'See who likes you', 'Change to any preferred location (Passport mode)', 'Send unlimited messages without waiting for a mutual match', 'Complete ad-free swiping experience', 'Filter your preferences', 'Unlimited rewinds to reconsider profiles', 'Voice and video calling', '7 Super Likes daily'] },
 ];
 
@@ -64,7 +64,7 @@ export default function PremiumPage() {
       <div style={{ display: 'flex', flexDirection: 'column' }}>
       <div className="animate-fade-up">
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '28px 24px 26px' }}>
-          <div style={{ width: 74, height: 74, borderRadius: 22, background: 'linear-gradient(135deg, #FFD700, #FF375F)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, boxShadow: '0 0 44px rgba(255,55,95,0.5)', animation: 'floaty 4s ease-in-out infinite' }}>
+          <div style={{ width: 74, height: 74, borderRadius: 22, background: 'linear-gradient(135deg, #FFE600, #FF2E5F)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, boxShadow: '0 0 44px rgba(255,46,95,0.5)', animation: 'floaty 4s ease-in-out infinite' }}>
             <DiamondIcon size={34} color="white" />
           </div>
           <h1 style={{ fontSize: 36, fontWeight: 800, color: '#151515', letterSpacing: 1, margin: 0 }}>
@@ -77,7 +77,7 @@ export default function PremiumPage() {
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
             {FEATURES.map((f, i) => (
               <div key={i} className="lift" style={{ width: 168, padding: 16, borderRadius: 18, display: 'flex', flexDirection: 'column', gap: 10, animation: `fadeUp 0.5s ease both`, animationDelay: `${i * 0.05}s`, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
-                <div style={{ width: 42, height: 42, borderRadius: 13, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(255,55,95,0.35)' }}>
+                <div style={{ width: 42, height: 42, borderRadius: 13, background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(255,46,95,0.35)' }}>
                   {f.icon}
                 </div>
                 <span style={{ fontSize: 14, fontWeight: 700, color: '#151515' }}>{f.title}</span>
@@ -124,13 +124,13 @@ export default function PremiumPage() {
               >
                 {popular && (
                   <div style={{ position: 'relative', zIndex: 1, pointerEvents: 'none' }}>
-                    <div style={{ position: 'absolute', top: 16, right: -34, background: 'linear-gradient(135deg, #FFD700, #FF9500)', color: '#1A1A1A', fontSize: 11, fontWeight: 800, letterSpacing: 1, padding: '6px 42px', transform: 'rotate(45deg)', boxShadow: '0 4px 14px rgba(255,215,0,0.4)' }}>
+                    <div style={{ position: 'absolute', top: 16, right: -34, background: 'linear-gradient(135deg, #FFE600, #FFB62B)', color: '#1A1A1A', fontSize: 11, fontWeight: 800, letterSpacing: 1, padding: '6px 42px', transform: 'rotate(45deg)', boxShadow: '0 4px 14px rgba(255,230,0,0.4)' }}>
                       MOST POPULAR
                     </div>
                   </div>
                 )}
                 {popular && (
-                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, #FF375F, #FFD700, #7C4DFF)', zIndex: 2 }} />
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, #FF2E5F, #FFE600, #B44CFF)', zIndex: 2 }} />
                 )}
                 <div style={{ padding: '26px 24px 18px', borderBottom: '1px solid #F0F0F3' }}>
                   <div style={{ fontSize: 12, fontWeight: 800, color: plan.color[0], textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>
@@ -141,8 +141,8 @@ export default function PremiumPage() {
                     <span style={{ fontSize: 14, color: '#8A8A8F' }}>{plan.period}</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 6 }}>
-                    <CoinsIcon size={13} color="#FFD700" />
-                    <span style={{ fontSize: 12.5, color: '#FFD700', fontWeight: 700 }}>{plan.coins} coins</span>
+                    <CoinsIcon size={13} color="#FFE600" />
+                    <span style={{ fontSize: 12.5, color: '#FFE600', fontWeight: 700 }}>{plan.coins} coins</span>
                     <span style={{ fontSize: 12, color: '#8A8A8F' }}>or pay with coins</span>
                   </div>
                 </div>
@@ -165,16 +165,16 @@ export default function PremiumPage() {
                       </button>
                       <button
                         onClick={() => { setPayMethod('coins'); walletService.getWallet().then(w => setMyCoins(w?.coins ?? 0)).catch(() => {}); }}
-                        style={{ flex: 1, padding: '8px 0', borderRadius: 9999, cursor: 'pointer', fontSize: 13, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, background: payMethod === 'coins' ? 'rgba(255,215,0,0.14)' : '#F8F8FA', border: payMethod === 'coins' ? '1px solid rgba(255,215,0,0.45)' : '1px solid #EDEDF1', color: payMethod === 'coins' ? '#FFD700' : '#8A8A8F' }}
+                        style={{ flex: 1, padding: '8px 0', borderRadius: 9999, cursor: 'pointer', fontSize: 13, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, background: payMethod === 'coins' ? 'rgba(255,230,0,0.14)' : '#F8F8FA', border: payMethod === 'coins' ? '1px solid rgba(255,230,0,0.45)' : '1px solid #EDEDF1', color: payMethod === 'coins' ? '#FFE600' : '#8A8A8F' }}
                       >
-                        <CoinsIcon size={14} color="#FFD700" /> Coins
+                        <CoinsIcon size={14} color="#FFE600" /> Coins
                       </button>
                     </div>
                   )}
                   {selected && payMethod === 'coins' && (
                     <div style={{ marginBottom: 10, textAlign: 'center' }}>
                       <span style={{ fontSize: 12, color: myCoins >= (plan?.coins ?? 0) ? '#7CFFA0' : '#FF6B6B', fontWeight: 700 }}>
-                        {myCoins >= (plan?.coins ?? 0) ? `You have ${myCoins.toLocaleString()} coins` : `You have ${myCoins.toLocaleString()} coins — need ${(plan?.coins ?? 0) - myCoins} more`}
+                        {myCoins >= (plan?.coins ?? 0) ? `You have ${myCoins.toLocaleString()} coins` : `You have ${myCoins.toLocaleString()} coins Ã¢â‚¬â€ need ${(plan?.coins ?? 0) - myCoins} more`}
                       </span>
                     </div>
                   )}
@@ -198,7 +198,7 @@ export default function PremiumPage() {
         <div style={{ display: 'inline-block', padding: '14px 28px', borderRadius: 9999, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
           <p style={{ color: '#8A8A8F', fontSize: 12, lineHeight: '18px', margin: 0 }}>
             Subscription automatically renews. Cancel anytime.{'\n'}
-            <span style={{ color: '#8A8A8F' }}>Terms of Service • Privacy Policy</span>
+            <span style={{ color: '#8A8A8F' }}>Terms of Service Ã¢â‚¬Â¢ Privacy Policy</span>
           </p>
         </div>
       </div>

@@ -77,7 +77,7 @@ export default function ProfileModal({ user, onClose }: { user: ProfileModalUser
               <LocationIcon size={14} color="rgba(255,255,255,0.85)" />
               <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14, textShadow: '0 1px 8px rgba(0,0,0,0.6)' }}>{user.city}</span>
               {typeof user.distanceKm === 'number' && (
-                <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, textShadow: '0 1px 8px rgba(0,0,0,0.6)' }}>· {user.distanceKm} km</span>
+                <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, textShadow: '0 1px 8px rgba(0,0,0,0.6)' }}>Â· {user.distanceKm} km</span>
               )}
             </div>
           )}
@@ -115,8 +115,8 @@ export default function ProfileModal({ user, onClose }: { user: ProfileModalUser
                     {items.map((it) => (
                       <span key={it} style={{
                         padding: '8px 16px', borderRadius: 9999, fontSize: 13, fontWeight: 600, color: 'white',
-                        background: 'linear-gradient(135deg, rgba(255,55,95,0.18), rgba(108,99,255,0.16))',
-                        border: '1px solid rgba(255,55,95,0.35)',
+                        background: 'linear-gradient(135deg, rgba(255,46,95,0.18), rgba(108,99,255,0.16))',
+                        border: '1px solid rgba(255,46,95,0.35)',
                       }}>
                         {it}
                       </span>

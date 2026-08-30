@@ -103,11 +103,11 @@ function WalletContent() {
             </div>
             <div>
               <span style={{ fontSize: 24, fontWeight: 800, color: '#151515' }}>Wallet</span>
-              <div style={{ fontSize: 12, color: '#FFD700', fontWeight: 700, marginTop: 1 }}>1 coin = N100</div>
+              <div style={{ fontSize: 12, color: '#FFE600', fontWeight: 700, marginTop: 1 }}>1 coin = N100</div>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', borderRadius: 14, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
-            <CoinsIcon size={18} color="#FFD700" />
+            <CoinsIcon size={18} color="#FFE600" />
             <span style={{ fontSize: 18, fontWeight: 800, color: '#151515' }}>{coins}</span>
             <span style={{ fontSize: 12, color: '#8A8A8F', fontWeight: 600 }}>coins</span>
           </div>
@@ -115,30 +115,30 @@ function WalletContent() {
 
         {verifying && (
           <div className="animate-fade-up" style={{ marginBottom: 18, padding: 16, borderRadius: 16, display: 'flex', alignItems: 'center', gap: 12, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
-            <div style={{ width: 22, height: 22, borderRadius: '50%', border: '3px solid rgba(255,215,0,0.2)', borderTopColor: '#FFD700', animation: 'spin 0.8s linear infinite' }} />
-            <span style={{ color: '#8A8A8F', fontSize: 14 }}>Verifying your payment…</span>
+            <div style={{ width: 22, height: 22, borderRadius: '50%', border: '3px solid rgba(255,230,0,0.2)', borderTopColor: '#FFE600', animation: 'spin 0.8s linear infinite' }} />
+            <span style={{ color: '#8A8A8F', fontSize: 14 }}>Verifying your paymentÃ¢â‚¬Â¦</span>
           </div>
         )}
 
         {notice && (
-          <div className="animate-fade-up" style={{ marginBottom: 18, padding: 14, borderRadius: 14, background: 'linear-gradient(135deg, rgba(255,215,0,0.12), rgba(255,55,95,0.08))', border: '1px solid rgba(255,215,0,0.25)' }}>
+          <div className="animate-fade-up" style={{ marginBottom: 18, padding: 14, borderRadius: 14, background: 'linear-gradient(135deg, rgba(255,230,0,0.12), rgba(255,46,95,0.08))', border: '1px solid rgba(255,230,0,0.25)' }}>
             <span style={{ color: '#151515', fontSize: 13.5 }}>{notice}</span>
           </div>
         )}
 
         <div className="animate-fade-up" style={{ marginBottom: 26 }}>
-          <div style={{ padding: 24, borderRadius: 24, background: 'linear-gradient(135deg, rgba(255,215,0,0.12), rgba(255,55,95,0.06)), #fff', border: '1px solid rgba(255,215,0,0.2)', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
+          <div style={{ padding: 24, borderRadius: 24, background: 'linear-gradient(135deg, rgba(255,230,0,0.12), rgba(255,46,95,0.06)), #fff', border: '1px solid rgba(255,230,0,0.2)', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-              <div style={{ width: 52, height: 52, borderRadius: 16, background: 'linear-gradient(135deg, #FFD700, #FF9500)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 26px rgba(255,215,0,0.35)' }}>
+              <div style={{ width: 52, height: 52, borderRadius: 16, background: 'linear-gradient(135deg, #FFE600, #FFB62B)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 26px rgba(255,230,0,0.35)' }}>
                 <CoinsIcon size={26} color="#1A1A1A" />
               </div>
               <div>
-                <span style={{ fontSize: 13, color: '#FFD700', fontWeight: 700, letterSpacing: 1 }}>COIN BALANCE</span>
+                <span style={{ fontSize: 13, color: '#FFE600', fontWeight: 700, letterSpacing: 1 }}>COIN BALANCE</span>
                 <div style={{ fontSize: 34, fontWeight: 800, color: '#151515', marginTop: 2 }}>
                   {coins} <span style={{ fontSize: 16, color: '#8A8A8F', fontWeight: 600 }}>coins</span>
                 </div>
                 <div style={{ fontSize: 12.5, color: '#8A8A8F', marginTop: 2 }}>
-                  ≈ {formatNaira(coins * 100)}
+                  Ã¢â€°Ë† {formatNaira(coins * 100)}
                 </div>
               </div>
             </div>
@@ -161,13 +161,13 @@ function WalletContent() {
                 className="lift"
                 style={{ padding: 18, borderRadius: 18, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, animation: `fadeUp 0.4s ease both`, animationDelay: `${i * 0.05}s`, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}
               >
-                <div style={{ width: 46, height: 46, borderRadius: 14, background: 'linear-gradient(135deg, #FFD700, #FF9500)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 18px rgba(255,215,0,0.3)' }}>
+                <div style={{ width: 46, height: 46, borderRadius: 14, background: 'linear-gradient(135deg, #FFE600, #FFB62B)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 18px rgba(255,230,0,0.3)' }}>
                   <CoinsIcon size={22} color="#1A1A1A" />
                 </div>
                 <div style={{ fontSize: 22, fontWeight: 800, color: '#151515' }}>{pack.coins}</div>
                 <div style={{ fontSize: 12.5, color: '#8A8A8F' }}>{formatNaira(pack.naira)}</div>
                 <Button
-                  title={initializing === String(pack.coins) ? 'Starting…' : 'Buy'}
+                  title={initializing === String(pack.coins) ? 'StartingÃ¢â‚¬Â¦' : 'Buy'}
                   variant="gradient"
                   size="sm"
                   loading={initializing === String(pack.coins)}
@@ -184,7 +184,7 @@ function WalletContent() {
           <h2 style={{ fontSize: 20, fontWeight: 800, color: '#151515', margin: '0 0 14px' }}>History</h2>
           {loading ? (
             <div style={{ padding: 30, borderRadius: 18, textAlign: 'center', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
-              <span style={{ color: '#8A8A8F', fontSize: 14 }}>Loading…</span>
+              <span style={{ color: '#8A8A8F', fontSize: 14 }}>LoadingÃ¢â‚¬Â¦</span>
             </div>
           ) : transactions.length === 0 ? (
             <div style={{ padding: 34, borderRadius: 18, textAlign: 'center', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
@@ -198,15 +198,15 @@ function WalletContent() {
                 const label = TX_LABELS[t.type] || t.type;
                 return (
                   <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', borderBottom: i < transactions.length - 1 ? '1px solid #F0F0F3' : 'none' }}>
-                    <div style={{ width: 38, height: 38, borderRadius: 12, background: isCredit ? 'rgba(52,199,89,0.12)' : 'rgba(255,55,95,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <CoinsIcon size={18} color={isCredit ? '#34C759' : '#FF6B8A'} />
+                    <div style={{ width: 38, height: 38, borderRadius: 12, background: isCredit ? 'rgba(61,252,119,0.12)' : 'rgba(255,46,95,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <CoinsIcon size={18} color={isCredit ? '#3DFC77' : '#FF7BA0'} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: 13.5, fontWeight: 700, color: '#151515' }}>{label}</div>
                       <div style={{ fontSize: 11.5, color: '#8A8A8F', marginTop: 1 }}>{new Date(t.createdAt).toLocaleString()}</div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: 15, fontWeight: 800, color: isCredit ? '#34C759' : '#FF6B8A' }}>
+                      <div style={{ fontSize: 15, fontWeight: 800, color: isCredit ? '#3DFC77' : '#FF7BA0' }}>
                         {isCredit ? '+' : '-'}{t.amount}
                       </div>
                       <div style={{ fontSize: 11, color: '#8A8A8F' }}>balance {t.balanceAfter}</div>

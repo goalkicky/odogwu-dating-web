@@ -33,7 +33,7 @@ export default function InterestPage() {
       <OnboardingProgress currentStep={3} totalSteps={6} />
 
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
-        <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, #34C759, #30D158)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, #3DFC77, #3DFC77)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <HeartIcon size={36} color="white" />
         </div>
       </div>
@@ -57,7 +57,7 @@ export default function InterestPage() {
                 border: 'none',
                 cursor: 'pointer',
                 background: isSelected
-                  ? 'linear-gradient(135deg, #34C759, #30D158)'
+                  ? 'linear-gradient(135deg, #3DFC77, #3DFC77)'
                   : 'linear-gradient(135deg, #1A1A1A, #242424)',
                 color: isSelected ? 'white' : '#ABABAB',
               }}

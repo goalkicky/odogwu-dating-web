@@ -181,7 +181,7 @@ export default function DiscoverPage() {
     return (
       <AppShell>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 18 }}>
-          <div style={{ width: 56, height: 56, borderRadius: 18, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
+          <div style={{ width: 56, height: 56, borderRadius: 18, border: '3px solid rgba(255,46,95,0.2)', borderTopColor: '#FF2E5F', animation: 'spin 0.8s linear infinite' }} />
           <span className="neon-text" style={{ fontSize: 16, fontWeight: 700 }}>Loading profiles...</span>
         </div>
       </AppShell>
@@ -193,7 +193,7 @@ export default function DiscoverPage() {
       <AppShell>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 16 }}>
           <div style={{ width: 96, height: 96, borderRadius: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FF6B8A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FF7BA0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 1 0 0-8c-2 0-4 1.33-6 4Z"/>
             </svg>
           </div>
@@ -201,7 +201,7 @@ export default function DiscoverPage() {
           <span style={{ fontSize: 14, color: '#8A8A8F', textAlign: 'center', maxWidth: 260 }}>
             You&apos;ve seen everyone nearby. Check back later for fresh faces.
           </span>
-          <button onClick={loadUsers} style={{ padding: '12px 28px', borderRadius: 9999, border: 'none', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 6px 24px rgba(255,55,95,0.4)' }}>Refresh</button>
+          <button onClick={loadUsers} style={{ padding: '12px 28px', borderRadius: 9999, border: 'none', background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', color: 'white', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 6px 24px rgba(255,46,95,0.4)' }}>Refresh</button>
         </div>
       </AppShell>
     );
@@ -216,7 +216,7 @@ export default function DiscoverPage() {
           <div className="animate-fade-up" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: isMobile ? 12 : 20 }}>
             <div>
               <h1 style={{ fontSize: isMobile ? 26 : 30, fontWeight: 800, color: '#151515', margin: 0, letterSpacing: 0.5 }}>
-                Discover<span style={{ color: '#FF375F' }}>.</span>
+                Discover<span style={{ color: '#FF2E5F' }}>.</span>
               </h1>
               <p style={{ fontSize: 13, color: '#8A8A8F', margin: '2px 0 0' }}>
                 {users.length > 0 ? `${users.length} profiles ready for you` : ''}
@@ -224,7 +224,7 @@ export default function DiscoverPage() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{ padding: '6px 12px', borderRadius: 9999, display: 'flex', alignItems: 'center', gap: 8, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
-                <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#34C759', boxShadow: '0 0 10px #34C759' }} />
+                <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#3DFC77', boxShadow: '0 0 10px #3DFC77' }} />
                 <span style={{ color: '#8A8A8F', fontSize: 13, fontWeight: 600 }}>Live</span>
               </div>
               <button
@@ -238,14 +238,14 @@ export default function DiscoverPage() {
                   cursor: 'pointer', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)',
                 }}
               >
-                <FilterIcon size={16} color="#FF6B8A" />
+                <FilterIcon size={16} color="#FF7BA0" />
                 Filters
                 {activeFilterCount > 0 && (
                   <span style={{
                     position: 'absolute', top: -6, right: -6, minWidth: 20, height: 20, padding: '0 5px', boxSizing: 'border-box',
-                    borderRadius: 9999, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white',
+                    borderRadius: 9999, background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', color: 'white',
                     fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    boxShadow: '0 2px 10px rgba(255,55,95,0.6)', border: '2px solid #fff',
+                    boxShadow: '0 2px 10px rgba(255,46,95,0.6)', border: '2px solid #fff',
                   }}>
                     {activeFilterCount}
                   </span>
@@ -258,7 +258,7 @@ export default function DiscoverPage() {
             {!isMobile && (
               <div style={{
                 position: 'absolute', inset: -20, borderRadius: 40,
-                background: 'radial-gradient(circle, rgba(255,55,95,0.14) 0%, rgba(124,77,255,0.1) 45%, transparent 70%)',
+                background: 'radial-gradient(circle, rgba(255,46,95,0.14) 0%, rgba(180,76,255,0.1) 45%, transparent 70%)',
                 filter: 'blur(10px)',
               }} />
             )}
@@ -281,7 +281,7 @@ export default function DiscoverPage() {
               <div className="animate-pop" style={{ position: 'absolute', bottom: 92, left: 0, right: 0, display: 'flex', justifyContent: 'center', animation: 'fadeUp 0.3s ease' }}>
                 <div style={{ padding: '8px 20px', borderRadius: 9999, whiteSpace: 'nowrap', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
                   <span style={{ color: '#151515', fontWeight: 700, fontSize: 14 }}>
-                    {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : `Super Liked ${current.fullName.split(' ')[0] || 'them'}! 💙`}
+                    {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : `Super Liked ${current.fullName.split(' ')[0] || 'them'}! Ã°Å¸â€™â„¢`}
                   </span>
                 </div>
               </div>
@@ -292,7 +292,7 @@ export default function DiscoverPage() {
                 <ChatIcon size={18} color="white" />
               </ActionButton>
               <ActionButton variant="secondary" size={46} onPress={handleReload}>
-                <RefreshIcon size={20} color="#FFD700" />
+                <RefreshIcon size={20} color="#FFE600" />
               </ActionButton>
               <ActionButton variant="danger" size={62} onPress={handleSwipeLeft}>
                 <CloseIcon size={30} color="white" />
@@ -303,9 +303,9 @@ export default function DiscoverPage() {
                 </ActionButton>
                 <span style={{
                   position: 'absolute', top: -4, right: -6, minWidth: 20, height: 20, padding: '0 5px', boxSizing: 'border-box',
-                  borderRadius: 9999, background: superlikes.remaining > 0 ? 'linear-gradient(135deg, #4FC3F7, #0288D1)' : '#FF3B30',
+                  borderRadius: 9999, background: superlikes.remaining > 0 ? 'linear-gradient(135deg, #22E5FF, #0AA6CE)' : '#FF4530',
                   color: 'white', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: superlikes.remaining > 0 ? '0 2px 10px rgba(79,195,247,0.6)' : '0 2px 10px rgba(255,59,48,0.6)',
+                  boxShadow: superlikes.remaining > 0 ? '0 2px 10px rgba(79,195,247,0.6)' : '0 2px 10px rgba(255,69,48,0.6)',
                   border: '2px solid #fff',
                 }}>
                   {superlikes.remaining}
@@ -318,9 +318,9 @@ export default function DiscoverPage() {
                 {!likes.isPremium && likes.dailyLimit > 0 && (
                   <span style={{
                     position: 'absolute', top: -4, right: -6, minWidth: 20, height: 20, padding: '0 5px', boxSizing: 'border-box',
-                    borderRadius: 9999, background: (likes.remaining ?? 0) > 0 ? 'linear-gradient(135deg, #FF375F, #FF6B81)' : '#FF3B30',
+                    borderRadius: 9999, background: (likes.remaining ?? 0) > 0 ? 'linear-gradient(135deg, #FF2E5F, #FF7BA0)' : '#FF4530',
                     color: 'white', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    boxShadow: (likes.remaining ?? 0) > 0 ? '0 2px 10px rgba(255,55,95,0.6)' : '0 2px 10px rgba(255,59,48,0.6)',
+                    boxShadow: (likes.remaining ?? 0) > 0 ? '0 2px 10px rgba(255,46,95,0.6)' : '0 2px 10px rgba(255,69,48,0.6)',
                     border: '2px solid #fff',
                   }}>
                     {Math.max(0, likes.remaining ?? 0)}
@@ -443,9 +443,9 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
                 style={{
                   flex: 1, padding: '13px 0', borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: 'pointer',
                   color: draft.gender === opt.value ? 'white' : '#8A8A8F',
-                  background: draft.gender === opt.value ? 'linear-gradient(135deg, #FF375F, #FF6B8A)' : '#F3F3F6',
+                  background: draft.gender === opt.value ? 'linear-gradient(135deg, #FF2E5F, #FF7BA0)' : '#F3F3F6',
                   border: draft.gender === opt.value ? 'none' : '1px solid #EDEDF1',
-                  boxShadow: draft.gender === opt.value ? '0 4px 18px rgba(255,55,95,0.35)' : 'none',
+                  boxShadow: draft.gender === opt.value ? '0 4px 18px rgba(255,46,95,0.35)' : 'none',
                 }}
               >
                 {opt.label}
@@ -458,7 +458,7 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
           <FilterLabel>Age Range</FilterLabel>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <span style={{ color: '#151515', fontSize: 22, fontWeight: 800 }}>
-              {draft.minAge} – {draft.maxAge}
+              {draft.minAge} Ã¢â‚¬â€œ {draft.maxAge}
             </span>
           </div>
           <div className="dual-slider-wrap">
@@ -508,7 +508,7 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
               {draft.maxDistance === 0 ? 'Anywhere' : `${draft.maxDistance} km`}
             </span>
             {draft.maxDistance > 0 && (
-              <button onClick={() => set({ maxDistance: 0 })} style={{ background: 'none', border: 'none', color: '#FF6B8A', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+              <button onClick={() => set({ maxDistance: 0 })} style={{ background: 'none', border: 'none', color: '#FF7BA0', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
                 Anywhere
               </button>
             )}
@@ -533,10 +533,10 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
           <FilterLabel>Height Range</FilterLabel>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <span style={{ color: '#151515', fontSize: 22, fontWeight: 800 }}>
-              {inchesToFtIn(draft.minHeight || HEIGHT_MIN)} – {inchesToFtIn(draft.maxHeight || HEIGHT_MAX)}
+              {inchesToFtIn(draft.minHeight || HEIGHT_MIN)} Ã¢â‚¬â€œ {inchesToFtIn(draft.maxHeight || HEIGHT_MAX)}
             </span>
             {((draft.minHeight > 0) || (draft.maxHeight > 0)) && (
-              <button onClick={() => set({ minHeight: 0, maxHeight: 0 })} style={{ background: 'none', border: 'none', color: '#FF6B8A', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+              <button onClick={() => set({ minHeight: 0, maxHeight: 0 })} style={{ background: 'none', border: 'none', color: '#FF7BA0', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
                 Any
               </button>
             )}
@@ -585,10 +585,10 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
           <FilterLabel>Weight Range (kg)</FilterLabel>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <span style={{ color: '#151515', fontSize: 22, fontWeight: 800 }}>
-              {draft.minWeight || WEIGHT_MIN} – {draft.maxWeight || WEIGHT_MAX} kg
+              {draft.minWeight || WEIGHT_MIN} Ã¢â‚¬â€œ {draft.maxWeight || WEIGHT_MAX} kg
             </span>
             {((draft.minWeight > 0) || (draft.maxWeight > 0)) && (
-              <button onClick={() => set({ minWeight: 0, maxWeight: 0 })} style={{ background: 'none', border: 'none', color: '#FF6B8A', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+              <button onClick={() => set({ minWeight: 0, maxWeight: 0 })} style={{ background: 'none', border: 'none', color: '#FF7BA0', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
                 Any
               </button>
             )}
@@ -660,7 +660,7 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
                   style={{
                     padding: '10px 18px', borderRadius: 9999, fontSize: 13.5, fontWeight: 600, cursor: 'pointer',
                     color: selected ? 'white' : '#8A8A8F',
-                    background: selected ? 'linear-gradient(135deg, #FF375F, #FF6B8A)' : '#F3F3F6',
+                    background: selected ? 'linear-gradient(135deg, #FF2E5F, #FF7BA0)' : '#F3F3F6',
                     border: selected ? 'none' : '1px solid #EDEDF1',
                     transition: 'all 0.15s ease',
                   }}
@@ -682,7 +682,7 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
             </button>
             <button
               onClick={() => { onChange(draft); onApply(); }}
-              style={{ flex: 1, padding: '16px 24px', borderRadius: 14, border: 'none', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white', fontSize: 16, fontWeight: 800, cursor: 'pointer', boxShadow: '0 6px 24px rgba(255,55,95,0.4)' }}
+              style={{ flex: 1, padding: '16px 24px', borderRadius: 14, border: 'none', background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', color: 'white', fontSize: 16, fontWeight: 800, cursor: 'pointer', boxShadow: '0 6px 24px rgba(255,46,95,0.4)' }}
             >
               Apply Filters
             </button>

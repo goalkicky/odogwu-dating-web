@@ -5,7 +5,7 @@ import MarketingFooter from '@/components/MarketingFooter';
 import { useMobile } from '@/lib/useMediaQuery';
 import { HelpIcon, ChevronForwardIcon } from '@/components/Icons';
 
-const ACCENT = '#FF3B30';
+const ACCENT = '#FF4530';
 
 const faqs = [
   {
@@ -62,7 +62,7 @@ function Accordion({ items, isMobile }: { items: { q: string; a: string }[]; isM
           <div key={i} style={{
             borderRadius: 14,
             background: 'rgba(255,255,255,0.03)',
-            border: isOpen ? '1px solid rgba(255,55,95,0.2)' : '1px solid rgba(255,255,255,0.06)',
+            border: isOpen ? '1px solid rgba(255,46,95,0.2)' : '1px solid rgba(255,255,255,0.06)',
             overflow: 'hidden',
             transition: 'border-color 0.3s',
           }}>
@@ -79,13 +79,13 @@ function Accordion({ items, isMobile }: { items: { q: string; a: string }[]; isM
               <span>{item.q}</span>
               <div style={{
                 width: 26, height: 26, borderRadius: 8,
-                background: isOpen ? 'rgba(255,55,95,0.15)' : 'rgba(255,255,255,0.06)',
+                background: isOpen ? 'rgba(255,46,95,0.15)' : 'rgba(255,255,255,0.06)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 flexShrink: 0,
                 transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)',
                 transition: 'transform 0.3s, background 0.3s',
               }}>
-                <ChevronForwardIcon size={14} color={isOpen ? '#FF375F' : '#6B6B6B'} />
+                <ChevronForwardIcon size={14} color={isOpen ? '#FF2E5F' : '#6B6B6B'} />
               </div>
             </button>
             <div style={{
@@ -113,7 +113,7 @@ export default function FAQPage() {
 
       <section style={{ padding: isMobile ? '100px 16px 60px' : '140px 24px 80px', maxWidth: 800, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: isMobile ? 36 : 56 }}>
-          <div className="badge" style={{ background: `rgba(255,59,48,0.1)`, border: `1px solid rgba(255,59,48,0.2)`, color: ACCENT, marginBottom: 20, display: 'inline-flex' }}>
+          <div className="badge" style={{ background: `rgba(255,69,48,0.1)`, border: `1px solid rgba(255,69,48,0.2)`, color: ACCENT, marginBottom: 20, display: 'inline-flex' }}>
             <HelpIcon size={16} color={ACCENT} /> FAQ
           </div>
           <h1 style={{ fontSize: isMobile ? 28 : 'clamp(36px, 5vw, 52px)', fontWeight: 800, margin: '0 0 12px' }}>
@@ -124,7 +124,7 @@ export default function FAQPage() {
 
         {faqs.map((group, i) => (
           <div key={i} style={{ marginBottom: isMobile ? 28 : 40 }}>
-            <h2 style={{ fontSize: isMobile ? 15 : 18, fontWeight: 700, color: '#FF375F', marginBottom: isMobile ? 12 : 16 }}>{group.category}</h2>
+            <h2 style={{ fontSize: isMobile ? 15 : 18, fontWeight: 700, color: '#FF2E5F', marginBottom: isMobile ? 12 : 16 }}>{group.category}</h2>
             <Accordion items={group.items} isMobile={isMobile} />
           </div>
         ))}
@@ -141,7 +141,7 @@ export default function FAQPage() {
           <a href="mailto:support@odogwu.com" style={{
             padding: isMobile ? '12px 28px' : '14px 32px', borderRadius: 9999,
             fontSize: isMobile ? 14 : 15, fontWeight: 600,
-            background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+            background: 'linear-gradient(135deg, #FF2E5F, #FF4530)',
             color: 'white', textDecoration: 'none', display: 'inline-block',
             width: isMobile ? '100%' : 'auto',
           }}>Contact Support</a>

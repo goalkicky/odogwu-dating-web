@@ -62,9 +62,9 @@ export default function CallLogsPage() {
   };
 
   const getStatusIcon = (status: string, isOutgoing: boolean) => {
-    if (status === 'answered') return <CheckmarkCircleIcon size={18} color="#34C759" />;
-    if (status === 'missed') return isOutgoing ? <EllipsisIcon size={18} color="#8A8A8F" /> : <CloseCircleIcon size={18} color="#FF3B30" />;
-    return <CloseCircleIcon size={18} color="#FF3B30" />;
+    if (status === 'answered') return <CheckmarkCircleIcon size={18} color="#3DFC77" />;
+    if (status === 'missed') return isOutgoing ? <EllipsisIcon size={18} color="#8A8A8F" /> : <CloseCircleIcon size={18} color="#FF4530" />;
+    return <CloseCircleIcon size={18} color="#FF4530" />;
   };
 
   const getStatusText = (status: string, isOutgoing: boolean) => {
@@ -97,7 +97,7 @@ export default function CallLogsPage() {
             const isOutgoing = log.from === user?.$id;
             return (
               <div key={log.$id} style={{ display: 'flex', alignItems: 'center', padding: '14px 8px', gap: 14, borderBottom: '1px solid #F0F0F3' }}>
-                <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <span style={{ color: 'white', fontWeight: 700, fontSize: 18 }}>{log.otherName?.[0] || '?'}</span>
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -109,10 +109,10 @@ export default function CallLogsPage() {
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
                     {getStatusIcon(log.status, isOutgoing)}
-                    <span style={{ fontSize: 13, color: log.status === 'missed' && !isOutgoing ? '#FF3B30' : '#8A8A8F' }}>
+                    <span style={{ fontSize: 13, color: log.status === 'missed' && !isOutgoing ? '#FF4530' : '#8A8A8F' }}>
                       {isOutgoing ? 'Outgoing' : 'Incoming'}
-                      {getStatusText(log.status, isOutgoing) && ` · ${getStatusText(log.status, isOutgoing)}`}
-                      {log.duration > 0 && ` · ${formatDuration(log.duration)}`}
+                      {getStatusText(log.status, isOutgoing) && ` Â· ${getStatusText(log.status, isOutgoing)}`}
+                      {log.duration > 0 && ` Â· ${formatDuration(log.duration)}`}
                     </span>
                   </div>
                 </div>

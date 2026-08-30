@@ -18,7 +18,7 @@ export default function MarketingNav() {
   const isMobile = useMobile();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const linkColor = (href: string) => pathname === href ? '#FF375F' : '#ABABAB';
+  const linkColor = (href: string) => pathname === href ? '#FF2E5F' : '#ABABAB';
 
   return (
     <nav style={{
@@ -48,14 +48,14 @@ export default function MarketingNav() {
               {pathname === l.href && (
                 <span style={{
                   position: 'absolute', bottom: -4, left: 0, right: 0,
-                  height: 2, background: '#FF375F', borderRadius: 1,
+                  height: 2, background: '#FF2E5F', borderRadius: 1,
                 }} />
               )}
             </Link>
           ))}
           <Link href="/login" style={{
             padding: '8px 20px', borderRadius: 9999, fontSize: 13, fontWeight: 600,
-            background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+            background: 'linear-gradient(135deg, #FF2E5F, #FF4530)',
             color: 'white', textDecoration: 'none',
             transition: 'opacity 0.2s',
           }}
@@ -94,7 +94,7 @@ export default function MarketingNav() {
               padding: '12px 16px', borderRadius: 12,
               fontSize: 15, fontWeight: 500, textDecoration: 'none',
               color: linkColor(l.href),
-              background: pathname === l.href ? 'rgba(255,55,95,0.08)' : 'transparent',
+              background: pathname === l.href ? 'rgba(255,46,95,0.08)' : 'transparent',
             }}>
               {l.label}
             </Link>

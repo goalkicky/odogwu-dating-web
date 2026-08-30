@@ -5,13 +5,13 @@ import MarketingFooter from '@/components/MarketingFooter';
 import { useMobile } from '@/lib/useMediaQuery';
 import { SparklesIcon, ShieldIcon, ChatIcon, StarIcon, GlobeIcon, EyeIcon, FlashIcon, CheckmarkCircleIcon } from '@/components/Icons';
 
-const ACCENT = '#FF3B30';
+const ACCENT = '#FF4530';
 
 const featureGroups = [
   {
-    title: 'Smart Matching', color: '#FF375F',
+    title: 'Smart Matching', color: '#FF2E5F',
     desc: 'Our AI learns your preferences from every interaction. The more you use Odogwu Dating, the better your matches become.',
-    icon: <SparklesIcon size={28} color="#FF375F" />,
+    icon: <SparklesIcon size={28} color="#FF2E5F" />,
     items: [
       'AI-powered compatibility scoring based on interests, values, and lifestyle',
       'Behavioral learning that improves match quality over time',
@@ -33,9 +33,9 @@ const featureGroups = [
     ],
   },
   {
-    title: 'Real-time Communication', color: '#34C759',
-    desc: 'Connect naturally with instant messaging, crystal-clear voice notes, and HD video calls — all in-app.',
-    icon: <ChatIcon size={28} color="#34C759" />,
+    title: 'Real-time Communication', color: '#3DFC77',
+    desc: 'Connect naturally with instant messaging, crystal-clear voice notes, and HD video calls Ã¢â‚¬â€ all in-app.',
+    icon: <ChatIcon size={28} color="#3DFC77" />,
     items: [
       'Instant messaging with typing indicators and read receipts',
       'Voice notes for a more personal touch',
@@ -45,9 +45,9 @@ const featureGroups = [
     ],
   },
   {
-    title: 'Premium Features', color: '#FFD700',
+    title: 'Premium Features', color: '#FFE600',
     desc: 'Stand out and get more matches with our premium suite of features designed to give you an edge.',
-    icon: <StarIcon size={28} color="#FFD700" />,
+    icon: <StarIcon size={28} color="#FFE600" />,
     items: [
       'Super Likes to show you\'re genuinely interested',
       'Profile Boosts for 10x more visibility',
@@ -57,9 +57,9 @@ const featureGroups = [
     ],
   },
   {
-    title: 'Global Passport', color: '#FF3B30',
+    title: 'Global Passport', color: '#FF4530',
     desc: 'Love knows no borders. Use Passport to match with people anywhere in the world before you travel.',
-    icon: <GlobeIcon size={28} color="#FF3B30" />,
+    icon: <GlobeIcon size={28} color="#FF4530" />,
     items: [
       'Match in any city or country worldwide',
       'See where your matches are located on a map',
@@ -69,21 +69,21 @@ const featureGroups = [
     ],
   },
   {
-    title: 'Safety First', color: '#FF375F',
+    title: 'Safety First', color: '#FF2E5F',
     desc: 'Your safety is our top priority. We use cutting-edge technology and human moderators to keep you safe.',
-    icon: <EyeIcon size={28} color="#FF375F" />,
+    icon: <EyeIcon size={28} color="#FF2E5F" />,
     items: [
       'AI-powered content moderation and spam detection',
       '24/7 human moderation team for reported accounts',
       'Block and report with one tap',
-      'Photo privacy controls — blur or hide your photos',
+      'Photo privacy controls Ã¢â‚¬â€ blur or hide your photos',
       'Location sharing only when you choose',
       'Emergency contact and safety check-in features',
     ],
   },
 ];
 
-const emojis = ['🧠', '✅', '💬', '⭐', '🌍', '🛡️'];
+const emojis = ['Ã°Å¸Â§Â ', 'Ã¢Å“â€¦', 'Ã°Å¸â€™Â¬', 'Ã¢Â­Â', 'Ã°Å¸Å’Â', 'Ã°Å¸â€ºÂ¡Ã¯Â¸Â'];
 
 export default function FeaturesPage() {
   const isMobile = useMobile();
@@ -93,8 +93,8 @@ export default function FeaturesPage() {
       <MarketingNav />
 
       <section style={{ padding: isMobile ? '100px 16px 60px' : '140px 24px 80px', maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
-        <div className="badge" style={{ background: 'rgba(255,55,95,0.1)', border: '1px solid rgba(255,55,95,0.2)', color: '#FF375F', marginBottom: 20, display: 'inline-flex' }}>
-          <FlashIcon size={16} color="#FF375F" /> Features
+        <div className="badge" style={{ background: 'rgba(255,46,95,0.1)', border: '1px solid rgba(255,46,95,0.2)', color: '#FF2E5F', marginBottom: 20, display: 'inline-flex' }}>
+          <FlashIcon size={16} color="#FF2E5F" /> Features
         </div>
         <h1 style={{ fontSize: isMobile ? 28 : 'clamp(36px, 5vw, 52px)', fontWeight: 800, margin: '0 0 12px' }}>
           Powerful Features for <span className="gradient-text">Meaningful Connections</span>
@@ -107,7 +107,7 @@ export default function FeaturesPage() {
       {featureGroups.map((fg, i) => (
         <section key={i} style={{
           padding: isMobile ? '48px 16px' : '80px 24px',
-          background: i % 2 === 0 ? 'linear-gradient(180deg, rgba(255,59,48,0.03) 0%, transparent 100%)' : 'transparent',
+          background: i % 2 === 0 ? 'linear-gradient(180deg, rgba(255,69,48,0.03) 0%, transparent 100%)' : 'transparent',
         }}>
           <div style={{
             maxWidth: 1000, margin: '0 auto',
@@ -119,7 +119,7 @@ export default function FeaturesPage() {
             <div style={{ order: isMobile ? 1 : (i % 2 === 0 ? 1 : 2) }}>
               <div style={{
                 width: 52, height: 52, borderRadius: 14,
-                background: `rgba(${fg.color === '#FF375F' ? '255,55,95' : fg.color === ACCENT ? '255,59,48' : fg.color === '#34C759' ? '52,199,89' : fg.color === '#FFD700' ? '255,215,0' : fg.color === '#FF3B30' ? '255,59,48' : '255,55,95'},0.1)`,
+                background: `rgba(${fg.color === '#FF2E5F' ? '255,46,95' : fg.color === ACCENT ? '255,69,48' : fg.color === '#3DFC77' ? '61,252,119' : fg.color === '#FFE600' ? '255,230,0' : fg.color === '#FF4530' ? '255,69,48' : '255,46,95'},0.1)`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 marginBottom: 20,
               }}>{fg.icon}</div>
@@ -156,10 +156,10 @@ export default function FeaturesPage() {
           <a href="/login" style={{
             padding: isMobile ? '14px 32px' : '16px 40px', borderRadius: 9999,
             fontSize: isMobile ? 15 : 16, fontWeight: 700,
-            background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+            background: 'linear-gradient(135deg, #FF2E5F, #FF4530)',
             color: 'white', textDecoration: 'none', display: 'inline-block',
             width: isMobile ? '100%' : 'auto',
-            boxShadow: '0 0 40px rgba(255,55,95,0.3)',
+            boxShadow: '0 0 40px rgba(255,46,95,0.3)',
           }}>Get Started Free</a>
         </div>
       </section>

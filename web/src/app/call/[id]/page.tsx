@@ -459,7 +459,7 @@ export default function CallPage() {
       {/* Audio-only UI */}
       {callType === 'audio' && (
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: 60 }}>
-          <div style={{ width: 100, height: 100, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+          <div style={{ width: 100, height: 100, borderRadius: '50%', background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
             <span style={{ fontSize: 40, fontWeight: 800, color: 'white' }}>{otherName[0]}</span>
           </div>
           <h1 style={{ fontSize: 28, fontWeight: 700, color: 'white', margin: 0 }}>{otherName}</h1>
@@ -469,7 +469,7 @@ export default function CallPage() {
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 3, height: 40, marginTop: 40 }}>
             {Array.from({ length: 30 }).map((_, i) => (
-              <div key={i} style={{ width: 3, height: Math.random() * 30 + 5, backgroundColor: i % 2 === 0 ? '#FF375F' : '#FF3B30', borderRadius: 2 }} />
+              <div key={i} style={{ width: 3, height: Math.random() * 30 + 5, backgroundColor: i % 2 === 0 ? '#FF2E5F' : '#FF4530', borderRadius: 2 }} />
             ))}
           </div>
         </div>
@@ -490,7 +490,7 @@ export default function CallPage() {
           {callType === 'video' && (
             <button
               onClick={() => setIsCameraOn(!isCameraOn)}
-              style={{ width: 64, height: 64, borderRadius: '50%', backgroundColor: !isCameraOn ? '#FF375F' : 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}
+              style={{ width: 64, height: 64, borderRadius: '50%', backgroundColor: !isCameraOn ? '#FF2E5F' : 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}
             >
               {isCameraOn ? <VideoIcon size={24} color="white" /> : <VideoIcon size={24} color="white" />}
               <span style={{ position: 'absolute', bottom: -18, fontSize: 10, color: '#ABABAB', fontWeight: 500 }}>{isCameraOn ? 'Camera' : 'Off'}</span>
@@ -499,7 +499,7 @@ export default function CallPage() {
 
           <button
             onClick={() => setIsMuted(!isMuted)}
-            style={{ width: 64, height: 64, borderRadius: '50%', backgroundColor: isMuted ? '#FF375F' : 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}
+            style={{ width: 64, height: 64, borderRadius: '50%', backgroundColor: isMuted ? '#FF2E5F' : 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}
           >
             {isMuted ? <MicOffIcon size={24} color="white" /> : <MicIcon size={24} color="white" />}
             <span style={{ position: 'absolute', bottom: -18, fontSize: 10, color: '#ABABAB', fontWeight: 500 }}>{isMuted ? 'Muted' : 'Mute'}</span>
@@ -507,7 +507,7 @@ export default function CallPage() {
 
           <button
             onClick={() => setIsSpeakerOn(!isSpeakerOn)}
-            style={{ width: 64, height: 64, borderRadius: '50%', backgroundColor: isSpeakerOn ? '#FF375F' : 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}
+            style={{ width: 64, height: 64, borderRadius: '50%', backgroundColor: isSpeakerOn ? '#FF2E5F' : 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}
           >
             <VolumeIcon size={24} color="white" />
             <span style={{ position: 'absolute', bottom: -18, fontSize: 10, color: '#ABABAB', fontWeight: 500 }}>{isSpeakerOn ? 'Speaker' : 'Phone'}</span>
@@ -525,7 +525,7 @@ export default function CallPage() {
         </div>
 
         <button onClick={handleEndCall} style={{ width: 72, height: 72, borderRadius: '50%', border: 'none', cursor: 'pointer', overflow: 'hidden', background: 'none' }}>
-          <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'linear-gradient(135deg, #FF3B30, #FF6B6B)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'linear-gradient(135deg, #FF4530, #FF6B6B)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{ transform: 'rotate(135deg)', display: 'flex' }}>
               <CallIcon size={32} color="white" />
             </div>

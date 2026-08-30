@@ -9,7 +9,7 @@ import { ChatIcon, StarIcon, ShieldIcon, SparklesIcon, GlobeIcon, EyeIcon } from
 import VideoCarouselBackground from '@/components/VideoCarouselBackground';
 import { useAuth } from '@/store/AuthContext';
 
-const ACCENT = '#FF3B30';
+const ACCENT = '#FF4530';
 
 function AnimatedCounter({ to, suffix = '' }: { to: number; suffix?: string }) {
   const [count, setCount] = useState(0);
@@ -40,12 +40,12 @@ function AnimatedCounter({ to, suffix = '' }: { to: number; suffix?: string }) {
 }
 
 const features = [
-  { icon: <SparklesIcon size={28} color="#FF375F" />, title: 'Smart Matching', desc: 'Our AI-powered algorithm learns your preferences and suggests the most compatible profiles.' },
+  { icon: <SparklesIcon size={28} color="#FF2E5F" />, title: 'Smart Matching', desc: 'Our AI-powered algorithm learns your preferences and suggests the most compatible profiles.' },
   { icon: <ShieldIcon size={28} color={ACCENT} />, title: 'Verified Profiles', desc: 'Every profile is verified to ensure authentic connections. No catfish, no bots.' },
-  { icon: <ChatIcon size={28} color="#34C759" />, title: 'Real-time Chat', desc: 'Break the ice with instant messaging, voice notes, and video calls.' },
-  { icon: <StarIcon size={28} color="#FFD700" />, title: 'Super Likes & Boosts', desc: 'Stand out with Super Likes and get 10x more visibility with Boosts.' },
-  { icon: <GlobeIcon size={28} color="#FF3B30" />, title: 'Global Passport', desc: 'Match with people anywhere in the world. Love knows no borders.' },
-  { icon: <EyeIcon size={28} color="#FF375F" />, title: 'See Who Likes You', desc: 'Know exactly who\'s interested before you swipe. No more guessing.' },
+  { icon: <ChatIcon size={28} color="#3DFC77" />, title: 'Real-time Chat', desc: 'Break the ice with instant messaging, voice notes, and video calls.' },
+  { icon: <StarIcon size={28} color="#FFE600" />, title: 'Super Likes & Boosts', desc: 'Stand out with Super Likes and get 10x more visibility with Boosts.' },
+  { icon: <GlobeIcon size={28} color="#FF4530" />, title: 'Global Passport', desc: 'Match with people anywhere in the world. Love knows no borders.' },
+  { icon: <EyeIcon size={28} color="#FF2E5F" />, title: 'See Who Likes You', desc: 'Know exactly who\'s interested before you swipe. No more guessing.' },
 ];
 
 const steps = [
@@ -98,10 +98,10 @@ export default function LandingPage() {
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
             padding: '6px 16px', borderRadius: 9999,
-            background: 'rgba(255,55,95,0.1)', border: '1px solid rgba(255,55,95,0.2)',
-            marginBottom: isMobile ? 24 : 32, fontSize: isMobile ? 12 : 14, color: '#FF6B8A',
+            background: 'rgba(255,46,95,0.1)', border: '1px solid rgba(255,46,95,0.2)',
+            marginBottom: isMobile ? 24 : 32, fontSize: isMobile ? 12 : 14, color: '#FF7BA0',
           }}>
-            <SparklesIcon size={12} color="#FF6B8A" />
+            <SparklesIcon size={12} color="#FF7BA0" />
             <span>Trusted by 50,000+ singles across Africa</span>
           </div>
 
@@ -129,10 +129,10 @@ export default function LandingPage() {
             <Link href="/login" style={{
               padding: isMobile ? '14px 32px' : '18px 40px',
               borderRadius: 9999, fontSize: isMobile ? 15 : 17, fontWeight: 700,
-              background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+              background: 'linear-gradient(135deg, #FF2E5F, #FF4530)',
               color: 'white', textDecoration: 'none', display: 'inline-block',
               width: isMobile ? '100%' : 'auto', textAlign: 'center',
-              boxShadow: '0 0 40px rgba(255,55,95,0.3)',
+              boxShadow: '0 0 40px rgba(255,46,95,0.3)',
             }}>
               Join Free Today
             </Link>
@@ -169,7 +169,7 @@ export default function LandingPage() {
             }}>
               <div style={{
                 fontSize: isMobile ? 28 : 40, fontWeight: 800,
-                background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+                background: 'linear-gradient(135deg, #FF2E5F, #FF4530)',
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
                 marginBottom: 4,
               }}>
@@ -186,7 +186,7 @@ export default function LandingPage() {
         <div style={{ textAlign: 'center', marginBottom: isMobile ? 40 : 64 }}>
           <span style={{
             display: 'inline-block', padding: '6px 16px', borderRadius: 9999,
-            background: `rgba(255,59,48,0.1)`, border: `1px solid rgba(255,59,48,0.2)`,
+            background: `rgba(255,69,48,0.1)`, border: `1px solid rgba(255,69,48,0.2)`,
             fontSize: 12, fontWeight: 600, color: ACCENT, marginBottom: 12,
             textTransform: 'uppercase', letterSpacing: 1,
           }}>How It Works</span>
@@ -207,13 +207,13 @@ export default function LandingPage() {
             <div key={s.num} className="card" style={{ padding: isMobile ? '24px 20px' : '32px 24px', position: 'relative' }}>
               <div style={{
                 fontSize: isMobile ? 36 : 48, fontWeight: 900,
-                background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+                background: 'linear-gradient(135deg, #FF2E5F, #FF4530)',
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
                 opacity: 0.3, position: 'absolute', top: 12, right: 20,
               }}>{s.num}</div>
               <div style={{
                 width: isMobile ? 40 : 48, height: isMobile ? 40 : 48,
-                borderRadius: 12, background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+                borderRadius: 12, background: 'linear-gradient(135deg, #FF2E5F, #FF4530)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 marginBottom: 16, fontSize: isMobile ? 16 : 20, fontWeight: 800, color: 'white',
               }}>{s.num}</div>
@@ -227,14 +227,14 @@ export default function LandingPage() {
       {/* ===== FEATURES ===== */}
       <section style={{
         padding: isMobile ? '60px 16px' : '100px 24px',
-        background: 'linear-gradient(180deg, rgba(255,59,48,0.03) 0%, transparent 100%)',
+        background: 'linear-gradient(180deg, rgba(255,69,48,0.03) 0%, transparent 100%)',
       }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: isMobile ? 40 : 64 }}>
             <span style={{
               display: 'inline-block', padding: '6px 16px', borderRadius: 9999,
-              background: 'rgba(255,55,95,0.1)', border: '1px solid rgba(255,55,95,0.2)',
-              fontSize: 12, fontWeight: 600, color: '#FF375F', marginBottom: 12,
+              background: 'rgba(255,46,95,0.1)', border: '1px solid rgba(255,46,95,0.2)',
+              fontSize: 12, fontWeight: 600, color: '#FF2E5F', marginBottom: 12,
               textTransform: 'uppercase', letterSpacing: 1,
             }}>Features</span>
             <h2 style={{ fontSize: isMobile ? 24 : 'clamp(28px, 4vw, 44px)', fontWeight: 800, margin: '0 0 12px' }}>
@@ -254,7 +254,7 @@ export default function LandingPage() {
               <div key={i} className="card" style={{ padding: isMobile ? '24px 20px' : '32px' }}>
                 <div style={{
                   width: 48, height: 48, borderRadius: 12,
-                  background: 'rgba(255,55,95,0.1)',
+                  background: 'rgba(255,46,95,0.1)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16,
                 }}>{f.icon}</div>
                 <h3 style={{ fontSize: isMobile ? 16 : 18, fontWeight: 700, margin: '0 0 6px' }}>{f.title}</h3>
@@ -269,8 +269,8 @@ export default function LandingPage() {
       <section style={{ padding: isMobile ? '60px 16px' : '100px 24px', maxWidth: 800, margin: '0 auto', textAlign: 'center' }}>
         <span style={{
           display: 'inline-block', padding: '6px 16px', borderRadius: 9999,
-          background: 'rgba(255,215,0,0.1)', border: '1px solid rgba(255,215,0,0.2)',
-          fontSize: 12, fontWeight: 600, color: '#FFD700', marginBottom: 12,
+          background: 'rgba(255,230,0,0.1)', border: '1px solid rgba(255,230,0,0.2)',
+          fontSize: 12, fontWeight: 600, color: '#FFE600', marginBottom: 12,
           textTransform: 'uppercase', letterSpacing: 1,
         }}>Testimonials</span>
         <h2 style={{ fontSize: isMobile ? 24 : 'clamp(28px, 4vw, 40px)', fontWeight: 800, marginBottom: isMobile ? 32 : 48 }}>
@@ -287,7 +287,7 @@ export default function LandingPage() {
               pointerEvents: i === testimonialIdx ? 'auto' : 'none',
             }}>
               <div className="card" style={{ padding: isMobile ? '32px 20px' : '48px 32px' }}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="#FF375F" opacity="0.3"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2-2-2H4c-1.25 0-2 .75-2 2v7c0 1.25.75 2 2 2c0 1.5 0 4-1 6m12 0c3 0 7-1 7-8V5c0-1.25-.756-2-2-2h-4c-1.25 0-2 .75-2 2v7c0 1.25.75 2 2 2c0 1.5 0 4-1 6z"/></svg>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="#FF2E5F" opacity="0.3"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2-2-2H4c-1.25 0-2 .75-2 2v7c0 1.25.75 2 2 2c0 1.5 0 4-1 6m12 0c3 0 7-1 7-8V5c0-1.25-.756-2-2-2h-4c-1.25 0-2 .75-2 2v7c0 1.25.75 2 2 2c0 1.5 0 4-1 6z"/></svg>
                 <p style={{ fontSize: isMobile ? 15 : 18, color: '#D0D0D0', lineHeight: isMobile ? '24px' : '28px', fontStyle: 'italic', maxWidth: 600, margin: '16px auto 24px' }}>
                   {'\u201C'}{t.text}{'\u201D'}
                 </p>
@@ -303,7 +303,7 @@ export default function LandingPage() {
           {testimonials.map((_, i) => (
             <button key={i} onClick={() => setTestimonialIdx(i)} style={{
               width: i === testimonialIdx ? 24 : 8, height: 8, borderRadius: 4,
-              background: i === testimonialIdx ? '#FF375F' : '#2A2A2A',
+              background: i === testimonialIdx ? '#FF2E5F' : '#2A2A2A',
               border: 'none', cursor: 'pointer', transition: 'all 0.3s',
             }} />
           ))}
@@ -315,7 +315,7 @@ export default function LandingPage() {
         <div style={{
           position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
           width: isMobile ? 350 : 600, height: isMobile ? 350 : 600,
-          borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,55,95,0.08), transparent 70%)',
+          borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,46,95,0.08), transparent 70%)',
           pointerEvents: 'none',
         }} />
         <div style={{ maxWidth: 700, margin: '0 auto', position: 'relative' }}>
@@ -328,10 +328,10 @@ export default function LandingPage() {
           <Link href="/login" style={{
             padding: isMobile ? '14px 36px' : '18px 48px',
             borderRadius: 9999, fontSize: isMobile ? 15 : 18, fontWeight: 700,
-            background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+            background: 'linear-gradient(135deg, #FF2E5F, #FF4530)',
             color: 'white', textDecoration: 'none', display: 'inline-block',
             width: isMobile ? '100%' : 'auto',
-            boxShadow: '0 0 50px rgba(255,55,95,0.3)',
+            boxShadow: '0 0 50px rgba(255,46,95,0.3)',
           }}>
             Create Free Account
           </Link>

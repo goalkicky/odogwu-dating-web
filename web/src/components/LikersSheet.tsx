@@ -34,7 +34,7 @@ export default function LikersSheet({ postId, onClose }: LikersSheetProps) {
         <div style={{ flex: 1, overflowY: 'auto', padding: '4px 0' }}>
           {loading ? (
             <div style={{ display: 'flex', justifyContent: 'center', padding: 40 }}>
-              <div style={{ width: 28, height: 28, borderRadius: 10, border: '2px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
+              <div style={{ width: 28, height: 28, borderRadius: 10, border: '2px solid rgba(255,46,95,0.2)', borderTopColor: '#FF2E5F', animation: 'spin 0.8s linear infinite' }} />
             </div>
           ) : likers.length === 0 ? (
             <div style={{ padding: '40px 0', textAlign: 'center' }}>
@@ -43,12 +43,12 @@ export default function LikersSheet({ postId, onClose }: LikersSheetProps) {
           ) : (
             likers.map((user: any) => (
               <div key={user.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 20px' }}>
-                <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #7C4DFF)', padding: 2, flexShrink: 0 }}>
+                <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)', padding: 2, flexShrink: 0 }}>
                   <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: '#111', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {user.userPhoto ? (
                       <img src={storageService.getFilePreview(user.userPhoto)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
-                      <span style={{ fontSize: 16, fontWeight: 700, color: '#FF375F' }}>{(user.fullName || '?').charAt(0)}</span>
+                      <span style={{ fontSize: 16, fontWeight: 700, color: '#FF2E5F' }}>{(user.fullName || '?').charAt(0)}</span>
                     )}
                   </div>
                 </div>

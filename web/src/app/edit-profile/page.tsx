@@ -55,8 +55,8 @@ function OptionPicker({ label, options, value, onChange, onClose }: { label: str
               key={opt}
               onClick={() => { onChange(opt); onClose(); }}
               style={{
-                width: '100%', padding: '14px 16px', background: value === opt ? 'rgba(255,55,95,0.15)' : 'transparent',
-                border: `1px solid ${value === opt ? '#FF375F' : '#EDEDF1'}`,
+                width: '100%', padding: '14px 16px', background: value === opt ? 'rgba(255,46,95,0.15)' : 'transparent',
+                border: `1px solid ${value === opt ? '#FF2E5F' : '#EDEDF1'}`,
                 borderRadius: 12, color: '#151515', fontSize: 16, cursor: 'pointer', textAlign: 'center', marginBottom: 8, textTransform: 'capitalize',
                 fontWeight: value === opt ? 700 : 400,
               }}
@@ -212,7 +212,7 @@ export default function EditProfilePage() {
         <button
           onClick={handleSave}
           disabled={saving}
-          style={{ width: 40, height: 40, borderRadius: 9999, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, background: 'linear-gradient(135deg, #FF375F, #FF6B8A)', boxShadow: '0 4px 16px rgba(255,55,95,0.4)', color: 'white', fontWeight: 800, fontSize: 13 }}
+          style={{ width: 40, height: 40, borderRadius: 9999, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, background: 'linear-gradient(135deg, #FF2E5F, #FF7BA0)', boxShadow: '0 4px 16px rgba(255,46,95,0.4)', color: 'white', fontWeight: 800, fontSize: 13 }}
         >
           {saving ? '...' : 'Done'}
         </button>
@@ -267,7 +267,7 @@ export default function EditProfilePage() {
             rows={4}
             style={{ width: '100%', boxSizing: 'border-box', background: '#F6F6F9', border: '1px solid #EDEDF1', borderRadius: 14, color: '#151515', padding: '14px 14px 24px', fontSize: 15, lineHeight: '22px', resize: 'none', outline: 'none', fontFamily: 'inherit' }}
           />
-          <span style={{ position: 'absolute', right: 12, bottom: 8, fontSize: 12, fontWeight: 600, color: bio.length >= BIO_MAX ? '#FF6B8A' : '#8A8A8F' }}>
+          <span style={{ position: 'absolute', right: 12, bottom: 8, fontSize: 12, fontWeight: 600, color: bio.length >= BIO_MAX ? '#FF7BA0' : '#8A8A8F' }}>
             {bio.length}/{BIO_MAX}
           </span>
         </div>
@@ -281,7 +281,7 @@ export default function EditProfilePage() {
             <input value={dob} onChange={e => setDob(e.target.value)} type="date" style={{ flex: 1, background: 'none', border: 'none', color: dob ? '#151515' : '#8A8A8F', fontSize: 15, textAlign: 'right', outline: 'none', padding: '0 0 0 12px', minWidth: 0 }} />
           </BasicsRow>
           {ageError && (
-            <div style={{ padding: '4px 16px 10px', color: '#FF3B30', fontSize: 12.5, fontWeight: 500 }}>
+            <div style={{ padding: '4px 16px 10px', color: '#FF4530', fontSize: 12.5, fontWeight: 500 }}>
               You must be at least 18 to use this app.
             </div>
           )}
@@ -299,11 +299,11 @@ export default function EditProfilePage() {
         <SectionLabel>My Interests</SectionLabel>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '0 2px 14px' }}>
           <p style={{ fontSize: 13, color: '#8A8A8F', margin: 0 }}>These show as badges on your profile.</p>
-          <span style={{ fontSize: 12.5, fontWeight: 700, color: interests.length >= MAX_INTERESTS ? '#FF6B8A' : '#8A8A8F' }}>
+          <span style={{ fontSize: 12.5, fontWeight: 700, color: interests.length >= MAX_INTERESTS ? '#FF7BA0' : '#8A8A8F' }}>
             {interests.length}/{MAX_INTERESTS}
           </span>
         </div>
-        {interestNote && <p style={{ fontSize: 12.5, color: '#FF6B8A', margin: '-6px 2px 10px', fontWeight: 600 }}>{interestNote}</p>}
+        {interestNote && <p style={{ fontSize: 12.5, color: '#FF7BA0', margin: '-6px 2px 10px', fontWeight: 600 }}>{interestNote}</p>}
         {INTEREST_CATEGORIES.map(cat => (
           <div key={cat.label} style={{ marginBottom: 4 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 7, margin: '18px 2px 10px' }}>
@@ -320,7 +320,7 @@ export default function EditProfilePage() {
                     style={{
                       padding: '9px 16px', borderRadius: 9999, fontSize: 13.5, fontWeight: 600, cursor: 'pointer',
                       color: selected ? 'white' : '#8A8A8F',
-                      background: selected ? 'linear-gradient(135deg, #FF375F, #FF6B8A)' : '#F3F3F6',
+                      background: selected ? 'linear-gradient(135deg, #FF2E5F, #FF7BA0)' : '#F3F3F6',
                       border: selected ? 'none' : '1px solid #EDEDF1',
                       opacity: !selected && interests.length >= MAX_INTERESTS ? 0.45 : 1,
                       transition: 'all 0.15s ease',
@@ -334,7 +334,7 @@ export default function EditProfilePage() {
           </div>
         ))}
 
-        {error && <p style={{ color: '#FF3B30', fontSize: 13, textAlign: 'center', marginTop: 20 }}>{error}</p>}
+        {error && <p style={{ color: '#FF4530', fontSize: 13, textAlign: 'center', marginTop: 20 }}>{error}</p>}
 
         <SectionLabel>Other Personal Details</SectionLabel>
         <div style={{ borderRadius: 16, overflow: 'hidden', marginTop: 12, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>

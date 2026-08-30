@@ -9,9 +9,9 @@ export interface InterestCategory {
 export const INTEREST_CATEGORIES: InterestCategory[] = [
   {
     label: 'Language and Linguistics',
-    emoji: '🗣️',
+    emoji: 'ðŸ—£ï¸',
     c1: '#1E88E5',
-    c2: '#4FC3F7',
+    c2: '#22E5FF',
     items: [
       'Igbo', 'Tsonga', 'Akan', 'Lingala', 'Yoruba', 'Xhosa', 'Hausa', 'Luganda', 'Luo', 'Zulu',
       'Urhobo', 'Duala', 'Nigerian Pidgin', 'Nupe', 'Mandinka', 'Wolof', 'Shona', 'Setswana', 'Sesotho',
@@ -21,8 +21,8 @@ export const INTEREST_CATEGORIES: InterestCategory[] = [
   },
   {
     label: 'Music',
-    emoji: '🎵',
-    c1: '#7C4DFF',
+    emoji: 'ðŸŽµ',
+    c1: '#B44CFF',
     c2: '#B388FF',
     items: [
       'Igbo Highlife', 'gospel music', 'Afro beat', 'Amapiano', 'R&B', 'Hip Hop', 'Reggae music',
@@ -31,27 +31,27 @@ export const INTEREST_CATEGORIES: InterestCategory[] = [
   },
   {
     label: 'Movies and TV shows',
-    emoji: '🎬',
+    emoji: 'ðŸŽ¬',
     c1: '#5C6BC0',
     c2: '#9FA8DA',
     items: [
-      'Nollywood', 'Documentaries', '90 day fiancé', 'Hollywood', 'K-drama', 'Horror movies',
+      'Nollywood', 'Documentaries', '90 day fiancÃ©', 'Hollywood', 'K-drama', 'Horror movies',
       'The Real Housewives', 'Big brother Naija', 'Bollywood', 'Comedy', 'Anime',
     ],
   },
   {
     label: 'Sports and Athletics',
-    emoji: '⚽',
+    emoji: 'âš½',
     c1: '#2E7D32',
     c2: '#66BB6A',
     items: [
-      'Football', 'Basketball', 'volleyball', 'swimming', 'running', 'cycling', 'ịkpọ ụga',
+      'Football', 'Basketball', 'volleyball', 'swimming', 'running', 'cycling', 'á»‹kpá» á»¥ga',
       'Hand ball', 'Netball', 'tennis', 'Golf', 'Boxing',
     ],
   },
   {
     label: 'Food and Drink',
-    emoji: '🍲',
+    emoji: 'ðŸ²',
     c1: '#FF7043',
     c2: '#FFB74D',
     items: [
@@ -61,7 +61,7 @@ export const INTEREST_CATEGORIES: InterestCategory[] = [
   },
   {
     label: 'Social Media and Networking',
-    emoji: '📱',
+    emoji: 'ðŸ“±',
     c1: '#3949AB',
     c2: '#7986CB',
     items: [
@@ -71,17 +71,17 @@ export const INTEREST_CATEGORIES: InterestCategory[] = [
   },
   {
     label: 'Art & Literature',
-    emoji: '📚',
+    emoji: 'ðŸ“š',
     c1: '#AB47BC',
     c2: '#CE93D8',
     items: [
       'Igbo Folktales', 'Bini Bronzes', 'Terracotta', 'Things fall apart', 'Half of a Yellow Sun',
-      'Asante Regalia', 'Djembé', 'Igboukwu bronzes',
+      'Asante Regalia', 'DjembÃ©', 'Igboukwu bronzes',
     ],
   },
   {
     label: 'Politics & Activism',
-    emoji: '✊',
+    emoji: 'âœŠ',
     c1: '#D81B60',
     c2: '#F06292',
     items: [
@@ -91,7 +91,7 @@ export const INTEREST_CATEGORIES: InterestCategory[] = [
   },
   {
     label: 'Social Activities & Adventures',
-    emoji: '🌍',
+    emoji: 'ðŸŒ',
     c1: '#00897B',
     c2: '#4DB6AC',
     items: [
@@ -101,7 +101,7 @@ export const INTEREST_CATEGORIES: InterestCategory[] = [
   },
   {
     label: 'Beauty & Wellness',
-    emoji: '🧖',
+    emoji: 'ðŸ§–',
     c1: '#7E57C2',
     c2: '#B39DDB',
     items: [

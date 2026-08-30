@@ -72,7 +72,7 @@ export default function LikesPage() {
       <div>
         {/* Hero header */}
         <div className="animate-fade-up" style={{ borderRadius: 24, padding: 24, marginBottom: 22, background: '#fff', border: '1px solid #EFEFF3', boxShadow: '0 2px 10px rgba(20,20,25,0.04)', display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div style={{ width: 52, height: 52, borderRadius: 16, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 28px rgba(255,55,95,0.45)' }}>
+          <div style={{ width: 52, height: 52, borderRadius: 16, background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 28px rgba(255,46,95,0.45)' }}>
             <EyeIcon size={26} color="white" />
           </div>
           <div style={{ flex: 1 }}>
@@ -94,7 +94,7 @@ export default function LikesPage() {
               <div style={{ fontSize: 14, fontWeight: 700, color: '#151515' }}>Unlock who liked you</div>
               <div style={{ fontSize: 12, color: '#8A8A8F' }}>See names &amp; clear photos instantly</div>
             </div>
-            <Link href="/premium" style={{ padding: '9px 18px', borderRadius: 9999, background: 'linear-gradient(135deg, #FFD700, #FF9500)', color: '#1A1A1A', fontSize: 13, fontWeight: 800, textDecoration: 'none', boxShadow: '0 4px 18px rgba(255,215,0,0.35)' }}>
+            <Link href="/premium" style={{ padding: '9px 18px', borderRadius: 9999, background: 'linear-gradient(135deg, #FFE600, #FFB62B)', color: '#1A1A1A', fontSize: 13, fontWeight: 800, textDecoration: 'none', boxShadow: '0 4px 18px rgba(255,230,0,0.35)' }}>
               Go Premium
             </Link>
           </div>
@@ -102,17 +102,17 @@ export default function LikesPage() {
 
         {loading ? (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 70, gap: 16 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 14, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
+            <div style={{ width: 40, height: 40, borderRadius: 14, border: '3px solid rgba(255,46,95,0.2)', borderTopColor: '#FF2E5F', animation: 'spin 0.8s linear infinite' }} />
             <span style={{ color: '#8A8A8F', fontSize: 15 }}>Loading...</span>
           </div>
         ) : likers.length === 0 ? (
           <div className="animate-fade-up" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 70, gap: 14, borderRadius: 24, background: '#fff', border: '1px solid #EFEFF3', boxShadow: '0 2px 10px rgba(20,20,25,0.04)' }}>
-            <div style={{ width: 80, height: 80, borderRadius: 24, background: 'rgba(255,55,95,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <EyeIcon size={40} color="#FF6B8A" />
+            <div style={{ width: 80, height: 80, borderRadius: 24, background: 'rgba(255,46,95,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <EyeIcon size={40} color="#FF7BA0" />
             </div>
             <span style={{ fontSize: 20, fontWeight: 800, color: '#151515' }}>No likes yet</span>
             <span style={{ fontSize: 14, color: '#8A8A8F', textAlign: 'center', maxWidth: 280 }}>Keep swiping on Discover to get more likes!</span>
-            <Link href="/discover" style={{ marginTop: 6, padding: '12px 28px', borderRadius: 9999, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white', fontSize: 14, fontWeight: 700, textDecoration: 'none', boxShadow: '0 6px 24px rgba(255,55,95,0.4)' }}>
+            <Link href="/discover" style={{ marginTop: 6, padding: '12px 28px', borderRadius: 9999, background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', color: 'white', fontSize: 14, fontWeight: 700, textDecoration: 'none', boxShadow: '0 6px 24px rgba(255,46,95,0.4)' }}>
               Start Swiping
             </Link>
           </div>
@@ -160,8 +160,8 @@ export default function LikesPage() {
 
                   {!isPremium && (
                     <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.25)' }}>
-                      <div style={{ padding: '6px 14px', borderRadius: 9999, background: 'rgba(13,13,16,0.85)', border: '1px solid rgba(255,215,0,0.4)', fontSize: 11, fontWeight: 800, color: '#FFD700', letterSpacing: 0.5, backdropFilter: 'blur(4px)' }}>
-                        🔒 PREMIUM
+                      <div style={{ padding: '6px 14px', borderRadius: 9999, background: 'rgba(13,13,16,0.85)', border: '1px solid rgba(255,230,0,0.4)', fontSize: 11, fontWeight: 800, color: '#FFE600', letterSpacing: 0.5, backdropFilter: 'blur(4px)' }}>
+                        Ã°Å¸â€â€™ PREMIUM
                       </div>
                     </div>
                   )}
@@ -185,11 +185,11 @@ export default function LikesPage() {
                     style={{
                       position: 'absolute', right: 12, bottom: 12,
                       width: 40, height: 40, borderRadius: '50%', border: 'none',
-                      background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+                      background: 'linear-gradient(135deg, #FF2E5F, #FF4530)',
                       color: 'white', cursor: 'pointer',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       opacity: likingId === (mp.$id || mp.id) ? 0.5 : 1,
-                      boxShadow: '0 0 18px rgba(255,55,95,0.65), 0 6px 16px rgba(255,55,95,0.4)',
+                      boxShadow: '0 0 18px rgba(255,46,95,0.65), 0 6px 16px rgba(255,46,95,0.4)',
                       transition: 'transform 0.15s ease',
                     }}
                     onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.08)')}

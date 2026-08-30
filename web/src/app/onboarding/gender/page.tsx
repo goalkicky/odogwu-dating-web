@@ -33,7 +33,7 @@ export default function GenderPage() {
       <OnboardingProgress currentStep={2} totalSteps={6} />
 
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
-        <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, #FF375F, #FF6B8A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, #FF2E5F, #FF7BA0)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <TransgenderIcon size={36} color="white" />
         </div>
       </div>
@@ -57,7 +57,7 @@ export default function GenderPage() {
                 border: 'none',
                 cursor: 'pointer',
                 background: isSelected
-                   ? 'linear-gradient(135deg, #FF375F, #FF3B30)'
+                   ? 'linear-gradient(135deg, #FF2E5F, #FF4530)'
                   : 'linear-gradient(135deg, #1A1A1A, #242424)',
                 color: isSelected ? 'white' : '#ABABAB',
               }}

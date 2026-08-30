@@ -73,12 +73,12 @@ export default function LoginPage() {
             width: 120,
             height: 120,
             borderRadius: 40,
-            background: 'linear-gradient(135deg, #FF3B30, #FF375F)',
+            background: 'linear-gradient(135deg, #FF4530, #FF2E5F)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             marginBottom: 20,
-            boxShadow: '0 0 20px rgba(255,55,95,0.5)',
+            boxShadow: '0 0 20px rgba(255,46,95,0.5)',
           }}
         >
           <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu Dating" style={{ width: 60, height: 60, objectFit: 'cover' }} />
@@ -91,9 +91,9 @@ export default function LoginPage() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', paddingBottom: 32, position: 'relative', zIndex: 1 }}>
         {[
-          { icon: <SparklesIcon size={20} color="#FF375F" />, text: 'Smart Matching Algorithm' },
-          { icon: <ShieldIcon size={20} color="#FF375F" />, text: 'Verified Profiles Only' },
-          { icon: <ChatIcon size={20} color="#FF375F" />, text: 'Real-time Chat & Calls' },
+          { icon: <SparklesIcon size={20} color="#FF2E5F" />, text: 'Smart Matching Algorithm' },
+          { icon: <ShieldIcon size={20} color="#FF2E5F" />, text: 'Verified Profiles Only' },
+          { icon: <ChatIcon size={20} color="#FF2E5F" />, text: 'Real-time Chat & Calls' },
         ].map((feature, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             {feature.icon}
@@ -115,7 +115,7 @@ export default function LoginPage() {
             />
             <button
               onClick={() => setMode('email')}
-              style={{ background: 'none', border: 'none', color: '#FF6B8A', fontSize: 14, fontWeight: 600, cursor: 'pointer', marginBottom: 16, padding: '4px 8px' }}
+              style={{ background: 'none', border: 'none', color: '#FF7BA0', fontSize: 14, fontWeight: 600, cursor: 'pointer', marginBottom: 16, padding: '4px 8px' }}
             >
               Sign in with email instead
             </button>
@@ -142,7 +142,7 @@ export default function LoginPage() {
             <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
               <button
                 onClick={() => router.push('/forgot-password')}
-                style={{ background: 'none', border: 'none', color: '#FF6B8A', fontSize: 13, fontWeight: 600, cursor: 'pointer', padding: '2px 0' }}
+                style={{ background: 'none', border: 'none', color: '#FF7BA0', fontSize: 13, fontWeight: 600, cursor: 'pointer', padding: '2px 0' }}
               >
                 Forgot password?
               </button>
@@ -158,7 +158,7 @@ export default function LoginPage() {
             />
             <button
               onClick={() => router.push('/register')}
-              style={{ background: 'none', border: 'none', color: '#FF6B8A', fontSize: 14, fontWeight: 600, cursor: 'pointer', marginBottom: 16, padding: '4px 8px' }}
+              style={{ background: 'none', border: 'none', color: '#FF7BA0', fontSize: 14, fontWeight: 600, cursor: 'pointer', marginBottom: 16, padding: '4px 8px' }}
             >
               Create an account
             </button>
@@ -170,7 +170,7 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <div style={{ position: 'absolute', width: 150, height: 150, borderRadius: '50%', opacity: 0.08, top: '40%', right: -60, backgroundColor: '#FFD700', pointerEvents: 'none', zIndex: 1 }} />
+      <div style={{ position: 'absolute', width: 150, height: 150, borderRadius: '50%', opacity: 0.08, top: '40%', right: -60, backgroundColor: '#FFE600', pointerEvents: 'none', zIndex: 1 }} />
     </div>
   );
 }

@@ -296,7 +296,7 @@ export default function ExplorePage() {
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <GridIcon size={20} color="#FF375F" />
+                <GridIcon size={20} color="#FF2E5F" />
                 <h2 style={{ fontSize: isMobile ? 22 : 24, fontWeight: 800, color: '#151515', margin: 0 }}>Feed</h2>
               </div>
               <button
@@ -304,9 +304,9 @@ export default function ExplorePage() {
                 style={{
                   display: 'flex', alignItems: 'center', gap: 6,
                   padding: '8px 16px', borderRadius: 9999, border: 'none',
-                  background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+                  background: 'linear-gradient(135deg, #FF2E5F, #FF4530)',
                   color: 'white', fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                  boxShadow: '0 4px 18px rgba(255,55,95,0.35)',
+                  boxShadow: '0 4px 18px rgba(255,46,95,0.35)',
                 }}
               >
                 <PlusIcon size={16} color="white" /> Post
@@ -315,12 +315,12 @@ export default function ExplorePage() {
 
             {feedLoading && feedPosts.length === 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '30vh', gap: 18 }}>
-                <div style={{ width: 48, height: 48, borderRadius: 16, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
+                <div style={{ width: 48, height: 48, borderRadius: 16, border: '3px solid rgba(255,46,95,0.2)', borderTopColor: '#FF2E5F', animation: 'spin 0.8s linear infinite' }} />
                 <span className="neon-text" style={{ fontSize: 14, fontWeight: 700 }}>Loading feed...</span>
               </div>
             ) : feedPosts.length === 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 0', gap: 12, textAlign: 'center' }}>
-                <div style={{ width: 72, height: 72, borderRadius: 22, background: 'linear-gradient(135deg, rgba(255,55,95,0.12), rgba(124,77,255,0.08))', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #EDEDF1' }}>
+                <div style={{ width: 72, height: 72, borderRadius: 22, background: 'linear-gradient(135deg, rgba(255,46,95,0.12), rgba(180,76,255,0.08))', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #EDEDF1' }}>
                   <CameraIcon size={32} color="#8A8A8F" />
                 </div>
                 <span style={{ fontSize: 16, fontWeight: 700, color: '#151515' }}>No posts yet</span>
@@ -332,9 +332,9 @@ export default function ExplorePage() {
                   style={{
                     marginTop: 4, display: 'flex', alignItems: 'center', gap: 8,
                     padding: '12px 24px', borderRadius: 9999, border: 'none',
-                    background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+                    background: 'linear-gradient(135deg, #FF2E5F, #FF4530)',
                     color: 'white', fontSize: 14, fontWeight: 700, cursor: 'pointer',
-                    boxShadow: '0 6px 24px rgba(255,55,95,0.4)',
+                    boxShadow: '0 6px 24px rgba(255,46,95,0.4)',
                   }}
                 >
                   <PlusIcon size={16} color="white" /> Create First Post
@@ -374,10 +374,10 @@ export default function ExplorePage() {
           <div className="animate-fade-up" style={{ maxWidth: 560, margin: '0 auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
               <h1 style={{ fontSize: isMobile ? 26 : 30, fontWeight: 800, color: '#151515', margin: 0, letterSpacing: 0.5 }}>
-                Explore<span style={{ color: '#FF375F' }}>.</span>
+                Explore<span style={{ color: '#FF2E5F' }}>.</span>
               </h1>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 14px', borderRadius: 9999, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
-                <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#34C759', boxShadow: '0 0 10px #34C759' }} />
+                <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#3DFC77', boxShadow: '0 0 10px #3DFC77' }} />
                 <span style={{ color: '#8A8A8F', fontSize: 13, fontWeight: 600 }}>{totalPeople} people</span>
               </div>
             </div>
@@ -387,7 +387,7 @@ export default function ExplorePage() {
 
             {loading ? (
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '50vh', gap: 18 }}>
-                <div style={{ width: 56, height: 56, borderRadius: 18, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
+                <div style={{ width: 56, height: 56, borderRadius: 18, border: '3px solid rgba(255,46,95,0.2)', borderTopColor: '#FF2E5F', animation: 'spin 0.8s linear infinite' }} />
                 <span className="neon-text" style={{ fontSize: 16, fontWeight: 700 }}>Finding people...</span>
               </div>
             ) : (
@@ -427,7 +427,7 @@ export default function ExplorePage() {
                 </span>
                 <button onClick={load} style={{ padding: '12px 26px', borderRadius: 9999, border: '1px solid #EDEDF1', background: '#fff', boxShadow: '0 1px 4px rgba(20,20,25,0.03)', color: '#151515', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <RefreshIcon size={16} color="#FF6B8A" />
+                    <RefreshIcon size={16} color="#FF7BA0" />
                     Refresh
                   </div>
                 </button>
@@ -465,20 +465,20 @@ export default function ExplorePage() {
         {showInterestRestriction && activeCategory && (
           <div onClick={() => setShowInterestRestriction(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(6px)', padding: 16 }}>
             <div onClick={(e) => e.stopPropagation()} className="feed-sheet-up" style={{ width: '100%', maxWidth: 380, background: '#fff', borderRadius: 24, border: '1px solid #EDEDF1', padding: '32px 24px', textAlign: 'center' }}>
-              <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,55,95,0.15), rgba(124,77,255,0.12))', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', border: '1px solid rgba(255,55,95,0.2)' }}>
-                <span style={{ fontSize: 28 }}>🔒</span>
+              <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,46,95,0.15), rgba(180,76,255,0.12))', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', border: '1px solid rgba(255,46,95,0.2)' }}>
+                <span style={{ fontSize: 28 }}>Ã°Å¸â€â€™</span>
               </div>
               <h3 style={{ fontSize: 18, fontWeight: 800, color: '#151515', margin: '0 0 10px' }}>Category Locked</h3>
               <p style={{ fontSize: 14, color: '#8A8A8F', margin: '0 0 24px', lineHeight: 1.5 }}>
-                You can&apos;t post in <span style={{ color: '#FF375F', fontWeight: 700 }}>{activeCategory.label}</span> because you haven&apos;t added any of its interests to your profile yet.
+                You can&apos;t post in <span style={{ color: '#FF2E5F', fontWeight: 700 }}>{activeCategory.label}</span> because you haven&apos;t added any of its interests to your profile yet.
               </p>
               <button
                 onClick={() => setShowInterestRestriction(false)}
                 style={{
                   width: '100%', padding: '12px 0', borderRadius: 14, border: 'none',
-                  background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+                  background: 'linear-gradient(135deg, #FF2E5F, #FF4530)',
                   color: 'white', fontSize: 14, fontWeight: 700, cursor: 'pointer',
-                  boxShadow: '0 6px 24px rgba(255,55,95,0.4)',
+                  boxShadow: '0 6px 24px rgba(255,46,95,0.4)',
                 }}
               >
                 Got it

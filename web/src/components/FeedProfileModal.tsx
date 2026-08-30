@@ -110,13 +110,13 @@ export default function FeedProfileModal({ userId, userName, userPhoto, currentU
         <div style={{ position: 'relative', width: '100%', aspectRatio: '3 / 4', background: '#0A0A0E' }}>
           {loading ? (
             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ width: 40, height: 40, borderRadius: 14, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
+              <div style={{ width: 40, height: 40, borderRadius: 14, border: '3px solid rgba(255,46,95,0.2)', borderTopColor: '#FF2E5F', animation: 'spin 0.8s linear infinite' }} />
             </div>
           ) : photoSrc ? (
             <img src={photoSrc} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           ) : (
             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #1A1A2E, #2A2A3E)' }}>
-              <span style={{ fontSize: 64, fontWeight: 700, color: '#FF375F' }}>{userName?.charAt(0)?.toUpperCase() || '?'}</span>
+              <span style={{ fontSize: 64, fontWeight: 700, color: '#FF2E5F' }}>{userName?.charAt(0)?.toUpperCase() || '?'}</span>
             </div>
           )}
 
@@ -158,7 +158,7 @@ export default function FeedProfileModal({ userId, userName, userPhoto, currentU
           </div>
         </div>
 
-        {/* Action buttons — hidden if already liked/superliked */}
+        {/* Action buttons Ã¢â‚¬â€ hidden if already liked/superliked */}
         {(hideActions || alreadyActed) ? (
           <div style={{ padding: '20px 20px 24px', textAlign: 'center' }}>
             <span style={{ fontSize: 14, color: '#6B6B6B', fontWeight: 600 }}>You&apos;ve already liked this profile</span>
@@ -172,17 +172,17 @@ export default function FeedProfileModal({ userId, userName, userPhoto, currentU
 
           {/* Superlike */}
           <button onClick={handleSuperLike} disabled={actionLoading || !!actionResult || superlikes.remaining <= 0} style={{ width: 48, height: 48, borderRadius: '50%', border: '2px solid rgba(79,195,247,0.3)', background: 'rgba(79,195,247,0.1)', cursor: actionLoading || actionResult || superlikes.remaining <= 0 ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', opacity: actionLoading || actionResult || superlikes.remaining <= 0 ? 0.4 : 1 }}>
-            <StarIcon size={22} color="#4FC3F7" />
-            <span style={{ position: 'absolute', top: -4, right: -6, minWidth: 18, height: 18, padding: '0 4px', boxSizing: 'border-box', borderRadius: 9999, background: superlikes.remaining > 0 ? 'linear-gradient(135deg, #4FC3F7, #0288D1)' : '#FF3B30', color: 'white', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #111' }}>
+            <StarIcon size={22} color="#22E5FF" />
+            <span style={{ position: 'absolute', top: -4, right: -6, minWidth: 18, height: 18, padding: '0 4px', boxSizing: 'border-box', borderRadius: 9999, background: superlikes.remaining > 0 ? 'linear-gradient(135deg, #22E5FF, #0AA6CE)' : '#FF4530', color: 'white', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #111' }}>
               {superlikes.remaining}
             </span>
           </button>
 
           {/* Like */}
-          <button onClick={handleLike} disabled={actionLoading || !!actionResult || (!likes.isPremium && (likes.remaining ?? 0) <= 0)} style={{ width: 62, height: 62, borderRadius: '50%', border: 'none', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', cursor: actionLoading || actionResult || (!likes.isPremium && (likes.remaining ?? 0) <= 0) ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 24px rgba(255,55,95,0.4)', position: 'relative', opacity: actionLoading || actionResult || (!likes.isPremium && (likes.remaining ?? 0) <= 0) ? 0.4 : 1 }}>
+          <button onClick={handleLike} disabled={actionLoading || !!actionResult || (!likes.isPremium && (likes.remaining ?? 0) <= 0)} style={{ width: 62, height: 62, borderRadius: '50%', border: 'none', background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', cursor: actionLoading || actionResult || (!likes.isPremium && (likes.remaining ?? 0) <= 0) ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 24px rgba(255,46,95,0.4)', position: 'relative', opacity: actionLoading || actionResult || (!likes.isPremium && (likes.remaining ?? 0) <= 0) ? 0.4 : 1 }}>
             <HeartIcon size={28} color="white" />
             {!likes.isPremium && likes.dailyLimit > 0 && (
-              <span style={{ position: 'absolute', top: -4, right: -6, minWidth: 18, height: 18, padding: '0 4px', boxSizing: 'border-box', borderRadius: 9999, background: (likes.remaining ?? 0) > 0 ? 'linear-gradient(135deg, #FF375F, #FF6B81)' : '#FF3B30', color: 'white', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #111' }}>
+              <span style={{ position: 'absolute', top: -4, right: -6, minWidth: 18, height: 18, padding: '0 4px', boxSizing: 'border-box', borderRadius: 9999, background: (likes.remaining ?? 0) > 0 ? 'linear-gradient(135deg, #FF2E5F, #FF7BA0)' : '#FF4530', color: 'white', fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #111' }}>
                 {Math.max(0, likes.remaining ?? 0)}
               </span>
             )}
@@ -194,15 +194,15 @@ export default function FeedProfileModal({ userId, userName, userPhoto, currentU
         {actionResult && (
           <div className="animate-pop" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 20 }}>
             {actionResult === 'match' ? (
-              <div style={{ background: 'linear-gradient(135deg, #FF375F, #7C4DFF)', padding: '12px 28px', borderRadius: 9999, boxShadow: '0 8px 30px rgba(255,55,95,0.5)' }}>
+              <div style={{ background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)', padding: '12px 28px', borderRadius: 9999, boxShadow: '0 8px 30px rgba(255,46,95,0.5)' }}>
                 <span style={{ color: 'white', fontWeight: 800, fontSize: 16 }}>It&apos;s a Match!</span>
               </div>
             ) : actionResult === 'liked' ? (
-              <div style={{ background: 'linear-gradient(135deg, #34C759, #30D158)', padding: '12px 28px', borderRadius: 9999, boxShadow: '0 8px 30px rgba(52,199,89,0.5)' }}>
+              <div style={{ background: 'linear-gradient(135deg, #3DFC77, #3DFC77)', padding: '12px 28px', borderRadius: 9999, boxShadow: '0 8px 30px rgba(61,252,119,0.5)' }}>
                 <span style={{ color: 'white', fontWeight: 800, fontSize: 16 }}>Liked!</span>
               </div>
             ) : actionResult === 'superliked' ? (
-              <div style={{ background: 'linear-gradient(135deg, #4FC3F7, #0288D1)', padding: '12px 28px', borderRadius: 9999, boxShadow: '0 8px 30px rgba(79,195,247,0.5)' }}>
+              <div style={{ background: 'linear-gradient(135deg, #22E5FF, #0AA6CE)', padding: '12px 28px', borderRadius: 9999, boxShadow: '0 8px 30px rgba(79,195,247,0.5)' }}>
                 <span style={{ color: 'white', fontWeight: 800, fontSize: 16 }}>Super Liked!</span>
               </div>
             ) : null}

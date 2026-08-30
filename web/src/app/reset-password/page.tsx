@@ -50,7 +50,7 @@ function ResetPasswordContent() {
           <p style={{ color: '#ABABAB', fontSize: 15, textAlign: 'center' }}>Invalid reset link. Please request a new code.</p>
           <button
             onClick={() => router.push('/forgot-password')}
-            style={{ background: 'none', border: 'none', color: '#FF6B8A', fontSize: 14, fontWeight: 600, cursor: 'pointer', marginTop: 12 }}
+            style={{ background: 'none', border: 'none', color: '#FF7BA0', fontSize: 14, fontWeight: 600, cursor: 'pointer', marginTop: 12 }}
           >
             Go to Forgot Password
           </button>
@@ -64,7 +64,7 @@ function ResetPasswordContent() {
       <div style={{ minHeight: '100svh', display: 'flex', flexDirection: 'column', padding: '0 24px', position: 'relative', overflow: 'hidden' }}>
         <VideoCarouselBackground />
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative', zIndex: 1 }}>
-          <div style={{ width: 64, height: 64, borderRadius: 9999, background: 'linear-gradient(135deg, #34C759, #30B350)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
+          <div style={{ width: 64, height: 64, borderRadius: 9999, background: 'linear-gradient(135deg, #3DFC77, #30B350)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
             <span style={{ fontSize: 28, color: 'white' }}>&#10003;</span>
           </div>
           <h1 style={{ fontSize: 24, fontWeight: 800, color: 'white', margin: '0 0 8px' }}>Password Updated</h1>
@@ -120,7 +120,7 @@ function ResetPasswordContent() {
 
         <button
           onClick={() => router.push('/login')}
-          style={{ background: 'none', border: 'none', color: '#FF6B8A', fontSize: 14, fontWeight: 600, cursor: 'pointer', padding: '4px 8px', alignSelf: 'center' }}
+          style={{ background: 'none', border: 'none', color: '#FF7BA0', fontSize: 14, fontWeight: 600, cursor: 'pointer', padding: '4px 8px', alignSelf: 'center' }}
         >
           Back to sign in
         </button>

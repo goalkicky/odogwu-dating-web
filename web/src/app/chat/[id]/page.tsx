@@ -15,9 +15,9 @@ import { captureStream, mediaConstraints, mediaErrorMessage } from '@/lib/media'
 import Button from '@/components/Button';
 import type { Message } from '@/lib/types';
 
-const EMOJIS = ['😀', '😂', '❤️', '🔥', '😍', '🥰', '😘', '💕', '😊', '😎', '🙌', '👋', '💪', '✨', '🌟', '🎉', '🎂', '🍕', '☕', '🌮'];
-const QUICK_REPLIES = ['Hey 😊', 'How are you?', "You're gorgeous 🔥", 'Coffee sometime? ☕', 'LOL 😂', '💕'];
-const REACTIONS = ['❤️', '😂', '🔥', '😍', '👍', '😮'];
+const EMOJIS = ['Ã°Å¸Ëœâ‚¬', 'Ã°Å¸Ëœâ€š', 'Ã¢ÂÂ¤Ã¯Â¸Â', 'Ã°Å¸â€Â¥', 'Ã°Å¸ËœÂ', 'Ã°Å¸Â¥Â°', 'Ã°Å¸ËœËœ', 'Ã°Å¸â€™â€¢', 'Ã°Å¸ËœÅ ', 'Ã°Å¸ËœÅ½', 'Ã°Å¸â„¢Å’', 'Ã°Å¸â€˜â€¹', 'Ã°Å¸â€™Âª', 'Ã¢Å“Â¨', 'Ã°Å¸Å’Å¸', 'Ã°Å¸Å½â€°', 'Ã°Å¸Å½â€š', 'Ã°Å¸Ââ€¢', 'Ã¢Ëœâ€¢', 'Ã°Å¸Å’Â®'];
+const QUICK_REPLIES = ['Hey Ã°Å¸ËœÅ ', 'How are you?', "You're gorgeous Ã°Å¸â€Â¥", 'Coffee sometime? Ã¢Ëœâ€¢', 'LOL Ã°Å¸Ëœâ€š', 'Ã°Å¸â€™â€¢'];
+const REACTIONS = ['Ã¢ÂÂ¤Ã¯Â¸Â', 'Ã°Å¸Ëœâ€š', 'Ã°Å¸â€Â¥', 'Ã°Å¸ËœÂ', 'Ã°Å¸â€˜Â', 'Ã°Å¸ËœÂ®'];
 const GROUP_GAP_MS = 5 * 60 * 1000;
 
 function hashStr(s: string) {
@@ -61,7 +61,7 @@ function Highlight({ text, query }: { text: string; query: string }) {
   return (
     <>
       {text.slice(0, idx)}
-      <mark style={{ background: 'rgba(255,215,0,0.3)', color: 'inherit', borderRadius: 3, padding: '0 2px' }}>{text.slice(idx, idx + query.length)}</mark>
+      <mark style={{ background: 'rgba(255,230,0,0.3)', color: 'inherit', borderRadius: 3, padding: '0 2px' }}>{text.slice(idx, idx + query.length)}</mark>
       {text.slice(idx + query.length)}
     </>
   );
@@ -102,9 +102,9 @@ function VoiceBubble({ url, isMe }: { url: string; isMe: boolean }) {
         onClick={toggle}
         style={{
           width: 36, height: 36, borderRadius: '50%', border: 'none', cursor: 'pointer', flexShrink: 0,
-          background: isMe ? 'rgba(255,255,255,0.22)' : 'linear-gradient(135deg, #FF375F, #FF3B30)',
+          background: isMe ? 'rgba(255,255,255,0.22)' : 'linear-gradient(135deg, #FF2E5F, #FF4530)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: isMe ? 'none' : '0 4px 16px rgba(255,55,95,0.35)',
+          boxShadow: isMe ? 'none' : '0 4px 16px rgba(255,46,95,0.35)',
         }}
       >
         {playing ? (
@@ -119,7 +119,7 @@ function VoiceBubble({ url, isMe }: { url: string; isMe: boolean }) {
             key={i}
             style={{
               width: 3, height: h, borderRadius: 2,
-              background: isMe ? 'rgba(255,255,255,0.9)' : '#FF6B8A',
+              background: isMe ? 'rgba(255,255,255,0.9)' : '#FF7BA0',
               transformOrigin: 'center',
               animation: playing ? `equalizer 0.9s ease-in-out ${(i % 6) * 0.12}s infinite` : 'none',
               opacity: playing ? 0.9 : 0.45,
@@ -476,8 +476,8 @@ export default function ChatPage() {
 
   const roundBtn = (active: boolean) => ({
     width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
-    border: active ? '1px solid rgba(255,55,95,0.35)' : '1px solid #EDEDF1',
-    background: active ? 'rgba(255,55,95,0.12)' : '#F3F3F6',
+    border: active ? '1px solid rgba(255,46,95,0.35)' : '1px solid #EDEDF1',
+    background: active ? 'rgba(255,46,95,0.12)' : '#F3F3F6',
     cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
   });
 
@@ -521,14 +521,14 @@ export default function ChatPage() {
             </div>
             <span style={{
               position: 'absolute', right: 0, bottom: 0, width: 12, height: 12, borderRadius: '50%',
-              border: '2px solid #FFFFFF', background: otherOnline ? '#34C759' : '#6B6B6B',
-              boxShadow: otherOnline ? '0 0 8px #34C759' : 'none',
+              border: '2px solid #FFFFFF', background: otherOnline ? '#3DFC77' : '#6B6B6B',
+              boxShadow: otherOnline ? '0 0 8px #3DFC77' : 'none',
             }} />
           </button>
           <div style={{ minWidth: 0 }}>
             <div style={{ fontSize: 17, fontWeight: 800, color: '#151515', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{matchName}</div>
-            <div style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5, color: otherOnline ? '#34C759' : '#8A8A8F' }}>
-              {otherOnline && <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#34C759', animation: 'pulse 1.4s infinite' }} />}
+            <div style={{ fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5, color: otherOnline ? '#3DFC77' : '#8A8A8F' }}>
+              {otherOnline && <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#3DFC77', animation: 'pulse 1.4s infinite' }} />}
               {otherOnline ? 'Online now' : 'Offline'}
             </div>
           </div>
@@ -536,16 +536,16 @@ export default function ChatPage() {
 
         <div style={{ display: 'flex', gap: 8, position: 'relative' }}>
           <button onClick={() => setSearchOpen(o => !o)} style={roundBtn(searchOpen)}>
-            {searchOpen ? <CloseCircleIcon size={18} color="#FF6B8A" /> : <SearchIcon size={18} color={searchOpen ? '#FF6B8A' : '#65656A'} />}
+            {searchOpen ? <CloseCircleIcon size={18} color="#FF7BA0" /> : <SearchIcon size={18} color={searchOpen ? '#FF7BA0' : '#65656A'} />}
           </button>
-          <button onClick={() => startCall('audio')} style={{ ...roundBtn(false), border: '1px solid rgba(52,199,89,0.25)', background: 'rgba(52,199,89,0.08)' }}>
-            <CallIcon size={18} color="#34C759" />
+          <button onClick={() => startCall('audio')} style={{ ...roundBtn(false), border: '1px solid rgba(61,252,119,0.25)', background: 'rgba(61,252,119,0.08)' }}>
+            <CallIcon size={18} color="#3DFC77" />
           </button>
-          <button onClick={() => startCall('video')} style={{ ...roundBtn(false), border: '1px solid rgba(255,55,95,0.3)', background: 'rgba(255,55,95,0.1)' }}>
-            <VideoIcon size={18} color="#FF375F" />
+          <button onClick={() => startCall('video')} style={{ ...roundBtn(false), border: '1px solid rgba(255,46,95,0.3)', background: 'rgba(255,46,95,0.1)' }}>
+            <VideoIcon size={18} color="#FF2E5F" />
           </button>
           <button onClick={() => setMenuOpen(o => !o)} style={roundBtn(menuOpen)} aria-label="More options">
-            <EllipsisIcon size={18} color={menuOpen ? '#FF6B8A' : '#65656A'} />
+            <EllipsisIcon size={18} color={menuOpen ? '#FF7BA0' : '#65656A'} />
           </button>
           {menuOpen && (
             <div style={{
@@ -556,9 +556,9 @@ export default function ChatPage() {
               <button
                 onClick={handleBlock}
                 disabled={blockAction}
-                style={{ display: 'block', width: '100%', padding: '13px 16px', textAlign: 'left', border: 'none', background: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 600, color: '#FF6B8A' }}
+                style={{ display: 'block', width: '100%', padding: '13px 16px', textAlign: 'left', border: 'none', background: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 600, color: '#FF7BA0' }}
               >
-                {blockAction ? 'Blocking…' : `Block ${matchName}`}
+                {blockAction ? 'BlockingÃ¢â‚¬Â¦' : `Block ${matchName}`}
               </button>
               <button
                 onClick={handleUnblock}
@@ -599,7 +599,7 @@ export default function ChatPage() {
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, overflowY: 'auto', padding: `${searchOpen ? 150 : 110}px 12px 120px`, display: 'flex', flexDirection: 'column' }}>
         {messages.length === 0 && !searchOpen && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, gap: 12, textAlign: 'center', padding: 24 }}>
-            <div className="grad-ring" style={{ width: 76, height: 76, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 44px rgba(255,55,95,0.35)', overflow: 'hidden' }}>
+            <div className="grad-ring" style={{ width: 76, height: 76, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 44px rgba(255,46,95,0.35)', overflow: 'hidden' }}>
               {otherAvatarUrl ? (
                 <img src={otherAvatarUrl} alt={matchName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
@@ -608,7 +608,7 @@ export default function ChatPage() {
             </div>
             <div style={{ fontSize: 18, fontWeight: 800, color: '#151515' }}>You matched with {matchName}!</div>
             <div style={{ fontSize: 13, color: '#8A8A8F', maxWidth: 260, lineHeight: '20px' }}>
-              Say hi and start the conversation — compliments go a long way ✨
+              Say hi and start the conversation Ã¢â‚¬â€ compliments go a long way Ã¢Å“Â¨
             </div>
           </div>
         )}
@@ -627,7 +627,7 @@ export default function ChatPage() {
             const isVideo = log.callType === 'video';
             const isMissed = log.status === 'missed';
             const isDeclined = log.status === 'declined';
-            const icon = isVideo ? '📹' : '📞';
+            const icon = isVideo ? 'Ã°Å¸â€œÂ¹' : 'Ã°Å¸â€œÅ¾';
             let statusLabel = '';
             if (isMissed) statusLabel = isMe ? 'No answer' : 'Missed';
             else if (isDeclined) statusLabel = 'Declined';
@@ -683,17 +683,17 @@ export default function ChatPage() {
             : isGift
               ? {
                   maxWidth: '100%', padding: '10px 14px',
-                  background: 'linear-gradient(135deg, rgba(255,215,0,0.16), rgba(255,150,0,0.07))',
-                  border: '1px solid rgba(255,215,0,0.35)',
+                  background: 'linear-gradient(135deg, rgba(255,230,0,0.16), rgba(255,150,0,0.07))',
+                  border: '1px solid rgba(255,230,0,0.35)',
                   borderRadius: isMe ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                  boxShadow: '0 4px 18px rgba(255,215,0,0.12)',
+                  boxShadow: '0 4px 18px rgba(255,230,0,0.12)',
                 }
               : {
                   maxWidth: '100%', padding: '9px 13px',
-                  background: isMe ? 'linear-gradient(135deg, #FF375F, #FF3B30)' : '#F3F3F6',
+                  background: isMe ? 'linear-gradient(135deg, #FF2E5F, #FF4530)' : '#F3F3F6',
                   border: isMe ? 'none' : '1px solid #EDEDF1',
                   borderRadius: isMe ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                  boxShadow: isMe ? '0 4px 18px rgba(255,55,95,0.22)' : 'none',
+                  boxShadow: isMe ? '0 4px 18px rgba(255,46,95,0.22)' : 'none',
                 };
 
           return (
@@ -713,7 +713,7 @@ export default function ChatPage() {
                   style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 6, maxWidth: '84%' }}
                   onMouseEnter={() => setHoveredId(msg.id)}
                   onMouseLeave={() => setHoveredId(null)}
-                  onDoubleClick={() => toggleReaction(msg, '❤️')}
+                  onDoubleClick={() => toggleReaction(msg, 'Ã¢ÂÂ¤Ã¯Â¸Â')}
                 >
                   {/* Hover reaction / action bar */}
                   <div style={{
@@ -761,11 +761,11 @@ export default function ChatPage() {
                   <div style={bubbleStyle}>
                     {msg.replyTo && (
                       <div style={{
-                        borderLeft: '3px solid ' + (isMe ? 'rgba(255,255,255,0.5)' : '#FF6B8A'),
+                        borderLeft: '3px solid ' + (isMe ? 'rgba(255,255,255,0.5)' : '#FF7BA0'),
                         background: isMe ? 'rgba(255,255,255,0.14)' : 'rgba(0,0,0,0.05)',
                         borderRadius: 8, padding: '4px 8px', marginBottom: 6,
                       }}>
-                        <div style={{ fontSize: 11, color: isMe ? 'rgba(255,255,255,0.75)' : '#FF6B8A', fontWeight: 700 }}>
+                        <div style={{ fontSize: 11, color: isMe ? 'rgba(255,255,255,0.75)' : '#FF7BA0', fontWeight: 700 }}>
                           {msg.replyTo.senderId === userId ? 'You' : matchName}
                         </div>
                         <div style={{ fontSize: 12, color: isMe ? 'rgba(255,255,255,0.85)' : '#8A8A8F', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 220 }}>{msg.replyTo.text}</div>
@@ -794,14 +794,14 @@ export default function ChatPage() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '2px 2px' }}>
                         <div style={{
                           width: 36, height: 36, borderRadius: '50%', flexShrink: 0,
-                          background: 'linear-gradient(135deg, #FFD700, #FF9500)',
+                          background: 'linear-gradient(135deg, #FFE600, #FFB62B)',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           boxShadow: '0 4px 12px rgba(255,200,0,0.35)',
                         }}>
                           <CoinsIcon size={18} color="#1A1A1A" />
                         </div>
                         <div>
-                          <div style={{ fontSize: 13, fontWeight: 800, color: '#FFD700' }}>{isMe ? 'Gift sent' : 'Gift received'}</div>
+                          <div style={{ fontSize: 13, fontWeight: 800, color: '#FFE600' }}>{isMe ? 'Gift sent' : 'Gift received'}</div>
                           <div style={{ fontSize: 13, color: isMe ? 'rgba(255,255,255,0.9)' : '#151515', fontWeight: 600 }}>{msg.text} coins</div>
                         </div>
                       </div>
@@ -835,7 +835,7 @@ export default function ChatPage() {
 
         {searchOpen && searchQuery.trim() && visibleMessages.length === 0 && (
           <div style={{ textAlign: 'center', color: '#8A8A8F', fontSize: 14, padding: 40 }}>
-            No messages match “{searchQuery}”
+            No messages match Ã¢â‚¬Å“{searchQuery}Ã¢â‚¬Â
           </div>
         )}
 
@@ -862,9 +862,9 @@ export default function ChatPage() {
       {/* ===== Composer ===== */}
       <div>
         {editingId && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 16px', background: 'rgba(255,215,0,0.06)', borderTop: '1px solid rgba(255,215,0,0.15)' }}>
-            <PencilIcon size={14} color="#FFD700" />
-            <span style={{ flex: 1, fontSize: 13, color: '#FFD700', fontWeight: 700 }}>Editing message</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 16px', background: 'rgba(255,230,0,0.06)', borderTop: '1px solid rgba(255,230,0,0.15)' }}>
+            <PencilIcon size={14} color="#FFE600" />
+            <span style={{ flex: 1, fontSize: 13, color: '#FFE600', fontWeight: 700 }}>Editing message</span>
             <button onClick={() => { setEditingId(null); setInputText(''); }} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
               <CloseCircleIcon size={18} color="#8A8A8F" />
             </button>
@@ -872,9 +872,9 @@ export default function ChatPage() {
         )}
 
         {replyTo && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 16px', background: 'rgba(255,55,95,0.07)', borderTop: '1px solid rgba(255,55,95,0.15)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 16px', background: 'rgba(255,46,95,0.07)', borderTop: '1px solid rgba(255,46,95,0.15)' }}>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 11, color: '#FF6B8A', fontWeight: 700 }}>Replying to {replyTo.senderId === userId ? 'yourself' : matchName}</div>
+              <div style={{ fontSize: 11, color: '#FF7BA0', fontWeight: 700 }}>Replying to {replyTo.senderId === userId ? 'yourself' : matchName}</div>
               <div style={{ fontSize: 13, color: '#8A8A8F', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{replyTo.text}</div>
             </div>
             <button onClick={() => setReplyTo(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
@@ -910,7 +910,7 @@ export default function ChatPage() {
         {showGift && (
           <div style={{ background: '#FFFFFF', borderTop: '1px solid #EDEDF1' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 14px 0' }}>
-              <span style={{ fontSize: 12, color: '#FFD700', fontWeight: 700, letterSpacing: 1 }}>GIFT COINS</span>
+              <span style={{ fontSize: 12, color: '#FFE600', fontWeight: 700, letterSpacing: 1 }}>GIFT COINS</span>
               <button onClick={() => setShowGift(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
                 <CloseCircleIcon size={18} color="#8A8A8F" />
               </button>
@@ -922,12 +922,12 @@ export default function ChatPage() {
                   onClick={() => setGiftAmount(n)}
                   style={{
                     padding: '8px 12px', borderRadius: 9999, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5,
-                    background: giftAmount === n ? 'rgba(255,215,0,0.16)' : '#F3F3F6',
-                    border: giftAmount === n ? '1px solid rgba(255,215,0,0.5)' : '1px solid #EDEDF1',
-                    color: giftAmount === n ? '#FFD700' : '#65656A', fontSize: 13, fontWeight: 700,
+                    background: giftAmount === n ? 'rgba(255,230,0,0.16)' : '#F3F3F6',
+                    border: giftAmount === n ? '1px solid rgba(255,230,0,0.5)' : '1px solid #EDEDF1',
+                    color: giftAmount === n ? '#FFE600' : '#65656A', fontSize: 13, fontWeight: 700,
                   }}
                 >
-                  {n} <CoinsIcon size={12} color={giftAmount === n ? '#FFD700' : '#8A8A8A'} />
+                  {n} <CoinsIcon size={12} color={giftAmount === n ? '#FFE600' : '#8A8A8A'} />
                 </button>
               ))}
             </div>
@@ -938,7 +938,7 @@ export default function ChatPage() {
                 placeholder="Custom"
                 style={{ width: 90, background: '#F3F3F6', border: '1px solid #EDEDF1', borderRadius: 10, padding: '8px 10px', color: '#151515', fontSize: 14, outline: 'none' }}
               />
-              <Button title={gifting ? 'Sending…' : 'Send Gift'} variant="gradient" size="sm" loading={gifting} disabled={gifting} onPress={handleGift} />
+              <Button title={gifting ? 'SendingÃ¢â‚¬Â¦' : 'Send Gift'} variant="gradient" size="sm" loading={gifting} disabled={gifting} onPress={handleGift} />
               <span style={{ marginLeft: 'auto', fontSize: 11, color: '#8A8A8F', fontWeight: 600 }}>You have {myCoins.toLocaleString()} coins</span>
             </div>
           </div>
@@ -949,16 +949,16 @@ export default function ChatPage() {
             <button
               onClick={() => stopRecording(false)}
               title="Cancel"
-              style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,59,48,0.15)', border: '1px solid rgba(255,59,48,0.3)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+              style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,69,48,0.15)', border: '1px solid rgba(255,69,48,0.3)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
             >
-              <CloseCircleIcon size={20} color="#FF3B30" />
+              <CloseCircleIcon size={20} color="#FF4530" />
             </button>
             <div style={{ flex: 1, minWidth: 0, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, background: '#F3F3F6', border: '1px solid #EDEDF1', borderRadius: 9999, padding: '0 12px' }}>
-              <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#FF3B30', boxShadow: '0 0 12px #FF3B30', animation: 'pulse 1s infinite', flexShrink: 0 }} />
+              <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#FF4530', boxShadow: '0 0 12px #FF4530', animation: 'pulse 1s infinite', flexShrink: 0 }} />
               <span style={{ fontSize: 15, color: '#151515', fontWeight: 700, fontVariant: 'tabular-nums', flexShrink: 0 }}>{formatDuration(recordingDuration)}</span>
               <div style={{ display: 'flex', alignItems: 'center', gap: 2, height: 26, overflow: 'hidden' }}>
                 {recBars.map((h, i) => (
-                  <div key={i} style={{ width: 3, height: h, borderRadius: 2, background: i % 3 === 0 ? '#FF375F' : '#FF6B8A', transformOrigin: 'center', animation: `equalizer 0.8s ease-in-out ${(i % 6) * 0.1}s infinite`, flexShrink: 0 }} />
+                  <div key={i} style={{ width: 3, height: h, borderRadius: 2, background: i % 3 === 0 ? '#FF2E5F' : '#FF7BA0', transformOrigin: 'center', animation: `equalizer 0.8s ease-in-out ${(i % 6) * 0.1}s infinite`, flexShrink: 0 }} />
                 ))}
               </div>
             </div>
@@ -968,13 +968,13 @@ export default function ChatPage() {
                 title="Lock"
                 style={{ width: 40, height: 40, borderRadius: '50%', background: '#F3F3F6', border: '1px solid #EDEDF1', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B8A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF7BA0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               </button>
             )}
             <button
               onClick={() => stopRecording(true)}
               title="Send"
-              style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 16px rgba(255,55,95,0.4)' }}
+              style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 16px rgba(255,46,95,0.4)' }}
             >
               <SendIcon size={18} color="white" />
             </button>
@@ -986,14 +986,14 @@ export default function ChatPage() {
               title="Send a photo"
               style={{ width: 40, height: 40, borderRadius: '50%', border: '1px solid #EDEDF1', background: '#F3F3F6', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
             >
-              <ImagesIcon size={20} color="#FF6B8A" />
+              <ImagesIcon size={20} color="#FF7BA0" />
             </button>
             <input ref={attachRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAttach} />
 
             <div style={{ flex: 1, height: 40, minWidth: 0, display: 'flex', alignItems: 'center', background: '#F3F3F6', border: '1px solid #EDEDF1', borderRadius: 9999, padding: '0 6px 0 16px' }}>
               <input
                 style={{ flex: 1, minWidth: 0, color: '#151515', fontSize: 15, background: 'none', border: 'none', outline: 'none', padding: 0 }}
-                placeholder={sendingImage ? 'Uploading photo…' : 'Type a message...'}
+                placeholder={sendingImage ? 'Uploading photoÃ¢â‚¬Â¦' : 'Type a message...'}
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
@@ -1010,13 +1010,13 @@ export default function ChatPage() {
                 title="Send coins"
                 style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 5, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
               >
-                <CoinsIcon size={20} color={showGift ? '#FFD700' : '#A8842C'} />
+                <CoinsIcon size={20} color={showGift ? '#FFE600' : '#A8842C'} />
               </button>
               <button
                 onClick={() => { setShowEmoji(!showEmoji); if (!showEmoji) setShowGift(false); }}
                 style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 5, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
               >
-                {showEmoji ? <KeypadIcon size={20} color="#FF6B8A" /> : <HappyIcon size={20} color={inputText ? '#65656A' : '#8A8A8F'} />}
+                {showEmoji ? <KeypadIcon size={20} color="#FF7BA0" /> : <HappyIcon size={20} color={inputText ? '#65656A' : '#8A8A8F'} />}
               </button>
             </div>
 
@@ -1024,7 +1024,7 @@ export default function ChatPage() {
               <button
                 onClick={handleSend}
                 disabled={sending}
-                style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF3B30)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 6px 20px rgba(255,55,95,0.4)', opacity: sending ? 0.5 : 1 }}
+                style={{ width: 40, height: 40, borderRadius: '50%', background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 6px 20px rgba(255,46,95,0.4)', opacity: sending ? 0.5 : 1 }}
               >
                 <SendIcon size={18} color="white" />
               </button>

@@ -19,12 +19,12 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
 
   return (
     <>
-      {/* Mobile fallback — renders children as-is on small screens */}
+      {/* Mobile fallback Ã¢â‚¬â€ renders children as-is on small screens */}
       <div className="desktop-layout-mobile">
         {children}
       </div>
 
-      {/* Desktop layout — hidden on mobile */}
+      {/* Desktop layout Ã¢â‚¬â€ hidden on mobile */}
       <div className="desktop-layout-desktop">
         <div style={{
           maxWidth: 1400, margin: '0 auto', minHeight: '100svh',
@@ -63,7 +63,7 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
 
             <div className="glass" style={{ margin: '0 16px 24px', padding: 16, borderRadius: 16 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg, #FFD700, #FF375F)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg, #FFE600, #FF2E5F)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <DiamondIcon size={18} color="white" />
                 </div>
                 <div>
@@ -75,9 +75,9 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
                 onClick={() => router.push('/premium')}
                 style={{
                   marginTop: 12, width: '100%', padding: '10px 0', borderRadius: 10, border: 'none',
-                  background: 'linear-gradient(135deg, #FF375F, #FF3B30)', color: 'white',
+                  background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', color: 'white',
                   fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                  boxShadow: '0 4px 18px rgba(255,55,95,0.35)',
+                  boxShadow: '0 4px 18px rgba(255,46,95,0.35)',
                 }}
               >
                 Upgrade

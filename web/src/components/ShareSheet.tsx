@@ -87,14 +87,14 @@ export default function ShareSheet({ postId, postCaption, currentUserId, onClose
         <div style={{ display: 'flex', gap: 16, padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
           <button onClick={handleCopyLink} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, padding: '14px 8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, cursor: 'pointer' }}>
             <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {copied ? <CheckmarkIcon size={20} color="#34C759" /> : <CopyIcon size={20} color="white" />}
+              {copied ? <CheckmarkIcon size={20} color="#3DFC77" /> : <CopyIcon size={20} color="white" />}
             </div>
             <span style={{ fontSize: 11, color: '#ABABAB', fontWeight: 600 }}>{copied ? 'Copied!' : 'Copy Link'}</span>
           </button>
           {typeof navigator !== 'undefined' && typeof (navigator as any).share === 'function' && (
             <button onClick={handleShareNative} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, padding: '14px 8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, cursor: 'pointer' }}>
-              <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,55,95,0.2), rgba(124,77,255,0.2))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <SendIcon size={20} color="#FF6B8A" />
+              <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,46,95,0.2), rgba(180,76,255,0.2))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <SendIcon size={20} color="#FF7BA0" />
               </div>
               <span style={{ fontSize: 11, color: '#ABABAB', fontWeight: 600 }}>Share</span>
             </button>
@@ -108,7 +108,7 @@ export default function ShareSheet({ postId, postCaption, currentUserId, onClose
           </div>
           {loading ? (
             <div style={{ display: 'flex', justifyContent: 'center', padding: 30 }}>
-              <div style={{ width: 24, height: 24, borderRadius: 8, border: '2px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
+              <div style={{ width: 24, height: 24, borderRadius: 8, border: '2px solid rgba(255,46,95,0.2)', borderTopColor: '#FF2E5F', animation: 'spin 0.8s linear infinite' }} />
             </div>
           ) : matches.length === 0 ? (
             <div style={{ padding: '20px', textAlign: 'center' }}>
@@ -131,14 +131,14 @@ export default function ShareSheet({ postId, postCaption, currentUserId, onClose
                     {photo ? (
                       <img src={photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
-                      <span style={{ fontSize: 16, fontWeight: 700, color: '#FF375F' }}>{name.charAt(0)}</span>
+                      <span style={{ fontSize: 16, fontWeight: 700, color: '#FF2E5F' }}>{name.charAt(0)}</span>
                     )}
                   </div>
                   <span style={{ flex: 1, fontSize: 14, fontWeight: 600, color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</span>
                   {isSent ? (
-                    <span style={{ fontSize: 12, color: '#34C759', fontWeight: 700 }}>Sent</span>
+                    <span style={{ fontSize: 12, color: '#3DFC77', fontWeight: 700 }}>Sent</span>
                   ) : (
-                    <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #FF6B8A)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'linear-gradient(135deg, #FF2E5F, #FF7BA0)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <SendIcon size={12} color="white" />
                     </div>
                   )}

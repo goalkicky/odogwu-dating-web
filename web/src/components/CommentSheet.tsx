@@ -79,7 +79,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
         // Check if it's a top-level comment
         const filtered = prev.filter(c => c.id !== commentId);
         if (filtered.length !== prev.length) return filtered;
-        // It's a reply — remove from parent's replies
+        // It's a reply Ã¢â‚¬â€ remove from parent's replies
         return prev.map(c => ({
           ...c,
           replies: (c.replies || []).filter(r => r.id !== commentId),
@@ -116,7 +116,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
         {comment.userPhoto ? (
           <img src={storageService.getFilePreview(comment.userPhoto)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
         ) : (
-          <span style={{ fontSize: isReply ? 11 : 12, fontWeight: 700, color: '#FF375F' }}>{comment.userName?.charAt(0)?.toUpperCase()}</span>
+          <span style={{ fontSize: isReply ? 11 : 12, fontWeight: 700, color: '#FF2E5F' }}>{comment.userName?.charAt(0)?.toUpperCase()}</span>
         )}
       </button>
       <div style={{ flex: 1, minWidth: 0 }}>
@@ -165,7 +165,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
             {post.userPhoto ? (
               <img src={storageService.getFilePreview(post.userPhoto)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
             ) : (
-              <span style={{ fontSize: 13, fontWeight: 700, color: '#FF375F' }}>{post.userName?.charAt(0)?.toUpperCase()}</span>
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#FF2E5F' }}>{post.userName?.charAt(0)?.toUpperCase()}</span>
             )}
           </div>
           <div style={{ minWidth: 0, flex: 1 }}>
@@ -180,11 +180,11 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
         <div ref={listRef} style={{ flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch', padding: '8px 20px', minHeight: 200, maxHeight: 'calc(75dvh - 180px)' }}>
           {loading ? (
             <div style={{ display: 'flex', justifyContent: 'center', padding: 40 }}>
-              <div style={{ width: 28, height: 28, borderRadius: 10, border: '2px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
+              <div style={{ width: 28, height: 28, borderRadius: 10, border: '2px solid rgba(255,46,95,0.2)', borderTopColor: '#FF2E5F', animation: 'spin 0.8s linear infinite' }} />
             </div>
           ) : comments.length === 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 0', gap: 8 }}>
-              <span style={{ fontSize: 32 }}>💬</span>
+              <span style={{ fontSize: 32 }}>Ã°Å¸â€™Â¬</span>
               <span style={{ fontSize: 14, fontWeight: 600, color: '#6B6B6B' }}>No comments yet</span>
               <span style={{ fontSize: 12, color: '#4A4A4A' }}>Start the conversation.</span>
             </div>
@@ -233,7 +233,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
         {replyTo && (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)' }}>
             <span style={{ fontSize: 12, color: '#ABABAB' }}>
-              Replying to <span style={{ fontWeight: 700, color: '#FF6B8A' }}>{replyTo.userName}</span>
+              Replying to <span style={{ fontWeight: 700, color: '#FF7BA0' }}>{replyTo.userName}</span>
             </span>
             <button onClick={cancelReply} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2, display: 'flex' }}>
               <CloseIcon size={14} color="#6B6B6B" />
@@ -244,7 +244,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
         {/* Input */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 20px 16px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
           <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg, #1A1A2E, #2A2A3E)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#FF375F' }}>Y</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#FF2E5F' }}>Y</span>
           </div>
           <input
             ref={inputRef}
@@ -261,7 +261,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
             onClick={handleSend}
             disabled={!text.trim() || sending}
             style={{
-              background: text.trim() ? 'linear-gradient(135deg, #FF375F, #FF3B30)' : 'rgba(255,255,255,0.06)',
+              background: text.trim() ? 'linear-gradient(135deg, #FF2E5F, #FF4530)' : 'rgba(255,255,255,0.06)',
               border: 'none', borderRadius: 9999, width: 40, height: 40, cursor: text.trim() ? 'pointer' : 'default',
               display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s',
               opacity: text.trim() ? 1 : 0.4,

@@ -22,7 +22,7 @@ const sections = [
   },
   {
     title: 'Blocking',
-    body: 'Blocking someone stops them from seeing your profile, liking or messaging you. Your matches and chats with them are hidden while the block is active. You can review and undo blocks at any time in Privacy → Blocked Users.',
+    body: 'Blocking someone stops them from seeing your profile, liking or messaging you. Your matches and chats with them are hidden while the block is active. You can review and undo blocks at any time in Privacy â†’ Blocked Users.',
   },
   {
     title: 'Your rights',
@@ -36,8 +36,8 @@ export default function PrivacyPolicyPage() {
   return (
     <AppShell>
       <div style={{ maxWidth: 720, margin: '0 auto' }}>
-        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#FF375F', fontSize: 15, fontWeight: 600, cursor: 'pointer', padding: '8px 0', marginBottom: 8 }}>
-          ← Back
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#FF2E5F', fontSize: 15, fontWeight: 600, cursor: 'pointer', padding: '8px 0', marginBottom: 8 }}>
+          â† Back
         </button>
         <h1 style={{ fontSize: 28, fontWeight: 800, color: '#151515', margin: '0 0 8px' }}>Privacy Policy</h1>
         <p style={{ fontSize: 13, color: '#8A8A8F', margin: '0 0 24px' }}>Last updated: August 2026</p>

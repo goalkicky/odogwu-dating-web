@@ -6,11 +6,11 @@ import Button from '@/components/Button';
 import { useAuth } from '@/store/AuthContext';
 
 const FEATURES = [
-  { icon: InfiniteIcon, title: 'Unlimited Likes', desc: 'Like every profile that catches your eye — no limits, no pause.' },
+  { icon: InfiniteIcon, title: 'Unlimited Likes', desc: 'Like every profile that catches your eye Ã¢â‚¬â€ no limits, no pause.' },
   { icon: StarIcon, title: 'Super Likes', desc: 'Stand out instantly and boost your chances of a match.' },
   { icon: FlashIcon, title: 'Profile Boosts', desc: 'Put your profile in front of 10x more people.' },
   { icon: GlobeIcon, title: 'Passport Mode', desc: 'Change your location and match anywhere in the world.' },
-  { icon: EyeIcon, title: 'See Who Likes You', desc: 'Never wonder again — see who already liked you.' },
+  { icon: EyeIcon, title: 'See Who Likes You', desc: 'Never wonder again Ã¢â‚¬â€ see who already liked you.' },
   { icon: ChatIcon, title: 'Priority Chat', desc: 'Message before you match and skip the wait.' },
 ];
 
@@ -93,8 +93,8 @@ export default function PremiumPopup() {
         style={{
           position: 'relative', width: '100%', maxWidth: 360, padding: 28, borderRadius: 26, textAlign: 'center',
           background: 'linear-gradient(165deg, #1A1A22, #0D0D0D)',
-          border: '1px solid rgba(255,215,0,0.25)',
-          boxShadow: '0 24px 80px rgba(0,0,0,0.65), 0 0 60px rgba(255,55,95,0.22)',
+          border: '1px solid rgba(255,230,0,0.25)',
+          boxShadow: '0 24px 80px rgba(0,0,0,0.65), 0 0 60px rgba(255,46,95,0.22)',
         }}
       >
         <button
@@ -105,15 +105,15 @@ export default function PremiumPopup() {
           <CloseIcon size={14} color="white" />
         </button>
 
-        <div style={{ width: 64, height: 64, borderRadius: 20, background: 'linear-gradient(135deg, #FFD700, #FF375F)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px', boxShadow: '0 0 34px rgba(255,55,95,0.5)' }}>
+        <div style={{ width: 64, height: 64, borderRadius: 20, background: 'linear-gradient(135deg, #FFE600, #FF2E5F)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px', boxShadow: '0 0 34px rgba(255,46,95,0.5)' }}>
           <DiamondIcon size={30} color="white" />
         </div>
 
-        <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: 2, color: '#FFD700', textTransform: 'uppercase' }}>
+        <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: 2, color: '#FFE600', textTransform: 'uppercase' }}>
           Premium Perk
         </span>
         <h2 style={{ fontSize: 22, fontWeight: 800, color: 'white', margin: '10px 0 6px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-          <FeatureIcon size={20} color="#FF6B8A" />
+          <FeatureIcon size={20} color="#FF7BA0" />
           {feature.title}
         </h2>
         <p style={{ fontSize: 14, color: '#ABABAB', lineHeight: '20px', margin: '0 0 22px' }}>{feature.desc}</p>

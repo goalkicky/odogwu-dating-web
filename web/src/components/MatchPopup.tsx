@@ -74,7 +74,7 @@ export default function MatchPopup({ matchedUser, matchId, myPhotoUrl, onClose }
               width: 6 + Math.random() * 6,
               height: 6 + Math.random() * 6,
               borderRadius: '50%',
-              background: i % 3 === 0 ? '#FFD700' : i % 3 === 1 ? '#FF375F' : '#7C4DFF',
+              background: i % 3 === 0 ? '#FFE600' : i % 3 === 1 ? '#FF2E5F' : '#B44CFF',
               top: `${10 + Math.random() * 70}%`,
               left: `${5 + Math.random() * 90}%`,
               animation: `sparkleFloat ${1.5 + Math.random() * 2}s ease-in-out ${Math.random() * 0.8}s infinite alternate`,
@@ -87,9 +87,9 @@ export default function MatchPopup({ matchedUser, matchId, myPhotoUrl, onClose }
         {/* Heart burst icon */}
         <div style={{
           width: 56, height: 56, borderRadius: '50%',
-          background: 'linear-gradient(135deg, #FF375F, #7C4DFF)',
+          background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: '0 0 40px rgba(255,55,95,0.5), 0 0 80px rgba(124,77,255,0.3)',
+          boxShadow: '0 0 40px rgba(255,46,95,0.5), 0 0 80px rgba(180,76,255,0.3)',
           marginBottom: 20,
           animation: 'matchHeartPulse 1.2s ease-in-out infinite',
         }}>
@@ -99,7 +99,7 @@ export default function MatchPopup({ matchedUser, matchId, myPhotoUrl, onClose }
         {/* Title */}
         <h1 style={{
           fontSize: 32, fontWeight: 900, letterSpacing: -0.5,
-          background: 'linear-gradient(135deg, #FF375F, #FFD700, #7C4DFF)',
+          background: 'linear-gradient(135deg, #FF2E5F, #FFE600, #B44CFF)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
           marginBottom: 8,
@@ -116,9 +116,9 @@ export default function MatchPopup({ matchedUser, matchId, myPhotoUrl, onClose }
           {/* My photo (left) */}
           <div style={{
             position: 'absolute', left: 0, width: 80, height: 80, borderRadius: '50%',
-            background: 'linear-gradient(135deg, #FF375F, #FF6B8A)',
+            background: 'linear-gradient(135deg, #FF2E5F, #FF7BA0)',
             padding: 3,
-            boxShadow: '0 4px 24px rgba(255,55,95,0.4)',
+            boxShadow: '0 4px 24px rgba(255,46,95,0.4)',
             zIndex: 2,
             animation: 'matchPhotoIn 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.2s both',
           }}>
@@ -129,16 +129,16 @@ export default function MatchPopup({ matchedUser, matchId, myPhotoUrl, onClose }
               {myPhoto ? (
                 <img src={myPhoto} alt="You" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
-                <span style={{ fontSize: 32 }}>😊</span>
+                <span style={{ fontSize: 32 }}>Ã°Å¸ËœÅ </span>
               )}
             </div>
           </div>
           {/* Their photo (right) */}
           <div style={{
             position: 'absolute', right: 0, width: 80, height: 80, borderRadius: '50%',
-            background: 'linear-gradient(135deg, #7C4DFF, #B47CFF)',
+            background: 'linear-gradient(135deg, #B44CFF, #B47CFF)',
             padding: 3,
-            boxShadow: '0 4px 24px rgba(124,77,255,0.4)',
+            boxShadow: '0 4px 24px rgba(180,76,255,0.4)',
             zIndex: 1,
             animation: 'matchPhotoIn 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.4s both',
           }}>
@@ -149,7 +149,7 @@ export default function MatchPopup({ matchedUser, matchId, myPhotoUrl, onClose }
               {theirPhoto ? (
                 <img src={theirPhoto} alt={firstName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
-                <span style={{ fontSize: 32 }}>😊</span>
+                <span style={{ fontSize: 32 }}>Ã°Å¸ËœÅ </span>
               )}
             </div>
           </div>
@@ -160,7 +160,7 @@ export default function MatchPopup({ matchedUser, matchId, myPhotoUrl, onClose }
             zIndex: 3,
             animation: 'matchHeartPop 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.6s both',
           }}>
-            <HeartIcon size={22} color="#FFD700" />
+            <HeartIcon size={22} color="#FFE600" />
           </div>
         </div>
 
@@ -169,10 +169,10 @@ export default function MatchPopup({ matchedUser, matchId, myPhotoUrl, onClose }
           onClick={handleSendMessage}
           style={{
             width: '100%', padding: '16px 0', borderRadius: 14,
-            background: 'linear-gradient(135deg, #FF375F, #FF6B8A)',
+            background: 'linear-gradient(135deg, #FF2E5F, #FF7BA0)',
             border: 'none', color: 'white', fontSize: 16, fontWeight: 800,
             cursor: 'pointer',
-            boxShadow: '0 6px 24px rgba(255,55,95,0.45)',
+            boxShadow: '0 6px 24px rgba(255,46,95,0.45)',
             marginBottom: 12,
             transition: 'transform 0.15s ease, box-shadow 0.15s ease',
           }}

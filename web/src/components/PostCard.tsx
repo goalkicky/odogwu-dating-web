@@ -120,12 +120,12 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
           style={{ flexShrink: 0, cursor: onProfileClick ? 'pointer' : 'default' }}
           onClick={onProfileClick ? () => onProfileClick(post.userId, post.userName, post.userPhoto) : undefined}
         >
-          <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #7C4DFF)', padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)', padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: '#000', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {post.userPhoto ? (
                 <img src={storageService.getFilePreview(post.userPhoto)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
-                <span style={{ fontSize: 13, fontWeight: 700, color: '#FF375F' }}>{post.userName?.charAt(0)?.toUpperCase() || '?'}</span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: '#FF2E5F' }}>{post.userName?.charAt(0)?.toUpperCase() || '?'}</span>
               )}
             </div>
           </div>
@@ -232,7 +232,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
         </div>
       )}
 
-      {/* Action bar — Instagram-exact: icon + count inline */}
+      {/* Action bar â€” Instagram-exact: icon + count inline */}
       <div style={{ padding: '10px 14px 0' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {/* Heart + count */}
@@ -271,7 +271,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
             onClick={handleSave}
             style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '8px 0 8px 12px', display: 'flex', alignItems: 'center' }}
           >
-            <BookmarkIcon size={26} color={saved ? '#FFD700' : 'white'} filled={saved} />
+            <BookmarkIcon size={26} color={saved ? '#FFE600' : 'white'} filled={saved} />
           </button>
         </div>
       </div>
@@ -308,7 +308,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
         </button>
       )}
 
-      {/* Inline comment previews — Instagram-style */}
+      {/* Inline comment previews â€” Instagram-style */}
       {previewComments.length > 0 && (
         <div style={{ padding: '2px 14px 0' }}>
           {previewComments.map(c => (
@@ -327,10 +327,10 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
         </span>
       </div>
 
-      {/* Add a comment — Instagram-style */}
+      {/* Add a comment â€” Instagram-style */}
       <div style={{ display: 'flex', alignItems: 'center', padding: '10px 14px 12px', borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 8 }}>
         <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'linear-gradient(135deg, #1A1A2E, #2A2A3E)', flexShrink: 0, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: 10 }}>
-          <span style={{ fontSize: 11, fontWeight: 700, color: '#FF375F' }}>Y</span>
+          <span style={{ fontSize: 11, fontWeight: 700, color: '#FF2E5F' }}>Y</span>
         </div>
         <button
           onClick={() => onComment(post)}

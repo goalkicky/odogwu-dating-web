@@ -50,9 +50,9 @@ export default function Button({
   };
 
   const variants: Record<string, React.CSSProperties> = {
-    primary: { backgroundColor: '#FF375F', color: '#FFFFFF' },
+    primary: { backgroundColor: '#FF2E5F', color: '#FFFFFF' },
     secondary: { backgroundColor: '#242424', color: '#FFFFFF' },
-    outline: { backgroundColor: 'transparent', border: '2px solid #FF375F', color: '#FF375F' },
+    outline: { backgroundColor: 'transparent', border: '2px solid #FF2E5F', color: '#FF2E5F' },
     ghost: { backgroundColor: 'transparent', color: '#ABABAB' },
   };
 
@@ -72,13 +72,13 @@ export default function Button({
               paddingLeft: '28px',
               paddingRight: '28px',
               borderRadius: '9999px',
-              background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+              background: 'linear-gradient(135deg, #FF2E5F, #FF4530)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
               width: '100%',
-              boxShadow: '0 6px 24px rgba(255,55,95,0.4)',
+              boxShadow: '0 6px 24px rgba(255,46,95,0.4)',
             }}
           >
           {loading ? (
@@ -102,7 +102,7 @@ export default function Button({
       className={className}
     >
       {loading ? (
-        <div style={{ width: 20, height: 20, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: variant === 'outline' ? '#FF375F' : 'white', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />
+        <div style={{ width: 20, height: 20, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: variant === 'outline' ? '#FF2E5F' : 'white', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />
       ) : (
         <>
           {icon}

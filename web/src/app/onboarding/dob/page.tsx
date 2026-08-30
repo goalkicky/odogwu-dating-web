@@ -50,7 +50,7 @@ export default function DOBPage() {
       <OnboardingProgress currentStep={1} totalSteps={6} />
 
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
-        <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, #FF3B30, #CC2F26)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, #FF4530, #FF2A1F)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <CalendarIcon size={36} color="white" />
         </div>
       </div>
@@ -65,10 +65,10 @@ export default function DOBPage() {
         ) : (
           <span style={{ color: '#6B6B6B', fontSize: 20 }}>Select your birthday</span>
         )}
-        {age && <span style={{ color: '#FF375F', fontSize: 15, fontWeight: 600, marginTop: 8 }}>{age} years old</span>}
+        {age && <span style={{ color: '#FF2E5F', fontSize: 15, fontWeight: 600, marginTop: 8 }}>{age} years old</span>}
       </div>
 
-      {error && <p style={{ color: '#FF3B30', fontSize: 13, textAlign: 'center', marginTop: 12 }}>{error}</p>}
+      {error && <p style={{ color: '#FF4530', fontSize: 13, textAlign: 'center', marginTop: 12 }}>{error}</p>}
 
       <div style={{ marginTop: 16 }}>
         <input

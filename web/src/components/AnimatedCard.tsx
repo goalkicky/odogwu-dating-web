@@ -118,7 +118,7 @@ export default function AnimatedCard({
     position: 'absolute',
     overflow: 'hidden',
     border: '1px solid rgba(255,255,255,0.1)',
-    boxShadow: '0 18px 60px rgba(0,0,0,0.55), 0 0 40px rgba(255,55,95,0.08)',
+    boxShadow: '0 18px 60px rgba(0,0,0,0.55), 0 0 40px rgba(255,46,95,0.08)',
   };
 
   if (!isFirst) {
@@ -180,7 +180,7 @@ export default function AnimatedCard({
             <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, textShadow: '0 1px 6px rgba(0,0,0,0.6)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.city}</span>
             {typeof user.distanceKm === 'number' && (
               <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12.5, textShadow: '0 1px 6px rgba(0,0,0,0.6)', whiteSpace: 'nowrap' }}>
-                · {user.distanceKm} km
+                Ã‚Â· {user.distanceKm} km
               </span>
             )}
           </div>
@@ -219,15 +219,15 @@ export default function AnimatedCard({
           style={{
             position: 'absolute', top: '50px', right: '16px', zIndex: 10,
             width: 40, height: 40, borderRadius: 9999,
-            background: 'linear-gradient(135deg, rgba(255,55,95,0.6), rgba(124,77,255,0.6))',
+            background: 'linear-gradient(135deg, rgba(255,46,95,0.6), rgba(180,76,255,0.6))',
             border: '1px solid rgba(255,255,255,0.3)',
             backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 4px 20px rgba(255,55,95,0.35), 0 0 30px rgba(124,77,255,0.2)',
+            boxShadow: '0 4px 20px rgba(255,46,95,0.35), 0 0 30px rgba(180,76,255,0.2)',
             transition: 'transform 0.15s ease, box-shadow 0.15s ease',
           }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.12)'; e.currentTarget.style.boxShadow = '0 6px 28px rgba(255,55,95,0.5), 0 0 40px rgba(124,77,255,0.35)'; }}
-          onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(255,55,95,0.35), 0 0 30px rgba(124,77,255,0.2)'; }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.12)'; e.currentTarget.style.boxShadow = '0 6px 28px rgba(255,46,95,0.5), 0 0 40px rgba(180,76,255,0.35)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(255,46,95,0.35), 0 0 30px rgba(180,76,255,0.2)'; }}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>
@@ -237,21 +237,21 @@ export default function AnimatedCard({
 
       {likeOpacity > 0.1 && (
         <div style={{ position: 'absolute', top: '70px', left: '24px', transform: 'rotate(-15deg)', opacity: likeOpacity, animation: 'popIn 0.3s ease' }}>
-          <div style={{ padding: '8px 18px', borderRadius: '10px', border: '3px solid white', background: 'linear-gradient(135deg, #34C759, #30D158)', boxShadow: '0 0 24px rgba(52,199,89,0.7)' }}>
+          <div style={{ padding: '8px 18px', borderRadius: '10px', border: '3px solid white', background: 'linear-gradient(135deg, #3DFC77, #3DFC77)', boxShadow: '0 0 24px rgba(61,252,119,0.7)' }}>
             <span style={{ color: 'white', fontWeight: 800, fontSize: '28px', letterSpacing: '2px' }}>LIKE</span>
           </div>
         </div>
       )}
       {nopeOpacity > 0.1 && (
         <div style={{ position: 'absolute', top: '70px', right: '24px', transform: 'rotate(15deg)', opacity: nopeOpacity, animation: 'popIn 0.3s ease' }}>
-          <div style={{ padding: '8px 18px', borderRadius: '10px', border: '3px solid white', background: 'linear-gradient(135deg, #FF3B30, #FF453A)', boxShadow: '0 0 24px rgba(255,59,48,0.7)' }}>
+          <div style={{ padding: '8px 18px', borderRadius: '10px', border: '3px solid white', background: 'linear-gradient(135deg, #FF4530, #FF4530)', boxShadow: '0 0 24px rgba(255,69,48,0.7)' }}>
             <span style={{ color: 'white', fontWeight: 800, fontSize: '28px', letterSpacing: '2px' }}>NOPE</span>
           </div>
         </div>
       )}
       {superLikeOpacity > 0.1 && (
         <div style={{ position: 'absolute', top: '140px', left: '50%', transform: 'translateX(-50%)', opacity: superLikeOpacity, animation: 'popIn 0.3s ease' }}>
-          <div style={{ padding: '8px 18px', borderRadius: '10px', border: '3px solid white', background: 'linear-gradient(135deg, #4FC3F7, #0288D1)', boxShadow: '0 0 24px rgba(79,195,247,0.7)' }}>
+          <div style={{ padding: '8px 18px', borderRadius: '10px', border: '3px solid white', background: 'linear-gradient(135deg, #22E5FF, #0AA6CE)', boxShadow: '0 0 24px rgba(79,195,247,0.7)' }}>
             <span style={{ color: 'white', fontWeight: 800, fontSize: '24px', letterSpacing: '2px' }}>SUPER LIKE</span>
           </div>
         </div>

@@ -114,7 +114,7 @@ export default function LocationPage() {
       <OnboardingProgress currentStep={4} totalSteps={6} />
 
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
-        <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, #FF3B30, #FF6B6B)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, #FF4530, #FF6B6B)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <LocationIcon size={36} color="white" />
         </div>
       </div>
@@ -130,7 +130,7 @@ export default function LocationPage() {
           </div>
         ) : data.city ? (
           <>
-            <CheckmarkCircleIcon size={40} color="#34C759" />
+            <CheckmarkCircleIcon size={40} color="#3DFC77" />
             <span style={{ color: 'white', fontSize: 22, fontWeight: 700, marginTop: 12 }}>{data.city}</span>
             {data.latitude !== 0 && (
               <span style={{ color: '#6B6B6B', fontSize: 13, marginTop: 4 }}>{data.latitude.toFixed(4)}, {data.longitude.toFixed(4)}</span>
@@ -143,8 +143,8 @@ export default function LocationPage() {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, width: '100%' }}>
-            <LocationIcon size={40} color="#FF3B30" />
-            <span style={{ color: '#FF3B30', fontSize: 15 }}>Location access denied</span>
+            <LocationIcon size={40} color="#FF4530" />
+            <span style={{ color: '#FF4530', fontSize: 15 }}>Location access denied</span>
             <button
               onClick={requestLocation}
               style={{ padding: '10px 20px', borderRadius: 9999, border: 'none', backgroundColor: '#242424', color: 'white', cursor: 'pointer', fontSize: 14 }}
@@ -175,7 +175,7 @@ export default function LocationPage() {
                 disabled={!manualCity.trim()}
                 style={{
                   padding: '12px 16px', borderRadius: 12, border: 'none',
-                  background: manualCity.trim() ? 'linear-gradient(135deg, #FF3B30, #FF6B6B)' : '#2A2A2A',
+                  background: manualCity.trim() ? 'linear-gradient(135deg, #FF4530, #FF6B6B)' : '#2A2A2A',
                   color: 'white', cursor: manualCity.trim() ? 'pointer' : 'not-allowed',
                   fontSize: 14, fontWeight: 600, opacity: manualCity.trim() ? 1 : 0.5,
                 }}

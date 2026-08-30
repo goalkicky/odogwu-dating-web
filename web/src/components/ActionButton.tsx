@@ -10,26 +10,26 @@ interface ActionButtonProps {
 }
 
 const gradientColors: Record<string, string> = {
-  danger: 'linear-gradient(135deg, #FF3B30, #FF6B6B)',
-  superlike: 'linear-gradient(135deg, #4FC3F7, #0288D1)',
-  boost: 'linear-gradient(135deg, #FFD700, #FF9500)',
-  primary: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+  danger: 'linear-gradient(135deg, #FF4530, #FF6B6B)',
+  superlike: 'linear-gradient(135deg, #22E5FF, #0AA6CE)',
+  boost: 'linear-gradient(135deg, #FFE600, #FFB62B)',
+  primary: 'linear-gradient(135deg, #FF2E5F, #FF4530)',
   secondary: 'linear-gradient(135deg, #1A1A1A, #242424)',
 };
 
 const borderColors: Record<string, string> = {
-  danger: '#FF3B30',
-  superlike: '#4FC3F7',
-  boost: '#FFD700',
-  primary: '#FF3B30',
+  danger: '#FF4530',
+  superlike: '#22E5FF',
+  boost: '#FFE600',
+  primary: '#FF4530',
   secondary: '#2A2A2A',
 };
 
 const glows: Record<string, string> = {
-  danger: '0 0 24px rgba(255,59,48,0.45)',
+  danger: '0 0 24px rgba(255,69,48,0.45)',
   superlike: '0 0 24px rgba(79,195,247,0.4)',
-  boost: '0 0 24px rgba(255,215,0,0.4)',
-  primary: '0 0 28px rgba(255,55,95,0.5)',
+  boost: '0 0 24px rgba(255,230,0,0.4)',
+  primary: '0 0 28px rgba(255,46,95,0.5)',
   secondary: 'none',
 };
 
@@ -76,7 +76,7 @@ export default function ActionButton({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: `inset 0 -4px 12px rgba(0,0,0,0.25), inset 0 2px 6px rgba(255,255,255,0.25), ${variant === 'primary' ? '0 0 20px rgba(255,55,95,0.35)' : 'none'}`,
+          boxShadow: `inset 0 -4px 12px rgba(0,0,0,0.25), inset 0 2px 6px rgba(255,255,255,0.25), ${variant === 'primary' ? '0 0 20px rgba(255,46,95,0.35)' : 'none'}`,
         }}
       >
         {children}

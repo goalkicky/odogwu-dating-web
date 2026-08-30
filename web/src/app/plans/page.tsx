@@ -5,7 +5,7 @@ import MarketingFooter from '@/components/MarketingFooter';
 import { useMobile } from '@/lib/useMediaQuery';
 import { CheckmarkCircleIcon, DiamondIcon } from '@/components/Icons';
 
-const ACCENT = '#FF3B30';
+const ACCENT = '#FF4530';
 
 const plans = [
   {
@@ -20,7 +20,7 @@ const plans = [
     highlighted: false,
   },
   {
-    name: 'Premium', price: 4900, period: 'per month', color: '#FF375F',
+    name: 'Premium', price: 4900, period: 'per month', color: '#FF2E5F',
     features: [
       'Send unlimited likes',
       'Complete ad-free swiping experience',
@@ -32,7 +32,7 @@ const plans = [
     highlighted: false,
   },
   {
-    name: 'Surplus', price: 7900, period: 'per month', color: '#FFD700',
+    name: 'Surplus', price: 7900, period: 'per month', color: '#FFE600',
     features: [
       'Send unlimited likes',
       'See who likes you',
@@ -74,8 +74,8 @@ export default function PlansPage() {
 
       <section style={{ padding: isMobile ? '100px 16px 60px' : '140px 24px 80px', maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: isMobile ? 32 : 48 }}>
-          <div className="badge" style={{ background: 'rgba(255,55,95,0.1)', border: '1px solid rgba(255,55,95,0.2)', color: '#FF375F', marginBottom: 20, display: 'inline-flex' }}>
-            <DiamondIcon size={16} color="#FF375F" /> Pricing
+          <div className="badge" style={{ background: 'rgba(255,46,95,0.1)', border: '1px solid rgba(255,46,95,0.2)', color: '#FF2E5F', marginBottom: 20, display: 'inline-flex' }}>
+            <DiamondIcon size={16} color="#FF2E5F" /> Pricing
           </div>
           <h1 style={{ fontSize: isMobile ? 28 : 'clamp(36px, 5vw, 52px)', fontWeight: 800, margin: '0 0 12px' }}>
             Find Your Perfect <span className="gradient-text">Plan</span>
@@ -87,11 +87,11 @@ export default function PlansPage() {
 
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12, marginBottom: isMobile ? 36 : 56 }}>
           <span style={{ fontSize: 14, color: annual ? '#6B6B6B' : 'white', fontWeight: 600 }}>Monthly</span>
-          <button onClick={() => setAnnual(!annual)} style={{ width: 48, height: 26, borderRadius: 13, border: 'none', cursor: 'pointer', background: annual ? '#FF375F' : '#2A2A2A', position: 'relative', transition: 'background 0.3s' }}>
+          <button onClick={() => setAnnual(!annual)} style={{ width: 48, height: 26, borderRadius: 13, border: 'none', cursor: 'pointer', background: annual ? '#FF2E5F' : '#2A2A2A', position: 'relative', transition: 'background 0.3s' }}>
             <div style={{ position: 'absolute', top: 2, left: annual ? 25 : 2, width: 22, height: 22, borderRadius: '50%', background: 'white', transition: 'left 0.3s' }} />
           </button>
           <span style={{ fontSize: 14, color: annual ? 'white' : '#6B6B6B', fontWeight: 600 }}>
-            Annual <span style={{ color: '#34C759', fontSize: 11, fontWeight: 700 }}>Save 20%</span>
+            Annual <span style={{ color: '#3DFC77', fontSize: 11, fontWeight: 700 }}>Save 20%</span>
           </span>
         </div>
 
@@ -103,17 +103,17 @@ export default function PlansPage() {
                 position: 'relative', padding: isMobile ? '28px 24px' : '40px 32px',
                 borderRadius: 20,
                 background: plan.highlighted
-                  ? 'linear-gradient(135deg, rgba(255,55,95,0.08), rgba(255,59,48,0.08))'
+                  ? 'linear-gradient(135deg, rgba(255,46,95,0.08), rgba(255,69,48,0.08))'
                   : 'rgba(255,255,255,0.03)',
                 border: plan.highlighted
-                  ? '1px solid rgba(255,55,95,0.3)'
+                  ? '1px solid rgba(255,46,95,0.3)'
                   : '1px solid rgba(255,255,255,0.06)',
                 overflow: 'hidden',
               }}>
                 {plan.badge && (
                   <div style={{
                     position: 'absolute', top: 16, right: -32,
-                    background: 'linear-gradient(135deg, #FF375F, #FF3B30)',
+                    background: 'linear-gradient(135deg, #FF2E5F, #FF4530)',
                     color: 'white', fontSize: 11, fontWeight: 700, padding: '5px 40px',
                     transform: 'rotate(45deg)',
                   }}>
@@ -122,7 +122,7 @@ export default function PlansPage() {
                 )}
 
                 {plan.highlighted && (
-                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, #FF375F, #FF3B30)' }} />
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, #FF2E5F, #FF4530)' }} />
                 )}
 
                 <div style={{ fontSize: 11, fontWeight: 700, color: plan.color, textTransform: 'uppercase', letterSpacing: 2, marginBottom: 12 }}>{plan.name}</div>
@@ -135,7 +135,7 @@ export default function PlansPage() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
                   {plan.features.map((f, j) => (
                     <div key={j} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
-                      <CheckmarkCircleIcon size={16} color={plan.highlighted ? '#FF375F' : ACCENT} />
+                      <CheckmarkCircleIcon size={16} color={plan.highlighted ? '#FF2E5F' : ACCENT} />
                       <span style={{ fontSize: isMobile ? 13 : 14, color: '#D0D0D0', lineHeight: '18px' }}>{f}</span>
                     </div>
                   ))}
@@ -145,11 +145,11 @@ export default function PlansPage() {
                   display: 'block', textAlign: 'center', padding: isMobile ? '14px' : '16px', borderRadius: 12,
                   fontSize: isMobile ? 14 : 16, fontWeight: 700, textDecoration: 'none',
                   background: plan.highlighted
-                    ? 'linear-gradient(135deg, #FF375F, #FF3B30)'
+                    ? 'linear-gradient(135deg, #FF2E5F, #FF4530)'
                     : 'rgba(255,255,255,0.06)',
                   color: 'white',
                   border: plan.highlighted ? 'none' : '1px solid rgba(255,255,255,0.1)',
-                  boxShadow: plan.highlighted ? '0 0 30px rgba(255,55,95,0.3)' : 'none',
+                  boxShadow: plan.highlighted ? '0 0 30px rgba(255,46,95,0.3)' : 'none',
                 }}>
                   {plan.price === 0 ? 'Get Started Free' : `Subscribe ${annual ? 'Yearly' : 'Monthly'}`}
                 </a>
@@ -161,7 +161,7 @@ export default function PlansPage() {
 
       <section style={{ padding: isMobile ? '40px 16px 60px' : '60px 24px 100px', textAlign: 'center' }}>
         <p style={{ color: '#6B6B6B', fontSize: isMobile ? 14 : 15, marginBottom: 12 }}>Have questions about our plans?</p>
-        <a href="/faq" style={{ color: '#FF375F', fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Visit our FAQ →</a>
+        <a href="/faq" style={{ color: '#FF2E5F', fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Visit our FAQ Ã¢â€ â€™</a>
       </section>
 
       <MarketingFooter />

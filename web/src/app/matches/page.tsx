@@ -48,7 +48,7 @@ export default function MatchesPage() {
     photoUrl ? (
       <img src={photoUrl} alt={name} style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover' }} />
     ) : (
-      <div style={{ width: size, height: size, borderRadius: '50%', background: 'linear-gradient(135deg, #FF375F, #7C4DFF)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: size * 0.42, fontWeight: 800 }}>
+      <div style={{ width: size, height: size, borderRadius: '50%', background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: size * 0.42, fontWeight: 800 }}>
         {name[0]}
       </div>
     )
@@ -59,11 +59,11 @@ export default function MatchesPage() {
       <div>
         <div className="animate-fade-up" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 10, background: 'linear-gradient(135deg, #FF375F, #7C4DFF)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 800, fontSize: 18 }}>M</div>
+            <div style={{ width: 40, height: 40, borderRadius: 10, background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 800, fontSize: 18 }}>M</div>
             <div>
               <span style={{ fontSize: 24, fontWeight: 800, color: '#151515' }}>Matches</span>
               {matches.length > 0 && (
-                <div style={{ fontSize: 12, color: '#FF6B8A', fontWeight: 700, marginTop: 1 }}>
+                <div style={{ fontSize: 12, color: '#FF7BA0', fontWeight: 700, marginTop: 1 }}>
                   {matches.length} {matches.length === 1 ? 'connection' : 'connections'}
                 </div>
               )}
@@ -91,7 +91,7 @@ export default function MatchesPage() {
 
       {loading ? (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 80, gap: 16 }}>
-          <div style={{ width: 40, height: 40, borderRadius: 14, border: '3px solid rgba(255,55,95,0.2)', borderTopColor: '#FF375F', animation: 'spin 0.8s linear infinite' }} />
+          <div style={{ width: 40, height: 40, borderRadius: 14, border: '3px solid rgba(255,46,95,0.2)', borderTopColor: '#FF2E5F', animation: 'spin 0.8s linear infinite' }} />
           <span style={{ color: '#8A8A8F', fontSize: 15 }}>Loading matches...</span>
         </div>
       ) : (
@@ -99,12 +99,12 @@ export default function MatchesPage() {
           <div style={{ marginBottom: 34 }} className="animate-fade-up">
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
               <span style={{ fontSize: 18, fontWeight: 800, color: '#151515' }}>New Matches</span>
-              <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#FF375F', boxShadow: '0 0 10px #FF375F' }} />
+              <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#FF2E5F', boxShadow: '0 0 10px #FF2E5F' }} />
             </div>
             {newMatches.length === 0 ? (
               <div style={{ padding: 24, borderRadius: 18, textAlign: 'center', background: '#fff', border: '1px solid #EFEFF3' }}>
                 <p style={{ color: '#8A8A8F', fontSize: 14, margin: 0 }}>
-                  No matches yet. Keep swiping on Discover! 💘
+                  No matches yet. Keep swiping on Discover! Ã°Å¸â€™Ëœ
                 </p>
               </div>
             ) : (
@@ -127,12 +127,12 @@ export default function MatchesPage() {
                       style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, width: 84, flexShrink: 0, textDecoration: 'none' }}
                     >
                       <div style={{ position: 'relative' }}>
-                        <div className="grad-ring" style={{ width: 84, height: 84, display: 'flex', boxShadow: '0 6px 24px rgba(255,55,95,0.25)' }}>
+                        <div className="grad-ring" style={{ width: 84, height: 84, display: 'flex', boxShadow: '0 6px 24px rgba(255,46,95,0.25)' }}>
                           <div style={{ width: 78, height: 78, borderRadius: '50%', overflow: 'hidden', background: '#F3F3F6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             {avatar(photoUrl, name, 78)}
                           </div>
                         </div>
-                        <div style={{ position: 'absolute', top: -2, right: -4, padding: '3px 8px', borderRadius: 9999, background: 'linear-gradient(135deg, #FF375F, #FF3B30)', fontSize: 9, fontWeight: 800, color: 'white', letterSpacing: 1, boxShadow: '0 4px 12px rgba(255,55,95,0.5)' }}>
+                        <div style={{ position: 'absolute', top: -2, right: -4, padding: '3px 8px', borderRadius: 9999, background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', fontSize: 9, fontWeight: 800, color: 'white', letterSpacing: 1, boxShadow: '0 4px 12px rgba(255,46,95,0.5)' }}>
                           NEW
                         </div>
                       </div>
@@ -146,13 +146,13 @@ export default function MatchesPage() {
 
           <div className="animate-fade-up">
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-              <ChatIcon size={20} color="#FF6B8A" />
+              <ChatIcon size={20} color="#FF7BA0" />
               <span style={{ fontSize: 18, fontWeight: 800, color: '#151515' }}>Messages</span>
             </div>
             {conversationMatches.length === 0 ? (
               <div style={{ padding: 24, borderRadius: 18, textAlign: 'center', background: '#fff', border: '1px solid #EFEFF3' }}>
                 <p style={{ color: '#8A8A8F', fontSize: 14, margin: 0 }}>
-                  No messages yet. Start a conversation! 💬
+                  No messages yet. Start a conversation! Ã°Å¸â€™Â¬
                 </p>
               </div>
             ) : (
@@ -164,7 +164,7 @@ export default function MatchesPage() {
                   const age = mp.age || '';
                   const lm = item.lastMessage;
                   const isMe = lm && lm.senderId === (user as any)?.$id;
-                  const preview = lm ? (isMe ? `You: ${lm.text}` : lm.text) : 'Say hello! 👋';
+                  const preview = lm ? (isMe ? `You: ${lm.text}` : lm.text) : 'Say hello! Ã°Å¸â€˜â€¹';
                   return (
                     <Link
                       key={item.$id}
@@ -181,7 +181,7 @@ export default function MatchesPage() {
                             {avatar(photoUrl, name, 56)}
                           </div>
                         </div>
-                        <span style={{ position: 'absolute', bottom: 2, right: 2, width: 12, height: 12, borderRadius: 9999, background: '#34C759', border: '2px solid #fff', boxShadow: '0 0 6px rgba(52,199,89,0.6)' }} />
+                        <span style={{ position: 'absolute', bottom: 2, right: 2, width: 12, height: 12, borderRadius: 9999, background: '#3DFC77', border: '2px solid #fff', boxShadow: '0 0 6px rgba(61,252,119,0.6)' }} />
                       </div>
                       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3 }}>
                         <div style={{ display: 'flex', gap: 6, alignItems: 'baseline' }}>

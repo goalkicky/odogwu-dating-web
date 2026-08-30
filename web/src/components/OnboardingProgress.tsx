@@ -15,7 +15,7 @@ export default function OnboardingProgress({ currentStep, totalSteps }: Onboardi
             width: i === currentStep ? '24px' : '8px',
             height: '8px',
             borderRadius: '4px',
-            backgroundColor: i === currentStep ? '#FF375F' : i < currentStep ? '#FF6B8A' : '#2A2A2A',
+            backgroundColor: i === currentStep ? '#FF2E5F' : i < currentStep ? '#FF7BA0' : '#2A2A2A',
             transition: 'all 0.3s ease',
           }}
         />

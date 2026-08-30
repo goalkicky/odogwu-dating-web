@@ -95,8 +95,8 @@ export default function ProfileCompletionReminder() {
         </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-          <div style={{ width: 48, height: 48, borderRadius: 9999, background: 'linear-gradient(135deg, #FF375F, #7C4DFF)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <span style={{ fontSize: 22 }}>✨</span>
+          <div style={{ width: 48, height: 48, borderRadius: 9999, background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <span style={{ fontSize: 22 }}>Ã¢Å“Â¨</span>
           </div>
           <div>
             <h3 style={{ fontSize: 17, fontWeight: 800, color: 'white', margin: 0 }}>Complete Your Profile</h3>
@@ -105,7 +105,7 @@ export default function ProfileCompletionReminder() {
         </div>
 
         <div style={{ height: 5, borderRadius: 9999, background: 'rgba(255,255,255,0.1)', marginBottom: 18, overflow: 'hidden' }}>
-          <div style={{ width: `${pct}%`, height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, #FF375F, #FF6B8A)', transition: 'width 0.5s ease' }} />
+          <div style={{ width: `${pct}%`, height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, #FF2E5F, #FF7BA0)', transition: 'width 0.5s ease' }} />
         </div>
 
         <p style={{ fontSize: 13, color: '#D0D0D0', margin: '0 0 12px', lineHeight: '18px' }}>
@@ -117,7 +117,7 @@ export default function ProfileCompletionReminder() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 20 }}>
           {missing.slice(0, 5).map(label => (
             <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <div style={{ width: 5, height: 5, borderRadius: 9999, background: '#FF6B8A', flexShrink: 0 }} />
+              <div style={{ width: 5, height: 5, borderRadius: 9999, background: '#FF7BA0', flexShrink: 0 }} />
               <span style={{ fontSize: 13, color: '#ABABAB' }}>{label}</span>
             </div>
           ))}
@@ -135,7 +135,7 @@ export default function ProfileCompletionReminder() {
           </button>
           <button
             onClick={() => { dismiss(); router.push('/edit-profile'); }}
-            style={{ flex: 1, padding: '13px 20px', borderRadius: 9999, border: 'none', background: 'linear-gradient(135deg, #FF375F, #FF6B8A)', color: 'white', fontSize: 14, fontWeight: 800, cursor: 'pointer', boxShadow: '0 4px 18px rgba(255,55,95,0.35)' }}
+            style={{ flex: 1, padding: '13px 20px', borderRadius: 9999, border: 'none', background: 'linear-gradient(135deg, #FF2E5F, #FF7BA0)', color: 'white', fontSize: 14, fontWeight: 800, cursor: 'pointer', boxShadow: '0 4px 18px rgba(255,46,95,0.35)' }}
           >
             Complete Now
           </button>
