@@ -31,7 +31,7 @@ export default function NotificationsPage() {
     <AppShell>
       <div style={{ padding: '0 24px 24px' }}>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#FF2E5F', fontSize: 15, fontWeight: 600, cursor: 'pointer', padding: '8px 0', marginBottom: 8 }}>
-          â† Back
+          ← Back
         </button>
         <h1 style={{ fontSize: 28, fontWeight: 800, color: '#151515', margin: '0 0 24px' }}>Notifications</h1>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2, borderRadius: 12, overflow: 'hidden' }}>

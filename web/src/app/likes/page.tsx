@@ -161,7 +161,7 @@ export default function LikesPage() {
                   {!isPremium && (
                     <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.25)' }}>
                       <div style={{ padding: '6px 14px', borderRadius: 9999, background: 'rgba(13,13,16,0.85)', border: '1px solid rgba(255,230,0,0.4)', fontSize: 11, fontWeight: 800, color: '#FFE600', letterSpacing: 0.5, backdropFilter: 'blur(4px)' }}>
-                        Ã°Å¸â€â€™ PREMIUM
+                        🔒 PREMIUM
                       </div>
                     </div>
                   )}

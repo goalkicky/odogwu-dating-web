@@ -281,7 +281,7 @@ export default function DiscoverPage() {
               <div className="animate-pop" style={{ position: 'absolute', bottom: 92, left: 0, right: 0, display: 'flex', justifyContent: 'center', animation: 'fadeUp 0.3s ease' }}>
                 <div style={{ padding: '8px 20px', borderRadius: 9999, whiteSpace: 'nowrap', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
                   <span style={{ color: '#151515', fontWeight: 700, fontSize: 14 }}>
-                    {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : `Super Liked ${current.fullName.split(' ')[0] || 'them'}! Ã°Å¸â€™â„¢`}
+                    {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : `Super Liked ${current.fullName.split(' ')[0] || 'them'}! 💙`}
                   </span>
                 </div>
               </div>
@@ -458,7 +458,7 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
           <FilterLabel>Age Range</FilterLabel>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <span style={{ color: '#151515', fontSize: 22, fontWeight: 800 }}>
-              {draft.minAge} Ã¢â‚¬â€œ {draft.maxAge}
+              {draft.minAge} – {draft.maxAge}
             </span>
           </div>
           <div className="dual-slider-wrap">
@@ -533,7 +533,7 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
           <FilterLabel>Height Range</FilterLabel>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <span style={{ color: '#151515', fontSize: 22, fontWeight: 800 }}>
-              {inchesToFtIn(draft.minHeight || HEIGHT_MIN)} Ã¢â‚¬â€œ {inchesToFtIn(draft.maxHeight || HEIGHT_MAX)}
+              {inchesToFtIn(draft.minHeight || HEIGHT_MIN)} – {inchesToFtIn(draft.maxHeight || HEIGHT_MAX)}
             </span>
             {((draft.minHeight > 0) || (draft.maxHeight > 0)) && (
               <button onClick={() => set({ minHeight: 0, maxHeight: 0 })} style={{ background: 'none', border: 'none', color: '#FF7BA0', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
@@ -585,7 +585,7 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
           <FilterLabel>Weight Range (kg)</FilterLabel>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <span style={{ color: '#151515', fontSize: 22, fontWeight: 800 }}>
-              {draft.minWeight || WEIGHT_MIN} Ã¢â‚¬â€œ {draft.maxWeight || WEIGHT_MAX} kg
+              {draft.minWeight || WEIGHT_MIN} – {draft.maxWeight || WEIGHT_MAX} kg
             </span>
             {((draft.minWeight > 0) || (draft.maxWeight > 0)) && (
               <button onClick={() => set({ minWeight: 0, maxWeight: 0 })} style={{ background: 'none', border: 'none', color: '#FF7BA0', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>

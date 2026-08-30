@@ -69,7 +69,7 @@ export default function PrivacyPage() {
     <AppShell>
       <div>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#FF2E5F', fontSize: 15, fontWeight: 600, cursor: 'pointer', padding: '8px 0', marginBottom: 8 }}>
-          â† Back
+          ← Back
         </button>
         <h1 style={{ fontSize: 28, fontWeight: 800, color: '#151515', margin: '0 0 24px' }}>Privacy</h1>
 

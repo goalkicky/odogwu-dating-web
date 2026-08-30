@@ -466,7 +466,7 @@ export default function ExplorePage() {
           <div onClick={() => setShowInterestRestriction(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(6px)', padding: 16 }}>
             <div onClick={(e) => e.stopPropagation()} className="feed-sheet-up" style={{ width: '100%', maxWidth: 380, background: '#fff', borderRadius: 24, border: '1px solid #EDEDF1', padding: '32px 24px', textAlign: 'center' }}>
               <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg, rgba(255,46,95,0.15), rgba(180,76,255,0.12))', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', border: '1px solid rgba(255,46,95,0.2)' }}>
-                <span style={{ fontSize: 28 }}>Ã°Å¸â€â€™</span>
+                <span style={{ fontSize: 28 }}>🔒</span>
               </div>
               <h3 style={{ fontSize: 18, fontWeight: 800, color: '#151515', margin: '0 0 10px' }}>Category Locked</h3>
               <p style={{ fontSize: 14, color: '#8A8A8F', margin: '0 0 24px', lineHeight: 1.5 }}>

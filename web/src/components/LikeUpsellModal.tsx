@@ -51,7 +51,7 @@ export default function LikeUpsellModal({ onClose }: { onClose: () => void }) {
 
           <h2 style={{ fontSize: 26, fontWeight: 900, color: 'white', margin: 0, letterSpacing: 0.3 }}>You&apos;re out of Likes</h2>
           <p style={{ fontSize: 14.5, color: '#ABABAB', lineHeight: '22px', margin: '10px auto 0', maxWidth: 320 }}>
-            You&apos;ve used all 10 of today&apos;s free likes. Premium members get <b style={{ color: 'white' }}>unlimited likes</b> Ã¢â‚¬â€ never miss out on a potential match again. Ã¢ÂÂ¤Ã¯Â¸Â
+            You&apos;ve used all 10 of today&apos;s free likes. Premium members get <b style={{ color: 'white' }}>unlimited likes</b> — never miss out on a potential match again. ❤️
           </p>
 
           <div style={{ display: 'flex', gap: 8, marginTop: 22 }}>
@@ -64,7 +64,7 @@ export default function LikeUpsellModal({ onClose }: { onClose: () => void }) {
                   <HeartIcon size={12} color={p.color} />
                   <span style={{ fontSize: 13, fontWeight: 800, color: 'white' }}>{p.name}</span>
                 </div>
-                <div style={{ fontSize: 11, color: '#FF7BA0', fontWeight: 700, marginTop: 3 }}>Ã¢Ë†Å¾ Likes</div>
+                <div style={{ fontSize: 11, color: '#FF7BA0', fontWeight: 700, marginTop: 3 }}>∞ Likes</div>
               </div>
             ))}
           </div>
@@ -79,12 +79,12 @@ export default function LikeUpsellModal({ onClose }: { onClose: () => void }) {
             }}
           >
             <DiamondIcon size={19} color="white" />
-            Get Unlimited Likes Ã¢â‚¬â€ from N4,900/mo
+            Get Unlimited Likes — from N4,900/mo
           </button>
 
           <div style={{ marginTop: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
             <CheckmarkCircleIcon size={13} color="#3DFC77" />
-            <span style={{ fontSize: 11.5, color: '#6B6B6B' }}>Includes unlimited likes, boosts &amp; more Ã‚Â· Cancel anytime</span>
+            <span style={{ fontSize: 11.5, color: '#6B6B6B' }}>Includes unlimited likes, boosts &amp; more · Cancel anytime</span>
           </div>
         </div>
       </div>

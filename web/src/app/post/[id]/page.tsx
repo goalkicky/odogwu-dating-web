@@ -83,7 +83,7 @@ export default function SinglePostPage() {
             </div>
           ) : error || !post ? (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 20px', gap: 12 }}>
-              <span style={{ fontSize: 40 }}>Ã°Å¸â€œÂ­</span>
+              <span style={{ fontSize: 40 }}>📭</span>
               <span style={{ fontSize: 16, fontWeight: 700, color: '#151515' }}>Post not found</span>
               <span style={{ fontSize: 13, color: '#8A8A8F' }}>This post may have been deleted or is not available.</span>
               <button onClick={() => router.back()} style={{ marginTop: 8, padding: '10px 24px', background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', border: 'none', borderRadius: 9999, color: 'white', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>

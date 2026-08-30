@@ -104,7 +104,7 @@ export default function MatchesPage() {
             {newMatches.length === 0 ? (
               <div style={{ padding: 24, borderRadius: 18, textAlign: 'center', background: '#fff', border: '1px solid #EFEFF3' }}>
                 <p style={{ color: '#8A8A8F', fontSize: 14, margin: 0 }}>
-                  No matches yet. Keep swiping on Discover! Ã°Å¸â€™Ëœ
+                  No matches yet. Keep swiping on Discover! 💘
                 </p>
               </div>
             ) : (
@@ -152,7 +152,7 @@ export default function MatchesPage() {
             {conversationMatches.length === 0 ? (
               <div style={{ padding: 24, borderRadius: 18, textAlign: 'center', background: '#fff', border: '1px solid #EFEFF3' }}>
                 <p style={{ color: '#8A8A8F', fontSize: 14, margin: 0 }}>
-                  No messages yet. Start a conversation! Ã°Å¸â€™Â¬
+                  No messages yet. Start a conversation! 💬
                 </p>
               </div>
             ) : (
@@ -164,7 +164,7 @@ export default function MatchesPage() {
                   const age = mp.age || '';
                   const lm = item.lastMessage;
                   const isMe = lm && lm.senderId === (user as any)?.$id;
-                  const preview = lm ? (isMe ? `You: ${lm.text}` : lm.text) : 'Say hello! Ã°Å¸â€˜â€¹';
+                  const preview = lm ? (isMe ? `You: ${lm.text}` : lm.text) : 'Say hello! 👋';
                   return (
                     <Link
                       key={item.$id}

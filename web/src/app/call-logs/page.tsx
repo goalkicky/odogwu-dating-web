@@ -111,8 +111,8 @@ export default function CallLogsPage() {
                     {getStatusIcon(log.status, isOutgoing)}
                     <span style={{ fontSize: 13, color: log.status === 'missed' && !isOutgoing ? '#FF4530' : '#8A8A8F' }}>
                       {isOutgoing ? 'Outgoing' : 'Incoming'}
-                      {getStatusText(log.status, isOutgoing) && ` Â· ${getStatusText(log.status, isOutgoing)}`}
-                      {log.duration > 0 && ` Â· ${formatDuration(log.duration)}`}
+                      {getStatusText(log.status, isOutgoing) && ` · ${getStatusText(log.status, isOutgoing)}`}
+                      {log.duration > 0 && ` · ${formatDuration(log.duration)}`}
                     </span>
                   </div>
                 </div>

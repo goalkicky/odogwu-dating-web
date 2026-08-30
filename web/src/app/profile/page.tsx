@@ -306,7 +306,7 @@ export default function ProfilePage() {
                 <div style={{ width: `${Math.min(100, (superlikes.remaining / superlikes.dailyLimit) * 100)}%`, height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, #22E5FF, #0AA6CE)', transition: 'width 0.5s ease' }} />
               </div>
               <div style={{ fontSize: 11, color: '#8A8A8F', marginTop: 7 }}>
-                Refills at midnight Ã‚Â· {superlikes.dailyLimit} Super Likes a day
+                Refills at midnight · {superlikes.dailyLimit} Super Likes a day
               </div>
             </div>
           )}
@@ -323,7 +323,7 @@ export default function ProfilePage() {
               }}
             >
               <StarIcon size={16} color="white" />
-              Get Super Likes Ã¢â‚¬â€ stand out to matches
+              Get Super Likes — stand out to matches
             </button>
           )}
         </div>
@@ -367,7 +367,7 @@ export default function ProfilePage() {
                 <div style={{ width: `${Math.min(100, ((likes.remaining ?? 0) / likes.dailyLimit) * 100)}%`, height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, #FF2E5F, #FF7BA0)', transition: 'width 0.5s ease' }} />
               </div>
               <div style={{ fontSize: 11, color: '#8A8A8F', marginTop: 7 }}>
-                Refills at midnight Ã‚Â· {likes.dailyLimit} Likes a day
+                Refills at midnight · {likes.dailyLimit} Likes a day
               </div>
             </div>
           )}
@@ -398,7 +398,7 @@ export default function ProfilePage() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 15, fontWeight: 800, color: '#151515' }}>Premium Active</div>
                 <div style={{ fontSize: 12.5, color: '#8A8A8F', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {premiumPlanName}{premiumExpiry ? ` Ã‚Â· renews ${premiumExpiry}` : ''}
+                  {premiumPlanName}{premiumExpiry ? ` · renews ${premiumExpiry}` : ''}
                 </div>
               </div>
               <Button title="Manage" onPress={() => router.push('/premium')} variant="gradient" size="sm" />
@@ -447,13 +447,13 @@ export default function ProfilePage() {
               </div>
 
               <div style={{ marginTop: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, borderRadius: 15, padding: '14px 18px', background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', boxShadow: '0 10px 30px rgba(255,46,95,0.45)', animation: 'glowPulse 2.6s ease-in-out infinite' }}>
-                <span style={{ fontSize: 15.5, fontWeight: 800, color: 'white', letterSpacing: 0.3 }}>Subscribe now Ã‚Â· from N4,900/mo</span>
+                <span style={{ fontSize: 15.5, fontWeight: 800, color: 'white', letterSpacing: 0.3 }}>Subscribe now · from N4,900/mo</span>
                 <ChevronForwardIcon size={18} color="white" />
               </div>
 
               <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                 <CheckmarkCircleIcon size={13} color="#3DFC77" />
-                <span style={{ fontSize: 11.5, color: '#8A8A8F' }}>Trusted by 2,000+ Odogwu Dating members Ã‚Â· Cancel anytime</span>
+                <span style={{ fontSize: 11.5, color: '#8A8A8F' }}>Trusted by 2,000+ Odogwu Dating members · Cancel anytime</span>
               </div>
             </div>
           </button>

@@ -79,7 +79,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
         // Check if it's a top-level comment
         const filtered = prev.filter(c => c.id !== commentId);
         if (filtered.length !== prev.length) return filtered;
-        // It's a reply Ã¢â‚¬â€ remove from parent's replies
+        // It's a reply — remove from parent's replies
         return prev.map(c => ({
           ...c,
           replies: (c.replies || []).filter(r => r.id !== commentId),
@@ -184,7 +184,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
             </div>
           ) : comments.length === 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 0', gap: 8 }}>
-              <span style={{ fontSize: 32 }}>Ã°Å¸â€™Â¬</span>
+              <span style={{ fontSize: 32 }}>💬</span>
               <span style={{ fontSize: 14, fontWeight: 600, color: '#6B6B6B' }}>No comments yet</span>
               <span style={{ fontSize: 12, color: '#4A4A4A' }}>Start the conversation.</span>
             </div>

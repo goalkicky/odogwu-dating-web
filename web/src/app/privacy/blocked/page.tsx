@@ -35,7 +35,7 @@ export default function BlockedUsersPage() {
     <AppShell>
       <div>
         <button onClick={() => router.back()} style={{ background: 'none', border: 'none', color: '#FF2E5F', fontSize: 15, fontWeight: 600, cursor: 'pointer', padding: '8px 0', marginBottom: 8 }}>
-          Ã¢â€ Â Back
+          ← Back
         </button>
         <h1 style={{ fontSize: 28, fontWeight: 800, color: '#151515', margin: '0 0 8px' }}>Blocked Users</h1>
         <p style={{ fontSize: 14, color: '#8A8A8F', margin: '0 0 24px' }}>
@@ -81,7 +81,7 @@ export default function BlockedUsersPage() {
                       opacity: unblocking === b.blockedId ? 0.6 : 1,
                     }}
                   >
-                    {unblocking === b.blockedId ? 'UnblockingÃ¢â‚¬Â¦' : 'Unblock'}
+                    {unblocking === b.blockedId ? 'Unblocking…' : 'Unblock'}
                   </button>
                 </div>
               );

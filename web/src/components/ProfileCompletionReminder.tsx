@@ -96,7 +96,7 @@ export default function ProfileCompletionReminder() {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
           <div style={{ width: 48, height: 48, borderRadius: 9999, background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <span style={{ fontSize: 22 }}>Ã¢Å“Â¨</span>
+            <span style={{ fontSize: 22 }}>✨</span>
           </div>
           <div>
             <h3 style={{ fontSize: 17, fontWeight: 800, color: 'white', margin: 0 }}>Complete Your Profile</h3>

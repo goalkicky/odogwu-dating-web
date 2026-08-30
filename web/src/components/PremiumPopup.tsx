@@ -6,11 +6,11 @@ import Button from '@/components/Button';
 import { useAuth } from '@/store/AuthContext';
 
 const FEATURES = [
-  { icon: InfiniteIcon, title: 'Unlimited Likes', desc: 'Like every profile that catches your eye Ã¢â‚¬â€ no limits, no pause.' },
+  { icon: InfiniteIcon, title: 'Unlimited Likes', desc: 'Like every profile that catches your eye — no limits, no pause.' },
   { icon: StarIcon, title: 'Super Likes', desc: 'Stand out instantly and boost your chances of a match.' },
   { icon: FlashIcon, title: 'Profile Boosts', desc: 'Put your profile in front of 10x more people.' },
   { icon: GlobeIcon, title: 'Passport Mode', desc: 'Change your location and match anywhere in the world.' },
-  { icon: EyeIcon, title: 'See Who Likes You', desc: 'Never wonder again Ã¢â‚¬â€ see who already liked you.' },
+  { icon: EyeIcon, title: 'See Who Likes You', desc: 'Never wonder again — see who already liked you.' },
   { icon: ChatIcon, title: 'Priority Chat', desc: 'Message before you match and skip the wait.' },
 ];
 

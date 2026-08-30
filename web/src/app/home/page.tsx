@@ -19,21 +19,21 @@ function formatAgo(iso: string): string {
 
 const GRAD_PLACEHOLDER: CSSProperties = {
   width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-  fontSize: 44, fontWeight: 800, color: '#fff', background: 'linear-gradient(135deg, #FF1747, #c9093d)',
+  fontSize: 44, fontWeight: 800, color: '#fff', background: 'linear-gradient(135deg, #FF2E5F, #FF1747)',
 };
 
 function StoryAvatar({ photo, name }: { photo: string; name: string }) {
   if (photo) return <img src={photo} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />;
-  return <div style={{ position: 'absolute', inset: 0, ...GRAD_PLACEHOLDER, background: 'linear-gradient(135deg, #FF1747, #B44CFF)' }}>{name[0]}</div>;
+  return <div style={{ position: 'absolute', inset: 0, ...GRAD_PLACEHOLDER, background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)' }}>{name[0]}</div>;
 }
 
 const MOCK_STORIES: { id: string; name: string; ago: string; caption: string; bg: string }[] = [
-  { id: 'mock-1', name: 'Nnenna', ago: '2h ago', caption: 'Sunset vibes ðŸ˜', bg: 'linear-gradient(150deg, #ff9a9e, #fad0c4 60%, #fbc2eb)' },
-  { id: 'mock-2', name: 'Amaka', ago: '3h ago', caption: 'Beach day ðŸ–ï¸', bg: 'linear-gradient(150deg, #a1c4fd, #c2e9fb 70%, #96e6a1)' },
-  { id: 'mock-3', name: 'Kelechi', ago: '4h ago', caption: 'New week âš¡', bg: 'linear-gradient(150deg, #f6d365, #fda085 70%, #ff8177)' },
-  { id: 'mock-4', name: 'Chioma', ago: '5h ago', caption: 'Good morning ðŸ’—', bg: 'linear-gradient(150deg, #d299c2, #fef9d7 60%, #f7cde4)' },
-  { id: 'mock-5', name: 'Tobi', ago: '6h ago', caption: 'Grateful ðŸ™', bg: 'linear-gradient(150deg, #84fab0, #8fd3f4 70%, #a6c1ee)' },
-  { id: 'mock-6', name: 'Adaeze', ago: '7h ago', caption: 'City lights âœ¨', bg: 'linear-gradient(150deg, #667eea, #764ba2 70%, #f093fb)' },
+  { id: 'mock-1', name: 'Nnenna', ago: '2h ago', caption: 'Sunset vibes 😍', bg: 'linear-gradient(150deg, #ff9a9e, #fad0c4 60%, #fbc2eb)' },
+  { id: 'mock-2', name: 'Amaka', ago: '3h ago', caption: 'Beach day 🏖️', bg: 'linear-gradient(150deg, #a1c4fd, #c2e9fb 70%, #96e6a1)' },
+  { id: 'mock-3', name: 'Kelechi', ago: '4h ago', caption: 'New week ⚡', bg: 'linear-gradient(150deg, #f6d365, #fda085 70%, #ff8177)' },
+  { id: 'mock-4', name: 'Chioma', ago: '5h ago', caption: 'Good morning 💗', bg: 'linear-gradient(150deg, #d299c2, #fef9d7 60%, #f7cde4)' },
+  { id: 'mock-5', name: 'Tobi', ago: '6h ago', caption: 'Grateful 🙏', bg: 'linear-gradient(150deg, #84fab0, #8fd3f4 70%, #a6c1ee)' },
+  { id: 'mock-6', name: 'Adaeze', ago: '7h ago', caption: 'City lights ✨', bg: 'linear-gradient(150deg, #667eea, #764ba2 70%, #f093fb)' },
 ];
 
 function MockStoryCard({ s }: { s: (typeof MOCK_STORIES)[number] }) {
@@ -45,7 +45,7 @@ function MockStoryCard({ s }: { s: (typeof MOCK_STORIES)[number] }) {
     >
       <span aria-hidden="true" style={{ position: 'absolute', inset: 0, display: 'block', background: s.bg }} />
       <div className="tmpl-shade"></div>
-      <div className="tmpl-story-user"><span>â—‰</span><div>{s.name}<small>{s.ago}</small></div></div>
+      <div className="tmpl-story-user"><span>◉</span><div>{s.name}<small>{s.ago}</small></div></div>
       <p>{s.caption}</p>
     </button>
   );
@@ -319,7 +319,7 @@ export default function HomePage() {
             <div className="tmpl-brand-mark"><i></i></div>
             <div>
               <div className="tmpl-brand-name">DOGWU</div>
-              <div className="tmpl-brand-sub"><b>â€”</b> D A T <span>â™¥</span> I N G <b>â€”</b></div>
+              <div className="tmpl-brand-sub"><b>—</b> D A T <span>♥</span> I N G <b>—</b></div>
             </div>
           </div>
           <button className="tmpl-menu tmpl-icon-btn" onClick={() => go('/home')}><span></span><span></span><span></span>Home</button>
@@ -329,10 +329,10 @@ export default function HomePage() {
           </button>
           <div className="tmpl-sb-extra">
             <button onClick={() => go('/explore')}>Explore</button>
-            <button onClick={() => go('/matches')}>â™¥&nbsp;&nbsp;Matches</button>
-            <button onClick={() => go('/likes')}>â™§&nbsp;&nbsp;Likes You</button>
-            <button onClick={() => go('/discover')}>â—Ž&nbsp;&nbsp;Nearby</button>
-            <button onClick={() => go('/settings')}>âš™&nbsp;&nbsp;Settings</button>
+            <button onClick={() => go('/matches')}>♥&nbsp;&nbsp;Matches</button>
+            <button onClick={() => go('/likes')}>♧&nbsp;&nbsp;Likes You</button>
+            <button onClick={() => go('/discover')}>◎&nbsp;&nbsp;Nearby</button>
+            <button onClick={() => go('/settings')}>⚙&nbsp;&nbsp;Settings</button>
           </div>
         </aside>
       </div>
@@ -355,7 +355,7 @@ export default function HomePage() {
               <div className="tmpl-brand-mark"><i></i></div>
               <div>
                 <div className="tmpl-brand-name">DOGWU</div>
-                <div className="tmpl-brand-sub"><b>â€”</b> D A T <span>â™¥</span> I N G <b>â€”</b></div>
+                <div className="tmpl-brand-sub"><b>—</b> D A T <span>♥</span> I N G <b>—</b></div>
               </div>
             </div>
             <button className="tmpl-messages-top tmpl-icon-btn" aria-label="Messages" onClick={() => go('/matches')}>
@@ -371,7 +371,7 @@ export default function HomePage() {
 
           {!isPremium && (
             <section className="tmpl-premium">
-              <div className="tmpl-crown">â™›</div>
+              <div className="tmpl-crown">♛</div>
               <div className="tmpl-premium-copy">
                 <h3>Upgrade to Premium</h3>
                 <p>Unlock all features and<br />connect without limits</p>
@@ -412,7 +412,7 @@ export default function HomePage() {
           </section>
 
           <section className="tmpl-section">
-            <h2>Top Stories <span>ðŸ”¥</span></h2>
+            <h2>Top Stories <span>🔥</span></h2>
             <div className="tmpl-stories">
               {stories.length === 0
                 ? MOCK_STORIES.map(s => <MockStoryCard key={s.id} s={s} />)
@@ -422,7 +422,7 @@ export default function HomePage() {
                         ? <img src={s.photo} alt="" />
                         : <StoryAvatar photo="" name={s.name[0]} />}
                       <div className="tmpl-shade"></div>
-                      <div className="tmpl-story-user"><span>â—‰</span><div>{s.name}<small>{s.ago}</small></div></div>
+                      <div className="tmpl-story-user"><span>◉</span><div>{s.name}<small>{s.ago}</small></div></div>
                       <p>{s.caption}</p>
                     </Link>
                   ))}
@@ -430,9 +430,9 @@ export default function HomePage() {
           </section>
 
           <section className="tmpl-love-banner">
-            <div className="tmpl-hearts">ðŸ’—</div>
+            <div className="tmpl-hearts">💗</div>
             <div>
-              <h3>Love is better together <span>ðŸ’•</span></h3>
+              <h3>Love is better together <span>💕</span></h3>
               <p>Complete your profile, increase your<br />visibility and find your perfect match.</p>
             </div>
             <button className="tmpl-outline-btn" onClick={() => go('/edit-profile')}>Complete Profile</button>
@@ -467,7 +467,7 @@ export default function HomePage() {
           <Link href="/explore" className="tmpl-nav-item">
             <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none"/><path d="m19 29 4-10 9-4-4 9-9 5Z"/></svg><span>Explore</span>
           </Link>
-          <Link href="/discover" className="tmpl-nav-center"><span>â—”</span></Link>
+          <Link href="/discover" className="tmpl-nav-center"><span>◔</span></Link>
           <Link href="/matches" className="tmpl-nav-item">
             <span className="tmpl-nav-icon-wrap"><svg viewBox="0 0 48 48"><path d="M9 34l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/><circle cx="19" cy="22" r="2"/><circle cx="25" cy="22" r="2"/><circle cx="31" cy="22" r="2"/></svg><b>{messagesCount || 0}</b></span><span>Messages</span>
           </Link>

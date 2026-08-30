@@ -158,7 +158,7 @@ export default function FeedProfileModal({ userId, userName, userPhoto, currentU
           </div>
         </div>
 
-        {/* Action buttons Ã¢â‚¬â€ hidden if already liked/superliked */}
+        {/* Action buttons — hidden if already liked/superliked */}
         {(hideActions || alreadyActed) ? (
           <div style={{ padding: '20px 20px 24px', textAlign: 'center' }}>
             <span style={{ fontSize: 14, color: '#6B6B6B', fontWeight: 600 }}>You&apos;ve already liked this profile</span>

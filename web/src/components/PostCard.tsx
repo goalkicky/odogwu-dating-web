@@ -232,7 +232,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
         </div>
       )}
 
-      {/* Action bar â€” Instagram-exact: icon + count inline */}
+      {/* Action bar — Instagram-exact: icon + count inline */}
       <div style={{ padding: '10px 14px 0' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {/* Heart + count */}
@@ -308,7 +308,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
         </button>
       )}
 
-      {/* Inline comment previews â€” Instagram-style */}
+      {/* Inline comment previews — Instagram-style */}
       {previewComments.length > 0 && (
         <div style={{ padding: '2px 14px 0' }}>
           {previewComments.map(c => (
@@ -327,7 +327,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
         </span>
       </div>
 
-      {/* Add a comment â€” Instagram-style */}
+      {/* Add a comment — Instagram-style */}
       <div style={{ display: 'flex', alignItems: 'center', padding: '10px 14px 12px', borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 8 }}>
         <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'linear-gradient(135deg, #1A1A2E, #2A2A3E)', flexShrink: 0, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: 10 }}>
           <span style={{ fontSize: 11, fontWeight: 700, color: '#FF2E5F' }}>Y</span>

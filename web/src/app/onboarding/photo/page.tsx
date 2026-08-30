@@ -159,7 +159,7 @@ export default function PhotoPage() {
         })}
       </div>
 
-      <p style={{ color: '#6B6B6B', fontSize: 12, textAlign: 'center', marginTop: 12 }}>Tap to add Ã¢â‚¬Â¢ Tap again to remove</p>
+      <p style={{ color: '#6B6B6B', fontSize: 12, textAlign: 'center', marginTop: 12 }}>Tap to add • Tap again to remove</p>
 
       {error && <p style={{ color: '#FF4530', fontSize: 13, textAlign: 'center', marginTop: 12, padding: '8px 12px', background: 'rgba(255,69,48,0.1)', borderRadius: 8 }}>{error}</p>}
 

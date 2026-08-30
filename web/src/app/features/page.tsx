@@ -34,7 +34,7 @@ const featureGroups = [
   },
   {
     title: 'Real-time Communication', color: '#3DFC77',
-    desc: 'Connect naturally with instant messaging, crystal-clear voice notes, and HD video calls Ã¢â‚¬â€ all in-app.',
+    desc: 'Connect naturally with instant messaging, crystal-clear voice notes, and HD video calls — all in-app.',
     icon: <ChatIcon size={28} color="#3DFC77" />,
     items: [
       'Instant messaging with typing indicators and read receipts',
@@ -76,14 +76,14 @@ const featureGroups = [
       'AI-powered content moderation and spam detection',
       '24/7 human moderation team for reported accounts',
       'Block and report with one tap',
-      'Photo privacy controls Ã¢â‚¬â€ blur or hide your photos',
+      'Photo privacy controls — blur or hide your photos',
       'Location sharing only when you choose',
       'Emergency contact and safety check-in features',
     ],
   },
 ];
 
-const emojis = ['Ã°Å¸Â§Â ', 'Ã¢Å“â€¦', 'Ã°Å¸â€™Â¬', 'Ã¢Â­Â', 'Ã°Å¸Å’Â', 'Ã°Å¸â€ºÂ¡Ã¯Â¸Â'];
+const emojis = ['🧠', '✅', '💬', '⭐', '🌍', '🛡️'];
 
 export default function FeaturesPage() {
   const isMobile = useMobile();

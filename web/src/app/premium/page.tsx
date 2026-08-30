@@ -174,7 +174,7 @@ export default function PremiumPage() {
                   {selected && payMethod === 'coins' && (
                     <div style={{ marginBottom: 10, textAlign: 'center' }}>
                       <span style={{ fontSize: 12, color: myCoins >= (plan?.coins ?? 0) ? '#7CFFA0' : '#FF6B6B', fontWeight: 700 }}>
-                        {myCoins >= (plan?.coins ?? 0) ? `You have ${myCoins.toLocaleString()} coins` : `You have ${myCoins.toLocaleString()} coins Ã¢â‚¬â€ need ${(plan?.coins ?? 0) - myCoins} more`}
+                        {myCoins >= (plan?.coins ?? 0) ? `You have ${myCoins.toLocaleString()} coins` : `You have ${myCoins.toLocaleString()} coins — need ${(plan?.coins ?? 0) - myCoins} more`}
                       </span>
                     </div>
                   )}
@@ -198,7 +198,7 @@ export default function PremiumPage() {
         <div style={{ display: 'inline-block', padding: '14px 28px', borderRadius: 9999, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
           <p style={{ color: '#8A8A8F', fontSize: 12, lineHeight: '18px', margin: 0 }}>
             Subscription automatically renews. Cancel anytime.{'\n'}
-            <span style={{ color: '#8A8A8F' }}>Terms of Service Ã¢â‚¬Â¢ Privacy Policy</span>
+            <span style={{ color: '#8A8A8F' }}>Terms of Service • Privacy Policy</span>
           </p>
         </div>
       </div>

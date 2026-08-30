@@ -116,7 +116,7 @@ function WalletContent() {
         {verifying && (
           <div className="animate-fade-up" style={{ marginBottom: 18, padding: 16, borderRadius: 16, display: 'flex', alignItems: 'center', gap: 12, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
             <div style={{ width: 22, height: 22, borderRadius: '50%', border: '3px solid rgba(255,230,0,0.2)', borderTopColor: '#FFE600', animation: 'spin 0.8s linear infinite' }} />
-            <span style={{ color: '#8A8A8F', fontSize: 14 }}>Verifying your paymentÃ¢â‚¬Â¦</span>
+            <span style={{ color: '#8A8A8F', fontSize: 14 }}>Verifying your payment…</span>
           </div>
         )}
 
@@ -138,7 +138,7 @@ function WalletContent() {
                   {coins} <span style={{ fontSize: 16, color: '#8A8A8F', fontWeight: 600 }}>coins</span>
                 </div>
                 <div style={{ fontSize: 12.5, color: '#8A8A8F', marginTop: 2 }}>
-                  Ã¢â€°Ë† {formatNaira(coins * 100)}
+                  ≈ {formatNaira(coins * 100)}
                 </div>
               </div>
             </div>
@@ -167,7 +167,7 @@ function WalletContent() {
                 <div style={{ fontSize: 22, fontWeight: 800, color: '#151515' }}>{pack.coins}</div>
                 <div style={{ fontSize: 12.5, color: '#8A8A8F' }}>{formatNaira(pack.naira)}</div>
                 <Button
-                  title={initializing === String(pack.coins) ? 'StartingÃ¢â‚¬Â¦' : 'Buy'}
+                  title={initializing === String(pack.coins) ? 'Starting…' : 'Buy'}
                   variant="gradient"
                   size="sm"
                   loading={initializing === String(pack.coins)}
@@ -184,7 +184,7 @@ function WalletContent() {
           <h2 style={{ fontSize: 20, fontWeight: 800, color: '#151515', margin: '0 0 14px' }}>History</h2>
           {loading ? (
             <div style={{ padding: 30, borderRadius: 18, textAlign: 'center', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
-              <span style={{ color: '#8A8A8F', fontSize: 14 }}>LoadingÃ¢â‚¬Â¦</span>
+              <span style={{ color: '#8A8A8F', fontSize: 14 }}>Loading…</span>
             </div>
           ) : transactions.length === 0 ? (
             <div style={{ padding: 34, borderRadius: 18, textAlign: 'center', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>

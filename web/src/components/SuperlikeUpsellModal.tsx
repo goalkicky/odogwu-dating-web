@@ -51,7 +51,7 @@ export default function SuperlikeUpsellModal({ onClose }: { onClose: () => void 
 
           <h2 style={{ fontSize: 26, fontWeight: 900, color: 'white', margin: 0, letterSpacing: 0.3 }}>You&apos;re out of Super Likes</h2>
           <p style={{ fontSize: 14.5, color: '#ABABAB', lineHeight: '22px', margin: '10px auto 0', maxWidth: 320 }}>
-            Super Likes make you stand out instantly Ã¢â‚¬â€ they show someone you&apos;re seriously interested. Don&apos;t miss your chance to be noticed. Ã°Å¸â€™â„¢
+            Super Likes make you stand out instantly — they show someone you&apos;re seriously interested. Don&apos;t miss your chance to be noticed. 💙
           </p>
 
           <div style={{ display: 'flex', gap: 8, marginTop: 22 }}>
@@ -79,12 +79,12 @@ export default function SuperlikeUpsellModal({ onClose }: { onClose: () => void 
             }}
           >
             <DiamondIcon size={19} color="white" />
-            Get Super Likes Ã¢â‚¬â€ from N4,900/mo
+            Get Super Likes — from N4,900/mo
           </button>
 
           <div style={{ marginTop: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
             <CheckmarkCircleIcon size={13} color="#3DFC77" />
-            <span style={{ fontSize: 11.5, color: '#6B6B6B' }}>Includes unlimited likes, boosts &amp; more Ã‚Â· Cancel anytime</span>
+            <span style={{ fontSize: 11.5, color: '#6B6B6B' }}>Includes unlimited likes, boosts &amp; more · Cancel anytime</span>
           </div>
         </div>
       </div>

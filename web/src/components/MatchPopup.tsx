@@ -129,7 +129,7 @@ export default function MatchPopup({ matchedUser, matchId, myPhotoUrl, onClose }
               {myPhoto ? (
                 <img src={myPhoto} alt="You" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
-                <span style={{ fontSize: 32 }}>Ã°Å¸ËœÅ </span>
+                <span style={{ fontSize: 32 }}>😊</span>
               )}
             </div>
           </div>
@@ -149,7 +149,7 @@ export default function MatchPopup({ matchedUser, matchId, myPhotoUrl, onClose }
               {theirPhoto ? (
                 <img src={theirPhoto} alt={firstName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
-                <span style={{ fontSize: 32 }}>Ã°Å¸ËœÅ </span>
+                <span style={{ fontSize: 32 }}>😊</span>
               )}
             </div>
           </div>

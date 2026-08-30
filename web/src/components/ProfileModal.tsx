@@ -77,7 +77,7 @@ export default function ProfileModal({ user, onClose }: { user: ProfileModalUser
               <LocationIcon size={14} color="rgba(255,255,255,0.85)" />
               <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14, textShadow: '0 1px 8px rgba(0,0,0,0.6)' }}>{user.city}</span>
               {typeof user.distanceKm === 'number' && (
-                <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, textShadow: '0 1px 8px rgba(0,0,0,0.6)' }}>Â· {user.distanceKm} km</span>
+                <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, textShadow: '0 1px 8px rgba(0,0,0,0.6)' }}>· {user.distanceKm} km</span>
               )}
             </div>
           )}

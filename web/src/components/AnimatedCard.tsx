@@ -180,7 +180,7 @@ export default function AnimatedCard({
             <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, textShadow: '0 1px 6px rgba(0,0,0,0.6)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.city}</span>
             {typeof user.distanceKm === 'number' && (
               <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12.5, textShadow: '0 1px 6px rgba(0,0,0,0.6)', whiteSpace: 'nowrap' }}>
-                Ã‚Â· {user.distanceKm} km
+                · {user.distanceKm} km
               </span>
             )}
           </div>

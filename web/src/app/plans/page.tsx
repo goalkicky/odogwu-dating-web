@@ -161,7 +161,7 @@ export default function PlansPage() {
 
       <section style={{ padding: isMobile ? '40px 16px 60px' : '60px 24px 100px', textAlign: 'center' }}>
         <p style={{ color: '#6B6B6B', fontSize: isMobile ? 14 : 15, marginBottom: 12 }}>Have questions about our plans?</p>
-        <a href="/faq" style={{ color: '#FF2E5F', fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Visit our FAQ Ã¢â€ â€™</a>
+        <a href="/faq" style={{ color: '#FF2E5F', fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Visit our FAQ →</a>
       </section>
 
       <MarketingFooter />

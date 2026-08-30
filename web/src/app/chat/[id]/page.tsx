@@ -15,9 +15,9 @@ import { captureStream, mediaConstraints, mediaErrorMessage } from '@/lib/media'
 import Button from '@/components/Button';
 import type { Message } from '@/lib/types';
 
-const EMOJIS = ['Ã°Å¸Ëœâ‚¬', 'Ã°Å¸Ëœâ€š', 'Ã¢ÂÂ¤Ã¯Â¸Â', 'Ã°Å¸â€Â¥', 'Ã°Å¸ËœÂ', 'Ã°Å¸Â¥Â°', 'Ã°Å¸ËœËœ', 'Ã°Å¸â€™â€¢', 'Ã°Å¸ËœÅ ', 'Ã°Å¸ËœÅ½', 'Ã°Å¸â„¢Å’', 'Ã°Å¸â€˜â€¹', 'Ã°Å¸â€™Âª', 'Ã¢Å“Â¨', 'Ã°Å¸Å’Å¸', 'Ã°Å¸Å½â€°', 'Ã°Å¸Å½â€š', 'Ã°Å¸Ââ€¢', 'Ã¢Ëœâ€¢', 'Ã°Å¸Å’Â®'];
-const QUICK_REPLIES = ['Hey Ã°Å¸ËœÅ ', 'How are you?', "You're gorgeous Ã°Å¸â€Â¥", 'Coffee sometime? Ã¢Ëœâ€¢', 'LOL Ã°Å¸Ëœâ€š', 'Ã°Å¸â€™â€¢'];
-const REACTIONS = ['Ã¢ÂÂ¤Ã¯Â¸Â', 'Ã°Å¸Ëœâ€š', 'Ã°Å¸â€Â¥', 'Ã°Å¸ËœÂ', 'Ã°Å¸â€˜Â', 'Ã°Å¸ËœÂ®'];
+const EMOJIS = ['😀', '😂', '❤️', '🔥', '😍', '🥰', '😘', '💕', '😊', '😎', '🙌', '👋', '💪', '✨', '🌟', '🎉', '🎂', '🍕', '☕', '🌮'];
+const QUICK_REPLIES = ['Hey 😊', 'How are you?', "You're gorgeous 🔥", 'Coffee sometime? ☕', 'LOL 😂', '💕'];
+const REACTIONS = ['❤️', '😂', '🔥', '😍', '👍', '😮'];
 const GROUP_GAP_MS = 5 * 60 * 1000;
 
 function hashStr(s: string) {
@@ -558,7 +558,7 @@ export default function ChatPage() {
                 disabled={blockAction}
                 style={{ display: 'block', width: '100%', padding: '13px 16px', textAlign: 'left', border: 'none', background: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 600, color: '#FF7BA0' }}
               >
-                {blockAction ? 'BlockingÃ¢â‚¬Â¦' : `Block ${matchName}`}
+                {blockAction ? 'Blocking…' : `Block ${matchName}`}
               </button>
               <button
                 onClick={handleUnblock}
@@ -608,7 +608,7 @@ export default function ChatPage() {
             </div>
             <div style={{ fontSize: 18, fontWeight: 800, color: '#151515' }}>You matched with {matchName}!</div>
             <div style={{ fontSize: 13, color: '#8A8A8F', maxWidth: 260, lineHeight: '20px' }}>
-              Say hi and start the conversation Ã¢â‚¬â€ compliments go a long way Ã¢Å“Â¨
+              Say hi and start the conversation — compliments go a long way ✨
             </div>
           </div>
         )}
@@ -627,7 +627,7 @@ export default function ChatPage() {
             const isVideo = log.callType === 'video';
             const isMissed = log.status === 'missed';
             const isDeclined = log.status === 'declined';
-            const icon = isVideo ? 'Ã°Å¸â€œÂ¹' : 'Ã°Å¸â€œÅ¾';
+            const icon = isVideo ? '📹' : '📞';
             let statusLabel = '';
             if (isMissed) statusLabel = isMe ? 'No answer' : 'Missed';
             else if (isDeclined) statusLabel = 'Declined';
@@ -713,7 +713,7 @@ export default function ChatPage() {
                   style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 6, maxWidth: '84%' }}
                   onMouseEnter={() => setHoveredId(msg.id)}
                   onMouseLeave={() => setHoveredId(null)}
-                  onDoubleClick={() => toggleReaction(msg, 'Ã¢ÂÂ¤Ã¯Â¸Â')}
+                  onDoubleClick={() => toggleReaction(msg, '❤️')}
                 >
                   {/* Hover reaction / action bar */}
                   <div style={{
@@ -835,7 +835,7 @@ export default function ChatPage() {
 
         {searchOpen && searchQuery.trim() && visibleMessages.length === 0 && (
           <div style={{ textAlign: 'center', color: '#8A8A8F', fontSize: 14, padding: 40 }}>
-            No messages match Ã¢â‚¬Å“{searchQuery}Ã¢â‚¬Â
+            No messages match “{searchQuery}”
           </div>
         )}
 
@@ -938,7 +938,7 @@ export default function ChatPage() {
                 placeholder="Custom"
                 style={{ width: 90, background: '#F3F3F6', border: '1px solid #EDEDF1', borderRadius: 10, padding: '8px 10px', color: '#151515', fontSize: 14, outline: 'none' }}
               />
-              <Button title={gifting ? 'SendingÃ¢â‚¬Â¦' : 'Send Gift'} variant="gradient" size="sm" loading={gifting} disabled={gifting} onPress={handleGift} />
+              <Button title={gifting ? 'Sending…' : 'Send Gift'} variant="gradient" size="sm" loading={gifting} disabled={gifting} onPress={handleGift} />
               <span style={{ marginLeft: 'auto', fontSize: 11, color: '#8A8A8F', fontWeight: 600 }}>You have {myCoins.toLocaleString()} coins</span>
             </div>
           </div>
@@ -993,7 +993,7 @@ export default function ChatPage() {
             <div style={{ flex: 1, height: 40, minWidth: 0, display: 'flex', alignItems: 'center', background: '#F3F3F6', border: '1px solid #EDEDF1', borderRadius: 9999, padding: '0 6px 0 16px' }}>
               <input
                 style={{ flex: 1, minWidth: 0, color: '#151515', fontSize: 15, background: 'none', border: 'none', outline: 'none', padding: 0 }}
-                placeholder={sendingImage ? 'Uploading photoÃ¢â‚¬Â¦' : 'Type a message...'}
+                placeholder={sendingImage ? 'Uploading photo…' : 'Type a message...'}
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}

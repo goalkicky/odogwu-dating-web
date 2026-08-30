@@ -19,12 +19,12 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
 
   return (
     <>
-      {/* Mobile fallback Ã¢â‚¬â€ renders children as-is on small screens */}
+      {/* Mobile fallback — renders children as-is on small screens */}
       <div className="desktop-layout-mobile">
         {children}
       </div>
 
-      {/* Desktop layout Ã¢â‚¬â€ hidden on mobile */}
+      {/* Desktop layout — hidden on mobile */}
       <div className="desktop-layout-desktop">
         <div style={{
           maxWidth: 1400, margin: '0 auto', minHeight: '100svh',
