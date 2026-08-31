@@ -62,6 +62,7 @@ export default function HomePage() {
   const [stories, setStories] = useState<any[]>([]);
   const [isPremium, setIsPremium] = useState(false);
   const [messagesCount, setMessagesCount] = useState(0);
+  const [loaded, setLoaded] = useState(false);
 
   const uid = (profile as any)?.$id || (profile as any)?.id;
   const profilePhoto = profile?.photos?.[0] ? storageService.getFilePreview(profile.photos[0]) : '';
@@ -84,6 +85,7 @@ export default function HomePage() {
         setMessagesCount(docs.filter((d: any) => d.hasConversation).length);
       }
       if (premRes.status === 'fulfilled') setIsPremium(!!(premRes.value as any)?.isPremium);
+      setLoaded(true);
     });
 
     if (profile?.interestedIn) {
@@ -370,7 +372,7 @@ export default function HomePage() {
             </button>
           </header>
 
-          {!isPremium && (
+          {!loaded && !isPremium && (
             <section className="tmpl-premium">
               <div className="tmpl-crown">♛</div>
               <div className="tmpl-premium-copy">
