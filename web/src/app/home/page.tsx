@@ -133,7 +133,7 @@ export default function HomePage() {
         .tmpl-messages-top { position: relative; width: 50px; height: 50px; margin-top: 31px; background: none; border: 0; cursor: pointer; color: #171717; padding: 0; }
         .tmpl-messages-top svg { width: 40px; height: 40px; }
         .tmpl-messages-top em { position: absolute; right: 0; top: -4px; background: #d71945; color: #fff; width: 24px; height: 24px; border-radius: 50%; font-style: normal; font-size: 13px; display: grid; place-items: center; font-weight: 700; }
-        .tmpl-premium { min-height: 105px; height: auto; background: #fff1f5; border-radius: 18px; display: flex; align-items: center; padding: 17px 22px; margin-bottom: 18px; }
+        .tmpl-premium { min-height: 105px; height: auto; background: #fff1f5; border-radius: 18px; display: flex; align-items: center; padding: 10px 22px; margin-bottom: 18px; }
         .tmpl-crown { width: 52px; height: 52px; background: #df164c; color: #ffd12a; border-radius: 50%; display: grid; place-items: center; font-size: 32px; margin-right: 15px; flex-shrink: 0; }
         .tmpl-premium-copy { flex: 1; }
         .tmpl-premium h3 { font-size: 16px; margin: 0 0 5px; color: #151515; font-weight: 800; }
@@ -248,7 +248,7 @@ export default function HomePage() {
           .tmpl-menu span { width: 24px; }
           .tmpl-messages-top { width: 38px; height: 38px; margin-top: 20px; }
           .tmpl-messages-top svg { width: 30px; height: 30px; }
-          .tmpl-premium { padding: 12px 12px; }
+          .tmpl-premium { padding: 8px 12px; }
           .tmpl-crown { width: 44px; height: 44px; font-size: 27px; margin-right: 11px; }
           .tmpl-premium h3 { font-size: 15px; font-weight: 800; }
           .tmpl-premium p { font-size: 12px; line-height: 17px; font-weight: 700; }
