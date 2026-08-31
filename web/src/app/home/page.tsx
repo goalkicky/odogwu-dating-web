@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/store/AuthContext';
 import { useMobile } from '@/lib/useMediaQuery';
-import { matchService, userService, storageService, feedService, likeService } from '@/lib/cloudflare/services';
+import { matchService, userService, storageService, feedService } from '@/lib/cloudflare/services';
 
 function formatAgo(iso: string): string {
   if (!iso) return 'now';
@@ -60,9 +60,7 @@ export default function HomePage() {
   const [matchesCount, setMatchesCount] = useState(0);
   const [nearby, setNearby] = useState<any[]>([]);
   const [stories, setStories] = useState<any[]>([]);
-  const [isPremium, setIsPremium] = useState(false);
   const [messagesCount, setMessagesCount] = useState(0);
-  const [loaded, setLoaded] = useState(false);
 
   const uid = (profile as any)?.$id || (profile as any)?.id;
   const profilePhoto = profile?.photos?.[0] ? storageService.getFilePreview(profile.photos[0]) : '';
@@ -76,16 +74,13 @@ export default function HomePage() {
     Promise.allSettled([
       matchService.getWhoLikedMe(uid),
       matchService.getUserMatches(uid),
-      likeService.getStatus(),
-    ]).then(([likesRes, matchesRes, premRes]) => {
+    ]).then(([likesRes, matchesRes]) => {
       if (likesRes.status === 'fulfilled') setLikesCount(Array.isArray(likesRes.value) ? likesRes.value.length : (likesRes.value?.total || 0));
       if (matchesRes.status === 'fulfilled') {
         const docs = Array.isArray(matchesRes.value) ? matchesRes.value : (matchesRes.value?.documents || []);
         setMatchesCount(docs.length);
         setMessagesCount(docs.filter((d: any) => d.hasConversation).length);
       }
-      if (premRes.status === 'fulfilled') setIsPremium(!!(premRes.value as any)?.isPremium);
-      setLoaded(true);
     });
 
     if (profile?.interestedIn) {
@@ -372,16 +367,14 @@ export default function HomePage() {
             </button>
           </header>
 
-          {!loaded && !isPremium && (
-            <section className="tmpl-premium">
-              <div className="tmpl-crown">♛</div>
-              <div className="tmpl-premium-copy">
-                <h3>Upgrade to Premium</h3>
-                <p>Unlock all features and<br />connect without limits</p>
-              </div>
-              <button className="tmpl-pink-btn" onClick={() => go('/premium')}>Upgrade</button>
-            </section>
-          )}
+          <section className="tmpl-premium">
+            <div className="tmpl-crown">♛</div>
+            <div className="tmpl-premium-copy">
+              <h3>Upgrade to Premium</h3>
+              <p>Unlock all features and<br />connect without limits</p>
+            </div>
+            <button className="tmpl-pink-btn" onClick={() => go('/premium')}>Upgrade</button>
+          </section>
 
           <section className="tmpl-quick-nav">
             <button className="tmpl-quick" onClick={() => go('/edit-profile')}>
