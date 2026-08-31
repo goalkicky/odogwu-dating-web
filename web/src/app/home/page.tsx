@@ -248,7 +248,7 @@ export default function HomePage() {
           .tmpl-menu span { width: 24px; }
           .tmpl-messages-top { width: 38px; height: 38px; margin-top: 20px; }
           .tmpl-messages-top svg { width: 30px; height: 30px; }
-          .tmpl-premium { padding: 8px 12px; }
+          .tmpl-premium { padding: 5px 12px; }
           .tmpl-crown { width: 44px; height: 44px; font-size: 27px; margin-right: 11px; }
           .tmpl-premium h3 { font-size: 15px; font-weight: 800; }
           .tmpl-premium p { font-size: 12px; line-height: 17px; font-weight: 700; }
