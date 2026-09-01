@@ -215,10 +215,11 @@ export default function HomePage() {
           .tmpl-section h2 { font-size: 18px; }
           .tmpl-section h2 span { font-size: 17px; }
           .tmpl-stories { gap: 6px; }
-          .tmpl-story-card { height: 240px; flex-basis: 128px; flex-grow: 1; }
-          .tmpl-story-user { font-size: 12px; left: 8px; top: 10px; }
-          .tmpl-story-user span { width: 24px; height: 24px; }
-          .tmpl-story-card p { font-size: 12px; left: 10px; }
+          .tmpl-story-card { height: 240px; flex: 1 0 calc((100% - 24px) / 5); }
+          .tmpl-story-user { font-size: 11px; left: 6px; top: 6px; gap: 4px; }
+          .tmpl-story-user span { width: 20px; height: 20px; }
+          .tmpl-story-user small { font-size: 9px; margin-top: 1px; white-space: nowrap; }
+          .tmpl-story-card p { font-size: 11px; left: 8px; }
           .tmpl-love-banner { height: auto; min-height: 90px; padding: 12px; gap: 8px; }
           .tmpl-love-banner .tmpl-hearts { font-size: 34px; flex-shrink: 0; }
           .tmpl-love-banner > div:nth-child(2) { flex: 1; min-width: 0; }
@@ -255,7 +256,7 @@ export default function HomePage() {
           .tmpl-badge, .tmpl-plus { width: 27px; height: 27px; font-size: 12px; }
           .tmpl-plus { font-size: 19px; }
           .tmpl-quick label { font-size: 11px; }
-          .tmpl-story-card { flex-basis: 108px; height: 200px; }
+          .tmpl-story-card { flex: 1 0 calc((100% - 24px) / 5); height: 200px; }
           .tmpl-love-banner { gap: 6px; align-items: center; }
           .tmpl-love-banner .tmpl-hearts { font-size: 28px; }
           .tmpl-love-banner h3 { font-size: 12px; }
