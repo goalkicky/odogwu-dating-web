@@ -219,11 +219,12 @@ export default function HomePage() {
           .tmpl-story-user { font-size: 12px; left: 8px; top: 10px; }
           .tmpl-story-user span { width: 24px; height: 24px; }
           .tmpl-story-card p { font-size: 12px; left: 10px; }
-          .tmpl-love-banner { height: auto; min-height: 118px; padding: 14px; gap: 10px; flex-wrap: wrap; }
-          .tmpl-love-banner .tmpl-hearts { font-size: 42px; }
-          .tmpl-love-banner h3 { font-size: 16px; }
-          .tmpl-love-banner p { font-size: 12px; line-height: 18px; }
-          .tmpl-outline-btn { margin-left: auto; padding: 13px 16px; font-size: 12px; }
+          .tmpl-love-banner { height: auto; min-height: 90px; padding: 12px; gap: 8px; }
+          .tmpl-love-banner .tmpl-hearts { font-size: 34px; flex-shrink: 0; }
+          .tmpl-love-banner > div:nth-child(2) { flex: 1; min-width: 0; }
+          .tmpl-love-banner h3 { font-size: 13px; margin: 0 0 2px; white-space: nowrap; }
+          .tmpl-love-banner p { font-size: 11px; line-height: 14px; }
+          .tmpl-outline-btn { margin-left: 8px; padding: 11px 12px; font-size: 11px; flex-shrink: 0; }
           .tmpl-active-grid { grid-template-columns: repeat(3, 1fr); gap: 9px; }
           .tmpl-profile-card { height: 168px; }
           .tmpl-profile-card div { font-size: 13px; left: 9px; bottom: 9px; }
@@ -255,9 +256,11 @@ export default function HomePage() {
           .tmpl-plus { font-size: 19px; }
           .tmpl-quick label { font-size: 11px; }
           .tmpl-story-card { flex-basis: 108px; height: 200px; }
-          .tmpl-love-banner { flex-direction: column; align-items: flex-start; gap: 8px; }
-          .tmpl-love-banner .tmpl-hearts { font-size: 34px; }
-          .tmpl-outline-btn { margin-left: 0; width: 100%; text-align: center; }
+          .tmpl-love-banner { gap: 6px; align-items: center; }
+          .tmpl-love-banner .tmpl-hearts { font-size: 28px; }
+          .tmpl-love-banner h3 { font-size: 12px; }
+          .tmpl-love-banner p { font-size: 10px; line-height: 13px; }
+          .tmpl-outline-btn { margin-left: 6px; padding: 10px 9px; font-size: 10px; }
           .tmpl-active-grid { grid-template-columns: repeat(2, 1fr); }
           .tmpl-profile-card { height: 196px; }
         }
