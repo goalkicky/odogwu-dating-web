@@ -166,7 +166,7 @@ export default function HomePage() {
         .tmpl-profile-card > img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .tmpl-profile-card:after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgba(0,0,0,.55)); }
         .tmpl-profile-card div { position: absolute; left: 12px; bottom: 12px; z-index: 2; font-size: 12px; font-weight: 700; text-align: left; }
-        .tmpl-profile-card small { display: block; font-size: 10px; margin-top: 3px; font-weight: 700; }
+        .tmpl-profile-card small { display: block; font-size: 10px; margin-top: 0; font-weight: 700; line-height: 1; }
         .tmpl-profile-card i { position: absolute; right: 12px; top: 12px; width: 11px; height: 11px; background: #14e96d; border-radius: 50%; z-index: 3; }
         .tmpl-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 710px; height: 101px; background: #fff; border-top: 1px solid #eee; display: grid; grid-template-columns: 1fr 1fr 1.1fr 1fr 1fr; align-items: end; padding: 8px 15px 13px; z-index: 10; box-sizing: border-box; }
         .tmpl-nav-item { height: 70px; color: #777; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 13px; text-decoration: none; background: none; border: 0; padding: 0; cursor: pointer; }
