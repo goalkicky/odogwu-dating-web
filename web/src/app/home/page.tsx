@@ -267,8 +267,8 @@ export default function HomePage() {
         }
 
         @media (max-width: 767px) {
-          .tmpl-stories { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); grid-auto-flow: column; }
-          .tmpl-story-card { width: 100%; }
+          .tmpl-stories { gap: 6px; }
+          .tmpl-story-card { flex: 1 1 0; min-width: calc((100% - 24px) / 5); }
         }
 
         @media (min-width: 768px) {
