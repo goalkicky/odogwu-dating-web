@@ -262,7 +262,7 @@ export default function HomePage() {
           .tmpl-love-banner h3 { font-size: 12px; }
           .tmpl-love-banner p { font-size: 10px; line-height: 13px; }
           .tmpl-outline-btn { margin-left: 6px; padding: 10px 9px; font-size: 10px; }
-          .tmpl-active-grid { grid-template-columns: repeat(2, 1fr); }
+          .tmpl-active-grid { grid-template-columns: repeat(3, 1fr); }
           .tmpl-profile-card { height: 196px; }
         }
 
