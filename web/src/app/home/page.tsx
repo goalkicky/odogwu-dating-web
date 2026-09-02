@@ -165,8 +165,8 @@ export default function HomePage() {
         .tmpl-profile-card { aspect-ratio: 1 / 1; border-radius: 14px; overflow: hidden; position: relative; color: #fff; background: #444; cursor: pointer; border: 0; padding: 0; width: 100%; }
         .tmpl-profile-card > img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .tmpl-profile-card:after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgba(0,0,0,.55)); }
-        .tmpl-profile-card div { position: absolute; left: 12px; bottom: 12px; z-index: 2; font-size: 14px; text-align: left; }
-        .tmpl-profile-card small { display: block; font-size: 12px; margin-top: 3px; font-weight: 400; }
+        .tmpl-profile-card div { position: absolute; left: 12px; bottom: 12px; z-index: 2; font-size: 12px; font-weight: 700; text-align: left; }
+        .tmpl-profile-card small { display: block; font-size: 10px; margin-top: 3px; font-weight: 700; }
         .tmpl-profile-card i { position: absolute; right: 12px; top: 12px; width: 11px; height: 11px; background: #14e96d; border-radius: 50%; z-index: 3; }
         .tmpl-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 710px; height: 101px; background: #fff; border-top: 1px solid #eee; display: grid; grid-template-columns: 1fr 1fr 1.1fr 1fr 1fr; align-items: end; padding: 8px 15px 13px; z-index: 10; box-sizing: border-box; }
         .tmpl-nav-item { height: 70px; color: #777; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 13px; text-decoration: none; background: none; border: 0; padding: 0; cursor: pointer; }
@@ -227,7 +227,7 @@ export default function HomePage() {
           .tmpl-love-banner p { font-size: 11px; line-height: 14px; }
           .tmpl-outline-btn { margin-left: 8px; padding: 11px 12px; font-size: 11px; flex-shrink: 0; }
           .tmpl-active-grid { grid-template-columns: repeat(3, 1fr); gap: 9px; }
-          .tmpl-profile-card div { font-size: 13px; left: 9px; bottom: 9px; }
+          .tmpl-profile-card div { font-size: 11px; font-weight: 700; left: 9px; bottom: 9px; }
           .tmpl-profile-card i { width: 10px; height: 10px; right: 9px; top: 9px; }
           .tmpl-bottom-nav { height: 88px; padding: 6px 10px 10px; }
           .tmpl-nav-item { height: 62px; font-size: 12px; gap: 4px; }
