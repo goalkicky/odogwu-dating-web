@@ -162,7 +162,7 @@ export default function HomePage() {
         .tmpl-love-banner p { font-size: 15px; line-height: 21px; color: #555; margin: 0; }
         .tmpl-outline-btn { margin-left: auto; border: 1px solid #f2c7d4; border-radius: 28px; padding: 16px 19px; color: #cc1747; background: #fff; white-space: nowrap; font-weight: 600; cursor: pointer; font-size: 14px; }
         .tmpl-active-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 14px; }
-        .tmpl-profile-card { height: 204px; border-radius: 14px; overflow: hidden; position: relative; color: #fff; background: #444; cursor: pointer; border: 0; padding: 0; }
+        .tmpl-profile-card { aspect-ratio: 1 / 1; border-radius: 14px; overflow: hidden; position: relative; color: #fff; background: #444; cursor: pointer; border: 0; padding: 0; width: 100%; }
         .tmpl-profile-card > img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .tmpl-profile-card:after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgba(0,0,0,.55)); }
         .tmpl-profile-card div { position: absolute; left: 12px; bottom: 12px; z-index: 2; font-size: 14px; text-align: left; }
@@ -227,7 +227,6 @@ export default function HomePage() {
           .tmpl-love-banner p { font-size: 11px; line-height: 14px; }
           .tmpl-outline-btn { margin-left: 8px; padding: 11px 12px; font-size: 11px; flex-shrink: 0; }
           .tmpl-active-grid { grid-template-columns: repeat(3, 1fr); gap: 9px; }
-          .tmpl-profile-card { height: 168px; }
           .tmpl-profile-card div { font-size: 13px; left: 9px; bottom: 9px; }
           .tmpl-profile-card i { width: 10px; height: 10px; right: 9px; top: 9px; }
           .tmpl-bottom-nav { height: 88px; padding: 6px 10px 10px; }
@@ -263,7 +262,6 @@ export default function HomePage() {
           .tmpl-love-banner p { font-size: 10px; line-height: 13px; }
           .tmpl-outline-btn { margin-left: 6px; padding: 10px 9px; font-size: 10px; }
           .tmpl-active-grid { grid-template-columns: repeat(3, 1fr); }
-          .tmpl-profile-card { height: 196px; }
         }
 
         @media (max-width: 767px) {
@@ -301,7 +299,7 @@ export default function HomePage() {
           .tmpl-story-card { height: 340px; flex: 1 1 0; flex-basis: auto; }
           .tmpl-love-banner { height: 130px; margin-top: 32px; padding: 20px 30px; }
           .tmpl-active-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
-          .tmpl-profile-card { height: 285px; }
+          .tmpl-profile-card { aspect-ratio: 1 / 1; }
           .tmpl-bottom-nav { display: none; }
         }
 
@@ -309,7 +307,7 @@ export default function HomePage() {
           .tmpl-premium, .tmpl-section, .tmpl-love-banner { max-width: 1320px; }
           .tmpl-quick-nav { max-width: 1320px; }
           .tmpl-story-card { height: 365px; }
-          .tmpl-profile-card { height: 310px; }
+          .tmpl-profile-card { aspect-ratio: 1 / 1; }
         }
       `}</style>
       <style jsx>{`
