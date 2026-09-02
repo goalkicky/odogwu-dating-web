@@ -214,8 +214,8 @@ export default function HomePage() {
           .tmpl-quick label { font-size: 12px; margin-top: 7px; }
           .tmpl-section h2 { font-size: 18px; }
           .tmpl-section h2 span { font-size: 17px; }
-          .tmpl-stories { gap: 6px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); grid-auto-flow: column; }
-          .tmpl-story-card { height: 240px; width: 100%; }
+          .tmpl-stories { gap: 6px; }
+          .tmpl-story-card { height: 240px; }
           .tmpl-story-user { font-size: 11px; left: 6px; top: 6px; gap: 4px; }
           .tmpl-story-user span { width: 20px; height: 20px; }
           .tmpl-story-user small { font-size: 9px; margin-top: 1px; white-space: nowrap; }
@@ -264,6 +264,11 @@ export default function HomePage() {
           .tmpl-outline-btn { margin-left: 6px; padding: 10px 9px; font-size: 10px; }
           .tmpl-active-grid { grid-template-columns: repeat(2, 1fr); }
           .tmpl-profile-card { height: 196px; }
+        }
+
+        @media (max-width: 767px) {
+          .tmpl-stories { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); grid-auto-flow: column; }
+          .tmpl-story-card { width: 100%; }
         }
 
         @media (min-width: 768px) {
