@@ -162,7 +162,7 @@ export default function HomePage() {
         .tmpl-love-banner p { font-size: 15px; line-height: 21px; color: #555; margin: 0; }
         .tmpl-outline-btn { margin-left: auto; border: 1px solid #f2c7d4; border-radius: 28px; padding: 16px 19px; color: #cc1747; background: #fff; white-space: nowrap; font-weight: 600; cursor: pointer; font-size: 14px; }
         .tmpl-active-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 14px; }
-        .tmpl-profile-card { aspect-ratio: 1 / 1; border-radius: 14px; overflow: hidden; position: relative; color: #fff; background: #444; cursor: pointer; border: 0; padding: 0; width: 100%; }
+        .tmpl-profile-card { aspect-ratio: 3 / 4; border-radius: 14px; overflow: hidden; position: relative; color: #fff; background: #444; cursor: pointer; border: 0; padding: 0; width: 100%; }
         .tmpl-profile-card > img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .tmpl-profile-card:after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgba(0,0,0,.55)); }
         .tmpl-profile-card div { position: absolute; left: 12px; bottom: 12px; z-index: 2; font-size: 12px; font-weight: 700; text-align: left; }
@@ -299,7 +299,7 @@ export default function HomePage() {
           .tmpl-story-card { height: 340px; flex: 1 1 0; flex-basis: auto; }
           .tmpl-love-banner { height: 130px; margin-top: 32px; padding: 20px 30px; }
           .tmpl-active-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
-          .tmpl-profile-card { aspect-ratio: 1 / 1; }
+          .tmpl-profile-card { aspect-ratio: 3 / 4; }
           .tmpl-bottom-nav { display: none; }
         }
 
@@ -307,7 +307,7 @@ export default function HomePage() {
           .tmpl-premium, .tmpl-section, .tmpl-love-banner { max-width: 1320px; }
           .tmpl-quick-nav { max-width: 1320px; }
           .tmpl-story-card { height: 365px; }
-          .tmpl-profile-card { aspect-ratio: 1 / 1; }
+          .tmpl-profile-card { aspect-ratio: 3 / 4; }
         }
       `}</style>
       <style jsx>{`
