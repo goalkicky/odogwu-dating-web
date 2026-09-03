@@ -206,7 +206,7 @@ export default function HomePage() {
           .tmpl-messages-top svg { width: 34px; height: 34px; }
           .tmpl-messages-top em { width: 21px; height: 21px; font-size: 12px; right: -2px; }
           .tmpl-quick-nav { gap: 10px; margin-left: 0; margin-right: 0; }
-          .tmpl-round-photo { width: 100%; border-width: 3px; padding: 3px; }
+          .tmpl-round-photo { width: 80%; border-width: 3px; padding: 5px; }
           .tmpl-round-photo.location svg { width: 50%; height: 50%; }
           .tmpl-pink-btn { margin-left: 12px; flex-shrink: 0; }
           .tmpl-badge, .tmpl-plus { width: 29px; height: 29px; font-size: 13px; }
