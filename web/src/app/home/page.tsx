@@ -152,10 +152,10 @@ export default function HomePage() {
         .tmpl-story-card { height: 225px; flex: 1 0 152px; min-width: 0; border-radius: 15px; overflow: hidden; position: relative; background: #333; color: #fff; cursor: pointer; border: 0; padding: 0; display: block; text-decoration: none; }
         .tmpl-story-card > img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .tmpl-shade { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.28), transparent 45%, rgba(0,0,0,.65)); }
-        .tmpl-story-user { position: absolute; left: 10px; top: 12px; display: flex; gap: 7px; align-items: flex-start; font-size: 13px; text-shadow: 0 1px 2px #000; }
-        .tmpl-story-user span { width: 28px; height: 28px; border-radius: 50%; background: #222; border: 2px solid #fff; display: grid; place-items: center; font-size: 13px; }
-        .tmpl-story-user small { display: block; font-size: 12px; margin-top: 3px; font-weight: 400; }
-        .tmpl-story-card p { position: absolute; left: 12px; bottom: 0; font-size: 13px; margin: 0 0 11px; }
+        .tmpl-story-user { position: absolute; left: 10px; top: 12px; display: flex; gap: 7px; align-items: flex-start; font-size: 12px; text-shadow: 0 1px 2px #000; }
+        .tmpl-story-user span { width: 28px; height: 28px; border-radius: 50%; background: #222; border: 2px solid #fff; display: grid; place-items: center; font-size: 12px; }
+        .tmpl-story-user small { display: block; font-size: 11px; margin-top: 3px; font-weight: 400; }
+        .tmpl-story-card p { position: absolute; left: 12px; bottom: 0; font-size: 12px; margin: 0 0 11px; }
         .tmpl-love-banner { height: 125px; border-radius: 18px; background: #fff2f6; margin: 24px 0 13px; display: flex; align-items: center; padding: 18px 24px; gap: 20px; }
         .tmpl-hearts { font-size: 55px; line-height: 1; }
         .tmpl-love-banner h3 { font-size: 19px; margin: 0 0 7px; color: #151515; }
@@ -216,10 +216,10 @@ export default function HomePage() {
           .tmpl-section h2 span { font-size: 17px; }
           .tmpl-stories { gap: 6px; }
           .tmpl-story-card { height: 185px; }
-          .tmpl-story-user { font-size: 11px; left: 6px; top: 6px; gap: 4px; }
+          .tmpl-story-user { font-size: 10px; left: 6px; top: 6px; gap: 4px; }
           .tmpl-story-user span { width: 20px; height: 20px; }
-          .tmpl-story-user small { font-size: 9px; margin-top: 1px; white-space: nowrap; }
-          .tmpl-story-card p { font-size: 11px; left: 8px; }
+          .tmpl-story-user small { font-size: 8px; margin-top: 1px; white-space: nowrap; }
+          .tmpl-story-card p { font-size: 10px; left: 8px; }
           .tmpl-love-banner { height: auto; min-height: 90px; padding: 12px; gap: 8px; }
           .tmpl-love-banner .tmpl-hearts { font-size: 34px; flex-shrink: 0; }
           .tmpl-love-banner > div:nth-child(2) { flex: 1; min-width: 0; }
