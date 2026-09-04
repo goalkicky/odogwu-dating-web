@@ -146,8 +146,11 @@ export default function HomePage() {
         .tmpl-quick label { font-size: 16px; font-weight: 500; margin-top: 10px; color: #171717; text-align: center; line-height: 1.2; }
         .tmpl-badge, .tmpl-plus { position: absolute; right: 0; top: 78%; background: #d9184b; color: #fff; border-radius: 50%; width: 34px; height: 34px; display: grid; place-items: center; font-size: 15px; font-weight: 700; z-index: 3; transform: translate(15%, -15%); }
         .tmpl-plus { font-size: 25px; font-weight: 400; }
-        .tmpl-section h2 { font-size: 20px; margin: 0 0 10px; font-weight: 700; color: #151515; }
-        .tmpl-section h2 span { font-size: 19px; }
+.tmpl-section h2 { font-size: 20px; margin: 0 0 10px; font-weight: 700; color: #151515; }
+.tmpl-section h2 span { font-size: 19px; }
+.tmpl-section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.tmpl-section-head h2 { margin-bottom: 0; }
+.tmpl-see-more { background: none; border: none; padding: 0; font-size: 15px; font-weight: 700; color: #FF2E5F; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
         .tmpl-stories { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 4px; }
         .tmpl-story-card { height: 225px; flex: 1 0 152px; min-width: 0; border-radius: 15px; overflow: hidden; position: relative; background: #333; color: #fff; cursor: pointer; border: 0; padding: 0; display: block; text-decoration: none; }
         .tmpl-story-card > img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -442,7 +445,10 @@ export default function HomePage() {
           </section>
 
           <section className="tmpl-section">
-            <h2>Recently Active</h2>
+            <div className="tmpl-section-head">
+              <h2>Recently Active</h2>
+              <button className="tmpl-see-more" onClick={() => go('/discover')}>See more</button>
+            </div>
             <div className="tmpl-active-grid">
               {nearby.length === 0 && (
                 <div style={{ color: '#999', fontSize: 14, padding: '20px 4px', gridColumn: '1 / -1' }}>
