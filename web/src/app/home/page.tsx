@@ -447,7 +447,7 @@ export default function HomePage() {
           <section className="tmpl-section">
             <div className="tmpl-section-head">
               <h2>Recently Active</h2>
-              <button className="tmpl-see-more" onClick={() => go('/discover')}>See more</button>
+              <button className="tmpl-see-more" onClick={() => go('/discover')}>See all</button>
             </div>
             <div className="tmpl-active-grid">
               {nearby.length === 0 && (
