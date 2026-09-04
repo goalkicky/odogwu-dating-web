@@ -455,7 +455,7 @@ export default function HomePage() {
                   No nearby members yet. Check back soon!
                 </div>
               )}
-              {nearby.map((p: any, idx: number) => {
+              {nearby.slice(0, 6).map((p: any, idx: number) => {
                 const photo = p.photos?.[0] ? storageService.getFilePreview(p.photos[0]) : '';
                 const name = p.fullName || 'Member';
                 return (
