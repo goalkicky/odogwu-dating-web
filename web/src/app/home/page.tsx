@@ -158,7 +158,7 @@ export default function HomePage() {
         .tmpl-story-card p { position: absolute; left: 12px; bottom: 0; font-size: 12px; margin: 0 0 11px; }
         .tmpl-love-banner { height: 125px; border-radius: 18px; background: #fff2f6; margin: 24px 0 13px; display: flex; align-items: center; padding: 18px 24px; gap: 20px; }
         .tmpl-hearts { font-size: 55px; line-height: 1; }
-        .tmpl-love-banner h3 { font-size: 19px; margin: 0 0 7px; color: #151515; }
+        .tmpl-love-banner h3 { font-size: 19px; margin: 0 0 7px; color: #151515; font-weight: 800; }
         .tmpl-love-banner p { font-size: 15px; line-height: 21px; color: #555; margin: 0; }
         .tmpl-outline-btn { margin-left: auto; border: 1px solid #f2c7d4; border-radius: 28px; padding: 16px 19px; color: #cc1747; background: #fff; white-space: nowrap; font-weight: 600; cursor: pointer; font-size: 14px; }
         .tmpl-active-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 14px; }
@@ -223,7 +223,7 @@ export default function HomePage() {
           .tmpl-love-banner { height: auto; min-height: 90px; padding: 12px; gap: 8px; }
           .tmpl-love-banner .tmpl-hearts { font-size: 34px; flex-shrink: 0; }
           .tmpl-love-banner > div:nth-child(2) { flex: 1; min-width: 0; }
-          .tmpl-love-banner h3 { font-size: 13px; margin: 0 0 2px; white-space: nowrap; }
+          .tmpl-love-banner h3 { font-size: 13px; margin: 0 0 2px; white-space: nowrap; font-weight: 800; }
           .tmpl-love-banner p { font-size: 11px; line-height: 14px; }
           .tmpl-outline-btn { margin-left: 8px; padding: 11px 12px; font-size: 11px; flex-shrink: 0; }
           .tmpl-active-grid { grid-template-columns: repeat(3, 1fr); gap: 9px; }
@@ -258,7 +258,7 @@ export default function HomePage() {
           .tmpl-story-card { height: 155px; }
           .tmpl-love-banner { gap: 6px; align-items: center; }
           .tmpl-love-banner .tmpl-hearts { font-size: 28px; }
-          .tmpl-love-banner h3 { font-size: 12px; }
+          .tmpl-love-banner h3 { font-size: 12px; font-weight: 800; }
           .tmpl-love-banner p { font-size: 10px; line-height: 13px; }
           .tmpl-outline-btn { margin-left: 6px; padding: 10px 9px; font-size: 10px; }
           .tmpl-active-grid { grid-template-columns: repeat(3, 1fr); }
