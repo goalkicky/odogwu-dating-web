@@ -478,7 +478,7 @@ export default function HomePage() {
           <Link href="/explore" className="tmpl-nav-item">
             <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none"/><path d="m19 29 4-10 9-4-4 9-9 5Z"/></svg><span>Explore</span>
           </Link>
-          <Link href="/discover" className="tmpl-nav-center"><img src="/logo-icon.png" alt="Discover" /></Link>
+          <Link href="/discover" className="tmpl-nav-center"><img src="/logo-icon.png?v=2" alt="Discover" /></Link>
           <Link href="/matches" className="tmpl-nav-item">
             <span className="tmpl-nav-icon-wrap"><svg viewBox="0 0 48 48"><path d="M9 34l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/><circle cx="19" cy="22" r="2"/><circle cx="25" cy="22" r="2"/><circle cx="31" cy="22" r="2"/></svg><b>{messagesCount || 0}</b></span><span>Messages</span>
           </Link>
