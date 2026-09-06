@@ -176,6 +176,7 @@ export default function HomePage() {
         .tmpl-nav-item svg { width: 29px; height: 29px; stroke: currentColor; stroke-width: 2.2; fill: currentColor; }
         .tmpl-nav-item:not(.active) svg { fill: none; }
         .tmpl-nav-item.active { color: #d81043; }
+.tmpl-nav-logo { width: 29px; height: 29px; object-fit: cover; }
         .tmpl-nav-icon-wrap { position: relative; display: grid; }
         .tmpl-nav-icon-wrap b { position: absolute; right: -7px; top: -7px; background: #d81043; color: #fff; border-radius: 50%; font-size: 11px; width: 20px; height: 20px; display: grid; place-items: center; font-weight: 700; }
         .tmpl-nav-center { width: 77px; height: 77px; border-radius: 50%; background: #d51040; color: #fff; justify-self: center; align-self: start; margin-top: -20px; box-shadow: 0 2px 7px #bbb; border: 5px solid #fff; font-size: 56px; line-height: 1; display: grid; place-items: center; text-decoration: none; box-sizing: border-box; }
@@ -235,6 +236,7 @@ export default function HomePage() {
           .tmpl-bottom-nav { height: 88px; padding: 6px 10px 10px; }
           .tmpl-nav-item { height: 62px; font-size: 12px; gap: 4px; }
           .tmpl-nav-item svg { width: 26px; height: 26px; }
+          .tmpl-nav-logo { width: 26px; height: 26px; }
           .tmpl-nav-center { width: 66px; height: 66px; font-size: 48px; }
           .tmpl-nav-icon-wrap b { width: 18px; height: 18px; font-size: 10px; }
         }
@@ -471,7 +473,7 @@ export default function HomePage() {
         </main>
         <nav className="tmpl-bottom-nav" style={isMobile ? undefined : { display: 'none' }}>
           <Link href="/home" className="tmpl-nav-item active">
-            <svg viewBox="0 0 48 48"><path d="M8 22 24 9l16 13v17H29V28H19v11H8Z"/></svg><span>Home</span>
+            <img src="/logo-icon.png" alt="Home" className="tmpl-nav-logo" /><span>Home</span>
           </Link>
           <Link href="/explore" className="tmpl-nav-item">
             <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none"/><path d="m19 29 4-10 9-4-4 9-9 5Z"/></svg><span>Explore</span>
