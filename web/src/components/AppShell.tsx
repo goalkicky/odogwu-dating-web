@@ -69,24 +69,24 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         .uv-content-inner { max-width: 1040px; margin: 0 auto; padding: 32px 24px 60px; }
 
         .uv-bottom-nav {
-          position: fixed; bottom: 0; left: 0; right: 0; z-index: 40;
-          height: 82px; background: #fff; border-top: 1px solid #eee;
+          position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+          width: 100%; max-width: 710px; z-index: 40;
+          height: 88px; background: #fff; border-top: 1px solid #eee;
           display: grid; grid-template-columns: 1fr 1fr 1.1fr 1fr 1fr;
           align-items: end; padding: 6px 10px 10px; box-sizing: border-box;
         }
         .uv-nav-bl { width: 26px; height: 26px; stroke: currentColor; stroke-width: 2.2; fill: currentColor; }
         .uv-bottom-link {
-          height: 60px; color: #777; display: flex; flex-direction: column;
+          height: 62px; color: #777; display: flex; flex-direction: column;
           align-items: center; justify-content: center; gap: 4px; font-size: 12px;
         }
         .uv-bottom-link:not(.active) .uv-nav-bl { fill: none; }
         .uv-bottom-link.active { color: #d81043; }
         .uv-bottom-center {
-          width: 66px; height: 66px; border-radius: 50%; background: #d51040; color: #fff;
-          justify-self: center; align-self: start; margin-top: -18px;
-          box-shadow: 0 2px 7px #bbb; border: 5px solid #fff; font-size: 42px;
-          display: grid; place-items: center; box-sizing: border-box;
+          height: 62px; display: flex; align-items: center; justify-content: center;
+          text-decoration: none; cursor: pointer;
         }
+        .uv-bottom-center img { width: 58px; height: 58px; object-fit: cover; border-radius: 50%; }
 
         @media (min-width: 768px) {
           .uv-bottom-nav { display: none; }
@@ -127,9 +127,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             <svg viewBox="0 0 48 48" className="uv-nav-bl"><path d="M8 22 24 9l16 13v17H29V28H19v11H8Z"/></svg><span>Home</span>
           </Link>
           <Link href="/explore" className={`uv-bottom-link ${isActive('/explore') ? 'active' : ''}`}>
-            <svg viewBox="0 0 48 48" className="uv-nav-bl"><circle cx="20" cy="22" r="2"/><circle cx="26" cy="22" r="2"/><circle cx="32" cy="22" r="2"/></svg><span>Explore</span>
+            <svg viewBox="0 0 48 48" className="uv-nav-bl"><circle cx="24" cy="24" r="15" fill="none"/><path d="m19 29 4-10 9-4-4 9-9 5Z"/></svg><span>Explore</span>
           </Link>
-          <Link href="/discover" className="uv-bottom-center"><span>◔</span></Link>
+          <Link href="/discover" className="uv-bottom-center"><img src="/logo-icon.png?v=2" alt="Discover" /></Link>
           <Link href="/matches" className={`uv-bottom-link ${isActive('/matches') ? 'active' : ''}`}>
             <svg viewBox="0 0 48 48" className="uv-nav-bl"><path d="M9 34l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/><circle cx="19" cy="22" r="2"/><circle cx="25" cy="22" r="2"/><circle cx="31" cy="22" r="2"/></svg><span>Messages</span>
           </Link>
