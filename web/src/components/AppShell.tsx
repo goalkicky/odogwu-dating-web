@@ -1,7 +1,9 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useAuth } from '@/store/AuthContext';
+import { matchService } from '@/lib/cloudflare/services';
 
 function Brand() {
   return (
@@ -17,7 +19,46 @@ function Brand() {
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { profile, loading, isAuthenticated } = useAuth();
+  const [messagesCount, setMessagesCount] = useState(0);
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
+
+  const uid = (profile as any)?.$id || (profile as any)?.id;
+
+  useEffect(() => {
+    if (loading || !isAuthenticated || !profile || !uid) return;
+    matchService.getUserMatches(uid)
+      .then((matchesRes: any) => {
+        const docs = Array.isArray(matchesRes) ? matchesRes : (matchesRes?.documents || []);
+        setMessagesCount(docs.filter((d: any) => d.hasConversation).length);
+      })
+      .catch(() => {});
+  }, [loading, isAuthenticated, profile, uid]);
+
+  const header = (
+    <header className="uv-topbar">
+      <button className="uv-icon-btn uv-menu" aria-label="Menu" onClick={() => router.push('/settings')}>
+        <span></span><span></span><span></span>
+      </button>
+      <div className="uv-brand">
+        <div className="uv-brand-mark"><i></i></div>
+        <div>
+          <div className="uv-brand-name">DOGWU</div>
+          <div className="uv-brand-sub"><b>—</b> D A T <span>♥</span> I N G <b>—</b></div>
+        </div>
+      </div>
+      <button className="uv-messages-top uv-icon-btn" aria-label="Messages" onClick={() => router.push('/matches')}>
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <path d="M10 35l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none" stroke="currentColor" strokeWidth="3"/>
+          <circle cx="20" cy="22" r="1.7" fill="currentColor"/>
+          <circle cx="26" cy="22" r="1.7" fill="currentColor"/>
+          <circle cx="32" cy="22" r="1.7" fill="currentColor"/>
+        </svg>
+        <em>{messagesCount || 0}</em>
+      </button>
+    </header>
+  );
 
   const desktopNav = [
     { href: '/home', label: 'Home', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><path d="M8 22 24 9l16 13v17H29V28H19v11H8Z"/></svg> },
@@ -36,13 +77,22 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         .uv-shell a { text-decoration: none; }
 
         .uv-brand { display: flex; align-items: center; gap: 9px; }
-        .uv-brand-mark { width: 48px; height: 48px; border: 5px solid #cf0a13; border-radius: 50%; position: relative; flex-shrink: 0; box-sizing: border-box; }
-        .uv-brand-mark:before { content: ""; position: absolute; width: 13px; height: 13px; border: 4px solid #fff; border-radius: 50%; background: #cf0a13; left: -4px; top: -4px; box-sizing: border-box; }
-        .uv-brand-mark i { position: absolute; width: 12px; height: 12px; border: 3px solid #fff; border-top-color: transparent; border-radius: 50%; right: 6px; top: 3px; box-sizing: border-box; }
-        .uv-brand-name { font-size: 30px; line-height: 29px; font-weight: 800; letter-spacing: -2px; color: #bd0d17; }
-        .uv-brand-sub { text-align: center; font-size: 9px; font-weight: 700; letter-spacing: 4px; margin-top: 5px; }
+        .uv-brand-mark { width: 66px; height: 66px; border: 7px solid #cf0a13; border-radius: 50%; position: relative; flex-shrink: 0; box-sizing: border-box; }
+        .uv-brand-mark:before { content: ""; position: absolute; width: 18px; height: 18px; border: 6px solid #fff; border-radius: 50%; background: #cf0a13; left: -5px; top: -5px; box-sizing: border-box; }
+        .uv-brand-mark i { position: absolute; width: 16px; height: 16px; border: 4px solid #fff; border-top-color: transparent; border-radius: 50%; right: 7px; top: 4px; box-sizing: border-box; }
+        .uv-brand-name { font-size: 42px; line-height: 39px; font-weight: 800; letter-spacing: -2px; color: #bd0d17; }
+        .uv-brand-sub { text-align: center; font-size: 13px; font-weight: 700; letter-spacing: 6px; margin-top: 8px; }
         .uv-brand-sub b { color: #d20a19; letter-spacing: 0; }
         .uv-brand-sub span { color: #d20a19; }
+
+        .uv-topbar { height: 111px; display: flex; align-items: flex-start; justify-content: space-between; position: relative; }
+        .uv-topbar .uv-brand { margin-top: 10px; }
+        .uv-icon-btn { color: #171717; background: none; border: 0; cursor: pointer; padding: 0; }
+        .uv-menu { width: 38px; margin-top: 30px; padding: 0; }
+        .uv-menu span { display: block; width: 34px; height: 3px; background: #222; margin: 8px 0; border-radius: 2px; }
+        .uv-messages-top { position: relative; width: 50px; height: 50px; margin-top: 31px; background: none; border: 0; cursor: pointer; color: #171717; padding: 0; }
+        .uv-messages-top svg { width: 40px; height: 40px; }
+        .uv-messages-top em { position: absolute; right: 0; top: -4px; background: #d71945; color: #fff; width: 24px; height: 24px; border-radius: 50%; font-style: normal; font-size: 13px; display: grid; place-items: center; font-weight: 700; }
 
         .uv-sidebar {
           position: fixed; left: 0; top: 0; width: 255px; height: 100vh;
@@ -50,7 +100,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           z-index: 30; box-sizing: border-box; display: flex; flex-direction: column;
         }
         .uv-sidebar .uv-brand { margin: 0 0 42px 7px; }
-        .uv-sidebar .uv-brand-mark { width: 44px; height: 44px; border-width: 5px; }
+        .uv-sidebar .uv-brand-mark { width: 48px; height: 48px; border-width: 5px; }
+        .uv-sidebar .uv-brand-mark:before { width: 13px; height: 13px; border-width: 4px; }
+        .uv-sidebar .uv-brand-mark i { width: 12px; height: 12px; border-width: 3px; }
+        .uv-sidebar .uv-brand-name { font-size: 30px; line-height: 29px; }
+        .uv-sidebar .uv-brand-sub { font-size: 9px; letter-spacing: 4px; margin-top: 5px; }
         .uv-desktop-nav { display: flex; flex-direction: column; gap: 4px; }
         .uv-desktop-link {
           display: flex; align-items: center; gap: 13px; padding: 12px 16px;
@@ -67,6 +121,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           min-height: 100svh; box-sizing: border-box; background: #fff;
         }
         .uv-content-inner { max-width: 1040px; margin: 0 auto; padding: 32px 24px 60px; }
+        .uv-content-inner > .uv-topbar { max-width: 710px; margin: 0 auto; }
 
         .uv-bottom-nav {
           position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
@@ -95,6 +150,19 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           .uv-desktop-only { display: none !important; }
           .uv-content-inner { padding: 22px 16px 96px; }
         }
+        @media (max-width: 560px) {
+          .uv-topbar { height: 92px; }
+          .uv-brand-name { font-size: 30px; line-height: 28px; }
+          .uv-brand-mark { width: 48px; height: 48px; border-width: 5px; }
+          .uv-brand-mark:before { width: 13px; height: 13px; border-width: 4px; left: -4px; top: -4px; }
+          .uv-brand-mark i { width: 12px; height: 12px; border-width: 3px; right: 6px; top: 3px; }
+          .uv-brand-sub { font-size: 8px; letter-spacing: 3px; margin-top: 6px; }
+          .uv-menu { margin-top: 24px; }
+          .uv-menu span { width: 28px; }
+          .uv-messages-top { width: 44px; height: 44px; margin-top: 24px; }
+          .uv-messages-top svg { width: 34px; height: 34px; }
+          .uv-messages-top em { width: 21px; height: 21px; font-size: 12px; right: -2px; }
+        }
       `}</style>
 
       {/* Desktop sidebar */}
@@ -114,12 +182,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Main content */}
       <main className="uv-content uv-desktop-only" style={{ paddingLeft: 255 }}>
-        <div className="uv-content-inner">{children}</div>
+        <div className="uv-content-inner">{header}{children}</div>
       </main>
 
       {/* Mobile content + bottom nav */}
       <aside className="uv-mobile" style={{ display: 'none' }}>
         <main style={{ minHeight: '100svh', background: '#fff', padding: '22px 16px 96px', boxSizing: 'border-box' }}>
+          {header}
           {children}
         </main>
         <nav className="uv-bottom-nav">
