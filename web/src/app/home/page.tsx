@@ -178,8 +178,8 @@ export default function HomePage() {
         .tmpl-nav-item.active { color: #d81043; }
         .tmpl-nav-icon-wrap { position: relative; display: grid; }
         .tmpl-nav-icon-wrap b { position: absolute; right: -7px; top: -7px; background: #d81043; color: #fff; border-radius: 50%; font-size: 11px; width: 20px; height: 20px; display: grid; place-items: center; font-weight: 700; }
-        .tmpl-nav-center { width: 77px; height: 77px; border-radius: 50%; background: #d51040; color: #fff; justify-self: center; align-self: start; margin-top: -20px; box-shadow: 0 2px 7px #bbb; border: 5px solid #fff; font-size: 56px; line-height: 1; display: grid; place-items: center; text-decoration: none; box-sizing: border-box; }
-.tmpl-nav-center img { width: 52px; height: 52px; object-fit: cover; border-radius: 50%; }
+        .tmpl-nav-center { height: 70px; display: flex; align-items: center; justify-content: center; text-decoration: none; cursor: pointer; }
+.tmpl-nav-center img { width: 34px; height: 34px; object-fit: cover; border-radius: 50%; }
         .tmpl-profile-tab svg { stroke-width: 1.8; }
 
         .tmpl-sidebar { position: fixed; left: 0; top: 0; width: 255px; height: 100vh; padding: 32px 24px; background: #fff; border-right: 1px solid #ececef; z-index: 30; font-family: Arial, Helvetica, sans-serif; color: #151515; box-sizing: border-box; }
@@ -236,8 +236,8 @@ export default function HomePage() {
           .tmpl-bottom-nav { height: 88px; padding: 6px 10px 10px; }
           .tmpl-nav-item { height: 62px; font-size: 12px; gap: 4px; }
           .tmpl-nav-item svg { width: 26px; height: 26px; }
-          .tmpl-nav-center { width: 66px; height: 66px; font-size: 48px; }
-          .tmpl-nav-center img { width: 44px; height: 44px; }
+          .tmpl-nav-center { height: 62px; }
+          .tmpl-nav-center img { width: 28px; height: 28px; }
           .tmpl-nav-icon-wrap b { width: 18px; height: 18px; font-size: 10px; }
         }
 
