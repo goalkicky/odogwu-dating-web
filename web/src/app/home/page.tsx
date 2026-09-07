@@ -61,6 +61,8 @@ export default function HomePage() {
   const [nearby, setNearby] = useState<any[]>([]);
   const [stories, setStories] = useState<any[]>([]);
   const [messagesCount, setMessagesCount] = useState(0);
+  const [likePhoto, setLikePhoto] = useState('');
+  const [matchPhoto, setMatchPhoto] = useState('');
 
   const uid = (profile as any)?.$id || (profile as any)?.id;
   const profilePhoto = profile?.photos?.[0] ? storageService.getFilePreview(profile.photos[0]) : '';
@@ -75,11 +77,18 @@ export default function HomePage() {
       matchService.getWhoLikedMe(uid),
       matchService.getUserMatches(uid),
     ]).then(([likesRes, matchesRes]) => {
-      if (likesRes.status === 'fulfilled') setLikesCount(Array.isArray(likesRes.value) ? likesRes.value.length : (likesRes.value?.total || 0));
+      if (likesRes.status === 'fulfilled') {
+        const likes = Array.isArray(likesRes.value) ? likesRes.value : (likesRes.value?.documents || []);
+        setLikesCount(likes.length);
+        const first = likes[0]?.matchedUser;
+        if (first?.photos?.[0]) setLikePhoto(storageService.getFilePreview(first.photos[0]));
+      }
       if (matchesRes.status === 'fulfilled') {
         const docs = Array.isArray(matchesRes.value) ? matchesRes.value : (matchesRes.value?.documents || []);
         setMatchesCount(docs.length);
         setMessagesCount(docs.filter((d: any) => d.hasConversation).length);
+        const first = docs[0]?.matchedUser;
+        if (first?.photos?.[0]) setMatchPhoto(storageService.getFilePreview(first.photos[0]));
       }
     });
 
@@ -392,14 +401,14 @@ export default function HomePage() {
             </button>
             <button className="tmpl-quick" onClick={() => go('/likes')}>
               <span className="tmpl-round-photo">
-                <StoryAvatar photo={profilePhoto} name={initial} />
+                <StoryAvatar photo={likePhoto} name={initial} />
                 <b className="tmpl-badge">{likesCount}</b>
               </span>
               <label>Likes You</label>
             </button>
             <button className="tmpl-quick" onClick={() => go('/matches')}>
               <span className="tmpl-round-photo">
-                <StoryAvatar photo={profilePhoto} name={initial} />
+                <StoryAvatar photo={matchPhoto} name={initial} />
                 <b className="tmpl-badge">{matchesCount}</b>
               </span>
               <label>Matches</label>
