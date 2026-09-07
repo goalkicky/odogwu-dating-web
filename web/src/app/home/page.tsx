@@ -111,15 +111,15 @@ export default function HomePage() {
       <style jsx global>{`
         .tmpl-app {
           width: 100%; max-width: 710px; margin: 0 auto; background: #fff;
-          min-height: 100svh; position: relative; padding: 26px 23px 112px;
+          min-height: 100svh; position: relative; padding: 0 23px 112px;
           color: #151515; font-family: Arial, Helvetica, sans-serif;
           box-sizing: border-box;
         }
-        .tmpl-topbar { height: 111px; display: flex; align-items: flex-start; justify-content: space-between; position: relative; }
+        .tmpl-topbar { display: flex; align-items: center; justify-content: space-between; position: relative; padding: 0 0 16px; }
         .tmpl-icon-btn { color: #171717; background: none; border: 0; cursor: pointer; padding: 0; }
-        .tmpl-menu { width: 38px; margin-top: 30px; padding: 0; }
+        .tmpl-menu { width: 38px; padding: 0; }
         .tmpl-menu span { display: block; width: 34px; height: 3px; background: #222; margin: 8px 0; border-radius: 2px; }
-        .tmpl-brand { display: flex; align-items: center; gap: 9px; margin-top: 10px; }
+        .tmpl-brand { display: flex; align-items: center; gap: 9px; }
         .tmpl-brand-mark { width: 66px; height: 66px; border: 7px solid #cf0a13; border-radius: 50%; position: relative; flex-shrink: 0; box-sizing: border-box; }
         .tmpl-brand-mark:before { content: ""; position: absolute; width: 18px; height: 18px; border: 6px solid #fff; border-radius: 50%; background: #cf0a13; left: -5px; top: -5px; box-sizing: border-box; }
         .tmpl-brand-mark i { position: absolute; width: 16px; height: 16px; border: 4px solid #fff; border-top-color: transparent; border-radius: 50%; right: 7px; top: 4px; box-sizing: border-box; }
@@ -127,7 +127,7 @@ export default function HomePage() {
         .tmpl-brand-sub { text-align: center; font-size: 13px; font-weight: 700; letter-spacing: 6px; margin-top: 8px; }
         .tmpl-brand-sub b { color: #d20a19; letter-spacing: 0; }
         .tmpl-brand-sub span { color: #d20a19; }
-        .tmpl-messages-top { position: relative; width: 50px; height: 50px; margin-top: 31px; background: none; border: 0; cursor: pointer; color: #171717; padding: 0; }
+        .tmpl-messages-top { position: relative; width: 50px; height: 50px; background: none; border: 0; cursor: pointer; color: #171717; padding: 0; }
         .tmpl-messages-top svg { width: 40px; height: 40px; }
         .tmpl-messages-top em { position: absolute; right: 0; top: -4px; background: #d71945; color: #fff; width: 24px; height: 24px; border-radius: 50%; font-style: normal; font-size: 13px; display: grid; place-items: center; font-weight: 700; }
         .tmpl-premium { min-height: 105px; height: auto; background: #fff1f5; border-radius: 18px; display: flex; align-items: center; padding: 10px 22px; margin-bottom: 18px; }
@@ -203,10 +203,9 @@ export default function HomePage() {
           .tmpl-brand-mark:before { width: 13px; height: 13px; border-width: 4px; left: -4px; top: -4px; }
           .tmpl-brand-mark i { width: 12px; height: 12px; border-width: 3px; right: 6px; top: 3px; }
           .tmpl-brand-sub { font-size: 8px; letter-spacing: 3px; margin-top: 6px; }
-          .tmpl-topbar { height: 92px; }
-          .tmpl-menu { margin-top: 24px; }
+          .tmpl-topbar { padding: 0 0 12px; }
           .tmpl-menu span { width: 28px; }
-          .tmpl-messages-top { width: 44px; height: 44px; margin-top: 24px; }
+          .tmpl-messages-top { width: 44px; height: 44px; }
           .tmpl-messages-top svg { width: 34px; height: 34px; }
           .tmpl-messages-top em { width: 21px; height: 21px; font-size: 12px; right: -2px; }
           .tmpl-quick-nav { gap: 10px; margin-left: 0; margin-right: 0; }
@@ -353,7 +352,7 @@ export default function HomePage() {
           className="tmpl-app"
           style={
             !isMobile
-              ? { maxWidth: '100%', width: '100%', minHeight: '100svh', paddingLeft: 295, paddingRight: 40, paddingTop: 34, paddingBottom: 45 }
+              ? { maxWidth: '100%', width: '100%', minHeight: '100svh', paddingLeft: 295, paddingRight: 40, paddingTop: 0, paddingBottom: 45 }
               : undefined
           }
         >

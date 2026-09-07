@@ -85,7 +85,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         .uv-brand-sub b { color: #d20a19; letter-spacing: 0; }
         .uv-brand-sub span { color: #d20a19; }
 
-        .uv-topbar { display: flex; align-items: center; justify-content: space-between; position: relative; padding: 0 0 4px; }
+        .uv-topbar { display: flex; align-items: center; justify-content: space-between; position: relative; padding: 0 0 16px; }
         .uv-icon-btn { color: #171717; background: none; border: 0; cursor: pointer; padding: 0; }
         .uv-menu { width: 38px; padding: 0; }
         .uv-menu span { display: block; width: 34px; height: 3px; background: #222; margin: 8px 0; border-radius: 2px; }
@@ -150,6 +150,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           .uv-content-inner { padding: 22px 16px 96px; }
         }
         @media (max-width: 560px) {
+          .uv-topbar { padding: 0 0 12px; }
           .uv-brand-name { font-size: 30px; line-height: 28px; }
           .uv-brand-mark { width: 48px; height: 48px; border-width: 5px; }
           .uv-brand-mark:before { width: 13px; height: 13px; border-width: 4px; left: -4px; top: -4px; }
