@@ -141,7 +141,7 @@ export default function HomePage() {
         .tmpl-quick { position: relative; display: flex; flex-direction: column; align-items: center; color: #171717; background: none; border: 0; cursor: pointer; padding: 0; min-width: 0; }
         .tmpl-round-photo { width: 111px; max-width: 100%; height: auto; aspect-ratio: 1/1; border: 4px solid #d30e42; border-radius: 50%; padding: 5px; display: block; position: relative; background: #fff; box-sizing: border-box; overflow: hidden; }
         .tmpl-round-photo.dashed { border-style: dashed; border-color: #ec6690; }
-        .tmpl-round-photo > img, .tmpl-round-photo > div { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+        .tmpl-round-photo > img, .tmpl-round-photo > div { inset: 5px !important; width: calc(100% - 10px) !important; height: calc(100% - 10px) !important; border-radius: 50%; object-fit: cover; display: block; }
         .tmpl-round-photo.location { display: grid; place-items: center; border-color: #c7a523; }
         .tmpl-round-photo.location svg { width: 57px; height: 57px; fill: #df164b; }
         .tmpl-quick label { font-size: 16px; font-weight: 500; margin-top: 10px; color: #171717; text-align: center; line-height: 1.2; }
