@@ -85,12 +85,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         .uv-brand-sub b { color: #d20a19; letter-spacing: 0; }
         .uv-brand-sub span { color: #d20a19; }
 
-        .uv-topbar { height: 111px; display: flex; align-items: flex-start; justify-content: space-between; position: relative; }
-        .uv-topbar .uv-brand { margin-top: 10px; }
+        .uv-topbar { display: flex; align-items: center; justify-content: space-between; position: relative; padding: 0 0 4px; }
         .uv-icon-btn { color: #171717; background: none; border: 0; cursor: pointer; padding: 0; }
-        .uv-menu { width: 38px; margin-top: 30px; padding: 0; }
+        .uv-menu { width: 38px; padding: 0; }
         .uv-menu span { display: block; width: 34px; height: 3px; background: #222; margin: 8px 0; border-radius: 2px; }
-        .uv-messages-top { position: relative; width: 50px; height: 50px; margin-top: 31px; background: none; border: 0; cursor: pointer; color: #171717; padding: 0; }
+        .uv-messages-top { position: relative; width: 50px; height: 50px; background: none; border: 0; cursor: pointer; color: #171717; padding: 0; }
         .uv-messages-top svg { width: 40px; height: 40px; }
         .uv-messages-top em { position: absolute; right: 0; top: -4px; background: #d71945; color: #fff; width: 24px; height: 24px; border-radius: 50%; font-style: normal; font-size: 13px; display: grid; place-items: center; font-weight: 700; }
 
@@ -120,7 +119,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         .uv-content {
           min-height: 100svh; box-sizing: border-box; background: #fff;
         }
-        .uv-content-inner { max-width: 1040px; margin: 0 auto; padding: 32px 24px 60px; }
+        .uv-content-inner { max-width: 1040px; margin: 0 auto; padding: 0 24px 60px; }
         .uv-content-inner > .uv-topbar { max-width: 710px; margin: 0 auto; }
 
         .uv-bottom-nav {
@@ -151,15 +150,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           .uv-content-inner { padding: 22px 16px 96px; }
         }
         @media (max-width: 560px) {
-          .uv-topbar { height: 92px; }
           .uv-brand-name { font-size: 30px; line-height: 28px; }
           .uv-brand-mark { width: 48px; height: 48px; border-width: 5px; }
           .uv-brand-mark:before { width: 13px; height: 13px; border-width: 4px; left: -4px; top: -4px; }
           .uv-brand-mark i { width: 12px; height: 12px; border-width: 3px; right: 6px; top: 3px; }
           .uv-brand-sub { font-size: 8px; letter-spacing: 3px; margin-top: 6px; }
-          .uv-menu { margin-top: 24px; }
           .uv-menu span { width: 28px; }
-          .uv-messages-top { width: 44px; height: 44px; margin-top: 24px; }
+          .uv-messages-top { width: 44px; height: 44px; }
           .uv-messages-top svg { width: 34px; height: 34px; }
           .uv-messages-top em { width: 21px; height: 21px; font-size: 12px; right: -2px; }
         }
@@ -187,7 +184,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Mobile content + bottom nav */}
       <aside className="uv-mobile" style={{ display: 'none' }}>
-        <main style={{ minHeight: '100svh', background: '#fff', padding: '22px 16px 96px', boxSizing: 'border-box' }}>
+        <main style={{ minHeight: '100svh', background: '#fff', padding: '0 16px 96px', boxSizing: 'border-box' }}>
           {header}
           {children}
         </main>
