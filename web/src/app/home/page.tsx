@@ -141,7 +141,7 @@ export default function HomePage() {
         .tmpl-quick { position: relative; display: flex; flex-direction: column; align-items: center; color: #171717; background: none; border: 0; cursor: pointer; padding: 0; min-width: 0; }
         .tmpl-round-photo { width: 111px; max-width: 100%; height: auto; aspect-ratio: 1/1; border: 4px solid #d30e42; border-radius: 50%; padding: 5px; display: block; position: relative; background: #fff; box-sizing: border-box; overflow: hidden; }
         .tmpl-round-photo.dashed { border-style: dashed; border-color: #ec6690; }
-        .tmpl-round-photo > img, .tmpl-round-photo > div { inset: 5px !important; width: calc(100% - 10px) !important; height: calc(100% - 10px) !important; border-radius: 50%; object-fit: cover; display: block; }
+        .tmpl-round-photo > img, .tmpl-round-photo > div { inset: 2px !important; width: calc(100% - 4px) !important; height: calc(100% - 4px) !important; border-radius: 50%; object-fit: cover; display: block; }
         .tmpl-round-photo.location { display: grid; place-items: center; border-color: #c7a523; }
         .tmpl-round-photo.location svg { width: 57px; height: 57px; fill: #df164b; }
         .tmpl-quick label { font-size: 16px; font-weight: 500; margin-top: 10px; color: #171717; text-align: center; line-height: 1.2; }
@@ -386,28 +386,24 @@ export default function HomePage() {
             <button className="tmpl-quick" onClick={() => go('/edit-profile')}>
               <span className="tmpl-round-photo dashed">
                 <StoryAvatar photo={profilePhoto} name={initial} />
-                <b className="tmpl-plus">+</b>
               </span>
               <label>Your Story</label>
             </button>
             <button className="tmpl-quick" onClick={() => go('/likes')}>
               <span className="tmpl-round-photo">
                 <StoryAvatar photo={profilePhoto} name={initial} />
-                <b className="tmpl-badge">{likesCount}</b>
               </span>
               <label>Likes You</label>
             </button>
             <button className="tmpl-quick" onClick={() => go('/matches')}>
               <span className="tmpl-round-photo">
                 <StoryAvatar photo={profilePhoto} name={initial} />
-                <b className="tmpl-badge">{matchesCount}</b>
               </span>
               <label>Matches</label>
             </button>
             <button className="tmpl-quick" onClick={() => go('/discover')}>
               <span className="tmpl-round-photo location">
                 <svg viewBox="0 0 64 64"><path d="M32 7c-12 0-21 9-21 21 0 15 21 29 21 29s21-14 21-29C53 16 44 7 32 7Zm0 29a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"/></svg>
-                <b className="tmpl-badge">{nearby.length}</b>
               </span>
               <label>Nearby</label>
             </button>
