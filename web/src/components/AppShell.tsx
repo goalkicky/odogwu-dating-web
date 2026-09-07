@@ -8,7 +8,7 @@ import { matchService } from '@/lib/cloudflare/services';
 function Brand() {
   return (
     <div className="uv-brand">
-      <div className="uv-brand-mark"><i></i></div>
+      <img className="uv-brand-mark" src="/o-logo.png" alt="Odogwu" />
       <div>
         <div className="uv-brand-name">DOGWU</div>
         <div className="uv-brand-sub"><b>—</b> D A T <span>♥</span> I N G <b>—</b></div>
@@ -42,7 +42,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <span></span><span></span><span></span>
       </button>
       <div className="uv-brand">
-        <div className="uv-brand-mark"><i></i></div>
+        <img className="uv-brand-mark" src="/o-logo.png" alt="Odogwu" />
         <div>
           <div className="uv-brand-name">DOGWU</div>
           <div className="uv-brand-sub"><b>—</b> D A T <span>♥</span> I N G <b>—</b></div>
@@ -77,7 +77,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         .uv-shell a { text-decoration: none; }
 
         .uv-brand { display: flex; align-items: center; gap: 9px; }
-        .uv-brand-mark { width: 66px; height: 66px; border: 7px solid #cf0a13; border-radius: 50%; position: relative; flex-shrink: 0; box-sizing: border-box; }
+        .uv-brand-mark { width: 66px; height: 66px; border: 7px solid #cf0a13; border-radius: 50%; position: relative; flex-shrink: 0; box-sizing: border-box; object-fit: cover; display: block; }
         .uv-brand-mark:before { content: ""; position: absolute; width: 18px; height: 18px; border: 6px solid #fff; border-radius: 50%; background: #cf0a13; left: -5px; top: -5px; box-sizing: border-box; }
         .uv-brand-mark i { position: absolute; width: 16px; height: 16px; border: 4px solid #fff; border-top-color: transparent; border-radius: 50%; right: 7px; top: 4px; box-sizing: border-box; }
         .uv-brand-name { font-size: 42px; line-height: 39px; font-weight: 800; letter-spacing: -2px; color: #bd0d17; }

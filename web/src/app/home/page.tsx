@@ -120,7 +120,7 @@ export default function HomePage() {
         .tmpl-menu { width: 38px; padding: 0; }
         .tmpl-menu span { display: block; width: 34px; height: 3px; background: #222; margin: 8px 0; border-radius: 2px; }
         .tmpl-brand { display: flex; align-items: center; gap: 9px; }
-        .tmpl-brand-mark { width: 66px; height: 66px; border: 7px solid #cf0a13; border-radius: 50%; position: relative; flex-shrink: 0; box-sizing: border-box; }
+        .tmpl-brand-mark { width: 66px; height: 66px; border: 7px solid #cf0a13; border-radius: 50%; position: relative; flex-shrink: 0; box-sizing: border-box; object-fit: cover; display: block; }
         .tmpl-brand-mark:before { content: ""; position: absolute; width: 18px; height: 18px; border: 6px solid #fff; border-radius: 50%; background: #cf0a13; left: -5px; top: -5px; box-sizing: border-box; }
         .tmpl-brand-mark i { position: absolute; width: 16px; height: 16px; border: 4px solid #fff; border-top-color: transparent; border-radius: 50%; right: 7px; top: 4px; box-sizing: border-box; }
         .tmpl-brand-name { font-size: 42px; line-height: 39px; font-weight: 800; letter-spacing: -2px; color: #bd0d17; }
@@ -325,7 +325,7 @@ export default function HomePage() {
       <div className="tmpl-desktop-only" style={{ display: 'none' }}>
         <aside className="tmpl-sidebar">
           <div style={{ display: 'flex', alignItems: 'center', gap: 9, margin: '0 0 58px 7px' }}>
-            <div className="tmpl-brand-mark"><i></i></div>
+            <img className="tmpl-brand-mark" src="/o-logo.png" alt="Odogwu" />
             <div>
               <div className="tmpl-brand-name">DOGWU</div>
               <div className="tmpl-brand-sub"><b>—</b> D A T <span>♥</span> I N G <b>—</b></div>
@@ -361,7 +361,7 @@ export default function HomePage() {
               <span></span><span></span><span></span>
             </button>
             <div className="tmpl-brand">
-              <div className="tmpl-brand-mark"><i></i></div>
+              <img className="tmpl-brand-mark" src="/o-logo.png" alt="Odogwu" />
               <div>
                 <div className="tmpl-brand-name">DOGWU</div>
                 <div className="tmpl-brand-sub"><b>—</b> D A T <span>♥</span> I N G <b>—</b></div>
