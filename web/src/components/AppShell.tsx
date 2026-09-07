@@ -41,13 +41,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <button className="uv-icon-btn uv-menu" aria-label="Menu" onClick={() => router.push('/settings')}>
         <span></span><span></span><span></span>
       </button>
-      <div className="uv-brand">
-        <img className="uv-brand-mark" src="/o-logo.png" alt="Odogwu" />
-        <div>
-          <div className="uv-brand-name">DOGWU</div>
-          <div className="uv-brand-sub"><b>—</b> D A T <span>♥</span> I N G <b>—</b></div>
-        </div>
-      </div>
+      <img className="uv-brand-logo" src="/o-logo.png" alt="Odogwu" />
       <button className="uv-messages-top uv-icon-btn" aria-label="Messages" onClick={() => router.push('/matches')}>
         <svg viewBox="0 0 48 48" aria-hidden="true">
           <path d="M10 35l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none" stroke="currentColor" strokeWidth="3"/>
@@ -84,6 +78,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         .uv-brand-sub { text-align: center; font-size: 13px; font-weight: 700; letter-spacing: 6px; margin-top: 8px; }
         .uv-brand-sub b { color: #d20a19; letter-spacing: 0; }
         .uv-brand-sub span { color: #d20a19; }
+        .uv-brand-logo { height: 44px; width: auto; object-fit: contain; display: block; }
 
         .uv-topbar { display: flex; align-items: center; justify-content: space-between; position: relative; padding: 0 0 16px; }
         .uv-icon-btn { color: #171717; background: none; border: 0; cursor: pointer; padding: 0; }

@@ -127,6 +127,7 @@ export default function HomePage() {
         .tmpl-brand-sub { text-align: center; font-size: 13px; font-weight: 700; letter-spacing: 6px; margin-top: 8px; }
         .tmpl-brand-sub b { color: #d20a19; letter-spacing: 0; }
         .tmpl-brand-sub span { color: #d20a19; }
+        .tmpl-brand-logo { height: 44px; width: auto; object-fit: contain; display: block; }
         .tmpl-messages-top { position: relative; width: 50px; height: 50px; background: none; border: 0; cursor: pointer; color: #171717; padding: 0; }
         .tmpl-messages-top svg { width: 40px; height: 40px; }
         .tmpl-messages-top em { position: absolute; right: 0; top: -4px; background: #d71945; color: #fff; width: 24px; height: 24px; border-radius: 50%; font-style: normal; font-size: 13px; display: grid; place-items: center; font-weight: 700; }
@@ -360,13 +361,7 @@ export default function HomePage() {
             <button className="tmpl-icon-btn tmpl-menu" aria-label="Menu" onClick={() => go('/settings')}>
               <span></span><span></span><span></span>
             </button>
-            <div className="tmpl-brand">
-              <img className="tmpl-brand-mark" src="/o-logo.png" alt="Odogwu" />
-              <div>
-                <div className="tmpl-brand-name">DOGWU</div>
-                <div className="tmpl-brand-sub"><b>—</b> D A T <span>♥</span> I N G <b>—</b></div>
-              </div>
-            </div>
+            <img className="tmpl-brand-logo" src="/o-logo.png" alt="Odogwu" />
             <button className="tmpl-messages-top tmpl-icon-btn" aria-label="Messages" onClick={() => go('/matches')}>
               <svg viewBox="0 0 48 48" aria-hidden="true">
                 <path d="M10 35l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none" stroke="currentColor" strokeWidth="3"/>
