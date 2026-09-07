@@ -401,14 +401,14 @@ export default function HomePage() {
             </button>
             <button className="tmpl-quick" onClick={() => go('/likes')}>
               <span className="tmpl-round-photo">
-                <StoryAvatar photo={likePhoto} name={initial} />
+                <StoryAvatar photo={likePhoto} name="L" />
                 <b className="tmpl-badge">{likesCount}</b>
               </span>
               <label>Likes You</label>
             </button>
             <button className="tmpl-quick" onClick={() => go('/matches')}>
               <span className="tmpl-round-photo">
-                <StoryAvatar photo={matchPhoto} name={initial} />
+                <StoryAvatar photo={matchPhoto} name="M" />
                 <b className="tmpl-badge">{matchesCount}</b>
               </span>
               <label>Matches</label>
