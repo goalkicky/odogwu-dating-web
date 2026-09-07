@@ -139,13 +139,13 @@ export default function HomePage() {
         .tmpl-pink-btn { background: #FF1747; color: #fff; border-radius: 28px; padding: 15px 27px; font-size: 16px; border: 0; cursor: pointer; font-weight: 600; }
         .tmpl-quick-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin: 3px 0 26px; }
         .tmpl-quick { position: relative; display: flex; flex-direction: column; align-items: center; color: #171717; background: none; border: 0; cursor: pointer; padding: 0; min-width: 0; }
-        .tmpl-round-photo { width: 111px; max-width: 100%; height: auto; aspect-ratio: 1/1; border: 4px solid #d30e42; border-radius: 50%; padding: 5px; display: block; position: relative; background: #fff; box-sizing: border-box; overflow: hidden; }
+        .tmpl-round-photo { width: 111px; max-width: 100%; height: auto; aspect-ratio: 1/1; border: 4px solid #d30e42; border-radius: 50%; padding: 5px; display: block; position: relative; background: #fff; box-sizing: border-box; }
         .tmpl-round-photo.dashed { border-style: dashed; border-color: #ec6690; }
         .tmpl-round-photo > img, .tmpl-round-photo > div { inset: 2px !important; width: calc(100% - 4px) !important; height: calc(100% - 4px) !important; border-radius: 50%; object-fit: cover; display: block; }
         .tmpl-round-photo.location { display: grid; place-items: center; border-color: #c7a523; }
         .tmpl-round-photo.location svg { width: 57px; height: 57px; fill: #df164b; }
         .tmpl-quick label { font-size: 16px; font-weight: 500; margin-top: 10px; color: #171717; text-align: center; line-height: 1.2; }
-        .tmpl-badge, .tmpl-plus { position: absolute; right: 0; top: 78%; background: #d9184b; color: #fff; border-radius: 50%; width: 34px; height: 34px; display: grid; place-items: center; font-size: 15px; font-weight: 700; z-index: 3; transform: translate(15%, -15%); }
+        .tmpl-badge, .tmpl-plus { position: absolute; right: -6px; bottom: -6px; background: #d9184b; color: #fff; border-radius: 50%; width: 34px; height: 34px; display: grid; place-items: center; font-size: 15px; font-weight: 700; z-index: 3; border: 2px solid #fff; line-height: 1; }
         .tmpl-plus { font-size: 25px; font-weight: 400; }
 .tmpl-section h2 { font-size: 20px; margin: 0 0 10px; font-weight: 700; color: #151515; }
 .tmpl-section h2 span { font-size: 19px; }
@@ -213,7 +213,7 @@ export default function HomePage() {
           .tmpl-round-photo { width: 80%; border-width: 3px; padding: 5px; }
           .tmpl-round-photo.location svg { width: 50%; height: 50%; }
           .tmpl-pink-btn { margin-left: 12px; flex-shrink: 0; }
-          .tmpl-badge, .tmpl-plus { width: 29px; height: 29px; font-size: 13px; }
+          .tmpl-badge, .tmpl-plus { width: 29px; height: 29px; font-size: 13px; right: -4px; bottom: -4px; }
           .tmpl-plus { font-size: 21px; }
           .tmpl-quick label { font-size: 12px; margin-top: 7px; }
           .tmpl-section h2 { font-size: 18px; }
@@ -386,24 +386,28 @@ export default function HomePage() {
             <button className="tmpl-quick" onClick={() => go('/edit-profile')}>
               <span className="tmpl-round-photo dashed">
                 <StoryAvatar photo={profilePhoto} name={initial} />
+                <b className="tmpl-plus">+</b>
               </span>
               <label>Your Story</label>
             </button>
             <button className="tmpl-quick" onClick={() => go('/likes')}>
               <span className="tmpl-round-photo">
                 <StoryAvatar photo={profilePhoto} name={initial} />
+                <b className="tmpl-badge">{likesCount}</b>
               </span>
               <label>Likes You</label>
             </button>
             <button className="tmpl-quick" onClick={() => go('/matches')}>
               <span className="tmpl-round-photo">
                 <StoryAvatar photo={profilePhoto} name={initial} />
+                <b className="tmpl-badge">{matchesCount}</b>
               </span>
               <label>Matches</label>
             </button>
             <button className="tmpl-quick" onClick={() => go('/discover')}>
               <span className="tmpl-round-photo location">
                 <svg viewBox="0 0 64 64"><path d="M32 7c-12 0-21 9-21 21 0 15 21 29 21 29s21-14 21-29C53 16 44 7 32 7Zm0 29a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"/></svg>
+                <b className="tmpl-badge">{nearby.length}</b>
               </span>
               <label>Nearby</label>
             </button>
