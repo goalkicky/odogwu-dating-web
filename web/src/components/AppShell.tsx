@@ -17,7 +17,7 @@ function Brand() {
   );
 }
 
-export default function AppShell({ children }: { children: React.ReactNode }) {
+export default function AppShell({ children, header }: { children: React.ReactNode; header?: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { profile, loading, isAuthenticated } = useAuth();
@@ -36,7 +36,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       .catch(() => {});
   }, [loading, isAuthenticated, profile, uid]);
 
-  const header = (
+  const defaultHeader = (
     <header className="uv-topbar">
       <button className="uv-icon-btn uv-menu" aria-label="Settings" onClick={() => router.push('/settings')}>
         <svg viewBox="0 0 48 48" style={{ width: 28, height: 28, stroke: 'currentColor', fill: 'none', strokeWidth: 2.4, strokeLinecap: 'round' }}>
@@ -178,13 +178,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Main content */}
       <main className="uv-content uv-desktop-only" style={{ paddingLeft: 255 }}>
-        <div className="uv-content-inner">{header}{children}</div>
+        <div className="uv-content-inner">{header ?? defaultHeader}{children}</div>
       </main>
 
       {/* Mobile content + bottom nav */}
       <aside className="uv-mobile" style={{ display: 'none' }}>
         <main style={{ minHeight: '100svh', background: '#fff', padding: '0 16px 96px', boxSizing: 'border-box' }}>
-          {header}
+          {header ?? defaultHeader}
           {children}
         </main>
         <nav className="uv-bottom-nav">

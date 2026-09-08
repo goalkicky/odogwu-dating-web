@@ -211,43 +211,37 @@ export default function DiscoverPage() {
   const msgFont = isTiny ? 24 : isMobile ? 29 : 35;
   const actionSmall = isMobile ? 15 : 18;
 
+  const discoverHeader = (
+    <header className="uv-topbar">
+      <img className="uv-brand-logo" src="/o-logo.png" alt="Odogwu" style={{ justifySelf: 'start' }} />
+      <h1 style={{ fontSize: 26, fontWeight: 800, color: '#000', margin: 0, letterSpacing: -0.5, textAlign: 'center' }}>Discover</h1>
+      <button
+        onClick={() => setShowFilters(true)}
+        aria-label="Filter preferences"
+        style={{
+          position: 'relative', width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: 'none', border: 0, cursor: 'pointer', color: '#17191d', justifySelf: 'end',
+        }}
+      >
+        <FilterIcon size={26} color="#17191d" />
+        {activeFilterCount > 0 && (
+          <span style={{
+            position: 'absolute', top: 2, right: 0, minWidth: 20, height: 20, padding: '0 5px', boxSizing: 'border-box',
+            borderRadius: 9999, background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', color: 'white',
+            fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 2px 10px rgba(255,46,95,0.6)', border: '2px solid #fff',
+          }}>
+            {activeFilterCount}
+          </span>
+        )}
+      </button>
+    </header>
+  );
+
   return (
-    <AppShell>
+    <AppShell header={discoverHeader}>
       <div className="animate-fade-up" style={{ paddingTop: isMobile ? 6 : 22 }}>
         <div style={{ maxWidth: 760, margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: isMobile ? 14 : 22 }}>
-            <div>
-              <h1 style={{ fontSize: isMobile ? 26 : 30, fontWeight: 800, color: '#151515', margin: 0, letterSpacing: 0.5 }}>
-                Discover<span style={{ color: '#FF2E5F' }}>.</span>
-              </h1>
-              <p style={{ fontSize: 13, color: '#8A8A8F', margin: '2px 0 0' }}>
-                {users.length} profiles ready for you
-              </p>
-            </div>
-            <button
-              onClick={() => setShowFilters(true)}
-              className="lift"
-              aria-label="Filter preferences"
-              style={{
-                position: 'relative', width: 48, height: 48, borderRadius: 9999, border: '1px solid #e4e4e6',
-                background: '#fff', boxShadow: '0 1px 4px rgba(20,20,25,0.03)', cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#17191d',
-              }}
-            >
-              <FilterIcon size={22} color="#FF7BA0" />
-              {activeFilterCount > 0 && (
-                <span style={{
-                  position: 'absolute', top: -4, right: -4, minWidth: 20, height: 20, padding: '0 5px', boxSizing: 'border-box',
-                  borderRadius: 9999, background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', color: 'white',
-                  fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: '0 2px 10px rgba(255,46,95,0.6)', border: '2px solid #fff',
-                }}>
-                  {activeFilterCount}
-                </span>
-              )}
-            </button>
-          </div>
-
           <AnimatedCard
             key={current.id}
             user={current}
