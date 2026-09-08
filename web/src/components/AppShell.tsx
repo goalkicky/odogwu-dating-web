@@ -38,8 +38,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   const header = (
     <header className="uv-topbar">
-      <button className="uv-icon-btn uv-menu" aria-label="Menu" onClick={() => router.push('/settings')}>
-        <span></span><span></span><span></span>
+      <button className="uv-icon-btn uv-menu" aria-label="Settings" onClick={() => router.push('/settings')}>
+        <svg viewBox="0 0 48 48" style={{ width: 28, height: 28, stroke: 'currentColor', fill: 'none', strokeWidth: 2.4, strokeLinecap: 'round' }}>
+          <circle cx="24" cy="24" r="10"/>
+          <path d="M24 7v5M24 36v5M7 24h5M36 24h5M12 12l4 4M32 32l4 4M36 12l-4 4M16 32l-4 4"/>
+        </svg>
       </button>
       <img className="uv-brand-logo" src="/o-logo.png" alt="Odogwu" />
       <button className="uv-messages-top uv-icon-btn" aria-label="Messages" onClick={() => router.push('/matches')}>
