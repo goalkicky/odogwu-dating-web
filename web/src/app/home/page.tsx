@@ -416,7 +416,15 @@ export default function HomePage() {
             </button>
             <button className="tmpl-quick" onClick={() => go('/matches')}>
               <span className="tmpl-round-photo">
-                <StoryAvatar photo={matchPhoto} name="M" />
+                {matchPhoto ? (
+                  <StoryAvatar photo={matchPhoto} name="M" />
+                ) : (
+                  <div style={{ position: 'absolute', inset: 2, background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg viewBox="0 0 48 48" style={{ width: 26, height: 26, fill: '#FF2E5F', display: 'block' }}>
+                      <path d="M24 40s-14-9-14-20a8 8 0 0 1 14-5 8 8 0 0 1 14 5c0 11-14 20-14 20Z"/>
+                    </svg>
+                  </div>
+                )}
                 <b className="tmpl-badge">{matchesCount}</b>
               </span>
               <label>Matches</label>
