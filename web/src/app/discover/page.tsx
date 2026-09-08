@@ -1,16 +1,14 @@
 'use client';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { HeartIcon, CloseIcon, StarIcon, RefreshIcon, FilterIcon, ChatIcon } from '@/components/Icons';
+import { FilterIcon, CloseIcon } from '@/components/Icons';
 import AnimatedCard from '@/components/AnimatedCard';
-import ActionButton from '@/components/ActionButton';
 import AppShell from '@/components/AppShell';
-import ProfileModal from '@/components/ProfileModal';
 import SuperlikeUpsellModal from '@/components/SuperlikeUpsellModal';
 import LikeUpsellModal from '@/components/LikeUpsellModal';
 import MessageUpsellModal from '@/components/MessageUpsellModal';
 import MatchPopup from '@/components/MatchPopup';
-import { useMobile } from '@/lib/useMediaQuery';
+import { useMobile, useMediaQuery } from '@/lib/useMediaQuery';
 import { useAuth } from '@/store/AuthContext';
 import { userService, storageService, superlikeService, likeService, matchService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
@@ -19,12 +17,12 @@ export default function DiscoverPage() {
   const { profile } = useAuth();
   const router = useRouter();
   const isMobile = useMobile();
+  const isTiny = useMediaQuery('(max-width: 390px)');
   const [users, setUsers] = useState<any[]>([]);
 
   const [lastAction, setLastAction] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
-  const [showProfileUser, setShowProfileUser] = useState<any>(null);
   const [superlikes, setSuperlikes] = useState<any>({ remaining: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
   const [showSuperlikeUpsell, setShowSuperlikeUpsell] = useState(false);
   const [likes, setLikes] = useState<any>({ remaining: 0, used: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
@@ -67,6 +65,7 @@ export default function DiscoverPage() {
         distanceKm: d.distanceKm,
         gender: d.gender || '',
         interests: d.interests || [],
+        verified: !!d.verified,
       })).filter((u: any) => u.photos.length > 0);
       setUsers(mapped);
     } catch {}
@@ -150,10 +149,6 @@ export default function DiscoverPage() {
     setTimeout(() => { setLastAction(null); nextUser(); }, 300);
   }, [users, superlikes, nextUser]);
 
-  const handleReload = useCallback(() => {
-    loadUsers();
-  }, [loadUsers]);
-
   const handleMessage = useCallback(async () => {
     const target = users[0];
     if (!target || !account) return;
@@ -209,126 +204,87 @@ export default function DiscoverPage() {
 
   const current = users[0];
 
+  const actionSize = isTiny ? 78 : isMobile ? 88 : 110;
+  const actionGap = isTiny ? 18 : isMobile ? 28 : 74;
+  const actionFont = isTiny ? 44 : isMobile ? 47 : 57;
+  const likeFont = isTiny ? 34 : isMobile ? 40 : 47;
+  const msgFont = isTiny ? 24 : isMobile ? 29 : 35;
+  const actionSmall = isMobile ? 15 : 18;
+
   return (
     <AppShell>
-      <div style={{ display: 'flex', flexDirection: 'column', height: isMobile ? '100dvh' : 'auto', minHeight: '100dvh', overflow: 'hidden', padding: isMobile ? '12px 14px 108px' : '24px 16px' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 0 }}>
-          <div className="animate-fade-up" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: isMobile ? 12 : 20 }}>
+      <div className="animate-fade-up" style={{ paddingTop: isMobile ? 6 : 22 }}>
+        <div style={{ maxWidth: 760, margin: '0 auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: isMobile ? 14 : 22 }}>
             <div>
               <h1 style={{ fontSize: isMobile ? 26 : 30, fontWeight: 800, color: '#151515', margin: 0, letterSpacing: 0.5 }}>
                 Discover<span style={{ color: '#FF2E5F' }}>.</span>
               </h1>
               <p style={{ fontSize: 13, color: '#8A8A8F', margin: '2px 0 0' }}>
-                {users.length > 0 ? `${users.length} profiles ready for you` : ''}
+                {users.length} profiles ready for you
               </p>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ padding: '6px 12px', borderRadius: 9999, display: 'flex', alignItems: 'center', gap: 8, background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
-                <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#3DFC77', boxShadow: '0 0 10px #3DFC77' }} />
-                <span style={{ color: '#8A8A8F', fontSize: 13, fontWeight: 600 }}>Live</span>
-              </div>
-              <button
-                onClick={() => setShowFilters(true)}
-                className="lift"
-                aria-label="Filter preferences"
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 8,
-                  padding: '8px 14px', borderRadius: 9999, position: 'relative',
-                  color: '#65656A', fontSize: 13, fontWeight: 600,
-                  cursor: 'pointer', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)',
-                }}
-              >
-                <FilterIcon size={16} color="#FF7BA0" />
-                Filters
-                {activeFilterCount > 0 && (
-                  <span style={{
-                    position: 'absolute', top: -6, right: -6, minWidth: 20, height: 20, padding: '0 5px', boxSizing: 'border-box',
-                    borderRadius: 9999, background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', color: 'white',
-                    fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    boxShadow: '0 2px 10px rgba(255,46,95,0.6)', border: '2px solid #fff',
-                  }}>
-                    {activeFilterCount}
-                  </span>
-                )}
-              </button>
-            </div>
+            <button
+              onClick={() => setShowFilters(true)}
+              className="lift"
+              aria-label="Filter preferences"
+              style={{
+                position: 'relative', width: 48, height: 48, borderRadius: 9999, border: '1px solid #e4e4e6',
+                background: '#fff', boxShadow: '0 1px 4px rgba(20,20,25,0.03)', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#17191d',
+              }}
+            >
+              <FilterIcon size={22} color="#FF7BA0" />
+              {activeFilterCount > 0 && (
+                <span style={{
+                  position: 'absolute', top: -4, right: -4, minWidth: 20, height: 20, padding: '0 5px', boxSizing: 'border-box',
+                  borderRadius: 9999, background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', color: 'white',
+                  fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 2px 10px rgba(255,46,95,0.6)', border: '2px solid #fff',
+                }}>
+                  {activeFilterCount}
+                </span>
+              )}
+            </button>
           </div>
 
-          <div style={{ position: 'relative', flex: 1, minHeight: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {!isMobile && (
-              <div style={{
-                position: 'absolute', inset: -20, borderRadius: 40,
-                background: 'radial-gradient(circle, rgba(255,46,95,0.14) 0%, rgba(180,76,255,0.1) 45%, transparent 70%)',
-                filter: 'blur(10px)',
-              }} />
-            )}
+          <AnimatedCard
+            key={current.id}
+            user={current}
+            isFirst
+            width="100%"
+            height="auto"
+            onSwipeLeft={handleSwipeLeft}
+            onSwipeRight={handleSwipeRight}
+            onSuperLike={handleSuperLike}
+          />
 
-            <div style={{ position: 'relative', width: isMobile ? '100%' : 420, height: isMobile ? '100%' : 600, maxWidth: '100%' }}>
-              <AnimatedCard
-                key={current.id}
-                user={current}
-                isFirst
-                width="100%"
-                height="100%"
-                onSwipeLeft={handleSwipeLeft}
-                onSwipeRight={handleSwipeRight}
-                onSuperLike={handleSuperLike}
-                onOpenProfile={() => setShowProfileUser(current)}
-              />
-            </div>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: actionGap, padding: isMobile ? '32px 0 22px' : '38px 0 25px' }}>
+            <button onClick={handleSwipeLeft} className="lift" aria-label="Pass" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, background: 'none', border: 0, cursor: 'pointer', color: '#101217' }}>
+              <span style={{ width: actionSize, height: actionSize, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff', fontSize: actionFont, fontWeight: 300, color: '#101217' }}>×</span>
+              <small style={{ fontSize: actionSmall, color: '#101217' }}>Pass</small>
+            </button>
 
-            {lastAction && lastAction !== 'match' && (
-              <div className="animate-pop" style={{ position: 'absolute', bottom: 92, left: 0, right: 0, display: 'flex', justifyContent: 'center', animation: 'fadeUp 0.3s ease' }}>
-                <div style={{ padding: '8px 20px', borderRadius: 9999, whiteSpace: 'nowrap', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
-                  <span style={{ color: '#151515', fontWeight: 700, fontSize: 14 }}>
-                    {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : `Super Liked ${current.fullName.split(' ')[0] || 'them'}! 💙`}
-                  </span>
-                </div>
-              </div>
-            )}
+            <button onClick={handleSwipeRight} className="lift" aria-label="Like" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, background: 'none', border: 0, cursor: 'pointer', color: '#101217' }}>
+              <span style={{ width: actionSize, height: actionSize, borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 6px 18px rgba(255,45,104,0.35)', background: '#ff2d68', color: '#fff', fontSize: likeFont, fontWeight: 300, paddingBottom: isMobile ? 4 : 6 }}>♥</span>
+              <small style={{ fontSize: actionSmall, color: '#101217' }}>Like</small>
+            </button>
 
-            <div className="animate-fade-up" style={{ position: 'absolute', bottom: 10, left: 0, right: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
-              <ActionButton variant="boost" size={40} onPress={handleMessage}>
-                <ChatIcon size={18} color="white" />
-              </ActionButton>
-              <ActionButton variant="secondary" size={46} onPress={handleReload}>
-                <RefreshIcon size={20} color="#FFE600" />
-              </ActionButton>
-              <ActionButton variant="danger" size={62} onPress={handleSwipeLeft}>
-                <CloseIcon size={30} color="white" />
-              </ActionButton>
-              <div style={{ position: 'relative' }}>
-                <ActionButton variant="superlike" size={46} onPress={handleSuperLike}>
-                  <StarIcon size={20} color="white" />
-                </ActionButton>
-                <span style={{
-                  position: 'absolute', top: -4, right: -6, minWidth: 20, height: 20, padding: '0 5px', boxSizing: 'border-box',
-                  borderRadius: 9999, background: superlikes.remaining > 0 ? 'linear-gradient(135deg, #22E5FF, #0AA6CE)' : '#FF4530',
-                  color: 'white', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: superlikes.remaining > 0 ? '0 2px 10px rgba(79,195,247,0.6)' : '0 2px 10px rgba(255,69,48,0.6)',
-                  border: '2px solid #fff',
-                }}>
-                  {superlikes.remaining}
+            <button onClick={handleMessage} className="lift" aria-label="Message" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, background: 'none', border: 0, cursor: 'pointer', color: '#101217' }}>
+              <span style={{ width: actionSize, height: actionSize, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff', fontSize: msgFont, color: '#171a1e' }}>●</span>
+              <small style={{ fontSize: actionSmall, color: '#101217' }}>Message</small>
+            </button>
+          </div>
+
+          {lastAction && lastAction !== 'match' && (
+            <div className="animate-pop" style={{ display: 'flex', justifyContent: 'center', paddingBottom: 14, animation: 'fadeUp 0.3s ease' }}>
+              <div style={{ padding: '8px 20px', borderRadius: 9999, whiteSpace: 'nowrap', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
+                <span style={{ color: '#151515', fontWeight: 700, fontSize: 14 }}>
+                  {lastAction === 'like' ? 'Liked!' : lastAction === 'dislike' ? 'Nope' : `Super Liked ${current.fullName.split(' ')[0] || 'them'}! 💙`}
                 </span>
               </div>
-              <div style={{ position: 'relative' }}>
-                <ActionButton variant="primary" size={62} onPress={handleSwipeRight}>
-                  <HeartIcon size={30} color="white" />
-                </ActionButton>
-                {!likes.isPremium && likes.dailyLimit > 0 && (
-                  <span style={{
-                    position: 'absolute', top: -4, right: -6, minWidth: 20, height: 20, padding: '0 5px', boxSizing: 'border-box',
-                    borderRadius: 9999, background: (likes.remaining ?? 0) > 0 ? 'linear-gradient(135deg, #FF2E5F, #FF7BA0)' : '#FF4530',
-                    color: 'white', fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    boxShadow: (likes.remaining ?? 0) > 0 ? '0 2px 10px rgba(255,46,95,0.6)' : '0 2px 10px rgba(255,69,48,0.6)',
-                    border: '2px solid #fff',
-                  }}>
-                    {Math.max(0, likes.remaining ?? 0)}
-                  </span>
-                )}
-              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {showFilters && (
@@ -339,10 +295,6 @@ export default function DiscoverPage() {
             onApply={() => setShowFilters(false)}
             onClose={() => setShowFilters(false)}
           />
-        )}
-
-        {showProfileUser && (
-          <ProfileModal user={showProfileUser} onClose={() => setShowProfileUser(null)} />
         )}
 
         {showSuperlikeUpsell && (
