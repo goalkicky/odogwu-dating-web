@@ -35,16 +35,6 @@ export default function DiscoverPage() {
   const defaultPrefs = { gender: baseGender, minAge: 18, maxAge: 60, maxDistance: 0, minHeight: 0, maxHeight: 0, minWeight: 0, maxWeight: 0, city: '', relationshipGoals: '' };
   const [prefs, setPrefs] = useState(defaultPrefs);
 
-  const activeFilterCount =
-    (prefs.gender !== baseGender ? 1 : 0) +
-    (prefs.minAge !== 18 ? 1 : 0) +
-    (prefs.maxAge !== 60 ? 1 : 0) +
-    (prefs.maxDistance > 0 ? 1 : 0) +
-    (prefs.minHeight > 0 || prefs.maxHeight > 0 ? 1 : 0) +
-    (prefs.minWeight > 0 || prefs.maxWeight > 0 ? 1 : 0) +
-    (prefs.city ? 1 : 0) +
-    (prefs.relationshipGoals ? 1 : 0);
-
   const loadUsers = useCallback(async () => {
     if (!profile || !account) return;
     setLoading(true);
@@ -213,27 +203,17 @@ export default function DiscoverPage() {
 
   const discoverHeader = (
     <header className="uv-topbar">
-      <img className="uv-brand-logo" src="/o-logo.png" alt="Odogwu" style={{ justifySelf: 'start' }} />
-      <h1 style={{ fontSize: 26, fontWeight: 800, color: '#000', margin: 0, letterSpacing: -0.5, textAlign: 'center' }}>Discover</h1>
+      <img className="uv-brand-logo" src="/o-logo.png" alt="Odogwu" style={{ justifySelf: 'start', height: 34 }} />
+      <h1 style={{ fontSize: 20, fontWeight: 800, color: '#000', margin: 0, letterSpacing: -0.5, textAlign: 'center' }}>Discover</h1>
       <button
         onClick={() => setShowFilters(true)}
         aria-label="Filter preferences"
         style={{
-          position: 'relative', width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center',
           background: 'none', border: 0, cursor: 'pointer', color: '#17191d', justifySelf: 'end',
         }}
       >
-        <FilterIcon size={26} color="#17191d" />
-        {activeFilterCount > 0 && (
-          <span style={{
-            position: 'absolute', top: 2, right: 0, minWidth: 20, height: 20, padding: '0 5px', boxSizing: 'border-box',
-            borderRadius: 9999, background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', color: 'white',
-            fontSize: 11, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 2px 10px rgba(255,46,95,0.6)', border: '2px solid #fff',
-          }}>
-            {activeFilterCount}
-          </span>
-        )}
+        <FilterIcon size={22} color="#17191d" />
       </button>
     </header>
   );
