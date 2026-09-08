@@ -209,8 +209,9 @@ export const OptionsIcon = ({ size, color, className }: IconProps) => (
 );
 
 export const FilterIcon = ({ size, color, className }: IconProps) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={s(size)} height={s(size)} viewBox="0 0 24 24" fill="none" stroke={color || 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+  <svg xmlns="http://www.w3.org/2000/svg" width={s(size)} height={s(size)} viewBox="0 0 32 32" fill="none" stroke={color || 'currentColor'} strokeWidth="2" strokeLinecap="round" className={className}>
+    <path d="M5 8h22M5 16h22M5 24h22"/>
+    <circle cx="12" cy="8" r="3"/><circle cx="21" cy="16" r="3"/><circle cx="14" cy="24" r="3"/>
   </svg>
 );
 
