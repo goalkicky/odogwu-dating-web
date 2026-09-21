@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/store/AuthContext';
-import { matchService, storageService } from '@/lib/cloudflare/services';
+import { matchService, userService, storageService } from '@/lib/cloudflare/services';
+import { profileCompletion } from '@/lib/profileCompletion';
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -15,6 +16,11 @@ function timeAgo(dateStr: string) {
   return `${days}d ago`;
 }
 
+function StoryAvatar({ photo, name }: { photo: string; name: string }) {
+  if (photo) return <img src={photo} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />;
+  return <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 44, fontWeight: 800, color: '#fff', background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)' }}>{name[0]}</div>;
+}
+
 export default function MyMatchesPage() {
   const router = useRouter();
   const { profile } = useAuth();
@@ -22,12 +28,15 @@ export default function MyMatchesPage() {
   const [messagesCount, setMessagesCount] = useState(0);
   const [likesCount, setLikesCount] = useState(0);
   const [likesPhoto, setLikesPhoto] = useState('');
+  const [nearbyCount, setNearbyCount] = useState(0);
   const [toast, setToast] = useState('');
   const toastTimer = React.useRef<any>(null);
 
   const uid = (profile as any)?.$id || (profile as any)?.id;
   const profilePhoto = profile?.photos?.[0] ? storageService.getFilePreview(profile.photos[0]) : '';
-  const firstName = ((profile as any)?.fullName || 'O').trim().split(' ')[0];
+  const fullName = (profile as any)?.fullName || (profile as any)?.displayName || 'Your';
+  const completion = profileCompletion(profile);
+  const initial = (fullName[0] || 'O').toUpperCase();
 
   const showToast = (message: string) => {
     setToast(message);
@@ -63,9 +72,15 @@ export default function MyMatchesPage() {
         if (first?.photos?.[0]) setLikesPhoto(storageService.getFilePreview(first.photos[0]));
       })
       .catch(() => {});
+    if ((profile as any)?.interestedIn) {
+      userService.getDiscoverUsers(uid, {
+        gender: (profile as any).interestedIn === 'both' ? 'male' : (profile as any).interestedIn,
+        minAge: 18, maxAge: 60, maxDistance: 200,
+      }).then((docs: any[]) => setNearbyCount((Array.isArray(docs) ? docs : []).length)).catch(() => {});
+    }
   }, [uid]);
 
-  const initial = (name: string) => (name?.[0] || 'M').toUpperCase();
+  const nameInitial = (name: string) => (name?.[0] || 'M').toUpperCase();
   const matchPhoto = matches[0]?.matchedUser?._photoUrl || '';
 
   return (
@@ -209,40 +224,108 @@ export default function MyMatchesPage() {
         }
       `}</style>
 
-      <header className="header">
-        <button className="menu" onClick={() => router.push('/settings')}><i></i><i></i><i></i></button>
-        <div className="logo"><span className="logoMark"></span>dogwu</div>
-        <div className="tag">DATING</div>
-        <button className="chat" aria-label="Messages" onClick={() => router.push('/matches')}>
-          <svg viewBox="0 0 48 48"><path d="M8 23c0-8 7-14 16-14s16 6 16 14-7 14-16 14c-3 0-5-.5-8-1.7L8 39l1.6-6.4C8.6 29.9 8 26.6 8 23Z"/><path d="M17 23h.1M24 23h.1M31 23h.1"/></svg>
-          {messagesCount > 0 && <span className="badge">{messagesCount}</span>}
-        </button>
-      </header>
+      <style jsx global>{`
+        .mm-home { max-width: 710px; margin: 0 auto; padding: 16px 23px 0; }
+        .tmpl-topbar { display: flex; align-items: center; justify-content: space-between; position: relative; padding: 0 0 16px; }
+        .tmpl-icon-btn { color: #171717; background: none; border: 0; cursor: pointer; padding: 0; }
+        .tmpl-menu { width: 38px; padding: 0; }
+        .tmpl-menu span { display: block; width: 34px; height: 3px; background: #222; margin: 8px 0; border-radius: 2px; }
+        .tmpl-brand-logo { height: 44px; width: auto; object-fit: contain; display: block; }
+        .tmpl-messages-top { position: relative; width: 50px; height: 50px; background: none; border: 0; cursor: pointer; color: #171717; padding: 0; }
+        .tmpl-messages-top svg { width: 40px; height: 40px; }
+        .tmpl-messages-top em { position: absolute; right: 0; top: -4px; background: #d71945; color: #fff; width: 24px; height: 24px; border-radius: 50%; font-style: normal; font-size: 13px; display: grid; place-items: center; font-weight: 700; }
+        .tmpl-premium { min-height: 105px; height: auto; background: #fff1f5; border-radius: 18px; display: flex; align-items: center; padding: 10px 22px; margin-bottom: 18px; }
+        .tmpl-crown { width: 52px; height: 52px; background: #df164c; color: #ffd12a; border-radius: 50%; display: grid; place-items: center; font-size: 32px; margin-right: 15px; flex-shrink: 0; }
+        .tmpl-premium-copy { flex: 1; }
+        .tmpl-premium h3 { font-size: 16px; margin: 0 0 5px; color: #151515; font-weight: 800; }
+        .tmpl-premium p { font-size: 13px; line-height: 19px; color: #555; margin: 0; font-weight: 700; }
+        .tmpl-pink-btn { background: #FF1747; color: #fff; border-radius: 28px; padding: 15px 27px; font-size: 16px; border: 0; cursor: pointer; font-weight: 600; }
+        .tmpl-quick-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin: 3px 0 26px; }
+        .tmpl-quick { position: relative; display: flex; flex-direction: column; align-items: center; color: #171717; background: none; border: 0; cursor: pointer; padding: 0; min-width: 0; }
+        .tmpl-round-photo { width: 111px; max-width: 100%; height: auto; aspect-ratio: 1/1; border: 4px solid #d30e42; border-radius: 50%; padding: 5px; display: block; position: relative; background: #fff; box-sizing: border-box; }
+        .tmpl-round-photo.story { border: none; background: conic-gradient(#d30e42 calc(var(--pct,0)*1%), #e9e9ec 0); padding: 5px; }
+        .tmpl-round-photo.story > img, .tmpl-round-photo.story > div { inset: 5px !important; width: calc(100% - 10px) !important; height: calc(100% - 10px) !important; }
+        .tmpl-round-photo > img, .tmpl-round-photo > div { inset: 2px !important; width: calc(100% - 4px) !important; height: calc(100% - 4px) !important; border-radius: 50%; object-fit: cover; display: block; }
+        .tmpl-round-photo.location { display: grid; place-items: center; border-color: #c7a523; }
+        .tmpl-round-photo.location svg { width: 57px; height: 57px; fill: #df164b; }
+        .tmpl-quick label { font-size: 16px; font-weight: 500; margin-top: 10px; color: #171717; text-align: center; line-height: 1.2; }
+        .tmpl-badge, .tmpl-plus { position: absolute; right: -6px; bottom: -6px; background: #d9184b; color: #fff; border-radius: 50%; width: 34px; height: 34px; display: grid; place-items: center; font-size: 15px; font-weight: 700; z-index: 3; border: 2px solid #fff; line-height: 1; }
+        .tmpl-plus { font-size: 25px; font-weight: 400; }
+      `}</style>
 
-      <section className="premium">
-        <div className="crown">♛</div>
-        <div className="premiumText"><b>Upgrade to Premium</b><div>Unlock all features and<br />connect without limits</div></div>
-        <button className="upgrade" onClick={() => router.push('/premium')}>Upgrade</button>
-      </section>
+      <div className="mm-home">
+        <header className="tmpl-topbar">
+          <button className="tmpl-icon-btn tmpl-menu" aria-label="Menu" onClick={() => router.push('/settings')}>
+            <span></span><span></span><span></span>
+          </button>
+          <img className="tmpl-brand-logo" src="/o-logo.png" alt="Odogwu" />
+          <button className="tmpl-messages-top tmpl-icon-btn" aria-label="Messages" onClick={() => router.push('/matches')}>
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M10 35l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none" stroke="currentColor" strokeWidth="3"/>
+              <circle cx="20" cy="22" r="1.7" fill="currentColor"/>
+              <circle cx="26" cy="22" r="1.7" fill="currentColor"/>
+              <circle cx="32" cy="22" r="1.7" fill="currentColor"/>
+            </svg>
+            <em>{messagesCount || 0}</em>
+          </button>
+        </header>
 
-      <section className="tabs">
-        <button className="tab" onClick={() => router.push('/home')}>
-          <div className="avatarRing">{profilePhoto ? <img src={profilePhoto} alt="" /> : <div className="ringFallback">{firstName[0] || '+'}</div>}<span className="tabCount plus">+</span></div>
-          <div className="tabName">Your Story</div>
-        </button>
-        <button className="tab" onClick={() => router.push('/likes')}>
-          <div className="avatarRing">{likesPhoto ? <img src={likesPhoto} alt="" /> : <div className="ringFallback">♡</div>}{likesCount > 0 && <span className="tabCount">{likesCount}</span>}</div>
-          <div className="tabName">Likes You</div>
-        </button>
-        <button className="tab active" onClick={() => showToast('You are on Matches')}>
-          <div className="avatarRing">{matchPhoto ? <img src={matchPhoto} alt="" /> : <div className="ringFallback">♥</div>}{matches.length > 0 && <span className="tabCount">{matches.length}</span>}</div>
-          <div className="tabName">Matches</div>
-        </button>
-        <button className="tab" onClick={() => showToast('No visitors yet')}>
-          <div className="avatarRing"><div className="ringFallback">◎</div></div>
-          <div className="tabName">Visitors</div>
-        </button>
-      </section>
+        <section className="tmpl-premium">
+          <div className="tmpl-crown">♛</div>
+          <div className="tmpl-premium-copy">
+            <h3>Upgrade to Premium</h3>
+            <p>Unlock all features and<br />connect without limits</p>
+          </div>
+          <button className="tmpl-pink-btn" onClick={() => router.push('/premium')}>Upgrade</button>
+        </section>
+
+        <section className="tmpl-quick-nav">
+          <button className="tmpl-quick" onClick={() => router.push('/edit-profile')}>
+            <span className="tmpl-round-photo story" style={{ ['--pct' as any]: completion }}>
+              <StoryAvatar photo={profilePhoto} name={initial} />
+              <b className="tmpl-plus">+</b>
+            </span>
+            <label>Your Story</label>
+          </button>
+          <button className="tmpl-quick" onClick={() => router.push('/likes')}>
+            <span className="tmpl-round-photo">
+              {likesPhoto ? (
+                <StoryAvatar photo={likesPhoto} name="L" />
+              ) : (
+                <div style={{ position: 'absolute', inset: 2, background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg viewBox="0 0 48 48" style={{ width: 26, height: 26, fill: '#FF2E5F', display: 'block' }}>
+                    <path d="M24 40s-14-9-14-20a8 8 0 0 1 14-5 8 8 0 0 1 14 5c0 11-14 20-14 20Z"/>
+                  </svg>
+                </div>
+              )}
+              <b className="tmpl-badge">{likesCount}</b>
+            </span>
+            <label>Likes You</label>
+          </button>
+          <button className="tmpl-quick" onClick={() => router.push('/my-matches')}>
+            <span className="tmpl-round-photo">
+              {matchPhoto ? (
+                <StoryAvatar photo={matchPhoto} name="M" />
+              ) : (
+                <div style={{ position: 'absolute', inset: 2, background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg viewBox="0 0 48 48" style={{ width: 26, height: 26, fill: '#FF2E5F', display: 'block' }}>
+                    <path d="M24 40s-14-9-14-20a8 8 0 0 1 14-5 8 8 0 0 1 14 5c0 11-14 20-14 20Z"/>
+                  </svg>
+                </div>
+              )}
+              <b className="tmpl-badge">{matches.length}</b>
+            </span>
+            <label>Matches</label>
+          </button>
+          <button className="tmpl-quick" onClick={() => router.push('/nearby')}>
+            <span className="tmpl-round-photo location">
+              <svg viewBox="0 0 64 64"><path d="M32 7c-12 0-21 9-21 21 0 15 21 29 21 29s21-14 21-29C53 16 44 7 32 7Zm0 29a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"/></svg>
+              <b className="tmpl-badge">{nearbyCount}</b>
+            </span>
+            <label>Nearby</label>
+          </button>
+        </section>
+      </div>
 
       <section>
         <div className="heading"><h1>Your Matches</h1><button className="sort" onClick={() => showToast('Sort options')}>Sort by: <b>Recent</b> <span>⌄</span></button></div>
@@ -256,7 +339,7 @@ export default function MyMatchesPage() {
             return (
               <article key={m.$id} className="match" onClick={() => router.push(`/chat/${m.$id}`)}>
                 <div className="photoWrap">
-                  {photo ? <img src={photo} alt="" /> : <div className="photoFallback">{initial(name)}</div>}
+                  {photo ? <img src={photo} alt="" /> : <div className="photoFallback">{nameInitial(name)}</div>}
                   {isOnline && <span className="online"></span>}
                   <span className="smallHeart">♥</span>
                 </div>
