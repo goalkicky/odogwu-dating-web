@@ -10,15 +10,20 @@ import { PREFERENCE_TEMPLATE_CSS } from '@/lib/preferenceTemplateStyles';
 const AGE_MIN = 18;
 const AGE_MAX = 99;
 
-const RELATIONSHIPS = [
-  { value: 'Long-term relationship', title: 'Long-term relationship', sub: 'Looking for something serious and meaningful', icon: <svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.4-8.8 10.1-8.8 10.1S3.2 14.2 3.2 8.8A4.8 4.8 0 0 1 12 6a4.8 4.8 0 0 1 8.8 2.8Z" /></svg> },
-  { value: 'Short-term relationship', title: 'Short-term relationship', sub: 'Something casual and fun', icon: <svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3" /><path d="M2.5 20c.5-4 2.2-6 5.5-6s5 2 5.5 6" /><path d="M16 11a3 3 0 1 0-1-5.8M17 14c2.8.1 4.3 2 4.8 5.5" /></svg> },
-  { value: 'Friendship', title: 'Friendship', sub: 'New friends and great connections', icon: <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M8 10h.01M16 10h.01M8.5 14.5c2 2 5 2 7 0" /><path d="M9 8c.6-1 1.4-1.5 3-1.5S14.4 7 15 8" /></svg> },
-  { value: 'Still figuring it out', title: 'Still figuring it out', sub: "Not sure yet, let's see where it goes", icon: <svg viewBox="0 0 24 24"><path d="M7 4h10M8 4v4l-2 3h12l-2-3V4M6 11v4a6 6 0 0 0 12 0v-4" /><path d="M9 15h6" /></svg> },
+const GENDERS = [
+  { label: 'Men', value: 'male' },
+  { label: 'Women', value: 'female' },
+  { label: 'Everyone', value: 'both' },
 ];
 
-const DISTANCES = ['Up to 10 km', 'Up to 25 km', 'Up to 50 km', 'Up to 100 km', '150+ km'];
-const KIDS = ["Doesn't have kids", 'Has kids', 'Open to kids'];
+const DISTANCE_STEPS = [10, 25, 50, 100];
+
+const GOAL_OPTIONS = [
+  { label: 'Serious Relationship', value: 'Long-term relationship' },
+  { label: 'Flirting', value: 'Short-term relationship' },
+  { label: 'Dating', value: 'Still figuring it out' },
+  { label: 'Friendship', value: 'Friendship' },
+];
 
 function parseRange(v: string | undefined): [number, number] {
   const m = (v || '').match(/(\d+)\s*-\s*(\d+)/);
@@ -31,48 +36,64 @@ function parseRange(v: string | undefined): [number, number] {
   return [AGE_MIN, AGE_MAX];
 }
 
+function mapGender(v: string | undefined): string {
+  if (v === 'male' || v === 'female' || v === 'both') return v;
+  return 'both';
+}
+
 function mapGoals(v: string | undefined): string {
-  if (v && RELATIONSHIPS.some(r => r.value === v)) return v;
+  if (v && GOAL_OPTIONS.some(g => g.value === v)) return v;
   if (v === 'Marriage' || v === 'Serious Dating') return 'Long-term relationship';
   if (v === 'Flirting' || v === 'Chatting') return 'Short-term relationship';
   return 'Long-term relationship';
 }
 
-function mapDistance(v: string | undefined): string {
-  if (v && DISTANCES.includes(v)) return v;
-  if (v === 'Anywhere') return '150+ km';
-  return 'Up to 50 km';
-}
-
-function mapKids(v: string | undefined): string {
-  if (v && KIDS.includes(v)) return v;
-  if (v === 'Have kids') return 'Has kids';
-  if (v === 'Flexible' || v === 'Prefer no kids' || v === 'No kids') return "Doesn't have kids";
-  return 'Open to kids';
+function mapDistance(v: string | undefined): number {
+  const m = (v || '').match(/up to (\d+) km/i);
+  if (m) {
+    const val = Number(m[1]);
+    if (DISTANCE_STEPS.includes(val)) return val;
+  }
+  return 100;
 }
 
 export default function PreferencesPage() {
   const router = useRouter();
   const { profile, refreshUser } = useAuth();
-  const rangeRef = useRef<HTMLDivElement>(null);
+  const ageRangeRef = useRef<HTMLDivElement>(null);
+  const distRef = useRef<HTMLDivElement>(null);
 
   const [age, setAge] = useState<[number, number]>([AGE_MIN, AGE_MAX]);
+  const [gender, setGender] = useState('both');
   const [goals, setGoals] = useState('Long-term relationship');
-  const [distance, setDistance] = useState('Up to 50 km');
-  const [kids, setKids] = useState('Open to kids');
+  const [distanceKm, setDistanceKm] = useState(50);
+  const [locationLabel, setLocationLabel] = useState('');
+  const [switches, setSwitches] = useState({ verified: true, photos: true, active: true });
   const [saving, setSaving] = useState(false);
-  const [done, setDone] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('locpicked') !== '1') return;
+    try {
+      const raw = localStorage.getItem('dogwu_location');
+      if (raw) {
+        const loc = JSON.parse(raw);
+        if (loc && loc.city) setLocationLabel(loc.city);
+      }
+    } catch {}
+  }, []);
 
   useEffect(() => {
     if (!profile) return;
     setAge(parseRange((profile as any).ageRange));
-    setGoals(mapGoals(profile.relationshipGoals || ''));
-    setDistance(mapDistance((profile as any).maxDistance || ''));
-    setKids(mapKids((profile as any).wantsKids || ''));
+    setGender(mapGender((profile as any).interestedIn));
+    setGoals(mapGoals(profile?.relationshipGoals || ''));
+    setDistanceKm(mapDistance((profile as any).maxDistance || ''));
+    setLocationLabel((profile as any)?.city || '');
   }, [profile]);
 
   const setAgeFromX = (which: 'min' | 'max', clientX: number) => {
-    const rect = rangeRef.current?.getBoundingClientRect();
+    const rect = ageRangeRef.current?.getBoundingClientRect();
     if (!rect) return;
     const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
     const val = Math.round(AGE_MIN + pct * (AGE_MAX - AGE_MIN));
@@ -97,143 +118,182 @@ export default function PreferencesPage() {
     window.addEventListener('pointerup', up);
   };
 
+  const startDist = (e: React.PointerEvent) => {
+    e.preventDefault();
+    const move = (ev: PointerEvent) => {
+      const rect = distRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      const pct = Math.max(0, Math.min(1, (ev.clientX - rect.left) / rect.width));
+      const idx = Math.round(pct * (DISTANCE_STEPS.length - 1));
+      setDistanceKm(DISTANCE_STEPS[idx]);
+    };
+    move(e.nativeEvent);
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
   const minPct = ((age[0] - AGE_MIN) / (AGE_MAX - AGE_MIN)) * 100;
   const maxPct = ((age[1] - AGE_MIN) / (AGE_MAX - AGE_MIN)) * 100;
+  const distIdx = Math.max(0, DISTANCE_STEPS.indexOf(distanceKm));
+  const distPct = (distIdx / (DISTANCE_STEPS.length - 1)) * 100;
+  const locValue = locationLabel || 'Select a location';
 
-  const filled = [(profile as any)?.ageRange, profile?.relationshipGoals, (profile as any)?.maxDistance, (profile as any)?.wantsKids].filter(Boolean).length;
-  const percent = Math.round((filled / 4) * 100);
+  const handleReset = () => {
+    setGender('female');
+    setGoals('Short-term relationship');
+    setAge([AGE_MIN, AGE_MAX]);
+    setDistanceKm(100);
+    setSwitches({ verified: true, photos: true, active: true });
+  };
 
-  const handleSave = async () => {
+  const handleApply = async () => {
+    if (saving) return;
     setSaving(true);
+    setSaved(false);
     try {
       const user = await account!.get();
-      await userService.updateProfile(user.$id, {
+      const payload: Record<string, unknown> = {
         ageRange: `${age[0]} - ${age[1]}`,
         relationshipGoals: goals,
-        maxDistance: distance,
-        wantsKids: kids,
-      } as any);
+        maxDistance: `Up to ${distanceKm} km`,
+        interestedIn: gender,
+      };
+      if ((profile as any)?.wantsKids) payload.wantsKids = (profile as any).wantsKids;
+      await userService.updateProfile(user.$id, payload as any);
       await refreshUser();
       setSaving(false);
-      setDone(true);
+      setSaved(true);
       setTimeout(() => router.back(), 1200);
     } catch {
       setSaving(false);
-      setDone(false);
+      setSaved(false);
     }
   };
+
+  const switchItems = [
+    { key: 'verified' as const, icon: '✣', cls: 'blue', label: 'Verified profiles only' },
+    { key: 'photos' as const, icon: '▣', cls: 'red', label: 'Profiles with photos' },
+    { key: 'active' as const, icon: 'ϟ', cls: 'green', label: 'Recently active' },
+  ];
 
   return (
     <AppShell header={<></>}>
       <style jsx global>{PREFERENCE_TEMPLATE_CSS}</style>
 
-      <main className="pf">
-        <div className="app-shell">
-          <header>
-            <div className="title-row">
-              <button className="back" aria-label="Go back" onClick={() => router.back()}>‹</button>
-              <div className="heading"><h1>Your Preferences</h1></div>
-              <div className="complete">{filled}/4 Complete</div>
+      <main className="dpr">
+        <div className="app">
+          <header className="topbar">
+            <div className="brand" aria-label="Dogwu Dating">
+              <div className="brand-mark"><span></span></div>
+              <div className="brand-copy">
+                <strong>DOGWU</strong>
+                <small>D A T <b>♥</b> I N G</small>
+              </div>
             </div>
-            <div className="subtitle">Tell us what you&apos;re looking for in a match.</div>
-            <div className="progress" aria-label="Progress">
-              {Array.from({ length: 4 }, (_, i) => <span key={i} />)}
-            </div>
-            <div className="complete-percent">{percent}% Complete</div>
+            <h1>Discover</h1>
+            <button className="filter-icon" aria-label="Open filters" onClick={() => router.push('/discover')}>
+              <i></i><i></i><i></i>
+            </button>
           </header>
 
-          <section className="card">
-            <div className="card-head">
-              <div className="icon-box">
-                <svg viewBox="0 0 24 24"><path d="M8 4h8v4h4v12H4V8h4z" /><path d="M9 4v4h6V4" /><path d="M8 12h8M8 16h5" /></svg>
-              </div>
-              <div className="head-copy">
-                <div className="head-title">Age Range</div>
-                <div className="head-sub">Select the age range you&apos;re interested in.</div>
-              </div>
-              <div className="head-value" id="ageValue">{age[0]} - {age[1]}</div>
+          <main className="sheet">
+            <div className="sheet-head">
+              <button className="close" aria-label="Close" onClick={() => router.back()}>×</button>
+              <h2>Discover Preferences</h2>
             </div>
-            <div className="age-body">
-              <div className="age-labels"><span id="minLabel">{age[0]}</span><span id="maxLabel">{age[1]}</span></div>
-              <div className="range" ref={rangeRef}>
-                <div className="range-fill" style={{ left: `${minPct}%`, right: `${100 - maxPct}%` }}></div>
-                <div className="thumb left" aria-label="Minimum age" role="slider" aria-valuemin={AGE_MIN} aria-valuemax={AGE_MAX} aria-valuenow={age[0]} onPointerDown={e => startDrag('min', e)} style={{ left: `${minPct}%` }}></div>
-                <div className="thumb right" aria-label="Maximum age" role="slider" aria-valuemin={AGE_MIN} aria-valuemax={AGE_MAX} aria-valuenow={age[1]} onPointerDown={e => startDrag('max', e)} style={{ left: `${maxPct}%` }}></div>
-              </div>
-              <div className="age-ticks">
-                <span>18</span><span>30</span><span>45</span><span>60</span><span>75</span><span>99</span>
-              </div>
-            </div>
-          </section>
 
-          <section className="card">
-            <div className="card-head">
-              <div className="icon-box">
-                <svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.4-8.8 10.1-8.8 10.1S3.2 14.2 3.2 8.8A4.8 4.8 0 0 1 12 6a4.8 4.8 0 0 1 8.8 2.8Z" /></svg>
-              </div>
-              <div className="head-copy">
-                <div className="head-title">Looking For</div>
-                <div className="head-sub">What type of relationship are you looking for?</div>
-              </div>
-              <div className="head-value" id="relationshipValue">{goals}</div>
-            </div>
-            <div className="options" id="relationshipOptions">
-              {RELATIONSHIPS.map(r => (
-                <button className={`option${goals === r.value ? ' selected' : ''}`} key={r.value} onClick={() => setGoals(r.value)}>
-                  <div className="option-icon">{r.icon}</div>
-                  <div className="option-copy"><div className="option-title">{r.title}</div><div className="option-sub">{r.sub}</div></div>
-                  <div className={`radio${goals === r.value ? ' selected' : ''}`}></div>
-                </button>
-              ))}
-            </div>
-          </section>
+            <section className="section first">
+              <h3><span className="pink person">●</span> Who are you looking for?</h3>
 
-          <section className="card">
-            <div className="card-head">
-              <div className="icon-box">
-                <svg viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z" /><circle cx="12" cy="9" r="2.3" /></svg>
-              </div>
-              <div className="head-copy">
-                <div className="head-title">Distance</div>
-                <div className="head-sub">How far are you willing to go?</div>
-              </div>
-              <div className="head-value" id="distanceValue">{distance}</div>
-            </div>
-            <div className="distance-body">
-              <div className="distance-buttons" id="distanceButtons">
-                {DISTANCES.map(d => (
-                  <button className={`distance-btn${distance === d ? ' selected' : ''}`} key={d} onClick={() => setDistance(d)}>{d}</button>
-                ))}
-              </div>
-            </div>
-          </section>
+              <div className="preference-card">
+                <div className="row gender-row">
+                  <label>Gender</label>
+                  <div className="segmented gender">
+                    {GENDERS.map(g => (
+                      <button key={g.value} className={gender === g.value ? 'selected' : ''} onClick={() => setGender(g.value)}>
+                        {g.label}{gender === g.value && <span className="check">✓</span>}
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-          <section className="card">
-            <div className="card-head">
-              <div className="icon-box">
-                <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3" /><path d="M3 20c.5-4 2.5-6 6-6s5.5 2 6 6" /><path d="M16 11a3 3 0 1 0-1-5.8M17 14c2.5.2 3.8 2 4.2 5" /></svg>
+                <div className="range-block">
+                  <div className="range-title">
+                    <span>Age Range</span><span>{age[0]} – {age[1]}</span>
+                  </div>
+                  <div className="dual-range" ref={ageRangeRef}>
+                    <div className="track"></div>
+                    <div className="active-track" style={{ left: `${minPct}%`, right: `${100 - maxPct}%` }}></div>
+                    <span className="knob left" onPointerDown={e => startDrag('min', e)} style={{ left: `calc(${minPct}% - 11px)` }}></span>
+                    <span className="knob right" onPointerDown={e => startDrag('max', e)} style={{ left: `calc(${maxPct}% - 11px)` }}></span>
+                  </div>
+                  <div className="range-labels"><span>{AGE_MIN}</span><span>{AGE_MAX}</span></div>
+                </div>
+
+                <div className="range-block distance">
+                  <div className="range-title">
+                    <span>Distance</span><span>Up to {distanceKm} km</span>
+                  </div>
+                  <div className="single-range" ref={distRef} onPointerDown={startDist}>
+                    <div className="track"></div>
+                    <div className="active-track" style={{ right: `${100 - distPct}%` }}></div>
+                    <span className="knob" style={{ left: `calc(${distPct}% - 11px)` }}></span>
+                  </div>
+                  <div className="distance-labels">
+                    <span>{DISTANCE_STEPS[0]} km</span><span>{DISTANCE_STEPS[1]} km</span><span>{DISTANCE_STEPS[2]} km</span><span>{DISTANCE_STEPS[3]} km</span>
+                  </div>
+                </div>
               </div>
-              <div className="head-copy">
-                <div className="head-title">Kids</div>
-                <div className="head-sub">What&apos;s your preference about having kids?</div>
+            </section>
+
+            <section className="premium">
+              <div className="crown">♛</div>
+              <div className="premium-copy">
+                <div><strong>Advanced filters</strong> <em>Premium</em></div>
+                <p>Go Premium to unlock more powerful filters<br className="desktop-break" /> and find your perfect match.</p>
               </div>
-              <div className="head-value" id="kidsValue">{kids}</div>
-            </div>
-            <div className="kids-body">
-              <div className="kids-buttons" id="kidsButtons">
-                {KIDS.map(k => (
-                  <button className={`kids-btn${kids === k ? ' selected' : ''}`} key={k} onClick={() => setKids(k)}>
-                    <span>{k}</span><span className="mini-radio"></span>
+              <button className="upgrade" onClick={() => alert('Premium filters are ready for your upgrade flow.')}>Upgrade</button>
+            </section>
+
+            <section className="simple-row" onClick={() => { window.location.href = '/location.html?return=/edit-profile/preferences'; }}>
+              <div className="left-content"><span className="outline-icon pin">⌾</span><strong>Location</strong></div>
+              <div className="value">{locValue} <span className="chevron">›</span></div>
+            </section>
+
+            <section className="section relationship">
+              <h3><span className="pink heart">♥</span> Relationship</h3>
+              <div className="choice-card">
+                {GOAL_OPTIONS.map(o => (
+                  <button key={o.value} className={goals === o.value ? 'selected' : ''} onClick={() => setGoals(o.value)}>
+                    {o.label}{goals === o.value && <span className="check">✓</span>}
                   </button>
                 ))}
               </div>
-            </div>
-          </section>
+            </section>
 
-          <button className="save" id="saveBtn" onClick={handleSave} disabled={saving}>
-            {done ? 'Preferences Saved ✓' : saving ? 'Saving...' : 'Save Preferences'}
-          </button>
-          <div className="home-indicator"></div>
+            <section className="section profile">
+              <h3><span className="pink shield">◈</span> Profile Preferences</h3>
+              <div className="switch-card">
+                {switchItems.map(s => (
+                  <div className="switch-row" key={s.key}>
+                    <div className="switch-label"><span className={`${s.cls} icon`}>{s.icon}</span> {s.label}</div>
+                    <button className={`switch ${switches[s.key] ? 'on' : ''}`} aria-label={s.label} onClick={() => setSwitches(prev => ({ ...prev, [s.key]: !prev[s.key] }))}><span></span></button>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <div className="bottom-actions">
+              <button className="reset" onClick={handleReset}><span>↶</span> Reset Filters</button>
+              <button className="apply" onClick={handleApply} disabled={saving}>
+                <span>✓</span>{saved ? 'Filters Applied' : saving ? 'Applying…' : 'Apply Filters'}
+              </button>
+            </div>
+          </main>
         </div>
       </main>
     </AppShell>

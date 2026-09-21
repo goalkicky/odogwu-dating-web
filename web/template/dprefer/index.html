@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Dogwu Dating — Discover Preferences</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand" aria-label="Dogwu Dating">
+        <div class="brand-mark"><span></span></div>
+        <div class="brand-copy">
+          <strong>DOGWU</strong>
+          <small>D A T <b>♥</b> I N G</small>
+        </div>
+      </div>
+      <h1>Discover</h1>
+      <button class="filter-icon" aria-label="Open filters">
+        <i></i><i></i><i></i>
+      </button>
+    </header>
+
+    <main class="sheet">
+      <div class="sheet-head">
+        <button class="close" aria-label="Close">×</button>
+        <h2>Discover Preferences</h2>
+      </div>
+
+      <section class="section first">
+        <h3><span class="pink person">●</span> Who are you looking for?</h3>
+
+        <div class="preference-card">
+          <div class="row gender-row">
+            <label>Gender</label>
+            <div class="segmented gender">
+              <button>Men</button>
+              <button class="selected">Women <span class="check">✓</span></button>
+              <button>Everyone</button>
+            </div>
+          </div>
+
+          <div class="range-block">
+            <div class="range-title">
+              <span>Age Range</span><span>18 – 99</span>
+            </div>
+            <div class="dual-range">
+              <div class="track"></div>
+              <div class="active-track"></div>
+              <span class="knob left"></span>
+              <span class="knob right"></span>
+            </div>
+            <div class="range-labels"><span>18</span><span>99</span></div>
+          </div>
+
+          <div class="range-block distance">
+            <div class="range-title">
+              <span>Distance</span><span>Up to 100 km</span>
+            </div>
+            <div class="single-range">
+              <div class="track"></div>
+              <div class="active-track"></div>
+              <span class="knob"></span>
+            </div>
+            <div class="distance-labels">
+              <span>10 km</span><span>25 km</span><span>50 km</span><span>100 km</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="premium">
+        <div class="crown">♛</div>
+        <div class="premium-copy">
+          <div><strong>Advanced filters</strong> <em>Premium</em></div>
+          <p>Go Premium to unlock more powerful filters<br class="desktop-break"> and find your perfect match.</p>
+        </div>
+        <button class="upgrade">Upgrade</button>
+      </section>
+
+      <section class="simple-row">
+        <div class="left-content"><span class="outline-icon pin">⌾</span><strong>Location</strong></div>
+        <div class="value">Lagos, Nigeria <span class="chevron">›</span></div>
+      </section>
+
+      <section class="section relationship">
+        <h3><span class="pink heart">♥</span> Relationship</h3>
+        <div class="choice-card">
+          <button class="selected">Serious Relationship <span class="check">✓</span></button>
+          <button>Flirting</button>
+          <button>Dating</button>
+          <button>Friendship</button>
+        </div>
+      </section>
+
+      <section class="section profile">
+        <h3><span class="pink shield">◈</span> Profile Preferences</h3>
+        <div class="switch-card">
+          <div class="switch-row">
+            <div class="switch-label"><span class="blue icon">✣</span> Verified profiles only</div>
+            <button class="switch on" aria-label="Verified profiles only"><span></span></button>
+          </div>
+          <div class="switch-row">
+            <div class="switch-label"><span class="red icon">▣</span> Profiles with photos</div>
+            <button class="switch on" aria-label="Profiles with photos"><span></span></button>
+          </div>
+          <div class="switch-row">
+            <div class="switch-label"><span class="green icon">ϟ</span> Recently active</div>
+            <button class="switch on" aria-label="Recently active"><span></span></button>
+          </div>
+        </div>
+      </section>
+
+      <div class="bottom-actions">
+        <button class="reset"><span>↶</span> Reset Filters</button>
+        <button class="apply"><span>✓</span> Apply Filters</button>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
