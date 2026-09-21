@@ -105,12 +105,25 @@ export default function BasicInfoPage() {
     setOccupation((profile as any).occupation || '');
   }, [profile]);
 
+  useEffect(() => {
+    if (!profile) return;
+    if (new URLSearchParams(window.location.search).get('locpicked') !== '1') return;
+    let raw: string | null = null;
+    try { raw = localStorage.getItem('dogwu_location'); } catch { return; }
+    if (!raw) return;
+    try {
+      const loc = JSON.parse(raw);
+      const picked = (loc && loc.city) || (loc && loc.name && loc.country && loc.country.toLowerCase() !== loc.name.toLowerCase() ? `${loc.name}, ${loc.country}` : (loc && loc.name) || '');
+      if (picked) { setCity(picked); showToast('Location updated'); }
+    } catch {}
+  }, [profile]);
+
   const age = calcAge(dob);
   const basics = [
     { field: 'Name', value: name || '—', sub: 'This is how it will appear on your profile.', twoLine: false, onEdit: () => setTextSheet({ label: 'Name', value: name, placeholder: 'Your name', onSave: (v: string) => { setName(v); showToast('Name updated'); } }) },
     { field: 'Age', value: age ? String(age) : '—', sub: "Your age won't be shown on your profile.", twoLine: false, onEdit: () => setTextSheet({ label: 'Date of Birth', value: dob, type: 'date', onSave: (v: string) => { setDob(v); showToast('Age updated'); } }) },
     { field: 'Gender', value: gender ? (gender.charAt(0).toUpperCase() + gender.slice(1)) : '—', sub: 'This helps us show you better matches.', twoLine: false, onEdit: () => setShowGender(true) },
-    { field: 'Location', value: city || '—', sub: 'Your location helps us find matches near you.', twoLine: false, onEdit: () => setTextSheet({ label: 'Location', value: city, placeholder: 'Lagos, Nigeria', onSave: (v: string) => { setCity(v); showToast('Location updated'); } }) },
+    { field: 'Location', value: city || '—', sub: 'Your location helps us find matches near you.', twoLine: false, onEdit: () => { window.location.href = '/location.html?return=/edit-profile/basic'; } },
     { field: 'Course of Study', value: courseOfStudy || '—', sub: 'What did you study?', twoLine: false, onEdit: () => setTextSheet({ label: 'Course of Study', value: courseOfStudy, placeholder: 'e.g. Computer Science', onSave: (v: string) => { setCourseOfStudy(v); showToast('Course updated'); } }) },
     { field: 'Institution', value: institution || '—', sub: 'Where did you attend?', twoLine: false, onEdit: () => setTextSheet({ label: 'Institution', value: institution, placeholder: 'e.g. University of Lagos', onSave: (v: string) => { setInstitution(v); showToast('Institution updated'); } }) },
     { field: 'Occupation', value: occupation || '—', sub: 'What do you do?', twoLine: false, onEdit: () => setTextSheet({ label: 'Occupation', value: occupation, placeholder: 'e.g. Software Developer', onSave: (v: string) => { setOccupation(v); showToast('Occupation updated'); } }) },

@@ -174,6 +174,19 @@ export default function EditProfilePage() {
       .catch(() => {});
   }, [uid]);
 
+  useEffect(() => {
+    if (!profile) return;
+    if (new URLSearchParams(window.location.search).get('locpicked') !== '1') return;
+    let raw: string | null = null;
+    try { raw = localStorage.getItem('dogwu_location'); } catch { return; }
+    if (!raw) return;
+    try {
+      const loc = JSON.parse(raw);
+      const picked = (loc && loc.city) || (loc && loc.name && loc.country && loc.country.toLowerCase() !== loc.name.toLowerCase() ? `${loc.name}, ${loc.country}` : (loc && loc.name) || '');
+      if (picked) { setCity(picked); showToast('Location updated'); }
+    } catch {}
+  }, [profile]);
+
   const completionData = {
     fullName: name,
     photos,
@@ -199,7 +212,7 @@ export default function EditProfilePage() {
     { label: 'Name', value: name || '—', onEdit: () => openText('Name', name, setName, { placeholder: 'Your name' }) },
     { label: 'Age', value: age ? String(age) : '—', onEdit: () => openText('Date of Birth', dob, setDob, { type: 'date' }) },
     { label: 'Gender', value: gender || '—', onEdit: () => setShowGender(true) },
-    { label: 'Location', value: city || '—', onEdit: () => openText('Location', city, setCity, { placeholder: 'Lagos, Nigeria' }) },
+    { label: 'Location', value: city || '—', onEdit: () => { window.location.href = '/location.html?return=/edit-profile'; } },
     { label: 'Course of Study', value: courseOfStudy || '—', onEdit: () => openText('Course of Study', courseOfStudy, setCourseOfStudy, { placeholder: 'e.g. Computer Science' }) },
     { label: 'Institution', value: institution || '—', onEdit: () => openText('Institution', institution, setInstitution, { placeholder: 'e.g. University of Lagos' }) },
     { label: 'Occupation', value: occupation || '—', onEdit: () => openText('Occupation', occupation, setOccupation, { placeholder: 'e.g. Software Developer' }) },

@@ -494,11 +494,16 @@ document.getElementById("currentLocation").addEventListener("click",()=>{detectC
 document.getElementById("locationButton").addEventListener("click",()=>{
  const button=document.getElementById("locationButton");
  try{
-  localStorage.setItem("dogwu_location",JSON.stringify({name:selection.name,type:selection.type,country:selection.country,iso:selection.iso,lat:selection.lat,lon:selection.lon}));
+  const city=selection.country&&selection.country.toLowerCase()!==selection.name.toLowerCase()?selection.name+", "+selection.country:selection.name;
+  localStorage.setItem("dogwu_location",JSON.stringify({name:selection.name,type:selection.type,country:selection.country,iso:selection.iso,lat:selection.lat,lon:selection.lon,city}));
   localStorage.setItem("dogwu_location_justset","1");
  }catch(e){}
  button.textContent="Location set ✓";
- setTimeout(()=>{location.href="/nearby";},1400);
+ setTimeout(()=>{
+  const ret=new URLSearchParams(location.search).get("return")||"/nearby";
+  if(!ret.startsWith("/")){location.href="/nearby";return;}
+  location.href=ret+(ret.indexOf("/edit-profile")===0?(ret.indexOf("?")===-1?"?":"&")+"locpicked=1":"");
+ },1400);
 });
 
 applySelection("Thailand","Country","Thailand","th",13.7563,100.5018);
