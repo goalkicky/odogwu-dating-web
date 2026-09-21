@@ -6,22 +6,17 @@
 <title>Dogwu Dating - Change Location</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#d8d8d8;color:#171717}
+html,body{width:100%;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#ececec;color:#171717}
 body{overflow-x:hidden}
-.app-background{position:fixed;inset:0;background:#d7d7d7;overflow:hidden}
-.app-header{height:180px;position:relative;display:flex;justify-content:center;padding-top:56px}
-.back-arrow{position:absolute;left:31px;top:103px;width:15px;height:15px;border-left:2px solid #111;border-bottom:2px solid #111;transform:rotate(45deg);cursor:pointer}
-.logo{text-align:center;color:#b31319}
-.logo-main{font-family:Georgia,"Times New Roman",serif;font-size:48px;line-height:48px;font-weight:700;letter-spacing:-2px}
-.logo-main::before{content:"◔";font-size:45px;display:inline-block;margin-right:3px}
-.logo-heart{font-size:17px;position:relative;top:-27px;margin-left:-2px}
-.logo-sub{margin-top:7px;font-size:12px;font-weight:500;letter-spacing:7px;color:#222}
-.logo-sub::before,.logo-sub::after{content:"";display:inline-block;vertical-align:middle;width:26px;height:1px;background:#b31319;margin:0 11px}
-.chat-icon{position:absolute;right:30px;top:101px;width:34px;height:28px;border:2px solid #111;border-radius:50%;cursor:pointer}
-.chat-icon::before{content:"";position:absolute;right:-3px;bottom:-5px;width:9px;height:9px;border-left:2px solid #111;transform:rotate(-30deg)}
-.chat-dots{position:absolute;left:8px;top:7px;font-size:16px;letter-spacing:2px}
-.notification{position:absolute;top:-7px;right:-7px;width:22px;height:22px;border-radius:50%;background:#d9182d;color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
-.location-sheet{position:fixed;left:0;right:0;bottom:0;top:181px;background:#fff;border-radius:30px 30px 0 0;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 -2px 15px rgba(0,0,0,.06)}
+.topbar{position:fixed;top:0;left:0;right:0;height:85px;display:grid;grid-template-columns:50px 1fr 50px;align-items:center;background:#fff;padding:0 14px}
+.icon-btn,.chat-btn{border:0;background:transparent}
+.back{font-size:43px;font-weight:200;line-height:1;text-align:left;color:#202020;transform:translateY(-2px);cursor:pointer;padding:0}
+.brand-logo{justify-self:center;height:44px;width:auto;object-fit:contain;display:block}
+.chat-btn{position:relative;font-size:24px;cursor:pointer}
+.bubble{border:2px solid #222;border-radius:50%;padding:2px 5px;font-size:14px;letter-spacing:1px;display:inline-block;line-height:20px;position:relative}
+.bubble:after{content:"";position:absolute;bottom:-5px;left:5px;border-width:5px 5px 0 0;border-style:solid;border-color:#222 transparent transparent transparent}
+.chat-btn em{position:absolute;right:-2px;top:-5px;background:#df003f;color:#fff;width:22px;height:22px;border-radius:50%;font-size:12px;font-style:normal;display:grid;place-items:center;font-weight:700}
+.location-sheet{position:fixed;left:0;right:0;bottom:0;top:85px;background:#fff;display:flex;flex-direction:column;overflow:hidden}
 .sheet-header{height:91px;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center}
 .sheet-title{font-size:25px;font-weight:700}
 .close-button{position:absolute;left:30px;top:39px;width:22px;height:22px;cursor:pointer}
@@ -72,9 +67,7 @@ body{overflow-x:hidden}
 .location-button{width:100%;height:74px;border:none;border-radius:22px;background:linear-gradient(180deg,#ff2a38 0%,#ee0e2e 100%);color:white;font-size:23px;font-weight:500;cursor:pointer;box-shadow:0 3px 7px rgba(230,0,30,.18);transition:transform .15s ease,opacity .15s ease}
 .location-button:active{transform:scale(.985);opacity:.9}
 @media(max-width:600px){
-.app-header{height:130px;padding-top:28px}.back-arrow{left:24px;top:78px}.chat-icon{right:23px;top:76px}
-.logo-main{font-size:36px;line-height:37px}.logo-main::before{font-size:34px}.logo-sub{font-size:9px;letter-spacing:5px}
-.logo-sub::before,.logo-sub::after{width:18px;margin:0 6px}.location-sheet{top:130px;border-radius:27px 27px 0 0}
+.topbar{height:72px;grid-template-columns:44px 1fr 44px}.brand-logo{height:40px}.back{font-size:36px}.location-sheet{top:72px}
 .sheet-header{height:72px}.sheet-title{font-size:20px}.close-button{left:22px;top:30px}
 .search-container{padding:5px 18px 9px}.search-box{height:56px}.search-input{font-size:17px;margin-left:14px}
 .selected-country{margin:5px 18px 11px;min-height:70px;border-radius:15px;padding:9px 14px}
@@ -87,27 +80,22 @@ body{overflow-x:hidden}
 .info-description{font-size:12px;line-height:1.35}.bottom-action{padding:7px 18px 14px}.location-button{height:57px;border-radius:17px;font-size:18px}
 }
 @media(max-height:700px){
-.location-sheet{top:105px}.app-header{height:105px}.back-arrow{top:60px}.chat-icon{top:59px}.logo-main{font-size:31px;line-height:31px}
+.topbar{height:62px;grid-template-columns:44px 1fr 44px}.brand-logo{height:36px}.back{font-size:34px}.location-sheet{top:62px}
 .sheet-header{height:57px}.close-button{top:22px}.search-box{height:49px}.selected-country{min-height:62px}.city-item{min-height:67px}
 .city-image{width:50px;height:50px}.current-location{min-height:70px}.current-icon{width:45px;height:45px}.info-card{min-height:82px}.location-button{height:51px}
 }
 @media(min-width:601px){
 .location-sheet{max-width:707px;margin:auto;left:50%;right:auto;width:100%;transform:translateX(-50%)}
-.app-background{display:flex;justify-content:center}
+.topbar{max-width:707px;margin:auto;left:50%;right:auto;width:100%;transform:translateX(-50%)}
 }
 </style>
 </head>
 <body>
-<div class="app-background">
-<header class="app-header">
-<div class="back-arrow" id="backArrow"></div>
-<div class="logo">
-<div class="logo-main">dogwu<span class="logo-heart">♥</span></div>
-<div class="logo-sub">DATING</div>
-</div>
-<div class="chat-icon" id="chatIcon"><span class="chat-dots">•••</span><span class="notification">3</span></div>
+<header class="topbar">
+<button class="icon-btn back" id="backArrow" aria-label="Go back" type="button">‹</button>
+<img class="brand-logo" src="/o-logo.png" alt="Odogwu Dating" />
+<button class="chat-btn" id="chatIcon" aria-label="Messages" type="button"><span class="bubble">•••</span><em>3</em></button>
 </header>
-</div>
 
 <section class="location-sheet">
 <div class="sheet-header">
