@@ -47,6 +47,7 @@ body{overflow-x:hidden}
 .content-scroll::-webkit-scrollbar{display:none}
 .city-heading{font-size:19px;font-weight:700;padding:5px 29px 9px}
 .city-list{padding:0 29px}
+.empty-cities{margin:0 29px 15px;padding:24px 18px;border-radius:16px;background:#faf6f7;color:#999;font-size:15px;text-align:center}
 .city-item{min-height:99px;border-bottom:1px solid #e1e1e1;display:flex;align-items:center;position:relative;cursor:pointer}
 .city-image{width:72px;height:72px;border-radius:50%;object-fit:cover;flex-shrink:0;margin-right:17px;background:#ddd}
 .city-info{min-width:0;padding-right:65px}
@@ -133,44 +134,7 @@ body{overflow-x:hidden}
 
 <div class="content-scroll">
 <div class="city-heading" id="cityHeading">Popular cities in Thailand</div>
-<div class="city-list" id="cityList">
-
-<div class="city-item">
-<img class="city-image" src="https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=200&q=80" alt="Bangkok">
-<div class="city-info"><div class="city-name">Bangkok</div><div class="city-location">Bangkok, Thailand</div></div>
-<div class="city-distance">0 km</div>
-</div>
-
-<div class="city-item">
-<img class="city-image" src="https://images.unsplash.com/photo-1598970605070-a38a6ccd3a2d?auto=format&fit=crop&w=200&q=80" alt="Chiang Mai">
-<div class="city-info"><div class="city-name">Chiang Mai</div><div class="city-location">Chiang Mai, Thailand</div></div>
-<div class="city-distance">693 km</div>
-</div>
-
-<div class="city-item">
-<img class="city-image" src="https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?auto=format&fit=crop&w=200&q=80" alt="Phuket">
-<div class="city-info"><div class="city-name">Phuket</div><div class="city-location">Phuket, Thailand</div></div>
-<div class="city-distance">863 km</div>
-</div>
-
-<div class="city-item">
-<img class="city-image" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=200&q=80" alt="Pattaya">
-<div class="city-info"><div class="city-name">Pattaya</div><div class="city-location">Chonburi, Thailand</div></div>
-<div class="city-distance">1051 km</div>
-</div>
-
-<div class="city-item">
-<img class="city-image" src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=200&q=80" alt="Krabi">
-<div class="city-info"><div class="city-name">Krabi</div><div class="city-location">Krabi, Thailand</div></div>
-<div class="city-distance">1121 km</div>
-</div>
-
-<div class="city-item">
-<img class="city-image" src="https://images.unsplash.com/photo-1563492065599-3520f775eeed?auto=format&fit=crop&w=200&q=80" alt="Hatyai">
-<div class="city-info"><div class="city-name">Hatyai</div><div class="city-location">Songkhla, Thailand</div></div>
-<div class="city-distance">1187 km</div>
-</div>
-</div>
+<div class="city-list" id="cityList"></div>
 
 <div class="current-location" id="currentLocation">
 <div class="current-icon"><div class="current-pin"></div></div>
@@ -201,7 +165,226 @@ const clearSearch=document.getElementById("clearSearch");
 const countryName=document.getElementById("countryName");
 const countryType=document.getElementById("countryType");
 const cityHeading=document.getElementById("cityHeading");
+const cityList=document.getElementById("cityList");
 const locationButton=document.getElementById("locationButton");
+
+const CITY_IMG="?auto=format&fit=crop&w=200&q=80";
+const SKYLINES=[
+ "https://images.unsplash.com/photo-1449824913935-59a10b8d2000"+CITY_IMG,
+ "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df"+CITY_IMG,
+ "https://images.unsplash.com/photo-1444723121867-7a241cacace9"+CITY_IMG
+];
+
+const POPULAR_CITIES={
+ th:[
+  {name:"Bangkok",location:"Bangkok, Thailand",dist:"0 km",img:"https://images.unsplash.com/photo-1508009603885-50cf7c579365"+CITY_IMG,lat:13.7563,lon:100.5018},
+  {name:"Chiang Mai",location:"Chiang Mai, Thailand",dist:"693 km",img:"https://images.unsplash.com/photo-1598970605070-a38a6ccd3a2d"+CITY_IMG,lat:18.7883,lon:98.9853},
+  {name:"Phuket",location:"Phuket, Thailand",dist:"863 km",img:"https://images.unsplash.com/photo-1589394815804-964ed0be2eb5"+CITY_IMG,lat:7.8804,lon:98.3923},
+  {name:"Pattaya",location:"Chonburi, Thailand",dist:"1051 km",img:"https://images.unsplash.com/photo-1537996194471-e657df975ab4"+CITY_IMG,lat:12.9236,lon:100.8825},
+  {name:"Krabi",location:"Krabi, Thailand",dist:"1121 km",img:"https://images.unsplash.com/photo-1552465011-b4e21bf6e79a"+CITY_IMG,lat:8.0863,lon:98.9063},
+  {name:"Hatyai",location:"Songkhla, Thailand",dist:"1187 km",img:"https://images.unsplash.com/photo-1563492065599-3520f775eeed"+CITY_IMG,lat:7.0084,lon:100.4747}
+ ],
+ ng:[
+  {name:"Lagos",location:"Lagos, Nigeria",lat:6.5244,lon:3.3792},
+  {name:"Abuja",location:"Federal Capital Territory, Nigeria",lat:9.0765,lon:7.3986},
+  {name:"Kano",location:"Kano, Nigeria",lat:12.0022,lon:8.592},
+  {name:"Ibadan",location:"Oyo, Nigeria",lat:7.3775,lon:3.947},
+  {name:"Port Harcourt",location:"Rivers, Nigeria",lat:4.8156,lon:7.0498},
+  {name:"Benin City",location:"Edo, Nigeria",lat:6.335,lon:5.6037}
+ ],
+ gh:[
+  {name:"Accra",location:"Greater Accra, Ghana",lat:5.6037,lon:-0.187},
+  {name:"Kumasi",location:"Ashanti, Ghana",lat:6.6885,lon:-1.6244},
+  {name:"Tamale",location:"Northern, Ghana",lat:9.4008,lon:-0.8393},
+  {name:"Takoradi",location:"Western, Ghana",lat:4.8845,lon:-1.7554},
+  {name:"Cape Coast",location:"Central, Ghana",lat:5.1053,lon:-1.2466},
+  {name:"Tema",location:"Greater Accra, Ghana",lat:5.6698,lon:0.0094}
+ ],
+ ke:[
+  {name:"Nairobi",location:"Nairobi, Kenya",lat:-1.2864,lon:36.8172},
+  {name:"Mombasa",location:"Mombasa, Kenya",lat:-4.0435,lon:39.6682},
+  {name:"Kisumu",location:"Kisumu, Kenya",lat:-0.1022,lon:34.7617},
+  {name:"Nakuru",location:"Nakuru, Kenya",lat:-0.3031,lon:36.08},
+  {name:"Eldoret",location:"Uasin Gishu, Kenya",lat:0.5143,lon:35.2698},
+  {name:"Thika",location:"Kiambu, Kenya",lat:-1.0332,lon:37.0693}
+ ],
+ za:[
+  {name:"Johannesburg",location:"Gauteng, South Africa",lat:-26.2041,lon:28.0473},
+  {name:"Cape Town",location:"Western Cape, South Africa",lat:-33.9249,lon:18.4241},
+  {name:"Durban",location:"KwaZulu-Natal, South Africa",lat:-29.8587,lon:31.0218},
+  {name:"Pretoria",location:"Gauteng, South Africa",lat:-25.7479,lon:28.2293},
+  {name:"Gqeberha",location:"Eastern Cape, South Africa",lat:-33.9189,lon:25.5701},
+  {name:"Bloemfontein",location:"Free State, South Africa",lat:-29.0852,lon:26.1596}
+ ],
+ eg:[
+  {name:"Cairo",location:"Cairo, Egypt",lat:30.0444,lon:31.2357},
+  {name:"Alexandria",location:"Alexandria, Egypt",lat:31.2001,lon:29.9187},
+  {name:"Giza",location:"Giza, Egypt",lat:30.0131,lon:31.2089},
+  {name:"Luxor",location:"Luxor, Egypt",lat:25.6872,lon:32.6396},
+  {name:"Aswan",location:"Aswan, Egypt",lat:24.0889,lon:32.8998},
+  {name:"Hurghada",location:"Red Sea, Egypt",lat:27.2579,lon:33.8116}
+ ],
+ et:[
+  {name:"Addis Ababa",location:"Addis Ababa, Ethiopia",lat:9.032,lon:38.7469},
+  {name:"Dire Dawa",location:"Dire Dawa, Ethiopia",lat:9.5931,lon:41.8661},
+  {name:"Mekelle",location:"Tigray, Ethiopia",lat:13.4964,lon:39.4753},
+  {name:"Gondar",location:"Amhara, Ethiopia",lat:12.6036,lon:37.4521},
+  {name:"Hawassa",location:"Sidama, Ethiopia",lat:7.0622,lon:38.4764},
+  {name:"Adama",location:"Oromia, Ethiopia",lat:8.54,lon:39.27}
+ ],
+ tz:[
+  {name:"Dar es Salaam",location:"Dar es Salaam, Tanzania",lat:-6.7924,lon:39.2083},
+  {name:"Mwanza",location:"Mwanza, Tanzania",lat:-2.5164,lon:32.9178},
+  {name:"Arusha",location:"Arusha, Tanzania",lat:-3.3869,lon:36.683},
+  {name:"Dodoma",location:"Dodoma, Tanzania",lat:-6.163,lon:35.7516},
+  {name:"Zanzibar City",location:"Zanzibar, Tanzania",lat:-6.1639,lon:39.1979},
+  {name:"Mbeya",location:"Mbeya, Tanzania",lat:-8.91,lon:33.46}
+ ],
+ ug:[
+  {name:"Kampala",location:"Central, Uganda",lat:0.3476,lon:32.5825},
+  {name:"Gulu",location:"Northern, Uganda",lat:2.7746,lon:32.299},
+  {name:"Mbarara",location:"Western, Uganda",lat:-0.6011,lon:30.656},
+  {name:"Jinja",location:"Eastern, Uganda",lat:0.4474,lon:33.2026},
+  {name:"Entebbe",location:"Central, Uganda",lat:0.0575,lon:32.478},
+  {name:"Kabale",location:"Western, Uganda",lat:-1.2498,lon:29.9894}
+ ],
+ ma:[
+  {name:"Casablanca",location:"Casablanca-Settat, Morocco",lat:33.5731,lon:-7.5898},
+  {name:"Rabat",location:"Rabat-Salé-Kénitra, Morocco",lat:34.0209,lon:-6.8416},
+  {name:"Marrakesh",location:"Marrakesh-Safi, Morocco",lat:31.6295,lon:-7.9811},
+  {name:"Fes",location:"Fès-Meknès, Morocco",lat:34.0181,lon:-5.0078},
+  {name:"Tangier",location:"Tanger-Tétouan, Morocco",lat:35.7595,lon:-5.834},
+  {name:"Agadir",location:"Souss-Massa, Morocco",lat:30.4278,lon:-9.5981}
+ ],
+ us:[
+  {name:"New York",location:"New York, United States",lat:40.7128,lon:-74.006},
+  {name:"Los Angeles",location:"California, United States",lat:34.0522,lon:-118.2437},
+  {name:"Chicago",location:"Illinois, United States",lat:41.8781,lon:-87.6298},
+  {name:"Houston",location:"Texas, United States",lat:29.7604,lon:-95.3698},
+  {name:"Miami",location:"Florida, United States",lat:25.7617,lon:-80.1918},
+  {name:"San Francisco",location:"California, United States",lat:37.7749,lon:-122.4194}
+ ],
+ gb:[
+  {name:"London",location:"England, United Kingdom",lat:51.5074,lon:-0.1278},
+  {name:"Manchester",location:"England, United Kingdom",lat:53.4808,lon:-2.2426},
+  {name:"Birmingham",location:"England, United Kingdom",lat:52.4862,lon:-1.8904},
+  {name:"Liverpool",location:"England, United Kingdom",lat:53.4084,lon:-2.9916},
+  {name:"Glasgow",location:"Scotland, United Kingdom",lat:55.8642,lon:-4.2518},
+  {name:"Leeds",location:"England, United Kingdom",lat:53.8008,lon:-1.5491}
+ ],
+ ca:[
+  {name:"Toronto",location:"Ontario, Canada",lat:43.6532,lon:-79.3832},
+  {name:"Vancouver",location:"British Columbia, Canada",lat:49.2827,lon:-123.1207},
+  {name:"Montreal",location:"Quebec, Canada",lat:45.5017,lon:-73.5673},
+  {name:"Calgary",location:"Alberta, Canada",lat:51.0447,lon:-114.0719},
+  {name:"Ottawa",location:"Ontario, Canada",lat:45.4215,lon:-75.6972},
+  {name:"Edmonton",location:"Alberta, Canada",lat:53.5461,lon:-113.4938}
+ ],
+ in:[
+  {name:"Mumbai",location:"Maharashtra, India",lat:19.076,lon:72.8777},
+  {name:"Delhi",location:"Delhi, India",lat:28.7041,lon:77.1025},
+  {name:"Bengaluru",location:"Karnataka, India",lat:12.9716,lon:77.5946},
+  {name:"Hyderabad",location:"Telangana, India",lat:17.385,lon:78.4867},
+  {name:"Chennai",location:"Tamil Nadu, India",lat:13.0827,lon:80.2707},
+  {name:"Kolkata",location:"West Bengal, India",lat:22.5726,lon:88.3639}
+ ],
+ ph:[
+  {name:"Manila",location:"Metro Manila, Philippines",lat:14.5995,lon:120.9842},
+  {name:"Cebu City",location:"Central Visayas, Philippines",lat:10.3157,lon:123.8854},
+  {name:"Davao City",location:"Davao Region, Philippines",lat:7.1907,lon:125.4553},
+  {name:"Quezon City",location:"Metro Manila, Philippines",lat:14.676,lon:121.0437},
+  {name:"Makati",location:"Metro Manila, Philippines",lat:14.5547,lon:121.0279},
+  {name:"Baguio",location:"Cordillera, Philippines",lat:16.4023,lon:120.596}
+ ],
+ ae:[
+  {name:"Dubai",location:"Dubai, United Arab Emirates",lat:25.2048,lon:55.2708},
+  {name:"Abu Dhabi",location:"Abu Dhabi, United Arab Emirates",lat:24.4539,lon:54.3773},
+  {name:"Sharjah",location:"Sharjah, United Arab Emirates",lat:25.3463,lon:55.4209},
+  {name:"Ajman",location:"Ajman, United Arab Emirates",lat:25.4052,lon:55.5136},
+  {name:"Al Ain",location:"Abu Dhabi, United Arab Emirates",lat:24.1302,lon:55.8023},
+  {name:"Fujairah",location:"Fujairah, United Arab Emirates",lat:25.1288,lon:56.3265}
+ ],
+ sa:[
+  {name:"Riyadh",location:"Riyadh, Saudi Arabia",lat:24.7136,lon:46.6753},
+  {name:"Jeddah",location:"Makkah, Saudi Arabia",lat:21.4858,lon:39.1925},
+  {name:"Mecca",location:"Makkah, Saudi Arabia",lat:21.3891,lon:39.8579},
+  {name:"Medina",location:"Al Madinah, Saudi Arabia",lat:24.5247,lon:39.5692},
+  {name:"Dammam",location:"Eastern Province, Saudi Arabia",lat:26.4207,lon:50.0888},
+  {name:"Taif",location:"Makkah, Saudi Arabia",lat:21.2703,lon:40.4158}
+ ],
+ fr:[
+  {name:"Paris",location:"Île-de-France, France",lat:48.8566,lon:2.3522},
+  {name:"Marseille",location:"Provence-Alpes-Côte d'Azur, France",lat:43.2965,lon:5.3698},
+  {name:"Lyon",location:"Auvergne-Rhône-Alpes, France",lat:45.764,lon:4.8357},
+  {name:"Toulouse",location:"Occitanie, France",lat:43.6047,lon:1.4442},
+  {name:"Nice",location:"Provence-Alpes-Côte d'Azur, France",lat:43.7102,lon:7.262},
+  {name:"Bordeaux",location:"Nouvelle-Aquitaine, France",lat:44.8378,lon:-0.5792}
+ ],
+ de:[
+  {name:"Berlin",location:"Berlin, Germany",lat:52.52,lon:13.405},
+  {name:"Munich",location:"Bavaria, Germany",lat:48.1351,lon:11.582},
+  {name:"Hamburg",location:"Hamburg, Germany",lat:53.5511,lon:9.9937},
+  {name:"Frankfurt",location:"Hesse, Germany",lat:50.1109,lon:8.6821},
+  {name:"Cologne",location:"North Rhine-Westphalia, Germany",lat:50.9375,lon:6.9603},
+  {name:"Stuttgart",location:"Baden-Württemberg, Germany",lat:48.7758,lon:9.1829}
+ ]
+};
+
+let selection={name:"Thailand",type:"Country",country:"Thailand",iso:"th",lat:13.7563,lon:100.5018};
+
+function esc(text){return String(text).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+
+function distanceKm(lat1,lon1,lat2,lon2){
+ const R=6371;
+ const dLat=(lat2-lat1)*Math.PI/180;
+ const dLon=(lon2-lon1)*Math.PI/180;
+ const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
+ return Math.round(R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)));
+}
+
+function renderCities(){
+ const cities=POPULAR_CITIES[selection.iso]||[];
+ if(!cities.length){
+  cityHeading.textContent="Popular cities";
+  cityList.innerHTML='<div class="empty-cities">No popular cities found for this location yet.</div>';
+  return;
+ }
+ cityHeading.textContent="Popular cities in "+selection.country;
+ const useHardDist=(selection.iso==="th"&&selection.name==="Bangkok");
+ let html="";
+ cities.forEach((c,i)=>{
+  const dist=(c.dist!==undefined&&useHardDist)?c.dist:distanceKm(selection.lat,selection.lon,c.lat,c.lon)+" km";
+  html+='<div class="city-item">'
+    +'<img class="city-image" src="'+(c.img||SKYLINES[i%SKYLINES.length])+'" alt="'+esc(c.name)+'">'
+    +'<div class="city-info"><div class="city-name">'+esc(c.name)+'</div><div class="city-location">'+esc(c.location)+'</div></div>'
+    +'<div class="city-distance">'+esc(dist)+'</div>'
+    +'</div>';
+ });
+ cityList.innerHTML=html;
+ Array.prototype.forEach.call(cityList.querySelectorAll(".city-item"),(el,i)=>{
+  el.addEventListener("click",()=>selectCity(cities[i]));
+ });
+}
+
+function selectCity(city){
+ selection.name=city.name;
+ selection.type="City";
+ selection.lat=city.lat;
+ selection.lon=city.lon;
+ countryName.textContent=city.name;
+ countryType.textContent="City";
+ locationButton.textContent="Set location to "+city.name;
+ searchInput.value=city.name;
+ renderCities();
+}
+
+function applySelection(name,type,country,iso,lat,lon){
+ selection={name:name,type:type,country:country,iso:iso||"",lat:lat,lon:lon};
+ countryName.textContent=name;
+ countryType.textContent=type;
+ locationButton.textContent="Set location to "+name;
+ renderCities();
+}
 
 clearSearch.addEventListener("click",()=>{
  searchInput.value="";
@@ -214,23 +397,11 @@ searchInput.addEventListener("input",function(){
 });
 
 function filterCities(value){
- document.querySelectorAll(".city-item").forEach(city=>{
-  const name=city.querySelector(".city-name").textContent.toLowerCase();
-  const location=city.querySelector(".city-location").textContent.toLowerCase();
-  city.style.display=(!value||name.includes(value)||location.includes(value))?"flex":"none";
+ Array.prototype.forEach.call(cityList.querySelectorAll(".city-item"),el=>{
+  const name=el.querySelector(".city-name").textContent.toLowerCase();
+  const location=el.querySelector(".city-location").textContent.toLowerCase();
+  el.style.display=(!value||name.includes(value)||location.includes(value))?"flex":"none";
  });
-}
-
-function applySelection(name,type,country){
- countryName.textContent=name;
- countryType.textContent=type;
- cityHeading.textContent=(name==="Thailand"||country==="Thailand")?"Popular cities in Thailand":"Popular cities";
- locationButton.textContent="Set location to "+name;
-}
-
-function setCurrentLocation(name,country){
- applySelection(name,"Current location",country||name);
- searchInput.value=name;
 }
 
 function detectCurrentLocation(silent){
@@ -242,35 +413,27 @@ function detectCurrentLocation(silent){
  countryName.textContent="Detecting location…";
  countryType.textContent="…";
  navigator.geolocation.getCurrentPosition(async (pos)=>{
-  const lat=pos.coords.latitude.toFixed(4);
-  const lon=pos.coords.longitude.toFixed(4);
-  let name="Current location",country="";
+  const lat=pos.coords.latitude;
+  const lon=pos.coords.longitude;
+  let name="Current location",country="",cc="";
   try{
-   const res=await fetch("https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat="+lat+"&lon="+lon+"&zoom=10",{headers:{Accept:"application/json"}});
+   const res=await fetch("https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat="+lat.toFixed(4)+"&lon="+lon.toFixed(4)+"&zoom=10",{headers:{Accept:"application/json"}});
    const data=await res.json();
    const a=data.address||{};
    name=a.city||a.town||a.village||a.state_district||a.state||a.country||"Current location";
    country=a.country||name;
+   cc=(a.country_code||"").toLowerCase();
   }catch(e){}
-  setCurrentLocation(name,country);
+  applySelection(name,"Current location",country,cc,lat,lon);
+  searchInput.value=name;
  },()=>{
   if(countryName.textContent==="Detecting location…"){
-   applySelection("Thailand","Country","Thailand");
+   applySelection("Thailand","Country","Thailand","th",13.7563,100.5018);
    searchInput.value="Thailand";
   }
   if(!silent) alert("Unable to detect your location. Please check your location permission.");
  });
 }
-
-document.querySelectorAll(".city-item").forEach(city=>{
- city.addEventListener("click",()=>{
-  const name=city.querySelector(".city-name").textContent;
-  const parts=(city.querySelector(".city-location").textContent||"").split(",");
-  const country=(parts.length>1?parts[1].trim():name);
-  applySelection(name,"City",country);
-  searchInput.value=name;
- });
-});
 
 function goBack(){
  if(history.length>1){history.back();}
@@ -280,15 +443,15 @@ function goBack(){
 document.getElementById("backArrow").addEventListener("click",goBack);
 document.getElementById("chatIcon").addEventListener("click",()=>{location.href="/matches";});
 document.getElementById("closeButton").addEventListener("click",goBack);
-
 document.getElementById("currentLocation").addEventListener("click",()=>{detectCurrentLocation(false);});
 
 document.getElementById("locationButton").addEventListener("click",()=>{
  const button=document.getElementById("locationButton");
  button.textContent="Location set ✓";
- setTimeout(()=>button.textContent="Set location to "+countryName.textContent,1800);
+ setTimeout(()=>button.textContent="Set location to "+selection.name,1800);
 });
 
+applySelection("Thailand","Country","Thailand","th",13.7563,100.5018);
 detectCurrentLocation(true);
 </script>
 </body>
