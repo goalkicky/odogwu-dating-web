@@ -275,14 +275,15 @@ export default function MyMatchesPage() {
         .app .sort span { font-size: 16px; }
         .app .list { padding: 0 16px; }
         .app .match { height: auto; min-height: 118px; padding: 8px 14px 8px 0; border-radius: 18px; margin-bottom: 10px; }
+        .app .info { flex: 1; margin-left: auto; text-align: right; }
         .app .photoWrap { width: 148px; height: 102px; margin-right: 18px; }
         .app .photoWrap img, .app .photoFallback { border-radius: 14px; }
         .app .photoFallback { font-size: 44px; }
         .app .online { left: 10px; top: 10px; width: 11px; height: 11px; }
         .app .smallHeart { width: 32px; height: 32px; font-size: 18px; }
-        .app .personName { font-size: 18px; margin-bottom: 5px; }
+        .app .personName { font-size: 18px; margin-bottom: 5px; text-align: right; }
         .app .verify { width: 16px; height: 16px; font-size: 10px; }
-        .app .detail { font-size: 13px; margin: 5px 0; gap: 7px; }
+        .app .detail { font-size: 13px; margin: 5px 0; gap: 7px; justify-content: flex-end; }
         .app .detail svg { width: 16px; height: 16px; }
         .app .time { font-size: 12px; margin-top: 14px; }
         .app .arrow { font-size: 26px; margin-left: 12px; }
