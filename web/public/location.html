@@ -47,7 +47,7 @@ body{overflow-x:hidden}
 .content-scroll::-webkit-scrollbar{display:none}
 .city-heading{font-size:19px;font-weight:700;padding:5px 29px 9px}
 .city-list{padding:0 29px}
-.city-item{min-height:99px;border-bottom:1px solid #e1e1e1;display:flex;align-items:center;position:relative}
+.city-item{min-height:99px;border-bottom:1px solid #e1e1e1;display:flex;align-items:center;position:relative;cursor:pointer}
 .city-image{width:72px;height:72px;border-radius:50%;object-fit:cover;flex-shrink:0;margin-right:17px;background:#ddd}
 .city-info{min-width:0;padding-right:65px}
 .city-name{font-size:20px;font-weight:700;margin-bottom:5px}
@@ -125,14 +125,14 @@ body{overflow-x:hidden}
 <div class="selected-country">
 <div class="pin-icon"></div>
 <div class="country-text">
-<div class="country-name">Thailand</div>
-<div class="country-type">Country</div>
+<div class="country-name" id="countryName">Thailand</div>
+<div class="country-type" id="countryType">Country</div>
 </div>
 <div class="check"></div>
 </div>
 
 <div class="content-scroll">
-<div class="city-heading">Popular cities in Thailand</div>
+<div class="city-heading" id="cityHeading">Popular cities in Thailand</div>
 <div class="city-list" id="cityList">
 
 <div class="city-item">
@@ -198,6 +198,10 @@ body{overflow-x:hidden}
 <script>
 const searchInput=document.getElementById("searchInput");
 const clearSearch=document.getElementById("clearSearch");
+const countryName=document.getElementById("countryName");
+const countryType=document.getElementById("countryType");
+const cityHeading=document.getElementById("cityHeading");
+const locationButton=document.getElementById("locationButton");
 
 clearSearch.addEventListener("click",()=>{
  searchInput.value="";
@@ -217,6 +221,57 @@ function filterCities(value){
  });
 }
 
+function applySelection(name,type,country){
+ countryName.textContent=name;
+ countryType.textContent=type;
+ cityHeading.textContent=(name==="Thailand"||country==="Thailand")?"Popular cities in Thailand":"Popular cities";
+ locationButton.textContent="Set location to "+name;
+}
+
+function setCurrentLocation(name,country){
+ applySelection(name,"Current location",country||name);
+ searchInput.value=name;
+}
+
+function detectCurrentLocation(silent){
+ if(!navigator.geolocation){
+  if(!silent) alert("Location detection is not supported.");
+  return;
+ }
+ locationButton.textContent="Detecting location…";
+ countryName.textContent="Detecting location…";
+ countryType.textContent="…";
+ navigator.geolocation.getCurrentPosition(async (pos)=>{
+  const lat=pos.coords.latitude.toFixed(4);
+  const lon=pos.coords.longitude.toFixed(4);
+  let name="Current location",country="";
+  try{
+   const res=await fetch("https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat="+lat+"&lon="+lon+"&zoom=10",{headers:{Accept:"application/json"}});
+   const data=await res.json();
+   const a=data.address||{};
+   name=a.city||a.town||a.village||a.state_district||a.state||a.country||"Current location";
+   country=a.country||name;
+  }catch(e){}
+  setCurrentLocation(name,country);
+ },()=>{
+  if(countryName.textContent==="Detecting location…"){
+   applySelection("Thailand","Country","Thailand");
+   searchInput.value="Thailand";
+  }
+  if(!silent) alert("Unable to detect your location. Please check your location permission.");
+ });
+}
+
+document.querySelectorAll(".city-item").forEach(city=>{
+ city.addEventListener("click",()=>{
+  const name=city.querySelector(".city-name").textContent;
+  const parts=(city.querySelector(".city-location").textContent||"").split(",");
+  const country=(parts.length>1?parts[1].trim():name);
+  applySelection(name,"City",country);
+  searchInput.value=name;
+ });
+});
+
 function goBack(){
  if(history.length>1){history.back();}
  else{location.href="/nearby";}
@@ -226,22 +281,15 @@ document.getElementById("backArrow").addEventListener("click",goBack);
 document.getElementById("chatIcon").addEventListener("click",()=>{location.href="/matches";});
 document.getElementById("closeButton").addEventListener("click",goBack);
 
-document.getElementById("currentLocation").addEventListener("click",()=>{
- if(!navigator.geolocation){
-  alert("Location detection is not supported.");
-  return;
- }
- navigator.geolocation.getCurrentPosition(
-  ()=>alert("Current location detected."),
-  ()=>alert("Unable to detect your location. Please check your location permission.")
- );
-});
+document.getElementById("currentLocation").addEventListener("click",()=>{detectCurrentLocation(false);});
 
 document.getElementById("locationButton").addEventListener("click",()=>{
  const button=document.getElementById("locationButton");
  button.textContent="Location set ✓";
- setTimeout(()=>button.textContent="Set location to Thailand",1800);
+ setTimeout(()=>button.textContent="Set location to "+countryName.textContent,1800);
 });
+
+detectCurrentLocation(true);
 </script>
 </body>
 </html>
