@@ -1,7 +1,7 @@
 'use client';
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { FilterIcon, CloseIcon } from '@/components/Icons';
+import { FilterIcon } from '@/components/Icons';
 import AnimatedCard from '@/components/AnimatedCard';
 import AppShell from '@/components/AppShell';
 import SuperlikeUpsellModal from '@/components/SuperlikeUpsellModal';
@@ -12,6 +12,7 @@ import { useMobile, useMediaQuery } from '@/lib/useMediaQuery';
 import { useAuth } from '@/store/AuthContext';
 import { userService, storageService, superlikeService, likeService, matchService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
+import { DISCOVER_FILTER_TEMPLATE_CSS } from '@/lib/discoverFilterTemplateStyles';
 
 export default function DiscoverPage() {
   const { profile } = useAuth();
@@ -67,6 +68,18 @@ export default function DiscoverPage() {
   useEffect(() => {
     superlikeService.getStatus().then(setSuperlikes).catch(() => {});
     likeService.getStatus().then(setLikes).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('locpicked') !== '1') return;
+    try {
+      const raw = localStorage.getItem('dogwu_location');
+      if (raw) {
+        const loc = JSON.parse(raw);
+        if (loc && loc.city) setPrefs(p => ({ ...p, city: loc.city }));
+      }
+    } catch {}
+    setShowFilters(true);
   }, []);
 
   const nextUser = useCallback(() => {
@@ -311,31 +324,30 @@ export default function DiscoverPage() {
 }
 
 const GENDER_OPTIONS = [
-  { value: 'both', label: 'Everyone' },
-  { value: 'female', label: 'Women' },
-  { value: 'male', label: 'Men' },
+  { label: 'Men', value: 'male' },
+  { label: 'Women', value: 'female' },
+  { label: 'Everyone', value: 'both' },
 ];
 const AGE_MIN = 18;
-const AGE_MAX = 80;
-const DIST_MAX = 100;
-const HEIGHT_MIN = 48;
-const HEIGHT_MAX = 84;
-const WEIGHT_MIN = 30;
-const WEIGHT_MAX = 200;
-const RELATIONSHIP_GOALS = ['Long-term relationship', 'Short-term relationship', 'Friendship', 'Still figuring it out'];
+const AGE_MAX = 99;
+const DISTANCE_STEPS = [10, 25, 50, 100] as const;
 
-function inchesToFtIn(inches: number): string {
-  const ft = Math.floor(inches / 12);
-  const inch = inches % 12;
-  return `${ft}'${inch}"`;
-}
+const GOAL_OPTIONS = [
+  { label: 'Serious Relationship', value: 'Long-term relationship' },
+  { label: 'Flirting', value: 'Short-term relationship' },
+  { label: 'Dating', value: 'Still figuring it out' },
+  { label: 'Friendship', value: 'Friendship' },
+];
 
-function FilterLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: 1.2, textTransform: 'uppercase', color: '#8A8A8F', margin: '0 0 12px' }}>
-      {children}
-    </p>
-  );
+const SWITCH_ITEMS = [
+  { key: 'verified' as const, icon: '✣', cls: 'blue', label: 'Verified profiles only' },
+  { key: 'photos' as const, icon: '▣', cls: 'red', label: 'Profiles with photos' },
+  { key: 'active' as const, icon: 'ϟ', cls: 'green', label: 'Recently active' },
+];
+
+function storedGoal(v: string): string {
+  if (v && GOAL_OPTIONS.some(o => o.value === v)) return v;
+  return 'Long-term relationship';
 }
 
 function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
@@ -346,289 +358,203 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
   onClose: () => void;
 }) {
   const [draft, setDraft] = useState(prefs);
+  const [switches, setSwitches] = useState({ verified: true, photos: true, active: true });
+  const [saved, setSaved] = useState(false);
+  const ageRef = useRef<HTMLDivElement>(null);
+  const distRef = useRef<HTMLDivElement>(null);
   const set = (patch: Partial<typeof draft>) => setDraft(d => ({ ...d, ...patch }));
 
-  const distFill = (draft.maxDistance / DIST_MAX) * 100;
-  const heightFillMin = ((draft.minHeight || HEIGHT_MIN) - HEIGHT_MIN) / (HEIGHT_MAX - HEIGHT_MIN) * 100;
-  const heightFillMax = 1 - ((draft.maxHeight || HEIGHT_MAX) - HEIGHT_MIN) / (HEIGHT_MAX - HEIGHT_MIN);
-  const weightFillMin = ((draft.minWeight || WEIGHT_MIN) - WEIGHT_MIN) / (WEIGHT_MAX - WEIGHT_MIN) * 100;
-  const weightFillMax = 1 - ((draft.maxWeight || WEIGHT_MAX) - WEIGHT_MIN) / (WEIGHT_MAX - WEIGHT_MIN);
+  const goalVal = storedGoal(draft.relationshipGoals);
+  const minPct = ((draft.minAge - AGE_MIN) / (AGE_MAX - AGE_MIN)) * 100;
+  const maxPct = ((draft.maxAge - AGE_MIN) / (AGE_MAX - AGE_MIN)) * 100;
+  const distIdx = (() => {
+    if (draft.maxDistance <= 0) return 0;
+    let best = 0, bd = Infinity;
+    DISTANCE_STEPS.forEach((s, i) => {
+      const d = Math.abs(s - draft.maxDistance);
+      if (d < bd) { bd = d; best = i; }
+    });
+    return best;
+  })();
+  const distPct = (distIdx / (DISTANCE_STEPS.length - 1)) * 100;
+
+  let savedCity = '';
+  try {
+    const loc = JSON.parse(localStorage.getItem('dogwu_location') || 'null');
+    if (loc && loc.city) savedCity = loc.city;
+  } catch {}
+  const locValue = draft.city || savedCity || 'Select a location';
+
+  const setAgeFromX = (which: 'min' | 'max', clientX: number) => {
+    const rect = ageRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    const val = Math.round(AGE_MIN + pct * (AGE_MAX - AGE_MIN));
+    setDraft(d => {
+      let min = which === 'min' ? Math.min(val, d.maxAge - 1) : d.minAge;
+      let max = which === 'max' ? Math.max(val, d.minAge + 1) : d.maxAge;
+      min = Math.max(AGE_MIN, min);
+      max = Math.min(AGE_MAX, max);
+      return { ...d, minAge: min, maxAge: max };
+    });
+  };
+
+  const startAgeDrag = (which: 'min' | 'max', e: React.PointerEvent) => {
+    e.preventDefault();
+    const move = (ev: PointerEvent) => setAgeFromX(which, ev.clientX);
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  const startDist = (e: React.PointerEvent) => {
+    e.preventDefault();
+    const move = (ev: PointerEvent) => {
+      const rect = distRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      const pct = Math.max(0, Math.min(1, (ev.clientX - rect.left) / rect.width));
+      const idx = Math.round(pct * (DISTANCE_STEPS.length - 1));
+      set({ maxDistance: DISTANCE_STEPS[idx] });
+    };
+    move(e.nativeEvent);
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  const handleReset = () => {
+    setDraft(defaults);
+    setSwitches({ verified: true, photos: true, active: true });
+  };
+
+  const handleApply = () => {
+    if (saved) return;
+    setSaved(true);
+    setTimeout(() => {
+      onChange(draft);
+      onApply();
+    }, 650);
+  };
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'stretch', background: '#F7F7FA' }} onClick={onClose}>
-      <div
-        onClick={e => e.stopPropagation()}
-        style={{
-          width: '100%', maxWidth: 520, margin: '0 auto',
-          background: '#fff',
-          padding: '24px 24px 40px',
-          height: '100vh',
-          overflowY: 'auto',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, position: 'sticky', top: 0, background: '#fff', paddingTop: 8, paddingBottom: 8, zIndex: 1 }}>
-          <h3 style={{ fontSize: 20, fontWeight: 800, color: '#151515', margin: 0 }}>Discovery Preferences</h3>
-          <button onClick={onClose} aria-label="Close" style={{ width: 36, height: 36, borderRadius: 9999, background: '#F3F3F6', border: '1px solid #EDEDF1', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <CloseIcon size={16} color="#151515" />
-          </button>
-        </div>
-
-        <div style={{ marginBottom: 30 }}>
-          <FilterLabel>Gender</FilterLabel>
-          <div style={{ display: 'flex', gap: 8 }}>
-            {GENDER_OPTIONS.map(opt => (
-              <button
-                key={opt.value}
-                onClick={() => set({ gender: opt.value })}
-                style={{
-                  flex: 1, padding: '13px 0', borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: 'pointer',
-                  color: draft.gender === opt.value ? 'white' : '#8A8A8F',
-                  background: draft.gender === opt.value ? 'linear-gradient(135deg, #FF2E5F, #FF7BA0)' : '#F3F3F6',
-                  border: draft.gender === opt.value ? 'none' : '1px solid #EDEDF1',
-                  boxShadow: draft.gender === opt.value ? '0 4px 18px rgba(255,46,95,0.35)' : 'none',
-                }}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ marginBottom: 30 }}>
-          <FilterLabel>Age Range</FilterLabel>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ color: '#151515', fontSize: 22, fontWeight: 800 }}>
-              {draft.minAge} – {draft.maxAge}
-            </span>
-          </div>
-          <div className="dual-slider-wrap">
-            <div className="dual-slider-track" />
-            <div
-              className="dual-slider-fill"
-              style={{
-                left: `${((draft.minAge - AGE_MIN) / (AGE_MAX - AGE_MIN)) * 100}%`,
-                right: `${(1 - (draft.maxAge - AGE_MIN) / (AGE_MAX - AGE_MIN)) * 100}%`,
-              }}
-            />
-            <input
-              type="range"
-              className="dual-slider"
-              min={AGE_MIN}
-              max={AGE_MAX}
-              value={draft.minAge}
-              onChange={e => {
-                const v = Math.min(Number(e.target.value), draft.maxAge - 1);
-                set({ minAge: Math.max(AGE_MIN, v) });
-              }}
-              style={{ zIndex: draft.minAge >= draft.maxAge - 1 ? 3 : 2 }}
-            />
-            <input
-              type="range"
-              className="dual-slider"
-              min={AGE_MIN}
-              max={AGE_MAX}
-              value={draft.maxAge}
-              onChange={e => {
-                const v = Math.max(Number(e.target.value), draft.minAge + 1);
-                set({ maxAge: Math.min(AGE_MAX, v) });
-              }}
-              style={{ zIndex: draft.minAge >= draft.maxAge - 1 ? 2 : 3 }}
-            />
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
-            <span style={{ fontSize: 11, color: '#8A8A8F' }}>{AGE_MIN}</span>
-            <span style={{ fontSize: 11, color: '#8A8A8F' }}>{AGE_MAX}</span>
-          </div>
-        </div>
-
-        <div style={{ marginBottom: 30 }}>
-          <FilterLabel>Distance</FilterLabel>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ color: '#151515', fontSize: 22, fontWeight: 800 }}>
-              {draft.maxDistance === 0 ? 'Anywhere' : `${draft.maxDistance} km`}
-            </span>
-            {draft.maxDistance > 0 && (
-              <button onClick={() => set({ maxDistance: 0 })} style={{ background: 'none', border: 'none', color: '#FF7BA0', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
-                Anywhere
-              </button>
-            )}
-          </div>
-          <input
-            type="range"
-            className="slider"
-            min={0}
-            max={DIST_MAX}
-            step={5}
-            value={draft.maxDistance}
-            onChange={e => set({ maxDistance: Number(e.target.value) })}
-            style={{ ['--fill' as any]: `${distFill}%` }}
-          />
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
-            <span style={{ fontSize: 11, color: '#8A8A8F' }}>Anywhere</span>
-            <span style={{ fontSize: 11, color: '#8A8A8F' }}>100 km</span>
-          </div>
-        </div>
-
-        <div style={{ marginBottom: 30 }}>
-          <FilterLabel>Height Range</FilterLabel>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ color: '#151515', fontSize: 22, fontWeight: 800 }}>
-              {inchesToFtIn(draft.minHeight || HEIGHT_MIN)} – {inchesToFtIn(draft.maxHeight || HEIGHT_MAX)}
-            </span>
-            {((draft.minHeight > 0) || (draft.maxHeight > 0)) && (
-              <button onClick={() => set({ minHeight: 0, maxHeight: 0 })} style={{ background: 'none', border: 'none', color: '#FF7BA0', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
-                Any
-              </button>
-            )}
-          </div>
-          <div className="dual-slider-wrap">
-            <div className="dual-slider-track" />
-            <div
-              className="dual-slider-fill"
-              style={{
-                left: `${heightFillMin}%`,
-                right: `${heightFillMax * 100}%`,
-              }}
-            />
-            <input
-              type="range"
-              className="dual-slider"
-              min={HEIGHT_MIN}
-              max={HEIGHT_MAX}
-              value={draft.minHeight || HEIGHT_MIN}
-              onChange={e => {
-                const v = Math.min(Number(e.target.value), (draft.maxHeight || HEIGHT_MAX) - 1);
-                set({ minHeight: Math.max(HEIGHT_MIN, v) });
-              }}
-              style={{ zIndex: (draft.minHeight || HEIGHT_MIN) >= (draft.maxHeight || HEIGHT_MAX) - 1 ? 3 : 2 }}
-            />
-            <input
-              type="range"
-              className="dual-slider"
-              min={HEIGHT_MIN}
-              max={HEIGHT_MAX}
-              value={draft.maxHeight || HEIGHT_MAX}
-              onChange={e => {
-                const v = Math.max(Number(e.target.value), (draft.minHeight || HEIGHT_MIN) + 1);
-                set({ maxHeight: Math.min(HEIGHT_MAX, v) });
-              }}
-              style={{ zIndex: (draft.minHeight || HEIGHT_MIN) >= (draft.maxHeight || HEIGHT_MAX) - 1 ? 2 : 3 }}
-            />
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
-            <span style={{ fontSize: 11, color: '#8A8A8F' }}>{inchesToFtIn(HEIGHT_MIN)}</span>
-            <span style={{ fontSize: 11, color: '#8A8A8F' }}>{inchesToFtIn(HEIGHT_MAX)}</span>
-          </div>
-        </div>
-
-        <div style={{ marginBottom: 30 }}>
-          <FilterLabel>Weight Range (kg)</FilterLabel>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ color: '#151515', fontSize: 22, fontWeight: 800 }}>
-              {draft.minWeight || WEIGHT_MIN} – {draft.maxWeight || WEIGHT_MAX} kg
-            </span>
-            {((draft.minWeight > 0) || (draft.maxWeight > 0)) && (
-              <button onClick={() => set({ minWeight: 0, maxWeight: 0 })} style={{ background: 'none', border: 'none', color: '#FF7BA0', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
-                Any
-              </button>
-            )}
-          </div>
-          <div className="dual-slider-wrap">
-            <div className="dual-slider-track" />
-            <div
-              className="dual-slider-fill"
-              style={{
-                left: `${weightFillMin}%`,
-                right: `${weightFillMax * 100}%`,
-              }}
-            />
-            <input
-              type="range"
-              className="dual-slider"
-              min={WEIGHT_MIN}
-              max={WEIGHT_MAX}
-              value={draft.minWeight || WEIGHT_MIN}
-              onChange={e => {
-                const v = Math.min(Number(e.target.value), (draft.maxWeight || WEIGHT_MAX) - 1);
-                set({ minWeight: Math.max(WEIGHT_MIN, v) });
-              }}
-              style={{ zIndex: (draft.minWeight || WEIGHT_MIN) >= (draft.maxWeight || WEIGHT_MAX) - 1 ? 3 : 2 }}
-            />
-            <input
-              type="range"
-              className="dual-slider"
-              min={WEIGHT_MIN}
-              max={WEIGHT_MAX}
-              value={draft.maxWeight || WEIGHT_MAX}
-              onChange={e => {
-                const v = Math.max(Number(e.target.value), (draft.minWeight || WEIGHT_MIN) + 1);
-                set({ maxWeight: Math.min(WEIGHT_MAX, v) });
-              }}
-              style={{ zIndex: (draft.minWeight || WEIGHT_MIN) >= (draft.maxWeight || WEIGHT_MAX) - 1 ? 2 : 3 }}
-            />
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
-            <span style={{ fontSize: 11, color: '#8A8A8F' }}>{WEIGHT_MIN} kg</span>
-            <span style={{ fontSize: 11, color: '#8A8A8F' }}>{WEIGHT_MAX} kg</span>
-          </div>
-        </div>
-
-        <div style={{ marginBottom: 30 }}>
-          <FilterLabel>Location</FilterLabel>
-          <input
-            type="text"
-            value={draft.city}
-            onChange={e => set({ city: e.target.value })}
-            placeholder="Search by city"
-            style={{
-              width: '100%', padding: '13px 16px', borderRadius: 12, border: '1px solid #EDEDF1',
-              background: '#F3F3F6', color: '#151515', fontSize: 15, outline: 'none',
-              boxSizing: 'border-box',
-            }}
-          />
-        </div>
-
-        <div style={{ marginBottom: 30 }}>
-          <FilterLabel>Relationship Goals</FilterLabel>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-            {RELATIONSHIP_GOALS.map(opt => {
-              const selected = draft.relationshipGoals === opt;
-              return (
-                <button
-                  key={opt}
-                  onClick={() => set({ relationshipGoals: selected ? '' : opt })}
-                  style={{
-                    padding: '10px 18px', borderRadius: 9999, fontSize: 13.5, fontWeight: 600, cursor: 'pointer',
-                    color: selected ? 'white' : '#8A8A8F',
-                    background: selected ? 'linear-gradient(135deg, #FF2E5F, #FF7BA0)' : '#F3F3F6',
-                    border: selected ? 'none' : '1px solid #EDEDF1',
-                    transition: 'all 0.15s ease',
-                  }}
-                >
-                  {opt}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div style={{ position: 'sticky', bottom: 0, background: '#fff', paddingTop: 16, paddingBottom: 24, marginTop: 12 }}>
-          <div style={{ display: 'flex', gap: 10 }}>
-            <button
-              onClick={() => setDraft(defaults)}
-              style={{ padding: '16px 24px', borderRadius: 14, background: '#F3F3F6', border: '1px solid #EDEDF1', color: '#65656A', fontSize: 15, fontWeight: 700, cursor: 'pointer', minWidth: 90 }}
-            >
-              Reset
+    <>
+      <style jsx global>{DISCOVER_FILTER_TEMPLATE_CSS}</style>
+      <div className="dpr" style={{ position: 'fixed', inset: 0, zIndex: 100, overflowY: 'auto' }}>
+        <div className="app">
+          <header className="topbar">
+            <div className="brand" aria-label="Dogwu Dating">
+              <div className="brand-mark"><span></span></div>
+              <div className="brand-copy">
+                <strong>DOGWU</strong>
+                <small>D A T <b>♥</b> I N G</small>
+              </div>
+            </div>
+            <h1>Discover</h1>
+            <button className="filter-icon" aria-label="Open filters">
+              <i></i><i></i><i></i>
             </button>
-            <button
-              onClick={() => { onChange(draft); onApply(); }}
-              style={{ flex: 1, padding: '16px 24px', borderRadius: 14, border: 'none', background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', color: 'white', fontSize: 16, fontWeight: 800, cursor: 'pointer', boxShadow: '0 6px 24px rgba(255,46,95,0.4)' }}
-            >
-              Apply Filters
-            </button>
-          </div>
+          </header>
+
+          <main className="sheet">
+            <div className="sheet-head">
+              <button className="close" aria-label="Close" onClick={onClose}>×</button>
+              <h2>Discover Preferences</h2>
+            </div>
+
+            <section className="section first">
+              <h3><span className="pink person">●</span> Who are you looking for?</h3>
+
+              <div className="preference-card">
+                <div className="row gender-row">
+                  <label>Gender</label>
+                  <div className="segmented gender">
+                    {GENDER_OPTIONS.map(opt => (
+                      <button key={opt.value} className={draft.gender === opt.value ? 'selected' : ''} onClick={() => set({ gender: opt.value })}>
+                        {opt.label}{draft.gender === opt.value && <span className="check">✓</span>}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="range-block">
+                  <div className="range-title">
+                    <span>Age Range</span><span>{draft.minAge} – {draft.maxAge}</span>
+                  </div>
+                  <div className="dual-range" ref={ageRef}>
+                    <div className="track"></div>
+                    <div className="active-track" style={{ left: `${minPct}%`, right: `${100 - maxPct}%` }}></div>
+                    <span className="knob left" onPointerDown={e => startAgeDrag('min', e)} style={{ left: `calc(${minPct}% - 11px)` }}></span>
+                    <span className="knob right" onPointerDown={e => startAgeDrag('max', e)} style={{ left: `calc(${maxPct}% - 11px)` }}></span>
+                  </div>
+                  <div className="range-labels"><span>{AGE_MIN}</span><span>{AGE_MAX}</span></div>
+                </div>
+
+                <div className="range-block distance">
+                  <div className="range-title">
+                    <span>Distance</span><span>{draft.maxDistance === 0 ? 'Anywhere' : `Up to ${draft.maxDistance} km`}</span>
+                  </div>
+                  <div className="single-range" ref={distRef} onPointerDown={startDist}>
+                    <div className="track"></div>
+                    <div className="active-track" style={{ right: `${100 - distPct}%` }}></div>
+                    <span className="knob" style={{ left: `calc(${distPct}% - 11px)` }}></span>
+                  </div>
+                  <div className="distance-labels">
+                    <span>10 km</span><span>25 km</span><span>50 km</span><span>100 km</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className="premium">
+              <div className="crown">♛</div>
+              <div className="premium-copy">
+                <div><strong>Advanced filters</strong> <em>Premium</em></div>
+                <p>Go Premium to unlock more powerful filters<br className="desktop-break" /> and find your perfect match.</p>
+              </div>
+              <button className="upgrade" onClick={() => alert('Premium filters are ready for your upgrade flow.')}>Upgrade</button>
+            </section>
+
+            <section className="simple-row" onClick={() => { window.location.href = '/location.html?return=/discover'; }}>
+              <div className="left-content"><span className="outline-icon pin">⌾</span><strong>Location</strong></div>
+              <div className="value">{locValue} <span className="chevron">›</span></div>
+            </section>
+
+            <section className="section relationship">
+              <h3><span className="pink heart">♥</span> Relationship</h3>
+              <div className="choice-card">
+                {GOAL_OPTIONS.map(o => (
+                  <button key={o.value} className={goalVal === o.value ? 'selected' : ''} onClick={() => set({ relationshipGoals: o.value })}>
+                    {o.label}{goalVal === o.value && <span className="check">✓</span>}
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            <section className="section profile">
+              <h3><span className="pink shield">◈</span> Profile Preferences</h3>
+              <div className="switch-card">
+                {SWITCH_ITEMS.map(s => (
+                  <div className="switch-row" key={s.key}>
+                    <div className="switch-label"><span className={`${s.cls} icon`}>{s.icon}</span> {s.label}</div>
+                    <button className={`switch ${switches[s.key] ? 'on' : ''}`} aria-label={s.label} onClick={() => setSwitches(prev => ({ ...prev, [s.key]: !prev[s.key] }))}><span></span></button>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <div className="bottom-actions">
+              <button className="reset" onClick={handleReset}><span>↶</span> Reset Filters</button>
+              <button className="apply" onClick={handleApply}><span>✓</span>{saved ? 'Filters Applied' : 'Apply Filters'}</button>
+            </div>
+          </main>
         </div>
       </div>
-    </div>
+    </>
   );
 }
