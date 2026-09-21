@@ -284,8 +284,8 @@ export default function MyMatchesPage() {
         .app .verify { width: 16px; height: 16px; font-size: 10px; }
         .app .detail { font-size: 13px; margin: 5px 0; gap: 7px; }
         .app .detail svg { width: 16px; height: 16px; }
-        .app .time { font-size: 12px; margin-top: 14px; }
-        .app .arrow { font-size: 26px; margin-left: 14px; margin-right: 0; }
+        .app .time { display: block; flex-shrink: 0; font-size: 12px; margin-top: 14px; }
+        .app .arrow { font-size: 26px; margin-left: 14px; margin-right: 0; flex-shrink: 0; }
 
         @media (max-width: 560px) {
           .mm-home .tmpl-round-photo { width: 76px; }
