@@ -63,7 +63,7 @@ export const userService = {
 
   getProfile: async (userId: string) => getProfileDoc(userId),
 
-  getDiscoverUsers: async (currentUserId: string, preferences: { gender: string; minAge: number; maxAge: number; maxDistance?: number; minHeight?: number; maxHeight?: number; minWeight?: number; maxWeight?: number; city?: string; relationshipGoals?: string }) => {
+  getDiscoverUsers: async (currentUserId: string, preferences: { gender: string; minAge: number; maxAge: number; maxDistance?: number; minHeight?: number; maxHeight?: number; minWeight?: number; maxWeight?: number; city?: string; relationshipGoals?: string; lat?: number; lng?: number }) => {
     void currentUserId;
     const q = new URLSearchParams({ gender: preferences.gender, minAge: String(preferences.minAge), maxAge: String(preferences.maxAge) });
     if (preferences.maxDistance) q.set('maxDistance', String(preferences.maxDistance));
@@ -73,6 +73,10 @@ export const userService = {
     if (preferences.maxWeight) q.set('maxWeight', String(preferences.maxWeight));
     if (preferences.city) q.set('city', preferences.city);
     if (preferences.relationshipGoals) q.set('relationshipGoals', preferences.relationshipGoals);
+    if (typeof preferences.lat === 'number' && typeof preferences.lng === 'number') {
+      q.set('lat', String(preferences.lat));
+      q.set('lng', String(preferences.lng));
+    }
     const data = await apiFetch(`/api/discover?${q.toString()}`);
     return data?.documents || [];
   },

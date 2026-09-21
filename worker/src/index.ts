@@ -639,6 +639,8 @@ async function handleDiscover(env: Env, req: Request, me: string): Promise<Respo
   const minAge = Number(url.searchParams.get('minAge')) || 18;
   const maxAge = Number(url.searchParams.get('maxAge')) || 99;
   const maxDistance = Number(url.searchParams.get('maxDistance')) || 0;
+  const originLat = Number(url.searchParams.get('lat')) || 0;
+  const originLng = Number(url.searchParams.get('lng')) || 0;
   const minHeight = Number(url.searchParams.get('minHeight')) || 0;
   const maxHeight = Number(url.searchParams.get('maxHeight')) || 0;
   const minWeight = Number(url.searchParams.get('minWeight')) || 0;
@@ -660,8 +662,8 @@ async function handleDiscover(env: Env, req: Request, me: string): Promise<Respo
   const { results } = await env.DB.prepare(sql).bind(...binds).all();
 
   const meRow = await getUserRow(env, me);
-  const myLat = Number(meRow?.latitude);
-  const myLng = Number(meRow?.longitude);
+  const myLat = originLat || Number(meRow?.latitude);
+  const myLng = originLng || Number(meRow?.longitude);
   const hasMeCoords = myLat && myLng;
 
   let docs = results.map(toProfile).map(publicize).map(d => {
