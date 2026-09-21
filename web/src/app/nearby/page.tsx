@@ -13,6 +13,7 @@ export default function NearbyPage() {
   const [messagesCount, setMessagesCount] = useState(0);
   const [toast, setToast] = useState('');
   const [likedSet, setLikedSet] = useState<Set<string>>(new Set());
+  const [locationLabel, setLocationLabel] = useState('');
   const uid = (profile as any)?.$id || (profile as any)?.id;
 
   useEffect(() => {
@@ -39,6 +40,20 @@ export default function NearbyPage() {
     clearTimeout(toastTimer.current);
     toastTimer.current = setTimeout(() => setToast(''), 1500);
   };
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('dogwu_location');
+      if (raw) {
+        const loc = JSON.parse(raw);
+        if (loc?.name) setLocationLabel(loc.name);
+        if (localStorage.getItem('dogwu_location_justset') === '1') {
+          localStorage.removeItem('dogwu_location_justset');
+          showToast(`Location set to ${loc.name}`);
+        }
+      }
+    } catch {}
+  }, []);
 
   const handleLike = async (member: any, e: React.MouseEvent) => {
     e.preventDefault();
@@ -160,11 +175,11 @@ export default function NearbyPage() {
               <div className="nb-copy">
                 <h1>Nearby</h1>
                 <p className="nb-pink-line">Find singles close to you <span>💕</span></p>
-                <p>Showing people within 25 km of you</p>
+                <p>Showing people within {locationLabel ? `25 km of ${locationLabel}` : '25 km of you'}</p>
               </div>
               <button className="nb-location" onClick={() => { window.location.href = '/location.html'; }}>
                 <svg viewBox="0 0 24 24"><path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="9" r="2.2" fill="currentColor"/></svg>
-                Change location
+                {locationLabel || 'Change location'}
               </button>
             </section>
 

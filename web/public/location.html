@@ -505,8 +505,12 @@ document.getElementById("currentLocation").addEventListener("click",()=>{detectC
 
 document.getElementById("locationButton").addEventListener("click",()=>{
  const button=document.getElementById("locationButton");
+ try{
+  localStorage.setItem("dogwu_location",JSON.stringify({name:selection.name,type:selection.type,country:selection.country,iso:selection.iso,lat:selection.lat,lon:selection.lon}));
+  localStorage.setItem("dogwu_location_justset","1");
+ }catch(e){}
  button.textContent="Location set ✓";
- setTimeout(()=>button.textContent="Set location to "+selection.name,1800);
+ setTimeout(()=>{location.href="/nearby";},1400);
 });
 
 applySelection("Thailand","Country","Thailand","th",13.7563,100.5018);
