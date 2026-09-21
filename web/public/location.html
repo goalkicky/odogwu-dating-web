@@ -332,6 +332,14 @@ const POPULAR_CITIES={
 
 let selection={name:"Thailand",type:"Country",country:"Thailand",iso:"th",lat:13.7563,lon:100.5018};
 
+const COUNTRY_NAMES={th:"Thailand",ng:"Nigeria",gh:"Ghana",ke:"Kenya",za:"South Africa",eg:"Egypt",et:"Ethiopia",tz:"Tanzania",ug:"Uganda",ma:"Morocco",us:"United States",gb:"United Kingdom",ca:"Canada",in:"India",ph:"Philippines",ae:"United Arab Emirates",sa:"Saudi Arabia",fr:"France",de:"Germany"};
+const ALL_CITIES=[];
+Object.keys(POPULAR_CITIES).forEach(iso=>{
+ POPULAR_CITIES[iso].forEach(c=>{
+  ALL_CITIES.push({iso:iso,country:COUNTRY_NAMES[iso]||"",name:c.name,location:c.location,lat:c.lat,lon:c.lon,img:c.img,dist:c.dist});
+ });
+});
+
 function esc(text){return String(text).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 
 function distanceKm(lat1,lon1,lat2,lon2){
@@ -342,14 +350,7 @@ function distanceKm(lat1,lon1,lat2,lon2){
  return Math.round(R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)));
 }
 
-function renderCities(){
- const cities=POPULAR_CITIES[selection.iso]||[];
- if(!cities.length){
-  cityHeading.textContent="Popular cities";
-  cityList.innerHTML='<div class="empty-cities">No popular cities found for this location yet.</div>';
-  return;
- }
- cityHeading.textContent="Popular cities in "+selection.country;
+function buildItems(cities){
  const useHardDist=(selection.iso==="th"&&selection.name==="Bangkok");
  let html="";
  cities.forEach((c,i)=>{
@@ -366,15 +367,44 @@ function renderCities(){
  });
 }
 
+function renderCities(){
+ const cities=(POPULAR_CITIES[selection.iso]||[]).map(c=>Object.assign({},c,{iso:selection.iso,country:selection.country}));
+ if(!cities.length){
+  cityHeading.textContent="Popular cities";
+  cityList.innerHTML='<div class="empty-cities">No popular cities found for this location yet.</div>';
+  return;
+ }
+ cityHeading.textContent="Popular cities in "+selection.country;
+ buildItems(cities);
+}
+
+function renderSearchResults(value){
+ const matches=ALL_CITIES.filter(c=>{
+  const n=c.name.toLowerCase();
+  const l=c.location.toLowerCase();
+  const co=c.country.toLowerCase();
+  return n.includes(value)||l.includes(value)||co.includes(value);
+ });
+ if(!matches.length){
+  cityHeading.textContent="No locations found";
+  cityList.innerHTML='<div class="empty-cities">No matching locations. Try another search.</div>';
+  return;
+ }
+ cityHeading.textContent="Search results";
+ buildItems(matches);
+}
+
 function selectCity(city){
  selection.name=city.name;
  selection.type="City";
+ selection.country=city.country;
+ selection.iso=city.iso;
  selection.lat=city.lat;
  selection.lon=city.lon;
  countryName.textContent=city.name;
  countryType.textContent="City";
  locationButton.textContent="Set location to "+city.name;
- searchInput.value=city.name;
+ searchInput.value="";
  renderCities();
 }
 
@@ -389,20 +419,14 @@ function applySelection(name,type,country,iso,lat,lon){
 clearSearch.addEventListener("click",()=>{
  searchInput.value="";
  searchInput.focus();
- filterCities("");
+ renderCities();
 });
 
 searchInput.addEventListener("input",function(){
- filterCities(this.value.toLowerCase().trim());
+ const value=this.value.toLowerCase().trim();
+ if(!value){renderCities();}
+ else{renderSearchResults(value);}
 });
-
-function filterCities(value){
- Array.prototype.forEach.call(cityList.querySelectorAll(".city-item"),el=>{
-  const name=el.querySelector(".city-name").textContent.toLowerCase();
-  const location=el.querySelector(".city-location").textContent.toLowerCase();
-  el.style.display=(!value||name.includes(value)||location.includes(value))?"flex":"none";
- });
-}
 
 function detectCurrentLocation(silent){
  if(!navigator.geolocation){
