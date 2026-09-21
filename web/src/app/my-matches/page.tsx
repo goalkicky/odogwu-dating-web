@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/store/AuthContext';
 import { matchService, userService, storageService } from '@/lib/cloudflare/services';
@@ -420,17 +421,34 @@ export default function MyMatchesPage() {
         </div>
       </section>
 
-      <nav className="bottom">
-        <button className="nav" onClick={() => router.push('/home')}><svg viewBox="0 0 40 40"><path d="m6 18 14-12 14 12v16H24v-9h-8v9H6Z"/></svg>Home</button>
-        <button className="nav" onClick={() => router.push('/explore')}><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="14"/><path d="m26 14-4 10-10 4 4-10 10-4Z"/></svg>Explore</button>
-        <button className="nav active" onClick={() => router.push('/discover')}><span className="discover"><svg viewBox="0 0 40 40"><path d="M29 10a12 12 0 1 0 2 18"/><path d="M29 7v8h-8"/></svg></span>Discover</button>
-        <button className="nav" onClick={() => router.push('/matches')}><span className="msgIcon"><svg viewBox="0 0 40 40"><path d="M6 19c0-7 6-12 14-12s14 5 14 12-6 12-14 12c-2 0-5-.5-7-1.5L7 32l1.3-5C6.8 24.8 6 22 6 19Z"/></svg>{messagesCount > 0 && <span className="msgCount">{messagesCount}</span>}</span>Messages</button>
-        <button className="nav" onClick={() => router.push('/edit-profile')}><svg viewBox="0 0 40 40"><circle cx="20" cy="13" r="6"/><path d="M9 34c1-7 5-11 11-11s10 4 11 11"/></svg>Profile</button>
+      <nav className="tmpl-bottom-nav">
+        <Link href="/home" className="tmpl-nav-item">
+          <svg viewBox="0 0 48 48"><path d="M8 22 24 9l16 13v17H29V28H19v11H8Z"/></svg><span>Home</span>
+        </Link>
+        <Link href="/explore" className="tmpl-nav-item">
+          <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none"/><path d="m19 29 4-10 9-4-4 9-9 5Z"/></svg><span>Explore</span>
+        </Link>
+        <Link href="/discover" className="tmpl-nav-center"><img src="/logo-icon.png?v=2" alt="Discover" /></Link>
+        <Link href="/matches" className="tmpl-nav-item active">
+          <span className="tmpl-nav-icon-wrap"><svg viewBox="0 0 48 48"><path d="M9 34l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/><circle cx="19" cy="22" r="2"/><circle cx="25" cy="22" r="2"/><circle cx="31" cy="22" r="2"/></svg><b>{messagesCount || 0}</b></span><span>Messages</span>
+        </Link>
+        <div role="button" tabIndex={0} onClick={() => router.push('/edit-profile')} onKeyDown={(e) => e.key === 'Enter' && router.push('/edit-profile')} className="tmpl-nav-item" style={{ cursor: 'pointer' }}>
+          <svg viewBox="0 0 48 48"><circle cx="24" cy="17" r="7" fill="none"/><path d="M10 39c1-8 7-12 14-12s13 4 14 12" fill="none"/></svg><span>Profile</span>
+        </div>
       </nav>
 
       {toast && <div id="toast">{toast}</div>}
       <style jsx global>{`
         #toast{position:fixed;z-index:100;left:50%;bottom:112px;transform:translateX(-50%);background:#111;color:#fff;padding:11px 18px;border-radius:24px;font:14px Arial;opacity:1}
+        .tmpl-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 710px; height: 101px; background: #fff; border-top: 1px solid #eee; display: grid; grid-template-columns: 1fr 1fr 1.1fr 1fr 1fr; align-items: end; padding: 8px 15px 13px; z-index: 10; box-sizing: border-box; }
+        .tmpl-nav-item { height: 70px; color: #777; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 13px; text-decoration: none; background: none; border: 0; padding: 0; cursor: pointer; }
+        .tmpl-nav-item svg { width: 29px; height: 29px; stroke: currentColor; stroke-width: 2.2; fill: currentColor; }
+        .tmpl-nav-item:not(.active) svg { fill: none; }
+        .tmpl-nav-item.active { color: #d81043; }
+        .tmpl-nav-icon-wrap { position: relative; display: grid; }
+        .tmpl-nav-icon-wrap b { position: absolute; right: -7px; top: -7px; background: #d81043; color: #fff; border-radius: 50%; font-size: 11px; width: 20px; height: 20px; display: grid; place-items: center; font-weight: 700; }
+        .tmpl-nav-center { height: 70px; display: flex; align-items: center; justify-content: center; text-decoration: none; cursor: pointer; }
+        .tmpl-nav-center img { width: 66px; height: 66px; object-fit: cover; border-radius: 50%; }
       `}</style>
     </div>
   );
