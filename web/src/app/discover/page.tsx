@@ -447,20 +447,6 @@ function FilterPanel({ prefs, defaults, onChange, onApply, onClose }: {
       <style jsx global>{DISCOVER_FILTER_TEMPLATE_CSS}</style>
       <div className="dpr" style={{ position: 'fixed', inset: 0, zIndex: 100, overflowY: 'auto' }}>
         <div className="app">
-          <header className="topbar">
-            <div className="brand" aria-label="Dogwu Dating">
-              <div className="brand-mark"><span></span></div>
-              <div className="brand-copy">
-                <strong>DOGWU</strong>
-                <small>D A T <b>♥</b> I N G</small>
-              </div>
-            </div>
-            <h1>Discover</h1>
-            <button className="filter-icon" aria-label="Open filters">
-              <i></i><i></i><i></i>
-            </button>
-          </header>
-
           <main className="sheet">
             <div className="sheet-head">
               <button className="close" aria-label="Close" onClick={onClose}>×</button>
