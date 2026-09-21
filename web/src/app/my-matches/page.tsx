@@ -274,7 +274,7 @@ export default function MyMatchesPage() {
         .app .sort b { font-size: 15px; }
         .app .sort span { font-size: 16px; }
         .app .list { padding: 0 16px; }
-        .app .match { height: auto; min-height: 118px; padding: 8px 8px 8px 0; border-radius: 18px; margin-bottom: 10px; }
+        .app .match { height: auto; min-height: 118px; padding: 8px 0 8px 0; border-radius: 18px; margin-bottom: 10px; }
         .app .photoWrap { width: 148px; height: 102px; margin-right: 18px; }
         .app .photoWrap img, .app .photoFallback { border-radius: 14px; }
         .app .photoFallback { font-size: 44px; }
@@ -285,7 +285,7 @@ export default function MyMatchesPage() {
         .app .detail { font-size: 13px; margin: 5px 0; gap: 7px; }
         .app .detail svg { width: 16px; height: 16px; }
         .app .time { font-size: 12px; margin-top: 14px; }
-        .app .arrow { font-size: 26px; margin-left: 12px; margin-right: 0; }
+        .app .arrow { font-size: 26px; margin-left: 14px; margin-right: 0; }
 
         @media (max-width: 560px) {
           .mm-home .tmpl-round-photo { width: 76px; }
@@ -293,7 +293,7 @@ export default function MyMatchesPage() {
           .mm-home .tmpl-quick label { font-size: 11px; }
           .mm-home .tmpl-badge, .mm-home .tmpl-plus { width: 24px; height: 24px; font-size: 12px; right: -4px; bottom: -4px; }
           .mm-home .tmpl-plus { font-size: 18px; }
-          .app .match { min-height: 104px; padding-right: 6px; border-radius: 15px; }
+          .app .match { min-height: 104px; padding-right: 0; border-radius: 15px; }
           .app .photoWrap { width: 126px; height: 88px; margin-right: 13px; }
           .app .personName { font-size: 16px; }
           .app .detail { font-size: 12px; }
@@ -306,7 +306,7 @@ export default function MyMatchesPage() {
           .mm-home .tmpl-round-photo.location svg { width: 34px; height: 34px; }
           .mm-home .tmpl-quick label { font-size: 10px; margin-top: 6px; }
           .mm-home .tmpl-round-photo.story > img, .mm-home .tmpl-round-photo.story > div { inset: 4px !important; width: calc(100% - 8px) !important; height: calc(100% - 8px) !important; }
-          .app .match { min-height: 92px; padding-right: 6px; }
+          .app .match { min-height: 92px; padding-right: 0; }
           .app .photoWrap { width: 108px; height: 76px; margin-right: 10px; border-radius: 12px; }
           .app .photoWrap img, .app .photoFallback { border-radius: 12px; }
           .app .personName { font-size: 15px; }
