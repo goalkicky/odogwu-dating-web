@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Dogwu Dating - Change Location</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#d8d8d8;color:#171717}
+body{overflow-x:hidden}
+.app-background{position:fixed;inset:0;background:#d7d7d7;overflow:hidden}
+.app-header{height:180px;position:relative;display:flex;justify-content:center;padding-top:56px}
+.back-arrow{position:absolute;left:31px;top:103px;width:15px;height:15px;border-left:2px solid #111;border-bottom:2px solid #111;transform:rotate(45deg);cursor:pointer}
+.logo{text-align:center;color:#b31319}
+.logo-main{font-family:Georgia,"Times New Roman",serif;font-size:48px;line-height:48px;font-weight:700;letter-spacing:-2px}
+.logo-main::before{content:"◔";font-size:45px;display:inline-block;margin-right:3px}
+.logo-heart{font-size:17px;position:relative;top:-27px;margin-left:-2px}
+.logo-sub{margin-top:7px;font-size:12px;font-weight:500;letter-spacing:7px;color:#222}
+.logo-sub::before,.logo-sub::after{content:"";display:inline-block;vertical-align:middle;width:26px;height:1px;background:#b31319;margin:0 11px}
+.chat-icon{position:absolute;right:30px;top:101px;width:34px;height:28px;border:2px solid #111;border-radius:50%;cursor:pointer}
+.chat-icon::before{content:"";position:absolute;right:-3px;bottom:-5px;width:9px;height:9px;border-left:2px solid #111;transform:rotate(-30deg)}
+.chat-dots{position:absolute;left:8px;top:7px;font-size:16px;letter-spacing:2px}
+.notification{position:absolute;top:-7px;right:-7px;width:22px;height:22px;border-radius:50%;background:#d9182d;color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.location-sheet{position:fixed;left:0;right:0;bottom:0;top:181px;background:#fff;border-radius:30px 30px 0 0;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 -2px 15px rgba(0,0,0,.06)}
+.sheet-header{height:91px;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center}
+.sheet-title{font-size:25px;font-weight:700}
+.close-button{position:absolute;left:30px;top:39px;width:22px;height:22px;cursor:pointer}
+.close-button::before,.close-button::after{content:"";position:absolute;left:10px;top:-1px;width:2px;height:25px;background:#111;border-radius:2px}
+.close-button::before{transform:rotate(45deg)}
+.close-button::after{transform:rotate(-45deg)}
+.search-container{padding:8px 29px 12px;flex-shrink:0}
+.search-box{height:66px;border:1px solid #dedede;background:#fafafa;border-radius:32px;display:flex;align-items:center;padding:0 17px;box-shadow:inset 0 1px 3px rgba(0,0,0,.02)}
+.search-icon{width:21px;height:21px;border:2px solid #9b9b9b;border-radius:50%;position:relative;flex-shrink:0}
+.search-icon::after{content:"";position:absolute;width:8px;height:2px;background:#9b9b9b;right:-6px;bottom:-3px;transform:rotate(45deg);border-radius:2px}
+.search-input{flex:1;border:none;outline:none;background:transparent;margin-left:17px;font-size:19px;color:#111}
+.clear-button{width:27px;height:27px;border-radius:50%;background:#999;color:white;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;cursor:pointer}
+.selected-country{margin:6px 29px 15px;min-height:88px;border-radius:18px;background:linear-gradient(90deg,#fff1f5,#fff3f6);display:flex;align-items:center;padding:13px 18px;flex-shrink:0}
+.pin-icon{width:30px;height:38px;position:relative;margin-right:27px;flex-shrink:0}
+.pin-icon::before{content:"";position:absolute;width:20px;height:26px;left:4px;top:1px;border:4px solid #ed1730;border-radius:50%}
+.pin-icon::after{content:"";position:absolute;width:7px;height:7px;background:#fff;border:2px solid #ed1730;border-radius:50%;left:10px;top:10px}
+.country-text{flex:1}
+.country-name{font-size:20px;font-weight:700;margin-bottom:6px}
+.country-type{font-size:16px;color:#777}
+.check{width:29px;height:29px;border-radius:50%;background:#ed1730;position:relative}
+.check::after{content:"";position:absolute;width:10px;height:5px;border-left:3px solid white;border-bottom:3px solid white;left:8px;top:8px;transform:rotate(-45deg)}
+.content-scroll{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+.content-scroll::-webkit-scrollbar{display:none}
+.city-heading{font-size:19px;font-weight:700;padding:5px 29px 9px}
+.city-list{padding:0 29px}
+.city-item{min-height:99px;border-bottom:1px solid #e1e1e1;display:flex;align-items:center;position:relative}
+.city-image{width:72px;height:72px;border-radius:50%;object-fit:cover;flex-shrink:0;margin-right:17px;background:#ddd}
+.city-info{min-width:0;padding-right:65px}
+.city-name{font-size:20px;font-weight:700;margin-bottom:5px}
+.city-location{font-size:16px;color:#777;white-space:nowrap}
+.city-distance{position:absolute;right:0;font-size:17px;color:#777;white-space:nowrap}
+.current-location{min-height:106px;margin:0 29px;display:flex;align-items:center;border-bottom:1px solid #eee;cursor:pointer}
+.current-icon{width:66px;height:66px;border:1px solid #ddd;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-right:17px;flex-shrink:0}
+.current-pin{width:21px;height:27px;border:3px solid #777;border-radius:50%;position:relative}
+.current-pin::after{content:"";position:absolute;width:5px;height:5px;border:2px solid #777;border-radius:50%;left:5px;top:6px}
+.current-text{flex:1}
+.current-title{font-size:18px;font-weight:700;margin-bottom:5px}
+.current-subtitle{font-size:15px;color:#777}
+.chevron{width:11px;height:11px;border-right:2px solid #777;border-top:2px solid #777;transform:rotate(45deg);margin-right:5px}
+.info-card{margin:15px 29px 14px;min-height:122px;border-radius:17px;background:#fff0f4;display:flex;align-items:center;padding:16px 20px;flex-shrink:0}
+.world-icon{width:106px;height:82px;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center;font-size:64px}
+.world-icon::before{content:"🌎";filter:saturate(1.2)}
+.info-text{padding-left:11px}
+.info-title{font-size:19px;font-weight:700;margin-bottom:7px}
+.info-description{color:#777;font-size:15px;line-height:1.4}
+.bottom-action{padding:9px 26px 25px;background:white;flex-shrink:0}
+.location-button{width:100%;height:74px;border:none;border-radius:22px;background:linear-gradient(180deg,#ff2a38 0%,#ee0e2e 100%);color:white;font-size:23px;font-weight:500;cursor:pointer;box-shadow:0 3px 7px rgba(230,0,30,.18);transition:transform .15s ease,opacity .15s ease}
+.location-button:active{transform:scale(.985);opacity:.9}
+@media(max-width:600px){
+.app-header{height:130px;padding-top:28px}.back-arrow{left:24px;top:78px}.chat-icon{right:23px;top:76px}
+.logo-main{font-size:36px;line-height:37px}.logo-main::before{font-size:34px}.logo-sub{font-size:9px;letter-spacing:5px}
+.logo-sub::before,.logo-sub::after{width:18px;margin:0 6px}.location-sheet{top:130px;border-radius:27px 27px 0 0}
+.sheet-header{height:72px}.sheet-title{font-size:20px}.close-button{left:22px;top:30px}
+.search-container{padding:5px 18px 9px}.search-box{height:56px}.search-input{font-size:17px;margin-left:14px}
+.selected-country{margin:5px 18px 11px;min-height:70px;border-radius:15px;padding:9px 14px}
+.pin-icon{transform:scale(.82);margin-right:16px}.country-name{font-size:17px;margin-bottom:3px}.country-type{font-size:14px}
+.city-heading{font-size:16px;padding:3px 18px 7px}.city-list{padding:0 18px}.city-item{min-height:79px}
+.city-image{width:57px;height:57px;margin-right:13px}.city-name{font-size:16px;margin-bottom:3px}.city-location{font-size:13px}.city-distance{font-size:14px}
+.current-location{min-height:82px;margin:0 18px}.current-icon{width:53px;height:53px;margin-right:13px}
+.current-title{font-size:15px}.current-subtitle{font-size:13px}.info-card{margin:11px 18px 9px;min-height:95px;border-radius:14px;padding:11px 13px}
+.world-icon{width:72px;height:65px;font-size:45px}.info-text{padding-left:5px}.info-title{font-size:15px;margin-bottom:4px}
+.info-description{font-size:12px;line-height:1.35}.bottom-action{padding:7px 18px 14px}.location-button{height:57px;border-radius:17px;font-size:18px}
+}
+@media(max-height:700px){
+.location-sheet{top:105px}.app-header{height:105px}.back-arrow{top:60px}.chat-icon{top:59px}.logo-main{font-size:31px;line-height:31px}
+.sheet-header{height:57px}.close-button{top:22px}.search-box{height:49px}.selected-country{min-height:62px}.city-item{min-height:67px}
+.city-image{width:50px;height:50px}.current-location{min-height:70px}.current-icon{width:45px;height:45px}.info-card{min-height:82px}.location-button{height:51px}
+}
+@media(min-width:601px){
+.location-sheet{max-width:707px;margin:auto;left:50%;right:auto;width:100%;transform:translateX(-50%)}
+.app-background{display:flex;justify-content:center}
+}
+</style>
+</head>
+<body>
+<div class="app-background">
+<header class="app-header">
+<div class="back-arrow" id="backArrow"></div>
+<div class="logo">
+<div class="logo-main">dogwu<span class="logo-heart">♥</span></div>
+<div class="logo-sub">DATING</div>
+</div>
+<div class="chat-icon" id="chatIcon"><span class="chat-dots">•••</span><span class="notification">3</span></div>
+</header>
+</div>
+
+<section class="location-sheet">
+<div class="sheet-header">
+<div class="close-button" id="closeButton"></div>
+<h1 class="sheet-title">Change location</h1>
+</div>
+
+<div class="search-container">
+<div class="search-box">
+<div class="search-icon"></div>
+<input id="searchInput" class="search-input" type="text" value="Thailand" placeholder="Search country or city">
+<div class="clear-button" id="clearSearch">×</div>
+</div>
+</div>
+
+<div class="selected-country">
+<div class="pin-icon"></div>
+<div class="country-text">
+<div class="country-name">Thailand</div>
+<div class="country-type">Country</div>
+</div>
+<div class="check"></div>
+</div>
+
+<div class="content-scroll">
+<div class="city-heading">Popular cities in Thailand</div>
+<div class="city-list" id="cityList">
+
+<div class="city-item">
+<img class="city-image" src="https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=200&q=80" alt="Bangkok">
+<div class="city-info"><div class="city-name">Bangkok</div><div class="city-location">Bangkok, Thailand</div></div>
+<div class="city-distance">0 km</div>
+</div>
+
+<div class="city-item">
+<img class="city-image" src="https://images.unsplash.com/photo-1598970605070-a38a6ccd3a2d?auto=format&fit=crop&w=200&q=80" alt="Chiang Mai">
+<div class="city-info"><div class="city-name">Chiang Mai</div><div class="city-location">Chiang Mai, Thailand</div></div>
+<div class="city-distance">693 km</div>
+</div>
+
+<div class="city-item">
+<img class="city-image" src="https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?auto=format&fit=crop&w=200&q=80" alt="Phuket">
+<div class="city-info"><div class="city-name">Phuket</div><div class="city-location">Phuket, Thailand</div></div>
+<div class="city-distance">863 km</div>
+</div>
+
+<div class="city-item">
+<img class="city-image" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=200&q=80" alt="Pattaya">
+<div class="city-info"><div class="city-name">Pattaya</div><div class="city-location">Chonburi, Thailand</div></div>
+<div class="city-distance">1051 km</div>
+</div>
+
+<div class="city-item">
+<img class="city-image" src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=200&q=80" alt="Krabi">
+<div class="city-info"><div class="city-name">Krabi</div><div class="city-location">Krabi, Thailand</div></div>
+<div class="city-distance">1121 km</div>
+</div>
+
+<div class="city-item">
+<img class="city-image" src="https://images.unsplash.com/photo-1563492065599-3520f775eeed?auto=format&fit=crop&w=200&q=80" alt="Hatyai">
+<div class="city-info"><div class="city-name">Hatyai</div><div class="city-location">Songkhla, Thailand</div></div>
+<div class="city-distance">1187 km</div>
+</div>
+</div>
+
+<div class="current-location" id="currentLocation">
+<div class="current-icon"><div class="current-pin"></div></div>
+<div class="current-text">
+<div class="current-title">Use current location</div>
+<div class="current-subtitle">Detect my location automatically</div>
+</div>
+<div class="chevron"></div>
+</div>
+
+<div class="info-card">
+<div class="world-icon"></div>
+<div class="info-text">
+<div class="info-title">Travel the world, meet amazing people 💕</div>
+<div class="info-description">Changing your location allows you to discover and connect with singles in that area.</div>
+</div>
+</div>
+</div>
+
+<div class="bottom-action">
+<button class="location-button" id="locationButton">Set location to Thailand</button>
+</div>
+</section>
+
+<script>
+const searchInput=document.getElementById("searchInput");
+const clearSearch=document.getElementById("clearSearch");
+
+clearSearch.addEventListener("click",()=>{
+ searchInput.value="";
+ searchInput.focus();
+ filterCities("");
+});
+
+searchInput.addEventListener("input",function(){
+ filterCities(this.value.toLowerCase().trim());
+});
+
+function filterCities(value){
+ document.querySelectorAll(".city-item").forEach(city=>{
+  const name=city.querySelector(".city-name").textContent.toLowerCase();
+  const location=city.querySelector(".city-location").textContent.toLowerCase();
+  city.style.display=(!value||name.includes(value)||location.includes(value))?"flex":"none";
+ });
+}
+
+function goBack(){
+ if(history.length>1){history.back();}
+ else{location.href="/nearby";}
+}
+
+document.getElementById("backArrow").addEventListener("click",goBack);
+document.getElementById("chatIcon").addEventListener("click",()=>{location.href="/matches";});
+document.getElementById("closeButton").addEventListener("click",goBack);
+
+document.getElementById("currentLocation").addEventListener("click",()=>{
+ if(!navigator.geolocation){
+  alert("Location detection is not supported.");
+  return;
+ }
+ navigator.geolocation.getCurrentPosition(
+  ()=>alert("Current location detected."),
+  ()=>alert("Unable to detect your location. Please check your location permission.")
+ );
+});
+
+document.getElementById("locationButton").addEventListener("click",()=>{
+ const button=document.getElementById("locationButton");
+ button.textContent="Location set ✓";
+ setTimeout(()=>button.textContent="Set location to Thailand",1800);
+});
+</script>
+</body>
+</html>
