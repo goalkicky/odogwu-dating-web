@@ -14,7 +14,7 @@ export default function TabBar() {
   const tabs = [
     { href: '/home', icon: <HOME_ICON />, label: 'Home' },
     { href: '/explore', icon: <CompassIcon size={20} />, label: 'Explore' },
-    { href: '/matches', icon: <ChatIcon size={20} />, label: 'Matches' },
+    { href: '/matches', icon: <ChatIcon size={20} />, label: 'Messages' },
     { href: '/likes', icon: <EyeIcon size={20} />, label: 'Likes' },
     { href: '/edit-profile', icon: <PersonIcon size={20} />, label: 'Profile' },
   ];

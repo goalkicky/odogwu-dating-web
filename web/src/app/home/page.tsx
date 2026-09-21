@@ -371,7 +371,7 @@ export default function HomePage() {
           </button>
           <div className="tmpl-sb-extra">
             <button onClick={() => go('/explore')}>Explore</button>
-            <button onClick={() => go('/matches')}>♥&nbsp;&nbsp;Matches</button>
+            <button onClick={() => go('/matches')}>♥&nbsp;&nbsp;Messages</button>
             <button onClick={() => go('/likes')}>♧&nbsp;&nbsp;Likes You</button>
             <button onClick={() => go('/nearby')}>◎&nbsp;&nbsp;Nearby</button>
             <button onClick={() => go('/settings')}>⚙&nbsp;&nbsp;Settings</button>
@@ -450,7 +450,7 @@ export default function HomePage() {
                 )}
                 <b className="tmpl-badge">{matchesCount}</b>
               </span>
-              <label>Matches</label>
+              <label>Messages</label>
             </button>
             <button className="tmpl-quick" onClick={() => go('/nearby')}>
               <span className="tmpl-round-photo location">

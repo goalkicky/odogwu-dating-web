@@ -61,7 +61,7 @@ export default function AppShell({ children, header }: { children: React.ReactNo
     { href: '/home', label: 'Home', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><path d="M8 22 24 9l16 13v17H29V28H19v11H8Z"/></svg> },
     { href: '/discover', label: 'Discover', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><path d="M10 35l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/></svg> },
     { href: '/explore', label: 'Explore', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><circle cx="20" cy="22" r="2"/><circle cx="26" cy="22" r="2"/><circle cx="32" cy="22" r="2"/></svg> },
-    { href: '/matches', label: 'Matches', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><path d="M24 40s-14-9-14-20a8 8 0 0 1 14-5 8 8 0 0 1 14 5c0 11-14 20-14 20Z" fill="none" strokeWidth="2.4"/></svg> },
+    { href: '/matches', label: 'Messages', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><path d="M24 40s-14-9-14-20a8 8 0 0 1 14-5 8 8 0 0 1 14 5c0 11-14 20-14 20Z" fill="none" strokeWidth="2.4"/></svg> },
     { href: '/likes', label: 'Likes You', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><circle cx="24" cy="17" r="7" fill="none" strokeWidth="2.6"/><path d="M10 39c1-8 7-12 14-12s13 4 14 12" fill="none" strokeWidth="2.6"/></svg> },
     { href: '/edit-profile', label: 'Profile', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><circle cx="24" cy="17" r="7" fill="none" strokeWidth="2.6"/><path d="M10 39c1-8 7-12 14-12s13 4 14 12" fill="none" strokeWidth="2.6"/></svg> },
     { href: '/settings', label: 'Settings', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><circle cx="24" cy="24" r="10" fill="none" strokeWidth="2.6"/><path d="M24 6v6M24 36v6M6 24h6M36 24h6" strokeWidth="2.6"/></svg> },

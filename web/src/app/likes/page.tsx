@@ -220,7 +220,7 @@ export default function LikesPage() {
               )}
               <b className="lk badge-count">{matchesCount}</b>
             </span>
-            <label>Matches</label>
+            <label>Messages</label>
           </button>
           <button className="lk quick" onClick={() => router.push('/discover')}>
             <span className="lk round-photo location">
