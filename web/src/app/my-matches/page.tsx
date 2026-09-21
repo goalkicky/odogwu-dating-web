@@ -234,12 +234,19 @@ export default function MyMatchesPage() {
         .tmpl-messages-top { position: relative; width: 50px; height: 50px; background: none; border: 0; cursor: pointer; color: #171717; padding: 0; }
         .tmpl-messages-top svg { width: 40px; height: 40px; }
         .tmpl-messages-top em { position: absolute; right: 0; top: -4px; background: #d71945; color: #fff; width: 24px; height: 24px; border-radius: 50%; font-style: normal; font-size: 13px; display: grid; place-items: center; font-weight: 700; }
-        .tmpl-premium { min-height: 105px; height: auto; background: #fff1f5; border-radius: 18px; display: flex; align-items: center; padding: 10px 22px; margin-bottom: 18px; }
-        .tmpl-crown { width: 52px; height: 52px; background: #df164c; color: #ffd12a; border-radius: 50%; display: grid; place-items: center; font-size: 32px; margin-right: 15px; flex-shrink: 0; }
-        .tmpl-premium-copy { flex: 1; }
-        .tmpl-premium h3 { font-size: 16px; margin: 0 0 5px; color: #151515; font-weight: 800; }
-        .tmpl-premium p { font-size: 13px; line-height: 19px; color: #555; margin: 0; font-weight: 700; }
-        .tmpl-pink-btn { background: #FF1747; color: #fff; border-radius: 28px; padding: 15px 27px; font-size: 16px; border: 0; cursor: pointer; font-weight: 600; }
+        .mm-home .tmpl-premium { min-height: 88px; height: auto; background: #fff1f5; border-radius: 16px; display: flex; align-items: center; padding: 8px 12px; margin: 0 0 12px; }
+        .mm-home .tmpl-crown { width: 38px; height: 38px; background: #df164c; color: #ffd12a; border-radius: 50%; display: grid; place-items: center; font-size: 22px; margin-right: 11px; flex-shrink: 0; }
+        .mm-home .tmpl-premium-copy { flex: 1; min-width: 0; }
+        .mm-home .tmpl-premium h3 { font-size: 13px; margin: 0 0 3px; color: #151515; font-weight: 800; }
+        .mm-home .tmpl-premium p { font-size: 11px; line-height: 15px; color: #555; margin: 0; font-weight: 700; }
+        .mm-home .tmpl-pink-btn { background: #FF1747; color: #fff; border-radius: 20px; padding: 10px 15px; font-size: 12.5px; border: 0; cursor: pointer; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
+        @media(max-width:480px){
+          .mm-home .tmpl-premium { min-height: 78px; padding: 7px 10px; border-radius: 14px; margin-bottom: 10px; }
+          .mm-home .tmpl-crown { width: 32px; height: 32px; font-size: 18px; margin-right: 9px; }
+          .mm-home .tmpl-premium h3 { font-size: 12px; margin-bottom: 2px; }
+          .mm-home .tmpl-premium p { font-size: 10px; line-height: 13px; }
+          .mm-home .tmpl-pink-btn { padding: 9px 11px; font-size: 11px; border-radius: 16px; }
+        }
         .tmpl-quick-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin: 3px 0 26px; }
         .tmpl-quick { position: relative; display: flex; flex-direction: column; align-items: center; color: #171717; background: none; border: 0; cursor: pointer; padding: 0; min-width: 0; }
         .tmpl-round-photo { width: 111px; max-width: 100%; height: auto; aspect-ratio: 1/1; border: 4px solid #d30e42; border-radius: 50%; padding: 5px; display: block; position: relative; background: #fff; box-sizing: border-box; }
