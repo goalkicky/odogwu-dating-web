@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>Odogwu — Discover</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">O<span>♥</span></div>
+        <div class="brand-copy">
+          <strong>Odogwu</strong>
+          <small>Where real connections begin</small>
+        </div>
+      </div>
+
+      <h1>Discover</h1>
+
+      <button class="icon-btn filter-btn" id="filterBtn" aria-label="Filters">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M5 8h22M5 16h22M5 24h22" />
+          <circle cx="12" cy="8" r="3"/><circle cx="21" cy="16" r="3"/><circle cx="14" cy="24" r="3"/>
+        </svg>
+      </button>
+    </header>
+
+    <main>
+      <section class="profile-card" id="profileCard">
+        <div class="photo-wrap">
+          <img src="profile.jpg" alt="Profile photo of Amaka">
+          <div class="photo-shade"></div>
+
+          <div class="pill for-you"><span>✦</span> For You</div>
+          <div class="pill verified"><span class="check">✓</span> Verified</div>
+        </div>
+
+        <div class="profile-content">
+          <div class="name-row">
+            <h2>Amaka, 26</h2>
+            <span class="verified-small">✓</span>
+          </div>
+
+          <div class="location">
+            <svg viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.2"/></svg>
+            Lagos, Nigeria <b>•</b> 5 km away
+          </div>
+
+          <p class="bio"><span>“</span> God fearing, adventurous and looking<br class="desktop-only"> for my partner in purpose.</p>
+
+          <h3>My Interests (10)</h3>
+          <div class="interests">
+            <span><i class="bubble">•••</i> Igbo</span>
+            <span><i>♫</i> Amapiano</span>
+            <span><i>🎬</i> Nollywood</span>
+            <span><i>⚽</i> Football</span>
+            <span><i>🍴</i> Jollof</span>
+            <span><i>◎</i> Instagram</span>
+            <span><i>♟</i> Bini-Bronzes</span>
+            <span><i>🌍</i> Pan-Africanism</span>
+            <span><i>✈</i> Travel</span>
+            <span><i>♨</i> Spa</span>
+          </div>
+
+          <div class="facts">
+            <div>
+              <span class="fact-icon">🎓</span>
+              <small>Education</small>
+              <strong>B.Sc. Mass Comm.</strong>
+            </div>
+            <div>
+              <span class="fact-icon">💼</span>
+              <small>Occupation</small>
+              <strong>Content Creator</strong>
+            </div>
+            <div>
+              <span class="fact-icon">♥</span>
+              <small>Looking for</small>
+              <strong>Serious Relationship</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="actions" aria-label="Profile actions">
+        <button class="action pass" id="passBtn">
+          <span>×</span>
+          <small>Pass</small>
+        </button>
+
+        <button class="action like" id="likeBtn">
+          <span>♥</span>
+          <small>Like</small>
+        </button>
+
+        <button class="action message" id="messageBtn">
+          <span>●</span>
+          <small>Message</small>
+        </button>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button><span class="nav-icon">⌂</span><small>Home</small></button>
+      <button><span class="nav-icon heart-outline">♡<b>12</b></span><small>Likes</small></button>
+      <button class="active"><span class="nav-icon">◈</span><small>Discover</small></button>
+      <button><span class="nav-icon">♡<b>5</b></span><small>Matches</small></button>
+      <button><span class="nav-icon">♙</span><small>Profile</small></button>
+    </nav>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="modal-backdrop" id="filterModal">
+    <div class="modal">
+      <button class="modal-close" id="closeModal">×</button>
+      <h2>Discover Filters</h2>
+      <label>Distance <strong id="distanceValue">5 km</strong></label>
+      <input id="distance" type="range" min="1" max="50" value="5">
+      <label>Looking for</label>
+      <select>
+        <option>Serious Relationship</option>
+        <option>Friendship</option>
+        <option>Long-term Relationship</option>
+      </select>
+      <button class="apply" id="applyFilters">Apply Filters</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

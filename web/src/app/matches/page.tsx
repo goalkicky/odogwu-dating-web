@@ -1,17 +1,29 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FilterIcon, ChatIcon, ChevronForwardIcon } from '@/components/Icons';
 import AppShell from '@/components/AppShell';
 import { useAuth } from '@/store/AuthContext';
-import { matchService, storageService } from '@/lib/cloudflare/services';
+import { matchService, messageService, storageService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
+
+function timeAgo(dateStr: string) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  return `${days}d ago`;
+}
 
 export default function MatchesPage() {
   const { profile, user } = useAuth();
   const [matches, setMatches] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState<'connections' | 'requests'>('connections');
+  const [lastTexts, setLastTexts] = useState<Record<string, any[]>>({});
 
   useEffect(() => {
     if (!profile && !user) return;
@@ -19,8 +31,7 @@ export default function MatchesPage() {
     if (!uid) return;
     setLoading(true);
     account?.createJWT()
-      .then(async tokenRes => {
-        const token = tokenRes.jwt;
+      .then(async () => {
         const docs = await matchService.getUserMatches(uid);
         const withPhotos = docs.map((m: any) => {
           const mp = m.matchedUser;
@@ -34,173 +45,218 @@ export default function MatchesPage() {
           };
         });
         setMatches(withPhotos);
+        const per: Record<string, any[]> = {};
+        await Promise.all(
+          withPhotos.map(async (m: any) => {
+            if (!m.$id) return;
+            try {
+              const res: any = await messageService.getMessages(m.$id);
+              const docs: any[] = res?.documents || [];
+              const texts = docs
+                .filter((d: any) => d.type === 'text' && d.text)
+                .sort((a: any, b: any) => String(a.createdAt).localeCompare(String(b.createdAt)));
+              per[m.$id] = texts.slice(-2);
+            } catch {}
+          })
+        );
+        setLastTexts(per);
         setLoading(false);
       })
       .catch(() => setLoading(false));
   }, [profile, user]);
 
   const q = searchQuery.toLowerCase();
-  // Matches with an existing conversation leave the "New Matches" row and live in Messages only
-  const newMatches = matches.filter((m: any) => !m.hasConversation && m.matchedUser && (m.matchedUser.fullName || '').toLowerCase().includes(q));
   const conversationMatches = matches.filter((m: any) => m.matchedUser && (m.matchedUser.fullName || '').toLowerCase().includes(q));
-
-  const avatar = (photoUrl: string, name: string, size: number) => (
-    photoUrl ? (
-      <img src={photoUrl} alt={name} style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover' }} />
-    ) : (
-      <div style={{ width: size, height: size, borderRadius: '50%', background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: size * 0.42, fontWeight: 800 }}>
-        {name[0]}
-      </div>
-    )
-  );
+  const requestCount = matches.filter((m: any) => !m.hasConversation).length;
 
   return (
-    <AppShell>
-      <div>
-        <div className="animate-fade-up" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 10, background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 800, fontSize: 18 }}>M</div>
-            <div>
-              <span style={{ fontSize: 24, fontWeight: 800, color: '#151515' }}>Matches</span>
-              {matches.length > 0 && (
-                <div style={{ fontSize: 12, color: '#FF7BA0', fontWeight: 700, marginTop: 1 }}>
-                  {matches.length} {matches.length === 1 ? 'connection' : 'connections'}
-                </div>
-              )}
-            </div>
-          </div>
-          <button className="lift" style={{ background: '#fff', border: '1px solid #EDEDF1', cursor: 'pointer', padding: 10, borderRadius: 12, display: 'flex' }}>
-            <FilterIcon size={20} color="#65656A" />
+    <AppShell
+      header={
+        <header className="uv-topbar" style={{ position: 'relative', alignItems: 'center', paddingTop: 26 }}>
+          <img className="uv-brand-logo" src="/o-logo.png" alt="Odogwu" style={{ height: 30 }} />
+          <span style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', fontSize: 17, fontWeight: 800, color: '#151515', letterSpacing: -0.3, whiteSpace: 'nowrap' }}>Messages</span>
+        </header>
+      }
+    >
+      <style>{`
+        .msg-search{height:50px;border:1.5px solid #dedee2;border-radius:14px;display:flex;align-items:center;padding:0 10px;box-shadow:0 1px 3px rgba(0,0,0,.02)}
+        .msg-search svg{width:22px;height:22px;stroke:#aeb0b7;fill:none;stroke-width:1.8;margin-right:12px;flex-shrink:0}
+        .msg-search input{width:100%;border:0;outline:0;color:#333;background:transparent;font-size:18px}
+        .msg-search input::placeholder{color:#b7b8bd;opacity:1}
+        .msg-tabs{height:64px;display:flex;align-items:center;gap:24px}
+        .msg-tab{position:relative;height:100%;font-size:22px;font-weight:600;color:#17181d;padding:0;cursor:pointer}
+        .msg-tab.active{color:#d71945}
+        .msg-tab.active:after{content:"";position:absolute;height:3px;background:#d71945;left:-1px;right:-1px;bottom:5px;border-radius:4px}
+        .msg-request-count{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;margin-left:7px;border-radius:50%;background:#d71945;color:#fff;font-size:18px;vertical-align:middle}
+        .msg-conv{height:92px;border-bottom:1px solid #e8e8eb;display:grid;grid-template-columns:80px 1fr 86px;column-gap:14px;align-items:center}
+        .msg-avatar-wrap{width:80px;height:80px;position:relative}
+        .msg-avatar-wrap img,.msg-avatar-wrap .msg-avatar-fallback{width:80px;height:80px;display:block;object-fit:cover;border-radius:50%}
+        .msg-avatar-fallback{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#FF2E5F,#B44CFF);color:#fff;font-size:34px;font-weight:800}
+        .msg-online{position:absolute;width:15px;height:15px;border-radius:50%;background:#13c979;border:2px solid #fff;right:1px;bottom:1px}
+        .msg-person-line{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+        .msg-person-line strong{font-size:18px;line-height:1.05;letter-spacing:-.3px;color:#101114}
+        .msg-verified{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#1496e9;color:#fff;font-size:12px;font-weight:800;line-height:1}
+        .msg-preview{font-size:15px;line-height:1.55;color:#3f4046;letter-spacing:.05px;overflow:hidden;text-overflow:ellipsis}
+        .msg-meta{height:100%;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:20px}
+        .msg-meta time{font-size:16px;color:#62636a;white-space:nowrap}
+        .msg-unread-badge{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:#d71945;color:#fff;font-size:18px;font-weight:700}
+        @media (max-width:620px){
+          .msg-tabs{height:62px;gap:22px}
+          .msg-tab{font-size:20px}
+          .msg-conv{height:92px;grid-template-columns:76px 1fr 68px;column-gap:12px}
+          .msg-avatar-wrap,.msg-avatar-wrap img,.msg-avatar-wrap .msg-avatar-fallback{width:76px;height:76px}
+          .msg-avatar-fallback{font-size:32px}
+          .msg-online{width:15px;height:15px}
+          .msg-person-line strong{font-size:17px}
+          .msg-preview{font-size:13px}
+          .msg-meta time{font-size:15px}
+        }
+        @media (max-width:450px){
+          .msg-search{height:46px;border-radius:12px}
+          .msg-search input{font-size:15px}
+          .msg-tabs{height:58px;gap:18px}
+          .msg-tab{font-size:18px}
+          .msg-request-count{width:31px;height:31px;font-size:16px}
+          .msg-conv{height:82px;grid-template-columns:64px minmax(0,1fr) 48px;column-gap:10px}
+          .msg-avatar-wrap,.msg-avatar-wrap img,.msg-avatar-wrap .msg-avatar-fallback{width:64px;height:64px}
+          .msg-avatar-fallback{font-size:27px}
+          .msg-online{width:14px;height:14px;right:0;bottom:0}
+          .msg-person-line{gap:4px;margin-bottom:3px}
+          .msg-person-line strong{font-size:15px}
+          .msg-verified{width:16px;height:16px;font-size:10px}
+          .msg-preview{font-size:13px}
+          .msg-meta{gap:13px}
+          .msg-meta time{font-size:12px}
+          .msg-unread-badge{width:30px;height:30px;font-size:15px}
+        }
+        @media (max-width:360px){
+          .msg-conv{grid-template-columns:54px minmax(0,1fr) 42px;column-gap:8px}
+          .msg-avatar-wrap,.msg-avatar-wrap img,.msg-avatar-wrap .msg-avatar-fallback{width:54px;height:54px}
+          .msg-person-line strong{font-size:14px}
+          .msg-preview{font-size:12px}
+        }
+      `}</style>
+
+      <div style={{ padding: '0', flex: 1 }}>
+        <label className="msg-search">
+          <svg viewBox="0 0 24 24">
+            <circle cx="10.8" cy="10.8" r="7.4"></circle>
+            <path d="M16.2 16.2 21 21"></path>
+          </svg>
+          <input
+            type="text"
+            placeholder="Search messages"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+          />
+        </label>
+
+        <div className="msg-tabs">
+          <button className={`msg-tab ${activeTab === 'connections' ? 'active' : ''}`} onClick={() => setActiveTab('connections')}>Connections</button>
+          <button className={`msg-tab ${activeTab === 'requests' ? 'active' : ''}`} onClick={() => setActiveTab('requests')}>
+            Requests
+            {requestCount > 0 && <b className="msg-request-count">{requestCount}</b>}
           </button>
         </div>
 
-        <div className="animate-fade-up" style={{ position: 'relative', marginBottom: 26, borderRadius: 16, overflow: 'hidden', background: '#fff', border: '1px solid #EDEDF1' }}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A8A8F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-          <input
-            type="text" placeholder="Search matches..."
-            value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-            style={{
-              width: '100%', padding: '14px 16px 14px 44px', borderRadius: 16,
-              border: 'none', background: 'transparent', color: '#151515', fontSize: 15,
-              outline: 'none', boxSizing: 'border-box',
-            }}
-          />
-        </div>
-
-      {loading ? (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 80, gap: 16 }}>
-          <div style={{ width: 40, height: 40, borderRadius: 14, border: '3px solid rgba(255,46,95,0.2)', borderTopColor: '#FF2E5F', animation: 'spin 0.8s linear infinite' }} />
-          <span style={{ color: '#8A8A8F', fontSize: 15 }}>Loading matches...</span>
-        </div>
-      ) : (
-        <>
-          <div style={{ marginBottom: 34 }} className="animate-fade-up">
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-              <span style={{ fontSize: 18, fontWeight: 800, color: '#151515' }}>New Matches</span>
-              <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#FF2E5F', boxShadow: '0 0 10px #FF2E5F' }} />
-            </div>
-            {newMatches.length === 0 ? (
-              <div style={{ padding: 24, borderRadius: 18, textAlign: 'center', background: '#fff', border: '1px solid #EFEFF3' }}>
-                <p style={{ color: '#8A8A8F', fontSize: 14, margin: 0 }}>
-                  No matches yet. Keep swiping on Discover! 💘
-                </p>
-              </div>
-            ) : (
-              <div
-                className="hscroll"
-                style={{
-                  display: 'flex', gap: 18, flexWrap: 'nowrap',
-                  overflowX: 'auto', paddingBottom: 8,
-                  WebkitOverflowScrolling: 'touch' as any,
-                }}>
-                {newMatches.map((item: any) => {
-                  const mp = item.matchedUser || {};
-                  const photoUrl = mp._photoUrl || '';
-                  const name = mp.fullName || 'User';
-                  return (
-                    <Link
-                      key={item.$id}
-                      href={`/chat/${item.$id}`}
-                      className="lift"
-                      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, width: 84, flexShrink: 0, textDecoration: 'none' }}
-                    >
-                      <div style={{ position: 'relative' }}>
-                        <div className="grad-ring" style={{ width: 84, height: 84, display: 'flex', boxShadow: '0 6px 24px rgba(255,46,95,0.25)' }}>
-                          <div style={{ width: 78, height: 78, borderRadius: '50%', overflow: 'hidden', background: '#F3F3F6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            {avatar(photoUrl, name, 78)}
-                          </div>
-                        </div>
-                        <div style={{ position: 'absolute', top: -2, right: -4, padding: '3px 8px', borderRadius: 9999, background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', fontSize: 9, fontWeight: 800, color: 'white', letterSpacing: 1, boxShadow: '0 4px 12px rgba(255,46,95,0.5)' }}>
-                          NEW
-                        </div>
-                      </div>
-                      <span style={{ color: '#65656A', fontSize: 12, fontWeight: 600, textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: 84 }}>{name}</span>
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
+        {loading ? (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 80, gap: 16 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 14, border: '3px solid rgba(255,46,95,0.2)', borderTopColor: '#FF2E5F', animation: 'spin 0.8s linear infinite' }} />
+            <span style={{ color: '#8A8A8F', fontSize: 15 }}>Loading conversations...</span>
           </div>
-
-          <div className="animate-fade-up">
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-              <ChatIcon size={20} color="#FF7BA0" />
-              <span style={{ fontSize: 18, fontWeight: 800, color: '#151515' }}>Messages</span>
-            </div>
+        ) : activeTab === 'connections' ? (
+          <div>
             {conversationMatches.length === 0 ? (
               <div style={{ padding: 24, borderRadius: 18, textAlign: 'center', background: '#fff', border: '1px solid #EFEFF3' }}>
-                <p style={{ color: '#8A8A8F', fontSize: 14, margin: 0 }}>
-                  No messages yet. Start a conversation! 💬
-                </p>
+                <p style={{ color: '#8A8A8F', fontSize: 14, margin: 0 }}>No conversations yet. Start chatting from Discover! 💬</p>
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {conversationMatches.map((item: any) => {
-                  const mp = item.matchedUser || {};
-                  const photoUrl = mp._photoUrl || '';
-                  const name = mp.fullName || 'User';
-                  const age = mp.age || '';
-                  const lm = item.lastMessage;
-                  const isMe = lm && lm.senderId === (user as any)?.$id;
-                  const preview = lm ? (isMe ? `You: ${lm.text}` : lm.text) : 'Say hello! 👋';
-                  return (
-                    <Link
-                      key={item.$id}
-                      href={`/chat/${item.$id}`}
-                      className="lift"
-                      style={{
-                        display: 'flex', alignItems: 'center', padding: 14, borderRadius: 18, gap: 14,
-                        textDecoration: 'none', cursor: 'pointer', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)',
-                      }}
-                    >
-                      <div style={{ position: 'relative' }}>
-                        <div className="grad-ring" style={{ width: 62, height: 62, display: 'flex' }}>
-                          <div style={{ width: 56, height: 56, borderRadius: '50%', overflow: 'hidden', background: '#F3F3F6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            {avatar(photoUrl, name, 56)}
-                          </div>
-                        </div>
-                        <span style={{ position: 'absolute', bottom: 2, right: 2, width: 12, height: 12, borderRadius: 9999, background: '#3DFC77', border: '2px solid #fff', boxShadow: '0 0 6px rgba(61,252,119,0.6)' }} />
+              conversationMatches.map((item: any) => {
+                const mp = item.matchedUser || {};
+                const photoUrl = mp._photoUrl || '';
+                const name = mp.fullName || 'User';
+                const texts = lastTexts[item.$id] || [];
+                const userId = (user as any)?.$id;
+                const preview = texts.length > 0 ? texts.map((t: any) => {
+                  let line = t.senderId === userId ? `You: ${t.text}` : t.text;
+                  if (line.length > 45) line = line.slice(0, 45).trimEnd() + '...';
+                  return line;
+                }) : ['Say hello! 👋'];
+                const time = texts.length > 0 ? timeAgo(texts[texts.length - 1].createdAt) : '';
+
+                return (
+                  <Link
+                    key={item.$id}
+                    href={`/chat/${item.$id}`}
+                    className="msg-conv"
+                    style={{ textDecoration: 'none', display: 'grid' }}
+                  >
+                    <div className="msg-avatar-wrap">
+                      {photoUrl ? (
+                        <img src={photoUrl} alt={name} />
+                      ) : (
+                        <div className="msg-avatar-fallback">{name[0]}</div>
+                      )}
+                      <span className="msg-online"></span>
+                    </div>
+                    <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                      <div className="msg-person-line">
+                        <strong>{name}</strong>
                       </div>
-                      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3 }}>
-                        <div style={{ display: 'flex', gap: 6, alignItems: 'baseline' }}>
-                          <span style={{ fontSize: 16, fontWeight: 700, color: '#151515' }}>{name}</span>
-                          {age && <span style={{ fontSize: 14, color: '#8A8A8F' }}>{age}</span>}
-                        </div>
-                        <span style={{ fontSize: 14, color: '#8A8A8F', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {preview}
-                        </span>
+                      <div className="msg-preview">
+                        {preview.map((line: string, i: number) => (
+                          <span key={i} style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{line}</span>
+                        ))}
                       </div>
-                      <ChevronForwardIcon size={18} color="#C7C7CC" />
-                    </Link>
-                  );
-                })}
-              </div>
+                    </div>
+                    <div className="msg-meta">
+                      {time && <time>{time}</time>}
+                    </div>
+                  </Link>
+                );
+              })
             )}
           </div>
-        </>
-      )}
+        ) : (
+          <div>
+            {requestCount === 0 ? (
+              <div style={{ padding: 24, borderRadius: 18, textAlign: 'center', background: '#fff', border: '1px solid #EFEFF3' }}>
+                <p style={{ color: '#8A8A8F', fontSize: 14, margin: 0 }}>No pending requests</p>
+              </div>
+            ) : (
+              matches.filter((m: any) => !m.hasConversation && m.matchedUser && (m.matchedUser.fullName || '').toLowerCase().includes(q)).map((item: any) => {
+                const mp = item.matchedUser || {};
+                const photoUrl = mp._photoUrl || '';
+                const name = mp.fullName || 'User';
+                return (
+                  <Link
+                    key={item.$id}
+                    href={`/chat/${item.$id}`}
+                    className="msg-conv"
+                    style={{ textDecoration: 'none', display: 'grid' }}
+                  >
+                    <div className="msg-avatar-wrap">
+                      {photoUrl ? (
+                        <img src={photoUrl} alt={name} />
+                      ) : (
+                        <div className="msg-avatar-fallback">{name[0]}</div>
+                      )}
+                      <span className="msg-online"></span>
+                    </div>
+                    <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                      <div className="msg-person-line">
+                        <strong>{name}</strong>
+                      </div>
+                      <div className="msg-preview">
+                        <span style={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>New match — say hello! 👋</span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })
+            )}
+          </div>
+        )}
       </div>
     </AppShell>
   );

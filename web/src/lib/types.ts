@@ -26,6 +26,10 @@ export interface UserProfile {
   height?: string;
   weight?: string;
   relationshipGoals?: string;
+  education?: string;
+  courseOfStudy?: string;
+  institution?: string;
+  occupation?: string;
 }
 
 export interface Match {

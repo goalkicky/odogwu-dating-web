@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Odogwu Dating — Messages</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand" aria-label="Odogwu Dating">
+        <div class="brand-mark">
+          <span class="brand-heart">♥</span>
+          <span class="brand-ring"></span>
+        </div>
+        <div class="brand-copy">
+          <div class="brand-name">ODOGWU</div>
+          <div class="brand-sub"><span></span> DAT<span class="heart">♥</span>ING <span></span></div>
+        </div>
+      </div>
+      <h1>Messages</h1>
+      <div class="topbar-spacer"></div>
+    </header>
+
+    <section class="messages-area">
+      <label class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="10.8" cy="10.8" r="7.4"></circle>
+          <path d="M16.2 16.2 21 21"></path>
+        </svg>
+        <input type="text" placeholder="Search messages" aria-label="Search messages">
+      </label>
+
+      <div class="tabs">
+        <button class="tab active">Connections</button>
+        <button class="tab">Requests <b class="request-count">3</b></button>
+      </div>
+
+      <div class="conversation-list">
+        <article class="conversation unread">
+          <div class="avatar-wrap">
+            <img src="assets/avatar-1.jpg" alt="Nhlamulo">
+            <span class="online"></span>
+          </div>
+          <div class="conversation-main">
+            <div class="person-line"><strong>Nhlamulo</strong><span class="verified">✓</span></div>
+            <div class="preview">Hey there 👋<br>How was your day?</div>
+          </div>
+          <div class="meta"><time>2m ago</time><span class="unread-badge">2</span></div>
+        </article>
+
+        <article class="conversation unread">
+          <div class="avatar-wrap">
+            <img src="assets/avatar-2.jpg" alt="Zinhle">
+            <span class="online"></span>
+          </div>
+          <div class="conversation-main">
+            <div class="person-line"><strong>Zinhle</strong><span class="verified">✓</span></div>
+            <div class="preview">I love your taste in music!<br>Amapiano all the way 🎶</div>
+          </div>
+          <div class="meta"><time>15m ago</time><span class="unread-badge">1</span></div>
+        </article>
+
+        <article class="conversation">
+          <div class="avatar-wrap">
+            <img src="assets/avatar-3.jpg" alt="Boitumelo">
+            <span class="online"></span>
+          </div>
+          <div class="conversation-main">
+            <div class="person-line"><strong>Boitumelo</strong><span class="verified">✓</span></div>
+            <div class="preview">You seem really fun to be around.<br>Let’s talk more 😊</div>
+          </div>
+          <div class="meta"><time>1h ago</time></div>
+        </article>
+
+        <article class="conversation">
+          <div class="avatar-wrap">
+            <img src="assets/avatar-4.jpg" alt="Amahle">
+            <span class="online"></span>
+          </div>
+          <div class="conversation-main">
+            <div class="person-line"><strong>Amahle</strong><span class="verified">✓</span></div>
+            <div class="preview">Haha that made me laugh 😂<br>Tell me more about yourself</div>
+          </div>
+          <div class="meta"><time>2h ago</time></div>
+        </article>
+
+        <article class="conversation">
+          <div class="avatar-wrap">
+            <img src="assets/avatar-5.jpg" alt="Lerato">
+            <span class="online"></span>
+          </div>
+          <div class="conversation-main">
+            <div class="person-line"><strong>Lerato</strong><span class="verified">✓</span></div>
+            <div class="preview">Nice photos!<br>Where was that taken?</div>
+          </div>
+          <div class="meta"><time>3h ago</time></div>
+        </article>
+
+        <article class="conversation">
+          <div class="avatar-wrap">
+            <img src="assets/avatar-6.jpg" alt="Thando">
+            <span class="online"></span>
+          </div>
+          <div class="conversation-main">
+            <div class="person-line"><strong>Thando</strong><span class="verified">✓</span></div>
+            <div class="preview">I’m new here too 😊<br>It’s nice to meet you</div>
+          </div>
+          <div class="meta"><time>5h ago</time></div>
+        </article>
+
+        <article class="conversation">
+          <div class="avatar-wrap">
+            <img src="assets/avatar-7.jpg" alt="Kholiwe">
+            <span class="online"></span>
+          </div>
+          <div class="conversation-main">
+            <div class="person-line"><strong>Kholiwe</strong><span class="verified">✓</span></div>
+            <div class="preview">We have a lot in common!<br>Let’s see where this goes 😉</div>
+          </div>
+          <div class="meta"><time>1d ago</time></div>
+        </article>
+      </div>
+    </section>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button class="nav-item">
+        <svg viewBox="0 0 32 32"><path d="M4 14.2 16 4l12 10.2v13.1h-8.2v-8.1h-7.6v8.1H4z"></path></svg>
+        <span>Home</span>
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 32 32"><path d="m26.8 5.2-5.2 14.7-14.4 5.4 5.3-14.8z"></path><circle cx="15.5" cy="15.5" r="2.2"></circle></svg>
+        <span>Explore</span>
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 32 32"><path d="M11 7.1c-4.4 0-7.4 3.7-7.4 8.1 0 7.1 5.8 12 12.3 12 6.2 0 11.5-4.8 11.5-11.1 0-5.4-3.5-9.3-8.3-9.3-4.1 0-6.9 2.7-6.9 6.3 0 3.7 2.5 6.1 5.7 6.1"></path><path d="M13.4 8.3c3.1-2.4 7.2-2 9.5.8"></path></svg>
+        <span>Discover</span>
+      </button>
+      <button class="nav-item selected">
+        <span class="nav-icon-with-badge">
+          <svg viewBox="0 0 32 32"><path d="M5 15.5c0-5.9 4.7-10.5 11.1-10.5 6.4 0 10.9 4.4 10.9 10.1 0 6.2-5.2 10.5-11.2 10.5-1.9 0-3.7-.4-5.3-1.2L5 26l1.8-4.5A10.1 10.1 0 0 1 5 15.5Z"></path></svg>
+          <b class="nav-badge">5</b>
+        </span>
+        <span>Messages</span>
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 32 32"><circle cx="16" cy="10" r="5.1"></circle><path d="M5.5 28c.7-5.3 4.4-8.2 10.5-8.2S25.8 22.7 26.5 28"></path></svg>
+        <span>Profile</span>
+      </button>
+    </nav>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

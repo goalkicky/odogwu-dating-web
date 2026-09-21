@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Odogwu Dating — Complete Your Profile</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <button class="icon-btn back" aria-label="Go back">‹</button>
+      <div class="brand" aria-label="Odogwu Dating">
+        <div class="brand-mark"><span></span></div>
+        <div class="brand-word">ODOGWU</div>
+        <div class="brand-sub"><i></i><span>DAT</span><b>♥</b><span>ING</span><i></i></div>
+      </div>
+      <button class="chat-btn" aria-label="Messages"><span class="bubble">•••</span><em>3</em></button>
+    </header>
+
+    <section class="intro">
+      <h1>Complete Your Profile</h1>
+      <p>Complete your profile to get more matches <span>♥</span></p>
+      <div class="progress"><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="progress-label">100% Complete</div>
+    </section>
+
+    <section class="card photos-card">
+      <div class="section-head">
+        <div><h2>Add Your Photos</h2><p>Profiles with 4+ photos get 5x more matches</p></div>
+        <strong>4/6</strong>
+      </div>
+      <div class="photo-grid" id="photoGrid">
+        <div class="photo-item"><img src="assets/photo1.jpg" alt="Profile photo"><button class="remove" aria-label="Remove photo">×</button></div>
+        <div class="photo-item"><img src="assets/photo2.jpg" alt="Profile photo"><button class="remove" aria-label="Remove photo">×</button></div>
+        <div class="photo-item"><img src="assets/photo3.jpg" alt="Profile photo"><button class="remove" aria-label="Remove photo">×</button></div>
+        <div class="photo-item"><img src="assets/photo4.jpg" alt="Profile photo"><button class="remove" aria-label="Remove photo">×</button></div>
+        <button class="add-tile" id="addPhoto"><span>＋</span><small>Add Photo</small></button>
+        <button class="add-tile" id="addVideo"><span class="video-icon">▣</span><small>Add Video</small></button>
+      </div>
+      <div class="hint"><span>♧</span> Show your best self! Clear photos with a smiling face work best.</div>
+      <input type="file" id="photoInput" accept="image/*" multiple hidden>
+      <input type="file" id="videoInput" accept="video/*" hidden>
+    </section>
+
+    <section class="card basic-card">
+      <div class="section-head accordion-title" data-target="basicBody">
+        <div class="title-icon person">♙</div><h2>Basic Information</h2><strong>6/6 <span>⌃</span></strong>
+      </div>
+      <div class="info-grid" id="basicBody">
+        <div class="info"><label>Name</label><b>Chimaobi</b><span>✓</span></div>
+        <div class="info"><label>Age</label><b>26</b><span>✓</span></div>
+        <div class="info"><label>Gender</label><b>Man</b><span>✓</span></div>
+        <div class="info"><label>Location</label><b>Lagos, Nigeria</b><span>✓</span></div>
+        <div class="info"><label>Education</label><b>B.Sc Computer Science</b><small>University of Lagos</small><span>✓</span></div>
+        <div class="info"><label>Occupation</label><b>Software Developer</b><span>✓</span></div>
+      </div>
+    </section>
+
+    <section class="card about-card">
+      <div class="section-head accordion-title" data-target="aboutBody">
+        <div class="title-icon quote">“</div><h2>About You</h2><strong>1/1 <span>⌄</span></strong>
+      </div>
+      <div class="about-body" id="aboutBody">Easy going, God fearing and always open to new adventures.<br>I love meaningful conversations and good vibes.<span>✓</span></div>
+    </section>
+
+    <section class="card preferences-card">
+      <div class="section-head accordion-title" data-target="prefsBody">
+        <div class="title-icon heart">♡</div><h2>Your Preferences</h2><strong>4/4 <span>⌃</span></strong>
+      </div>
+      <div class="preferences" id="prefsBody">
+        <div class="pref"><div>▣</div><label>Age Range</label><b>18 - 35</b></div>
+        <div class="pref"><div>♡</div><label>Looking For</label><b>Long-term</b></div>
+        <div class="pref"><div>⌾</div><label>Distance</label><b>Up to 50 km</b></div>
+        <div class="pref"><div>♧</div><label>Kids</label><b>Open to kids</b></div>
+      </div>
+    </section>
+
+    <section class="card interests-card">
+      <div class="section-head accordion-title" data-target="interestsBody">
+        <div class="title-icon star">☆</div><div><h2>Interests</h2><p>Pick your interests</p></div><strong>10/11 <span>›</span></strong>
+      </div>
+      <div class="interest-grid" id="interestsBody">
+        <div class="interest"><span>◎</span><div><b>Language &amp; Linguistics</b><small>Igbo</small></div><em>✓</em></div>
+        <div class="interest"><span>♫</span><div><b>Music</b><small>Amāpiano</small></div><em>✓</em></div>
+        <div class="interest"><span>▣</span><div><b>Movies &amp; TV Shows</b><small>Nollywood</small></div><em>✓</em></div>
+        <div class="interest"><span>⚽</span><div><b>Sports &amp; Athletics</b><small>Football</small></div><em>✓</em></div>
+        <div class="interest"><span>▰</span><div><b>Food &amp; Drink</b><small>Jollof rice</small></div><em>✓</em></div>
+        <div class="interest"><span>▥</span><div><b>Social Media &amp; Networking</b><small>Facebook</small></div><em>✓</em></div>
+        <div class="interest"><span>◉</span><div><b>Art &amp; Literature</b><small>Things fall apart</small></div><em>✓</em></div>
+        <div class="interest"><span>⚑</span><div><b>Politics &amp; Activism</b><small>Pan - Africanism</small></div><em>✓</em></div>
+        <div class="interest"><span>◈</span><div><b>Social Activities &amp; Adventures</b><small>Travel</small></div><em>✓</em></div>
+        <div class="interest"><span>♢</span><div><b>Beauty &amp; Wellness</b><small>Spa</small></div><em>✓</em></div>
+      </div>
+    </section>
+
+    <button class="save" id="saveBtn">Save &amp; Continue</button>
+    <p class="footer-note">You can always update this later</p>
+    <div class="home-indicator"></div>
+  </main>
+  <div class="toast" id="toast">Profile saved successfully</div>
+  <script src="script.js"></script>
+</body>
+</html>

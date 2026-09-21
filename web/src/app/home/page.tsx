@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/store/AuthContext';
 import { useMobile } from '@/lib/useMediaQuery';
 import { matchService, userService, storageService, feedService } from '@/lib/cloudflare/services';
+import { profileCompletion } from '@/lib/profileCompletion';
 
 function formatAgo(iso: string): string {
   if (!iso) return 'now';
@@ -67,6 +68,7 @@ export default function HomePage() {
   const uid = (profile as any)?.$id || (profile as any)?.id;
   const profilePhoto = profile?.photos?.[0] ? storageService.getFilePreview(profile.photos[0]) : '';
   const fullName = (profile as any)?.fullName || (profile as any)?.displayName || 'Your';
+  const completion = profileCompletion(profile);
   const initial = (fullName[0] || 'O').toUpperCase();
 
   useEffect(() => {
@@ -101,14 +103,31 @@ export default function HomePage() {
 
     feedService.getFeed(profile?.interests || []).then((d: any) => {
       const posts = d?.documents || d?.posts || (Array.isArray(d) ? d : []);
+      const grouped = new Map<string, any>();
+      for (const p of posts) {
+        const uid = p.userId || p.user || p.$id;
+        if (!uid) continue;
+        const imgs = Array.isArray(p.images) ? p.images.filter(Boolean) : [];
+        if (imgs.length === 0) continue;
+        if (!grouped.has(uid)) {
+          grouped.set(uid, {
+            id: uid,
+            name: p.userName || 'Odogwu',
+            avatar: p.userPhoto ? storageService.getFilePreview(p.userPhoto) : '',
+            last: p.createdAt || '',
+            slides: [],
+          });
+        }
+        const g = grouped.get(uid);
+        const ago = formatAgo(p.createdAt);
+        for (const im of imgs) {
+          g.slides.push({ postId: p.id || p.$id, img: storageService.getFilePreview(im), ago, caption: p.caption || '' });
+        }
+      }
       setStories(
-        posts.slice(0, 6).map((p: any) => ({
-          id: p.id || p.$id,
-          name: p.userName || 'Odogwu',
-          ago: formatAgo(p.createdAt),
-          caption: p.caption || '',
-          photo: p.images?.[0] ? storageService.getFilePreview(p.images[0]) : '',
-        }))
+        [...grouped.values()]
+          .sort((a, b) => ((b.last || '') < (a.last || '') ? -1 : 1))
+          .slice(0, 6)
       );
     }).catch(() => {});
   }, [loading, isAuthenticated, profile, uid]);
@@ -150,6 +169,8 @@ export default function HomePage() {
         .tmpl-quick { position: relative; display: flex; flex-direction: column; align-items: center; color: #171717; background: none; border: 0; cursor: pointer; padding: 0; min-width: 0; }
         .tmpl-round-photo { width: 111px; max-width: 100%; height: auto; aspect-ratio: 1/1; border: 4px solid #d30e42; border-radius: 50%; padding: 5px; display: block; position: relative; background: #fff; box-sizing: border-box; }
         .tmpl-round-photo.dashed { border-style: dashed; border-color: #ec6690; }
+        .tmpl-round-photo.story { border: none; background: conic-gradient(#d30e42 calc(var(--pct,0)*1%), #e9e9ec 0); padding: 5px; }
+        .tmpl-round-photo.story > img, .tmpl-round-photo.story > div { inset: 5px !important; width: calc(100% - 10px) !important; height: calc(100% - 10px) !important; }
         .tmpl-round-photo > img, .tmpl-round-photo > div { inset: 2px !important; width: calc(100% - 4px) !important; height: calc(100% - 4px) !important; border-radius: 50%; object-fit: cover; display: block; }
         .tmpl-round-photo.location { display: grid; place-items: center; border-color: #c7a523; }
         .tmpl-round-photo.location svg { width: 57px; height: 57px; fill: #df164b; }
@@ -167,6 +188,7 @@ export default function HomePage() {
         .tmpl-shade { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.28), transparent 45%, rgba(0,0,0,.65)); }
         .tmpl-story-user { position: absolute; left: 10px; top: 12px; display: flex; gap: 7px; align-items: flex-start; font-size: 12px; text-shadow: 0 1px 2px #000; }
         .tmpl-story-user span { width: 28px; height: 28px; border-radius: 50%; background: #222; border: 2px solid #fff; display: grid; place-items: center; font-size: 12px; }
+        .tmpl-story-user img { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #fff; object-fit: cover; display: block; flex-shrink: 0; }
         .tmpl-story-user small { display: block; font-size: 11px; margin-top: 3px; font-weight: 400; }
         .tmpl-story-card p { position: absolute; left: 12px; bottom: 0; font-size: 12px; margin: 0 0 11px; }
         .tmpl-love-banner { height: 125px; border-radius: 18px; background: #fff2f6; margin: 24px 0 13px; display: flex; align-items: center; padding: 18px 24px; gap: 20px; }
@@ -231,6 +253,7 @@ export default function HomePage() {
           .tmpl-story-card { height: 185px; }
           .tmpl-story-user { font-size: 10px; left: 6px; top: 6px; gap: 4px; }
           .tmpl-story-user span { width: 20px; height: 20px; }
+          .tmpl-story-user img { width: 20px; height: 20px; }
           .tmpl-story-user small { font-size: 8px; margin-top: 1px; white-space: nowrap; }
           .tmpl-story-card p { font-size: 10px; left: 8px; }
           .tmpl-love-banner { height: auto; min-height: 90px; padding: 12px; gap: 8px; }
@@ -350,7 +373,7 @@ export default function HomePage() {
             <button onClick={() => go('/explore')}>Explore</button>
             <button onClick={() => go('/matches')}>♥&nbsp;&nbsp;Matches</button>
             <button onClick={() => go('/likes')}>♧&nbsp;&nbsp;Likes You</button>
-            <button onClick={() => go('/discover')}>◎&nbsp;&nbsp;Nearby</button>
+            <button onClick={() => go('/nearby')}>◎&nbsp;&nbsp;Nearby</button>
             <button onClick={() => go('/settings')}>⚙&nbsp;&nbsp;Settings</button>
           </div>
         </aside>
@@ -393,7 +416,7 @@ export default function HomePage() {
 
           <section className="tmpl-quick-nav">
             <button className="tmpl-quick" onClick={() => go('/edit-profile')}>
-              <span className="tmpl-round-photo dashed">
+              <span className="tmpl-round-photo story" style={{ ['--pct' as any]: completion }}>
                 <StoryAvatar photo={profilePhoto} name={initial} />
                 <b className="tmpl-plus">+</b>
               </span>
@@ -429,7 +452,7 @@ export default function HomePage() {
               </span>
               <label>Matches</label>
             </button>
-            <button className="tmpl-quick" onClick={() => go('/discover')}>
+            <button className="tmpl-quick" onClick={() => go('/nearby')}>
               <span className="tmpl-round-photo location">
                 <svg viewBox="0 0 64 64"><path d="M32 7c-12 0-21 9-21 21 0 15 21 29 21 29s21-14 21-29C53 16 44 7 32 7Zm0 29a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"/></svg>
                 <b className="tmpl-badge">{nearby.length}</b>
@@ -441,18 +464,28 @@ export default function HomePage() {
           <section className="tmpl-section">
             <h2>Top Stories <span>🔥</span></h2>
             <div className="tmpl-stories">
-              {stories.length === 0
+{stories.length === 0
                 ? MOCK_STORIES.map(s => <MockStoryCard key={s.id} s={s} />)
-                : stories.map((s: any) => (
-                    <Link key={s.id} href={`/post/${s.id}`} className="tmpl-story-card">
-                      {s.photo
-                        ? <img src={s.photo} alt="" />
-                        : <StoryAvatar photo="" name={s.name[0]} />}
-                      <div className="tmpl-shade"></div>
-                      <div className="tmpl-story-user"><span>◉</span><div>{s.name}<small>{s.ago}</small></div></div>
-                      <p>{s.caption}</p>
-                    </Link>
-                  ))}
+                : stories.map((s: any, i: number) => {
+                    const first = (s.slides && s.slides[0]) || {};
+                    return (
+                      <Link
+                        key={s.id}
+                        href={`/story/${s.id}?key=home-stories&idx=${i}`}
+                        onClick={() => {
+                          try { sessionStorage.setItem('home-stories', JSON.stringify(stories)); } catch {}
+                        }}
+                        className="tmpl-story-card"
+                      >
+                        {first.img
+                          ? <img src={first.img} alt="" />
+                          : <StoryAvatar photo="" name={s.name[0]} />}
+                        <div className="tmpl-shade"></div>
+                        <div className="tmpl-story-user">{s.avatar ? <img src={s.avatar} alt="" /> : <span>◉</span>}<div>{s.name}<small>{first.ago}</small></div></div>
+                        <p>{first.caption}</p>
+                      </Link>
+                    );
+                  })}
             </div>
           </section>
 
@@ -468,7 +501,7 @@ export default function HomePage() {
           <section className="tmpl-section">
             <div className="tmpl-section-head">
               <h2>Recently Active</h2>
-              <button className="tmpl-see-more" onClick={() => go('/discover')}>See all</button>
+              <button className="tmpl-see-more" onClick={() => go('/active')}>See all</button>
             </div>
             <div className="tmpl-active-grid">
               {nearby.length === 0 && (
@@ -501,7 +534,7 @@ export default function HomePage() {
           <Link href="/matches" className="tmpl-nav-item">
             <span className="tmpl-nav-icon-wrap"><svg viewBox="0 0 48 48"><path d="M9 34l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/><circle cx="19" cy="22" r="2"/><circle cx="25" cy="22" r="2"/><circle cx="31" cy="22" r="2"/></svg><b>{messagesCount || 0}</b></span><span>Messages</span>
           </Link>
-          <div role="button" tabIndex={0} onClick={() => go('/profile')} onKeyDown={(e) => e.key === 'Enter' && go('/profile')} className="tmpl-nav-item tmpl-profile-tab" style={{ cursor: 'pointer' }}>
+          <div role="button" tabIndex={0} onClick={() => go('/edit-profile')} onKeyDown={(e) => e.key === 'Enter' && go('/edit-profile')} className="tmpl-nav-item tmpl-profile-tab" style={{ cursor: 'pointer' }}>
             <svg viewBox="0 0 48 48"><circle cx="24" cy="17" r="7" fill="none"/><path d="M10 39c1-8 7-12 14-12s13 4 14 12" fill="none"/></svg><span>Profile</span>
           </div>
         </nav>

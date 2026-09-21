@@ -63,7 +63,7 @@ export default function AppShell({ children, header }: { children: React.ReactNo
     { href: '/explore', label: 'Explore', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><circle cx="20" cy="22" r="2"/><circle cx="26" cy="22" r="2"/><circle cx="32" cy="22" r="2"/></svg> },
     { href: '/matches', label: 'Matches', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><path d="M24 40s-14-9-14-20a8 8 0 0 1 14-5 8 8 0 0 1 14 5c0 11-14 20-14 20Z" fill="none" strokeWidth="2.4"/></svg> },
     { href: '/likes', label: 'Likes You', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><circle cx="24" cy="17" r="7" fill="none" strokeWidth="2.6"/><path d="M10 39c1-8 7-12 14-12s13 4 14 12" fill="none" strokeWidth="2.6"/></svg> },
-    { href: '/profile', label: 'Profile', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><circle cx="24" cy="17" r="7" fill="none" strokeWidth="2.6"/><path d="M10 39c1-8 7-12 14-12s13 4 14 12" fill="none" strokeWidth="2.6"/></svg> },
+    { href: '/edit-profile', label: 'Profile', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><circle cx="24" cy="17" r="7" fill="none" strokeWidth="2.6"/><path d="M10 39c1-8 7-12 14-12s13 4 14 12" fill="none" strokeWidth="2.6"/></svg> },
     { href: '/settings', label: 'Settings', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><circle cx="24" cy="24" r="10" fill="none" strokeWidth="2.6"/><path d="M24 6v6M24 36v6M6 24h6M36 24h6" strokeWidth="2.6"/></svg> },
   ];
 
@@ -123,22 +123,22 @@ export default function AppShell({ children, header }: { children: React.ReactNo
         .uv-bottom-nav {
           position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
           width: 100%; max-width: 710px; z-index: 40;
-          height: 88px; background: #fff; border-top: 1px solid #eee;
+          height: 60px; background: #fff; border-top: 1px solid #eee;
           display: grid; grid-template-columns: 1fr 1fr 1.1fr 1fr 1fr;
-          align-items: end; padding: 6px 10px 10px; box-sizing: border-box;
+          align-items: end; padding: 4px 8px 6px; box-sizing: border-box;
         }
-        .uv-nav-bl { width: 26px; height: 26px; stroke: currentColor; stroke-width: 2.2; fill: currentColor; }
+        .uv-nav-bl { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2.2; fill: currentColor; }
         .uv-bottom-link {
-          height: 62px; color: #777; display: flex; flex-direction: column;
-          align-items: center; justify-content: center; gap: 4px; font-size: 12px;
+          height: 46px; color: #777; display: flex; flex-direction: column;
+          align-items: center; justify-content: center; gap: 2px; font-size: 10.5px;
         }
         .uv-bottom-link:not(.active) .uv-nav-bl { fill: none; }
         .uv-bottom-link.active { color: #d81043; }
         .uv-bottom-center {
-          height: 62px; display: flex; align-items: center; justify-content: center;
+          height: 46px; display: flex; align-items: center; justify-content: center;
           text-decoration: none; cursor: pointer;
         }
-        .uv-bottom-center img { width: 58px; height: 58px; object-fit: cover; border-radius: 50%; }
+        .uv-bottom-center img { width: 44px; height: 44px; object-fit: cover; border-radius: 50%; }
 
         @media (min-width: 768px) {
           .uv-bottom-nav { display: none; }
@@ -183,7 +183,7 @@ export default function AppShell({ children, header }: { children: React.ReactNo
 
       {/* Mobile content + bottom nav */}
       <aside className="uv-mobile" style={{ display: 'none' }}>
-        <main style={{ minHeight: '100svh', background: '#fff', padding: '0 16px 96px', boxSizing: 'border-box' }}>
+        <main style={{ minHeight: '100svh', background: '#fff', padding: '0 16px 72px', boxSizing: 'border-box' }}>
           {header ?? defaultHeader}
           {children}
         </main>
@@ -198,7 +198,7 @@ export default function AppShell({ children, header }: { children: React.ReactNo
           <Link href="/matches" className={`uv-bottom-link ${isActive('/matches') ? 'active' : ''}`}>
             <svg viewBox="0 0 48 48" className="uv-nav-bl"><path d="M9 34l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/><circle cx="19" cy="22" r="2"/><circle cx="25" cy="22" r="2"/><circle cx="31" cy="22" r="2"/></svg><span>Messages</span>
           </Link>
-          <Link href="/profile" className={`uv-bottom-link ${isActive('/profile') ? 'active' : ''}`}>
+          <Link href="/edit-profile" className={`uv-bottom-link ${isActive('/edit-profile') ? 'active' : ''}`}>
             <svg viewBox="0 0 48 48" className="uv-nav-bl"><circle cx="24" cy="17" r="7" fill="none" strokeWidth="2.6"/><path d="M10 39c1-8 7-12 14-12s13 4 14 12" fill="none" strokeWidth="2.6"/></svg><span>Profile</span>
           </Link>
         </nav>

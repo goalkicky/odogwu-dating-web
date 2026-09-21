@@ -114,6 +114,7 @@ export default function AnimatedCard({
   return (
     <div
       ref={cardRef}
+      className="dc-card"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
@@ -139,27 +140,30 @@ export default function AnimatedCard({
       <style jsx>{`
         .dc-photo { width: 100%; height: 560px; position: relative; background: #eee; overflow: hidden; }
         .dc-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 44%; display: block; }
-        .dc-shade { position: absolute; left: 0; right: 0; bottom: 0; height: 190px; z-index: 1; background: linear-gradient(transparent, rgba(255,255,255,.97)); }
-        .dc-pill { position: absolute; top: 27px; z-index: 2; padding: 10px 17px; border-radius: 28px; color: #fff; font-size: 16px; font-weight: 600; display: flex; gap: 7px; align-items: center; }
-        .dc-pill-left { left: 24px; background: #f62a65; } .dc-pill-left span { font-size: 19px; line-height: 1; }
+        .dc-shade { position: absolute; left: 0; right: 0; bottom: 0; height: 320px; z-index: 1; pointer-events: none; background: radial-gradient(140% 120% at 0% 100%, rgba(255,255,255,1) 18%, rgba(255,255,255,0.9) 42%, rgba(255,255,255,0.35) 62%, rgba(255,255,255,0) 78%), linear-gradient(to top, #ffffff 26%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0.4) 74%, rgba(255,255,255,0) 100%); }
+        .dc-pill { position: absolute; top: 27px; z-index: 2; padding: 8px 13px; border-radius: 28px; color: #fff; font-size: 14px; font-weight: 600; display: flex; gap: 6px; align-items: center; }
+        .dc-pill-left { left: 24px; background: #f62a65; } .dc-pill-left span { font-size: 16px; line-height: 1; }
         .dc-pill-right { right: 24px; background: rgba(30,35,40,.88); }
-        .dc-pill-check { width: 22px; height: 22px; background: #fff; color: #20252a; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 700; }
-        .dc-blocks { position: absolute; top: 78px; left: 24px; right: 24px; z-index: 2; display: flex; gap: 5px; }
-        .dc-block { flex: 1; height: 4px; border-radius: 2px; }
-        .dc-content { position: relative; z-index: 1; background: #fff; padding: 0 28px; margin-top: -1px; }
-        .dc-name { display: flex; align-items: center; gap: 8px; margin-top: -70px; }
-        .dc-name h2 { font-size: 39px; letter-spacing: -1.4px; margin: 0; color: #101217; line-height: 1.1; }
-        .dc-verified { width: 31px; height: 31px; border-radius: 50%; background: #f52261; color: #fff; display: grid; place-items: center; font-size: 19px; font-weight: 800; flex-shrink: 0; }
-        .dc-location { display: flex; align-items: center; gap: 8px; color: #666; font-size: 18px; margin: 10px 0 25px; }
+        .dc-pill-check { width: 18px; height: 18px; background: #fff; color: #20252a; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; }
+        .dc-blocks { position: absolute; top: 42px; left: 136px; right: 136px; z-index: 3; display: flex; gap: 5px; }
+        .dc-block { flex: 1; height: 3px; border-radius: 2px; }
+        .dc-content { position: relative; z-index: 1; background: transparent; margin-top: -150px; padding: 0 20px; }
+        .dc-carve { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 8px; text-shadow: 0 2px 10px rgba(255,255,255,0.85), 0 1px 3px rgba(255,255,255,0.9); }
+        .dc-carve .dc-name { display: flex; align-items: center; gap: 6px; }
+        .dc-carve .dc-name h2 { font-size: 20px; letter-spacing: -0.5px; margin: 0; color: #101217; line-height: 1.15; font-weight: 700; }
+        .dc-carve .dc-verified { width: 20px; height: 20px; border-radius: 50%; background: #f52261; color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+        .dc-carve .dc-location { display: flex; align-items: center; gap: 5px; color: #666; font-size: 13px; margin: 5px 0 0; flex-wrap: wrap; }
+        .dc-carve .dc-location svg { width: 15px; height: 15px; }
+        .dc-carve .dc-location b { font-size: 12px; }
         .dc-location svg { width: 21px; height: 21px; fill: none; stroke: #72767b; stroke-width: 2; flex-shrink: 0; }
         .dc-location b { font-size: 15px; color: #8a8a8a; }
-        .dc-bio { font-size: 20px; line-height: 1.45; margin: 0 0 25px; color: #101217; }
-        .dc-bio em { color: #f43a68; font-size: 40px; line-height: 0; vertical-align: -12px; margin-right: 7px; font-weight: 700; font-style: normal; }
-        .dc-int-h { font-size: 17px; margin: 0 0 13px; color: #101217; }
-        .dc-interests { display: flex; flex-wrap: wrap; gap: 9px 8px; padding-bottom: 24px; }
-        .dc-chip { height: 43px; border: 1px solid #e5e6e9; border-radius: 24px; padding: 0 14px; display: flex; align-items: center; gap: 7px; font-size: 16px; color: #101217; box-shadow: 0 1px 3px rgba(0,0,0,.03); white-space: nowrap; }
-        .dc-chip i { font-style: normal; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; flex-shrink: 0; }
-        .dc-facts { border-top: 1px solid #ddd; display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 25px 0 28px; }
+        .dc-bio { font-size: 11px; line-height: 1.45; margin: 0 0 25px; color: #101217; font-weight: 600; display: flex; align-items: flex-start; gap: 8px; }
+        .dc-bio em { flex-shrink: 0; color: #f43a68; font-size: 25pt; line-height: 1; font-weight: 800; font-style: normal; }
+        .dc-int-h { font-size: 13px; margin: 0 0 8px; color: #101217; font-weight: 700; }
+        .dc-interests { display: flex; flex-wrap: wrap; gap: 6px 4px; padding-bottom: 8px; }
+        .dc-chip { height: 26px; border: 1px solid #e5e6e9; border-radius: 14px; padding: 0 7px; display: flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: #101217; box-shadow: 0 1px 3px rgba(0,0,0,.03); white-space: nowrap; }
+        .dc-chip i { font-style: normal; width: 14px; height: 14px; border-radius: 50%; display: grid; place-items: center; font-size: 9px; flex-shrink: 0; }
+        .dc-facts { border-top: 1px solid #ddd; display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 12px 0 14px; }
         .dc-fact { position: relative; padding-left: 43px; min-height: 55px; }
         .dc-fact + .dc-fact { border-left: 1px solid #ddd; padding-left: 55px; }
         .dc-fick { position: absolute; left: 8px; top: 4px; font-size: 24px; }
@@ -168,21 +172,27 @@ export default function AnimatedCard({
         .dc-fact strong { display: block; font-size: 15px; font-weight: 500; color: #101217; white-space: nowrap; }
 
         @media (max-width: 700px) {
-          .dc-photo { height: 560px; }
-          .dc-pill { font-size: 15px; padding: 9px 14px; }
-          .dc-content { padding: 0 27px; }
-          .dc-name { margin-top: -67px; } .dc-name h2 { font-size: 34px; }
-          .dc-location { font-size: 16px; margin-bottom: 23px; }
-          .dc-bio { font-size: 17px; }
-          .dc-chip { font-size: 14px; height: 42px; padding: 0 12px; }
-          .dc-facts { padding-top: 22px; }
+          .dc-card { display: flex; flex-direction: column; }
+          .dc-photo { height: auto; flex: 1 1 0%; min-height: 56px; }
+          .dc-pill { font-size: 13px; padding: 7px 11px; }
+          .dc-content { margin-top: -110px; padding: 0 18px; }
+          .dc-shade { height: 250px; }
+          .dc-carve { margin-bottom: 6px; }
+          .dc-carve .dc-name h2 { font-size: 18px; }
+          .dc-carve .dc-location { font-size: 12px; }
+          .dc-bio { font-size: 11px; gap: 6px; align-items: flex-start; margin-bottom: 12px; }
+          .dc-chip { font-size: 10px; height: 24px; padding: 0 6px; }
+          .dc-interests { gap: 5px 3px; max-height: none; overflow: visible; }
+          .dc-facts { padding-top: 8px; }
+          .dc-fact { min-height: 40px; }
           .dc-fact { padding-left: 32px; } .dc-fact + .dc-fact { padding-left: 35px; }
           .dc-fick { left: 0; font-size: 20px; } .dc-fact + .dc-fact .dc-fick { left: 5px; }
           .dc-fact small { font-size: 12px; } .dc-fact strong { font-size: 12px; white-space: normal; }
         }
         @media (max-width: 390px) {
-          .dc-photo { height: 510px; }
-          .dc-interests { gap: 7px 5px; } .dc-chip { padding: 0 10px; font-size: 13px; }
+          .dc-photo { min-height: 50px; }
+          .dc-interests { gap: 5px 3px; } .dc-chip { padding: 0 6px; font-size: 10px; }
+          .dc-int-h { font-size: 12px; }
           .dc-fact strong { font-size: 11px; } .dc-fact small { font-size: 11px; }
         }
         @media (min-width: 1100px) {
@@ -190,7 +200,15 @@ export default function AnimatedCard({
         }
       `}</style>
 
-      <div className="dc-photo">
+      <svg width="0" height="0" aria-hidden="true" style={{ position: 'absolute' }}>
+        <defs>
+          <clipPath id="dc-u-arc" clipPathUnits="objectBoundingBox">
+            <path d="M0,0 L1,0 L1,0.85 Q0.5,1.14 0,0.85 Z" />
+          </clipPath>
+        </defs>
+      </svg>
+
+      <div className="dc-photo" style={{ clipPath: 'url(#dc-u-arc)' }}>
         <img src={photoUri} alt={user.fullName} draggable={false} />
         <div className="dc-shade" />
 
@@ -223,17 +241,18 @@ export default function AnimatedCard({
       </div>
 
       <div className="dc-content">
-        <div className="dc-name">
-          <h2>{user.fullName}{user.age ? `, ${user.age}` : ''}</h2>
-          {user.verified && <span className="dc-verified">✓</span>}
-        </div>
-
-        <div className="dc-location">
-          <svg viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.2"/></svg>
-          <span>{user.city || 'Nearby'}</span>
-          {typeof user.distanceKm === 'number' && (
-            <><b>•</b><span>{user.distanceKm} km away</span></>
-          )}
+        <div className="dc-carve">
+          <div className="dc-name">
+            <h2>{user.fullName}{user.age ? `, ${user.age}` : ''}</h2>
+            {user.verified && <span className="dc-verified">✓</span>}
+          </div>
+          <div className="dc-location">
+            <svg viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.2"/></svg>
+            <span>{user.city || 'Nearby'}</span>
+            {typeof user.distanceKm === 'number' && (
+              <><b>•</b><span>{user.distanceKm} km away</span></>
+            )}
+          </div>
         </div>
 
         {user.bio && (
@@ -244,7 +263,7 @@ export default function AnimatedCard({
           <>
             <h3 className="dc-int-h">My Interests ({user.interests.length})</h3>
             <div className="dc-interests">
-              {user.interests.slice(0, 12).map(it => {
+              {user.interests.map(it => {
                 const cat = interestCategory(it);
                 return (
                   <span key={it} className="dc-chip">

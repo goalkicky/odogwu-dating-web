@@ -60,6 +60,14 @@ function toProfile(r: any): any {
     height: r.height || '',
     weight: r.weight || '',
     relationshipGoals: r.relationship_goals || '',
+    ageRange: r.age_range || '',
+    maxDistance: r.max_distance || '',
+    wantsKids: r.wants_kids || '',
+    education: r.education || '',
+    courseOfStudy: r.course_of_study || '',
+    institution: r.institution || '',
+    occupation: r.occupation || '',
+    video: r.video || '',
     createdAt: r.created_at,
   };
 }
@@ -162,6 +170,14 @@ const PROFILE_FIELDS: Record<string, string> = {
   height: 'height',
   weight: 'weight',
   relationshipGoals: 'relationship_goals',
+  ageRange: 'age_range',
+  maxDistance: 'max_distance',
+  wantsKids: 'wants_kids',
+  education: 'education',
+  courseOfStudy: 'course_of_study',
+  institution: 'institution',
+  occupation: 'occupation',
+  video: 'video',
 };
 
 function mapProfileValues(data: Record<string, any>): { cols: string[]; vals: any[] } {

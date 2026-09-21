@@ -1,0 +1,6 @@
+ALTER TABLE users ADD COLUMN age_range TEXT;
+ALTER TABLE users ADD COLUMN max_distance TEXT;
+ALTER TABLE users ADD COLUMN wants_kids TEXT;
+ALTER TABLE users ADD COLUMN education TEXT;
+ALTER TABLE users ADD COLUMN occupation TEXT;
+ALTER TABLE users ADD COLUMN video TEXT;

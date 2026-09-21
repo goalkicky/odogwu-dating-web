@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Nhlamulo Chat Replica</title>
+<style>
+  :root{
+    --pink:#d91b70;
+    --bubble-pink:#ffd8e7;
+    --bubble-gray:#f1f1f3;
+    --text:#171717;
+    --muted:#8c8c92;
+    --line:#eeeeef;
+    --green:#22e18c;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;width:100%;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--text);background:#fff}
+  body{overflow:hidden}
+
+  .app{
+    width:100%;
+    max-width:711px;
+    height:100dvh;
+    min-height:620px;
+    margin:0 auto;
+    background:#fff;
+    position:relative;
+    overflow:hidden;
+  }
+
+  /* Status bar */
+  .status{
+    height:58px;
+    padding:20px 47px 0 47px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    font-weight:700;
+    font-size:16px;
+    letter-spacing:.1px;
+  }
+  .status-icons{display:flex;align-items:center;gap:7px}
+  .signal{display:flex;gap:2px;align-items:flex-end;height:13px}
+  .signal i{display:block;width:3px;background:#111;border-radius:2px}
+  .signal i:nth-child(1){height:5px}.signal i:nth-child(2){height:8px}.signal i:nth-child(3){height:11px}.signal i:nth-child(4){height:13px}
+  .wifi{width:18px;height:12px;position:relative}
+  .wifi:before,.wifi:after{content:"";position:absolute;left:50%;transform:translateX(-50%);border:2px solid #111;border-top-color:#111;border-left-color:transparent;border-right-color:transparent;border-bottom-color:transparent;border-radius:50%}
+  .wifi:before{width:18px;height:18px;top:-8px}
+  .wifi:after{width:9px;height:9px;top:-4px}
+  .wifi-dot{width:4px;height:4px;border-radius:50%;background:#111;position:absolute;left:7px;bottom:-1px}
+  .battery{width:35px;height:16px;border:2px solid #111;border-radius:4px;position:relative}
+  .battery:after{content:"";position:absolute;right:-5px;top:4px;width:3px;height:7px;background:#111;border-radius:0 2px 2px 0}
+  .battery span{display:block;width:24px;height:10px;background:#111;border-radius:2px;margin:1px}
+
+  /* Header */
+  .header{
+    height:86px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    padding:0 30px 0 28px;
+    position:relative;
+  }
+  .back{
+    width:34px;height:44px;border:0;background:transparent;padding:0;margin-right:25px;
+    display:grid;place-items:center;cursor:pointer;
+  }
+  .back svg{width:25px;height:25px;stroke:#111;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .avatar-wrap{position:relative;width:78px;height:78px;flex:none}
+  .avatar{width:78px;height:78px;border-radius:50%;object-fit:cover;display:block}
+  .online{position:absolute;right:1px;bottom:1px;width:15px;height:15px;background:#18bf74;border:2px solid #fff;border-radius:50%}
+  .person{margin-left:22px;min-width:0}
+  .name{font-size:25px;font-weight:700;line-height:1.05;display:flex;align-items:center;gap:8px}
+  .verified{width:17px;height:17px;border-radius:50%;background:#1595e5;color:#fff;display:inline-grid;place-items:center;font-size:11px;font-weight:900}
+  .online-text{font-size:17px;color:#85858b;margin-top:7px}
+  .header-actions{margin-left:auto;display:flex;align-items:center;gap:35px}
+  .action-btn{border:0;background:transparent;padding:6px;cursor:pointer;position:relative}
+  .action-btn svg{width:34px;height:34px;stroke:#111;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .gift svg{width:34px;height:34px}
+
+  /* Green annotation from reference */
+  .marker{
+    position:absolute;
+    right:67px;
+    top:-2px;
+    width:185px;
+    height:128px;
+    pointer-events:none;
+    transform:rotate(-3deg);
+  }
+  .marker path{fill:none;stroke:var(--green);stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+
+  /* Conversation */
+  .conversation{
+    height:calc(100dvh - 144px);
+    overflow-y:auto;
+    padding:0 17px 108px 17px;
+    scrollbar-width:none;
+  }
+  .conversation::-webkit-scrollbar{display:none}
+  .today{text-align:center;color:#8c8c92;font-size:16px;padding:37px 0 35px}
+  .row{display:flex;align-items:flex-start;margin-bottom:23px}
+  .row.incoming .avatar-small{margin-right:17px}
+  .row.outgoing{justify-content:flex-end}
+  .avatar-small{width:73px;height:73px;border-radius:50%;object-fit:cover;flex:none}
+  .message-col{max-width:calc(100% - 90px)}
+  .bubble{
+    padding:20px 25px;
+    font-size:21px;
+    line-height:1.45;
+    letter-spacing:.05px;
+    border-radius:27px;
+  }
+  .incoming .bubble{background:var(--bubble-gray);border-top-left-radius:27px}
+  .outgoing .bubble{background:var(--bubble-pink);border-radius:27px 27px 0 27px}
+  .time{
+    color:#8b8b91;font-size:15px;margin-top:9px;display:flex;align-items:center;gap:7px
+  }
+  .incoming .time{justify-content:flex-start}
+  .outgoing .time{justify-content:flex-end}
+  .checks{color:#d5166a;font-size:18px;line-height:1}
+  .divider{
+    display:flex;align-items:center;gap:25px;color:#d21a6a;font-weight:600;font-size:18px;
+    margin:33px 0 34px;
+  }
+  .divider:before,.divider:after{content:"";height:2px;background:#d21a6a;flex:1}
+  .last{margin-bottom:0}
+
+  /* Composer */
+  .composer{
+    position:absolute;left:0;right:0;bottom:0;height:104px;
+    background:rgba(255,255,255,.98);
+    border-top:1px solid #f3f3f3;
+    display:flex;align-items:center;
+    padding:15px 23px calc(15px + env(safe-area-inset-bottom));
+  }
+  .composer-box{
+    width:100%;height:58px;border:1px solid #e5e5e8;border-radius:30px;
+    display:flex;align-items:center;padding:0 13px 0 12px;
+    box-shadow:0 1px 3px rgba(0,0,0,.03) inset;
+  }
+  .plus{
+    width:35px;height:35px;border:2px solid var(--pink);border-radius:50%;
+    display:grid;place-items:center;color:var(--pink);font-size:27px;font-weight:300;
+    line-height:1;cursor:pointer;background:#fff;flex:none;
+  }
+  .input{
+    border:0;outline:0;flex:1;margin:0 15px;font-size:18px;color:#333;background:transparent;min-width:0
+  }
+  .input::placeholder{color:#8f8f95}
+  .mic{border:0;background:transparent;padding:5px;cursor:pointer}
+  .mic svg{width:27px;height:31px;stroke:var(--pink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+  @media (min-width:712px){
+    body{background:#f5f5f7}
+    .app{box-shadow:0 0 30px rgba(0,0,0,.08)}
+  }
+  @media (max-width:600px){
+    .status{height:45px;padding:12px 21px 0;font-size:14px}
+    .header{height:78px;padding:0 15px}
+    .back{margin-right:12px;width:28px}
+    .avatar-wrap,.avatar{width:55px;height:55px}
+    .online{width:12px;height:12px}
+    .person{margin-left:12px}
+    .name{font-size:19px;gap:5px}
+    .verified{width:14px;height:14px;font-size:9px}
+    .online-text{font-size:14px;margin-top:4px}
+    .header-actions{gap:13px}
+    .action-btn svg{width:27px;height:27px}
+    .marker{right:29px;top:-3px;width:135px;height:100px}
+    .marker path{stroke-width:9}
+    .conversation{height:calc(100dvh - 123px);padding:0 17px 92px}
+    .today{font-size:14px;padding:30px 0 28px}
+    .row{margin-bottom:19px}
+    .avatar-small{width:52px;height:52px}
+    .row.incoming .avatar-small{margin-right:11px}
+    .message-col{max-width:calc(100% - 63px)}
+    .bubble{font-size:16px;line-height:1.45;padding:14px 18px;border-radius:21px}
+    .time{font-size:12px;margin-top:7px}
+    .checks{font-size:15px}
+    .divider{font-size:14px;gap:17px;margin:27px 0 28px}
+    .composer{height:77px;padding:10px 15px calc(10px + env(safe-area-inset-bottom))}
+    .composer-box{height:49px}
+    .plus{width:29px;height:29px;font-size:22px}
+    .input{font-size:15px;margin:0 11px}
+    .mic svg{width:23px;height:27px}
+  }
+  @media (max-width:380px){
+    .bubble{font-size:15px;padding:13px 16px}
+    .person{margin-left:9px}
+    .name{font-size:17px}
+    .header-actions{gap:8px}
+    .marker{right:20px;width:120px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="status">
+    <div>9:41</div>
+    <div class="status-icons">
+      <div class="signal"><i></i><i></i><i></i><i></i></div>
+      <div class="wifi"><span class="wifi-dot"></span></div>
+      <div class="battery"><span></span></div>
+    </div>
+  </div>
+
+  <header class="header">
+    <button class="back" aria-label="Back" onclick="history.back()">
+      <svg viewBox="0 0 24 24"><path d="M15 4.5 7.5 12 15 19.5"/></svg>
+    </button>
+
+    <div class="avatar-wrap">
+      <img class="avatar" src="avatar.jpg" alt="Profile">
+      <span class="online"></span>
+    </div>
+
+    <div class="person">
+      <div class="name">Nhlamulo <span class="verified">✓</span></div>
+      <div class="online-text">Online now</div>
+    </div>
+
+    <div class="header-actions">
+      <button class="action-btn" aria-label="Call" onclick="alert('Calling Nhlamulo…')">
+        <svg viewBox="0 0 24 24">
+          <path d="M6.6 3.8c.5-.5 1.3-.6 1.9-.2l2.3 1.5c.6.4.8 1.2.5 1.8L10 9.1c-.2.5-.2 1 .1 1.4.8 1.1 2 2.3 3.1 3.1.4.3.9.3 1.4.1l2.2-1.3c.6-.3 1.4-.1 1.8.5l1.5 2.3c.4.6.3 1.4-.2 1.9l-1.5 1.5c-.7.7-1.7 1-2.7.8-2.5-.5-5.4-2.2-8-4.8s-4.3-5.5-4.8-8c-.2-1 .1-2 .8-2.7z"/>
+        </svg>
+      </button>
+      <button class="action-btn gift" aria-label="Gift" onclick="alert('Gift selected')">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 10h16v10H4zM3 7h18v3H3zM12 7v13M12 7c-1.8 0-4.5-1-4.5-2.8C7.5 3.1 8.4 2 9.6 2c1.7 0 2.4 2.3 2.4 5zM12 7c1.8 0 4.5-1 4.5-2.8 0-1.1-.9-2.2-2.1-2.2-1.7 0-2.4 2.3-2.4 5z"/>
+        </svg>
+      </button>
+    </div>
+
+    <svg class="marker" viewBox="0 0 185 128" aria-hidden="true">
+      <path d="M16 49 C35 25, 75 10, 125 13 C153 15, 171 22, 170 50 C169 79, 160 103, 129 108 C97 114, 61 109, 44 98 C28 88, 24 72, 29 55"/>
+      <path d="M16 49 C25 45, 31 42, 38 38"/>
+    </svg>
+  </header>
+
+  <main class="conversation" id="conversation">
+    <div class="today">Today</div>
+
+    <div class="row incoming">
+      <img class="avatar-small" src="avatar.jpg" alt="">
+      <div class="message-col">
+        <div class="bubble">Hey there 👋<br>How was your day?</div>
+        <div class="time">2:30 PM</div>
+      </div>
+    </div>
+
+    <div class="row outgoing">
+      <div class="message-col">
+        <div class="bubble">Hey Nhlamulo! It was great,<br>thank you 😊&nbsp; How about yours?</div>
+        <div class="time">2:32 PM <span class="checks">✓✓</span></div>
+      </div>
+    </div>
+
+    <div class="row incoming">
+      <img class="avatar-small" src="avatar.jpg" alt="">
+      <div class="message-col">
+        <div class="bubble">Pretty good! Just got back from<br>the gym 💪<br>What do you usually get up to<br>on weekends?</div>
+        <div class="time">2:34 PM</div>
+      </div>
+    </div>
+
+    <div class="row outgoing">
+      <div class="message-col">
+        <div class="bubble">Nice! I try to stay active too.<br>On weekends, I love listening<br>to music, catching up on movies,<br>and trying out new restaurants.<br>You?</div>
+        <div class="time">2:36 PM <span class="checks">✓✓</span></div>
+      </div>
+    </div>
+
+    <div class="divider"><span>New Messages</span></div>
+
+    <div class="row incoming last">
+      <img class="avatar-small" src="avatar.jpg" alt="">
+      <div class="message-col">
+        <div class="bubble">That sounds fun! I love trying<br>new restaurants too, and I’m<br>a big fan of good music.<br><br>Any favorite artists or cuisines?</div>
+        <div class="time">2:38 PM</div>
+      </div>
+    </div>
+  </main>
+
+  <form class="composer" id="composer">
+    <div class="composer-box">
+      <button type="button" class="plus" aria-label="Add" onclick="document.getElementById('message').focus()">+</button>
+      <input id="message" class="input" autocomplete="off" placeholder="Type a message...">
+      <button class="mic" type="submit" aria-label="Send">
+        <svg viewBox="0 0 24 28">
+          <rect x="8" y="2" width="8" height="15" rx="4"></rect>
+          <path d="M5 13a7 7 0 0 0 14 0M12 20v5M9 25h6"></path>
+        </svg>
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  const form = document.getElementById('composer');
+  const input = document.getElementById('message');
+  const conversation = document.getElementById('conversation');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text) return;
+
+    const row = document.createElement('div');
+    row.className = 'row outgoing';
+    row.innerHTML = `
+      <div class="message-col">
+        <div class="bubble"></div>
+        <div class="time">Now <span class="checks">✓✓</span></div>
+      </div>`;
+    row.querySelector('.bubble').textContent = text;
+    conversation.appendChild(row);
+    input.value = '';
+    conversation.scrollTop = conversation.scrollHeight;
+  });
+</script>
+</body>
+</html>

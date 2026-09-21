@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>DOGWU Dating — Recently Active</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <div class="status-bar" aria-hidden="true">
+      <strong>9:41</strong>
+      <div class="status-icons">
+        <span class="signal"></span><span class="wifi"></span><span class="battery"></span>
+      </div>
+    </div>
+
+    <header class="topbar">
+      <button class="icon-button back-button" aria-label="Go back" onclick="history.back()">‹</button>
+      <div class="brand" aria-label="DOGWU Dating">
+        <div class="brand-mark"><span>♡</span></div>
+        <div>
+          <div class="brand-name">DOGWU</div>
+          <div class="brand-sub">D A T <b>♥</b> I N G</div>
+        </div>
+      </div>
+      <div class="topbar-spacer"></div>
+    </header>
+
+    <main>
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.7"></circle><path d="m16.2 16.2 4.3 4.3"></path></svg>
+        <input id="searchInput" type="search" placeholder="Search profiles..." autocomplete="off" />
+      </div>
+
+      <section class="section-heading">
+        <h1>All Recently Active</h1>
+        <p>People who were recently active on the app</p>
+      </section>
+
+      <section id="profileGrid" class="profile-grid" aria-live="polite"></section>
+
+      <div class="results">
+        <div id="countText">Showing 1–9 of 45</div>
+        <button id="loadMore" class="load-more">Load more <span>⌄</span></button>
+      </div>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Primary navigation">
+      <button class="nav-item active" data-nav="Home">
+        <span class="nav-icon home-icon"></span><span>Home</span>
+      </button>
+      <button class="nav-item" data-nav="Explore">
+        <span class="nav-icon compass-icon">⌁</span><span>Explore</span>
+      </button>
+      <button class="nav-item center-action" data-nav="Matches">
+        <span class="center-logo">♡</span>
+      </button>
+      <button class="nav-item" data-nav="Messages">
+        <span class="nav-icon message-icon"><i>2</i></span><span>Messages</span>
+      </button>
+      <button class="nav-item" data-nav="Profile">
+        <span class="nav-icon profile-icon"></span><span>Profile</span>
+      </button>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

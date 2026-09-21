@@ -10,7 +10,7 @@ const NAV_ITEMS = [
   { label: 'Explore', icon: <CompassIcon size={22} color="white" />, href: '/explore' },
   { label: 'Matches', icon: <HeartIcon size={22} color="white" />, href: '/matches' },
   { label: 'Likes', icon: <EyeIcon size={22} color="white" />, href: '/likes' },
-  { label: 'Profile', icon: <PersonIcon size={22} color="white" />, href: '/profile' },
+  { label: 'Profile', icon: <PersonIcon size={22} color="white" />, href: '/edit-profile' },
 ];
 
 export default function DesktopLayout({ children }: { children: React.ReactNode }) {

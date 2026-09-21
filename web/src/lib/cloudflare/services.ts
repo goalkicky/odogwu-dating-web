@@ -477,6 +477,13 @@ export const storageService = {
     return { $id: data.key, key: data.key };
   },
 
+  uploadVideo: async (file: File) => {
+    const form = new FormData();
+    form.append('file', file, file.name);
+    const data = await apiFetch('/api/media', { method: 'POST', body: form });
+    return { $id: data.key, key: data.key };
+  },
+
   ensurePublicRead: async (fileId: string) => {
     void fileId;
     return { $permissions: ['read("any")'] };

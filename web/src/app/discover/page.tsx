@@ -194,58 +194,72 @@ export default function DiscoverPage() {
 
   const current = users[0];
 
-  const actionSize = isTiny ? 78 : isMobile ? 88 : 110;
-  const actionGap = isTiny ? 18 : isMobile ? 28 : 74;
-  const actionFont = isTiny ? 44 : isMobile ? 47 : 57;
-  const likeFont = isTiny ? 34 : isMobile ? 40 : 47;
-  const msgFont = isTiny ? 24 : isMobile ? 29 : 35;
-  const actionSmall = isMobile ? 15 : 18;
+  const actionSize = isTiny ? 58 : isMobile ? 64 : 110;
+  const actionGap = isTiny ? 14 : isMobile ? 20 : 74;
+  const actionFont = isTiny ? 36 : isMobile ? 40 : 57;
+  const likeFont = isTiny ? 28 : isMobile ? 34 : 47;
+  const actionSmall = isTiny ? 11 : isMobile ? 12 : 18;
 
   const discoverHeader = (
-    <header className="uv-topbar">
-      <img className="uv-brand-logo" src="/o-logo.png" alt="Odogwu" style={{ justifySelf: 'start', height: 34 }} />
-      <h1 style={{ fontSize: 20, fontWeight: 800, color: '#000', margin: 0, letterSpacing: -0.5, textAlign: 'center' }}>Discover</h1>
+    <header className="uv-topbar" style={{ padding: '2px 0 6px' }}>
+      <img className="uv-brand-logo" src="/o-logo.png" alt="Odogwu" style={{ justifySelf: 'start', height: 28 }} />
+      <h1 style={{ fontSize: 17, fontWeight: 800, color: '#000', margin: 0, letterSpacing: -0.5, textAlign: 'center' }}>Discover</h1>
       <button
         onClick={() => setShowFilters(true)}
         aria-label="Filter preferences"
         style={{
-          width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: 34, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center',
           background: 'none', border: 0, cursor: 'pointer', color: '#17191d', justifySelf: 'end',
         }}
       >
-        <FilterIcon size={22} color="#17191d" />
+        <FilterIcon size={18} color="#17191d" />
       </button>
     </header>
   );
 
   return (
     <AppShell header={discoverHeader}>
-      <div className="animate-fade-up" style={{ paddingTop: isMobile ? 6 : 22 }}>
-        <div style={{ maxWidth: 760, margin: '0 auto' }}>
-          <AnimatedCard
-            key={current.id}
-            user={current}
-            isFirst
-            width="100%"
-            height="auto"
-            onSwipeLeft={handleSwipeLeft}
-            onSwipeRight={handleSwipeRight}
-            onSuperLike={handleSuperLike}
-          />
+      <div className="animate-fade-up" style={isMobile ? { paddingTop: 2, height: 'calc(100dvh - 108px)', display: 'flex', flexDirection: 'column', boxSizing: 'border-box' } : { paddingTop: 22 }}>
+        <div style={{ maxWidth: 760, margin: '0 auto', width: '100%', flex: '1 1 0%', minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ flex: '1 1 0%', minHeight: 0, display: 'flex' }}>
+            <AnimatedCard
+              key={current.id}
+              user={current}
+              isFirst
+              width="100%"
+              height={isMobile ? '100%' : 'auto'}
+              onSwipeLeft={handleSwipeLeft}
+              onSwipeRight={handleSwipeRight}
+              onSuperLike={handleSuperLike}
+            />
+          </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: actionGap, padding: isMobile ? '32px 0 22px' : '38px 0 25px' }}>
-            <button onClick={handleSwipeLeft} className="lift" aria-label="Pass" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, background: 'none', border: 0, cursor: 'pointer', color: '#101217' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: actionGap, padding: isMobile ? '10px 0 4px' : '38px 0 25px' }}>
+            <button onClick={handleSwipeLeft} className="lift" aria-label="Pass" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#101217' }}>
               <span style={{ width: actionSize, height: actionSize, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff', fontSize: actionFont, fontWeight: 300, color: '#101217' }}>×</span>
               <small style={{ fontSize: actionSmall, color: '#101217' }}>Pass</small>
             </button>
 
-            <button onClick={handleSwipeRight} className="lift" aria-label="Like" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, background: 'none', border: 0, cursor: 'pointer', color: '#101217' }}>
+            <button onClick={handleSwipeRight} className="lift" aria-label="Like" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#101217' }}>
               <span style={{ width: actionSize, height: actionSize, borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 6px 18px rgba(255,45,104,0.35)', background: '#ff2d68', color: '#fff', fontSize: likeFont, fontWeight: 300, paddingBottom: isMobile ? 4 : 6 }}>♥</span>
               <small style={{ fontSize: actionSmall, color: '#101217' }}>Like</small>
             </button>
 
-            <button onClick={handleMessage} className="lift" aria-label="Message" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, background: 'none', border: 0, cursor: 'pointer', color: '#101217' }}>
-              <span style={{ width: actionSize, height: actionSize, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff', fontSize: msgFont, color: '#171a1e' }}>●</span>
+            <button onClick={handleSuperLike} className="lift" aria-label="Super Like" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#101217' }}>
+              <span style={{ width: actionSize, height: actionSize, borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 6px 18px rgba(63,161,255,0.35)', background: '#3fa1ff', color: '#fff' }}>
+                <svg viewBox="0 0 24 24" style={{ width: Math.round(actionSize * 0.44), height: Math.round(actionSize * 0.44), fill: '#fff' }}>
+                  <path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8-6.1-3.4-6.1 3.4 1.4-6.8L2.2 9.1l6.9-.8L12 2z" />
+                </svg>
+              </span>
+              <small style={{ fontSize: actionSmall, color: '#101217' }}>Super Like</small>
+            </button>
+
+            <button onClick={handleMessage} className="lift" aria-label="Message" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#101217' }}>
+              <span style={{ width: actionSize, height: actionSize, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff', color: '#171a1e' }}>
+                <svg viewBox="0 0 48 48" style={{ width: Math.round(actionSize * 0.64), height: Math.round(actionSize * 0.64), fill: '#171a1e', stroke: '#fff', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' }}>
+                  <path d="M6 21a14 14 0 1 1 6 11.6L4 36l2.2-8.2A13.9 13.9 0 0 1 6 21Z" />
+                </svg>
+              </span>
               <small style={{ fontSize: actionSmall, color: '#101217' }}>Message</small>
             </button>
           </div>
@@ -308,7 +322,7 @@ const HEIGHT_MIN = 48;
 const HEIGHT_MAX = 84;
 const WEIGHT_MIN = 30;
 const WEIGHT_MAX = 200;
-const RELATIONSHIP_GOALS = ['Flirting', 'Chatting', 'Serious Dating', 'Marriage'];
+const RELATIONSHIP_GOALS = ['Long-term relationship', 'Short-term relationship', 'Friendship', 'Still figuring it out'];
 
 function inchesToFtIn(inches: number): string {
   const ft = Math.floor(inches / 12);

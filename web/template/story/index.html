@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Amaka — Story Replica</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app" aria-label="Responsive social story replica">
+    <div class="story-frame">
+      <img class="reference" src="reference.jpg" alt="Amaka sunset date story reference" />
+
+      <!-- Transparent interaction zones sit over the exact controls in the supplied design. -->
+      <button class="hotspot close-hotspot" aria-label="Close story"></button>
+      <button class="hotspot like-hotspot" aria-label="Like story"></button>
+      <button class="hotspot comment-hotspot" aria-label="Comment"></button>
+      <button class="hotspot share-hotspot" aria-label="Share story"></button>
+      <button class="hotspot more-hotspot" aria-label="More options"></button>
+
+      <div class="toast" role="status" aria-live="polite"></div>
+      <div class="modal" aria-hidden="true">
+        <div class="modal-card">
+          <button class="modal-close" aria-label="Close">×</button>
+          <h2>Story options</h2>
+          <button class="option">Report</button>
+          <button class="option">Mute Amaka</button>
+          <button class="option">Copy link</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

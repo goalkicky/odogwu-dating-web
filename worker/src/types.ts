@@ -45,6 +45,14 @@ export interface UserRow {
   height: string;
   weight: string;
   relationship_goals: string;
+  age_range: string;
+  max_distance: string;
+  wants_kids: string;
+  education: string;
+  course_of_study: string;
+  institution: string;
+  occupation: string;
+  video: string;
   created_at: string;
   updated_at: string;
 }

@@ -16,7 +16,7 @@ export default function TabBar() {
     { href: '/explore', icon: <CompassIcon size={20} />, label: 'Explore' },
     { href: '/matches', icon: <ChatIcon size={20} />, label: 'Matches' },
     { href: '/likes', icon: <EyeIcon size={20} />, label: 'Likes' },
-    { href: '/profile', icon: <PersonIcon size={20} />, label: 'Profile' },
+    { href: '/edit-profile', icon: <PersonIcon size={20} />, label: 'Profile' },
   ];
 
   return (
