@@ -79,7 +79,6 @@ export default function MyProfilePage() {
   const initial = (name[0] || 'M').toUpperCase();
   const avatar = photos[0] || '';
   const main = photos[mainIdx] || '';
-  const sides = photos.filter((_, i) => i !== mainIdx);
   const online = !!user?.lastActive && (Date.now() - new Date(user.lastActive).getTime()) < 120000;
 
   const basic: { icon: string; label: string; value: string }[] = [];

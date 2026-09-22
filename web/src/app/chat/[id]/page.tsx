@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import {
   SendIcon, PencilIcon, CloseCircleIcon, HappyIcon, KeypadIcon, CoinsIcon,
 } from '@/components/Icons';
@@ -148,6 +148,7 @@ function resolveMediaUrl(url: string): string {
 export default function ChatPage() {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const { profile, user } = useAuth();
   const matchId = params.id as string;
 
@@ -226,6 +227,11 @@ export default function ChatPage() {
     const id = setInterval(checkOnline, 30000);
     return () => clearInterval(id);
   }, [otherUserId]);
+
+  useEffect(() => {
+    if (searchParams?.get('gift') === '1') setShowGift(true);
+    walletService.getWallet().then(w => setMyCoins(w?.coins ?? 0)).catch(() => {});
+  }, [searchParams]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

@@ -118,7 +118,10 @@ export default function ActivePage() {
       return next;
     });
     if (uid) {
-      try { await userService.likeUser(uid, p.id); } catch {}
+      try {
+        const res = await userService.likeUser(uid, p.id);
+        if (res?.mutual && res.match?.$id) router.push(`/match/${res.match.$id}`);
+      } catch {}
     }
   };
 

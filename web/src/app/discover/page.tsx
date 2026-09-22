@@ -7,7 +7,6 @@ import AppShell from '@/components/AppShell';
 import SuperlikeUpsellModal from '@/components/SuperlikeUpsellModal';
 import LikeUpsellModal from '@/components/LikeUpsellModal';
 import MessageUpsellModal from '@/components/MessageUpsellModal';
-import MatchPopup from '@/components/MatchPopup';
 import { useMobile, useMediaQuery } from '@/lib/useMediaQuery';
 import { useAuth } from '@/store/AuthContext';
 import { userService, storageService, superlikeService, likeService, matchService } from '@/lib/cloudflare/services';
@@ -29,8 +28,6 @@ export default function DiscoverPage() {
   const [likes, setLikes] = useState<any>({ remaining: 0, used: 0, dailyLimit: 0, refillsAt: '', isPremium: false });
   const [showLikeUpsell, setShowLikeUpsell] = useState(false);
   const [showMessageUpsell, setShowMessageUpsell] = useState(false);
-  const [matchPopupUser, setMatchPopupUser] = useState<any>(null);
-  const [matchPopupId, setMatchPopupId] = useState<string | undefined>(undefined);
 
   const baseGender = (profile?.interestedIn as string) || 'both';
   const defaultPrefs = { gender: baseGender, minAge: 18, maxAge: 60, maxDistance: 0, minHeight: 0, maxHeight: 0, minWeight: 0, maxWeight: 0, city: '', relationshipGoals: '' };
@@ -113,8 +110,7 @@ export default function DiscoverPage() {
         if (res && typeof res.remaining === 'number') setLikes(res);
         if (res?.mutual) {
           setLastAction(null);
-          setMatchPopupUser(liked);
-          setMatchPopupId(res.match?.$id);
+          if (res.match?.$id) router.push(`/match/${res.match.$id}`);
           return;
         }
       } catch (e: any) {
@@ -124,7 +120,7 @@ export default function DiscoverPage() {
       }
     }
     setTimeout(() => { setLastAction(null); nextUser(); }, 300);
-  }, [users, profile, likes, nextUser]);
+  }, [users, profile, likes, nextUser, router]);
 
   const handleSuperLike = useCallback(async () => {
     const liked = users[0];
@@ -139,8 +135,7 @@ export default function DiscoverPage() {
         setSuperlikes(res);
         if (res.mutual) {
           setLastAction(null);
-          setMatchPopupUser(liked);
-          setMatchPopupId(res.match?.$id);
+          if (res.match?.$id) router.push(`/match/${res.match.$id}`);
           return;
         }
       } catch (e: any) {
@@ -150,7 +145,7 @@ export default function DiscoverPage() {
       }
     }
     setTimeout(() => { setLastAction(null); nextUser(); }, 300);
-  }, [users, superlikes, nextUser]);
+  }, [users, superlikes, nextUser, router]);
 
   const handleMessage = useCallback(async () => {
     const target = users[0];
@@ -308,15 +303,6 @@ export default function DiscoverPage() {
 
         {showMessageUpsell && (
           <MessageUpsellModal onClose={() => setShowMessageUpsell(false)} />
-        )}
-
-        {matchPopupUser && (
-          <MatchPopup
-            matchedUser={matchPopupUser}
-            matchId={matchPopupId}
-            myPhotoUrl={(profile as any)?._photoUrl || ((profile as any)?.photos?.[0] ? storageService.getFilePreview((profile as any).photos[0]) : '')}
-            onClose={() => { setMatchPopupUser(null); setMatchPopupId(undefined); nextUser(); }}
-          />
         )}
       </div>
     </AppShell>

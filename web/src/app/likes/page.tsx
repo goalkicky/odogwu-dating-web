@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import AppShell from '@/components/AppShell';
-import MatchPopup from '@/components/MatchPopup';
 import { useAuth } from '@/store/AuthContext';
 import { matchService, storageService, userService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
@@ -31,8 +30,6 @@ export default function LikesPage() {
   const [sortMenu, setSortMenu] = useState(false);
   const [loading, setLoading] = useState(true);
   const [likingId, setLikingId] = useState<string | null>(null);
-  const [matchPopupUser, setMatchPopupUser] = useState<any>(null);
-  const [matchPopupId, setMatchPopupId] = useState<string | undefined>(undefined);
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState('');
   const [toastVisible, setToastVisible] = useState(false);
@@ -121,19 +118,8 @@ export default function LikesPage() {
         const otherId = d.matchedUser?.$id || d.matchedUser?.id || d.userId;
         return otherId !== likerId;
       }));
-      if (res?.mutual) {
-        const liker = likers.find(d => {
-          const otherId = d.matchedUser?.$id || d.matchedUser?.id || d.userId;
-          return otherId === likerId;
-        });
-        if (liker?.matchedUser) {
-          const mp = liker.matchedUser;
-          setMatchPopupUser({
-            ...mp,
-            photos: (mp.photos || []).map((fid: string) => storageService.getFilePreview(fid)),
-          });
-          setMatchPopupId(res.match?.$id);
-        }
+      if (res?.mutual && res.match?.$id) {
+        router.push(`/match/${res.match.$id}`);
       }
       showToast('Liked');
     } catch {}
@@ -333,15 +319,6 @@ export default function LikesPage() {
       </div>
 
       <div className={`lk toast${toastVisible ? '' : ''}`} style={{ opacity: toastVisible ? 1 : 0, transform: `translateX(-50%) translateY(${toastVisible ? 0 : 20}px)` }}>{toast}</div>
-
-      {matchPopupUser && (
-        <MatchPopup
-          matchedUser={matchPopupUser}
-          matchId={matchPopupId}
-          myPhotoUrl={(profile as any)?.photos?.[0] ? storageService.getFilePreview((profile as any).photos[0]) : ''}
-          onClose={() => { setMatchPopupUser(null); setMatchPopupId(undefined); }}
-        />
-      )}
     </AppShell>
   );
 }
