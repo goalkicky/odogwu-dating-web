@@ -137,35 +137,58 @@ export default function MyProfilePage() {
         .mp-page .mp-state button{margin-top:14px;padding:12px 28px;border-radius:9999px;background:#e90046;color:#fff;font-size:14px;font-weight:700;cursor:pointer;border:0}
         .mp-page #mp-toast{position:fixed;z-index:100;left:50%;bottom:112px;transform:translateX(-50%);background:#111;color:#fff;padding:11px 18px;border-radius:24px;font:14px Arial}
         @media(max-width:560px){
-          .mp-page .topbar{height:162px;padding:67px 10px 9px;grid-template-columns:45px 1fr 45px}
+          .mp-page .page{height:100dvh;max-height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+          .mp-page main{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+          .mp-page .topbar{height:auto;flex:none;padding:17px 10px 8px;grid-template-columns:38px 1fr 38px}
+          .mp-page .icon{font-size:34px}
+          .mp-page .more{font-size:20px}
           .mp-page .head{gap:10px}
-          .mp-page .head img,.mp-page .head .avatar-fallback{width:70px;height:70px}
-          .mp-page .name{font-size:25px}
-          .mp-page .photos{padding:0 11px;gap:8px}
-          .mp-page .mainpic{height:calc((100vw - 30px)*1.55)}
-          .mp-page .side{gap:8px}
-          .mp-page .side img{height:calc(((100vw - 30px)*1.55 - 8px)/2)}
-          .mp-page .profile{padding:29px 24px 70px}
-          .mp-page h1{font-size:34px}
-          .mp-page .location{font-size:16px}
-          .mp-page .bio{font-size:18px}
-          .mp-page .chips{gap:8px 6px}
-          .mp-page .chips span{font-size:14px;padding:9px 12px}
-          .mp-page .basic-grid>div{padding-left:4px;padding-right:4px}
-          .mp-page .basic-grid small,.mp-page .basic-grid p{font-size:13px}
-          .mp-page .home{display:block;position:fixed;bottom:9px;left:50%;transform:translateX(-50%);width:140px;height:5px;background:#080808;border-radius:5px}
-          .mp-page #mp-toast{bottom:90px}
+          .mp-page .head img,.mp-page .head .avatar-fallback{width:50px;height:50px}
+          .mp-page .head .avatar-fallback{font-size:20px}
+          .mp-page .name{font-size:20px}
+          .mp-page .active{font-size:12px;margin-top:1px}
+          .mp-page .active i{width:8px;height:8px}
+          .mp-page .photos{flex:1;min-height:0;padding:0 10px;gap:7px}
+          .mp-page .mainpic{height:100%}
+          .mp-page .side{grid-template-rows:1fr 1fr;gap:7px}
+          .mp-page .side img{height:100%}
+          .mp-page .profile{flex:none;padding:12px 16px 13px}
+          .mp-page h1{font-size:25px;letter-spacing:-.5px}
+          .mp-page h1 b{width:18px;height:18px;font-size:11px;vertical-align:2px}
+          .mp-page .location{font-size:13px;margin-top:7px;gap:7px}
+          .mp-page .location:first-letter{font-size:17px}
+          .mp-page .bio{font-size:13px;line-height:1.4;margin:9px 0}
+          .mp-page q::before{font-size:26px;vertical-align:-7px}
+          .mp-page .profile h2{font-size:14px;margin:0 0 7px}
+          .mp-page .chips{gap:5px}
+          .mp-page .chips span{font-size:11px;padding:5px 9px}
+          .mp-page .basic{margin-top:10px;border-radius:12px}
+          .mp-page .basic-title{padding:7px 12px 4px;font-size:14px}
+          .mp-page .basic-grid>div{min-height:58px;padding:3px 4px 9px}
+          .mp-page .basic-grid>div+div{border-left:1px solid #e2e2e5}
+          .mp-page .basic-grid strong{font-size:18px;height:24px}
+          .mp-page .basic-grid small{font-size:10px}
+          .mp-page .basic-grid p{font-size:11px;margin:4px 0 0}
+          .mp-page .home{display:block;position:fixed;bottom:5px;left:50%;transform:translateX(-50%);width:110px;height:4px;background:#080808;border-radius:5px}
+          .mp-page #mp-toast{bottom:80px}
         }
         @media(max-width:390px){
-          .mp-page .head img,.mp-page .head .avatar-fallback{width:62px;height:62px}
-          .mp-page .name{font-size:22px}
-          .mp-page .active{font-size:13px}
-          .mp-page .profile{padding-left:17px;padding-right:17px}
-          .mp-page h1{font-size:30px}
-          .mp-page .location{font-size:14px}
-          .mp-page .bio{font-size:16px}
-          .mp-page .chips span{font-size:13px;padding:8px 10px}
-          .mp-page .basic-grid small,.mp-page .basic-grid p{font-size:12px}
+          .mp-page .topbar{padding:12px 8px 6px;grid-template-columns:34px 1fr 34px}
+          .mp-page .head img,.mp-page .head .avatar-fallback{width:42px;height:42px}
+          .mp-page .name{font-size:18px}
+          .mp-page .active{font-size:11px}
+          .mp-page .photos{padding:0 8px;gap:6px}
+          .mp-page .side{gap:6px}
+          .mp-page .profile{padding:10px 13px 11px}
+          .mp-page h1{font-size:22px}
+          .mp-page .location{font-size:12px}
+          .mp-page .bio{font-size:12px;line-height:1.35;margin:7px 0}
+          .mp-page .chips span{font-size:10px;padding:4px 8px}
+          .mp-page .basic{margin-top:8px}
+          .mp-page .basic-grid>div{min-height:52px}
+          .mp-page .basic-grid strong{font-size:16px;height:22px}
+          .mp-page .basic-grid small{font-size:9px}
+          .mp-page .basic-grid p{font-size:10px;margin:3px 0 0}
         }
         @media(min-width:900px){
           .mp-page{background:#f3f3f4;padding:25px 0;min-height:100vh}
