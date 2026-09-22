@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import AppShell from '@/components/AppShell';
 import { useAuth } from '@/store/AuthContext';
 import { matchService, messageService, storageService } from '@/lib/cloudflare/services';
@@ -18,6 +19,7 @@ function timeAgo(dateStr: string) {
 }
 
 export default function MatchesPage() {
+  const router = useRouter();
   const { profile, user } = useAuth();
   const [matches, setMatches] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,6 +70,14 @@ export default function MatchesPage() {
   const q = searchQuery.toLowerCase();
   const conversationMatches = matches.filter((m: any) => m.matchedUser && (m.matchedUser.fullName || '').toLowerCase().includes(q));
   const requestCount = matches.filter((m: any) => !m.hasConversation).length;
+
+  const openProfile = (e: React.MouseEvent, item: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const mp = item.matchedUser || {};
+    const otherId = item.matchedUserId || mp.$id || mp.id;
+    if (otherId) router.push(`/my-profile/${otherId}`);
+  };
 
   return (
     <AppShell
@@ -191,7 +201,7 @@ export default function MatchesPage() {
                     className="msg-conv"
                     style={{ textDecoration: 'none', display: 'grid' }}
                   >
-                    <div className="msg-avatar-wrap">
+                    <div className="msg-avatar-wrap" onClick={(e) => openProfile(e, item)} style={{ cursor: 'pointer' }}>
                       {photoUrl ? (
                         <img src={photoUrl} alt={name} />
                       ) : (
@@ -235,7 +245,7 @@ export default function MatchesPage() {
                     className="msg-conv"
                     style={{ textDecoration: 'none', display: 'grid' }}
                   >
-                    <div className="msg-avatar-wrap">
+                    <div className="msg-avatar-wrap" onClick={(e) => openProfile(e, item)} style={{ cursor: 'pointer' }}>
                       {photoUrl ? (
                         <img src={photoUrl} alt={name} />
                       ) : (
