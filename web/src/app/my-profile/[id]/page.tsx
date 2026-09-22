@@ -44,6 +44,7 @@ export default function MyProfilePage() {
 
   const [user, setUser] = useState<any>(null);
   const [photos, setPhotos] = useState<string[]>([]);
+  const [mainIdx, setMainIdx] = useState(0);
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [toast, setToast] = useState('');
   const [failed, setFailed] = useState(false);
@@ -57,6 +58,7 @@ export default function MyProfilePage() {
         const raw: string[] = Array.isArray(p?.photos) ? p.photos : [];
         setUser(p);
         setPhotos(raw.filter(Boolean).map((fid: string) => storageService.getFilePreview(fid)));
+        setMainIdx(0);
       })
       .catch(() => setFailed(true))
       .finally(() => setLoading(false));
@@ -76,8 +78,8 @@ export default function MyProfilePage() {
   const name = user?.fullName || 'Member';
   const initial = (name[0] || 'M').toUpperCase();
   const avatar = photos[0] || '';
-  const main = photos[0] || '';
-  const side = photos.slice(1, 3);
+  const main = photos[mainIdx] || '';
+  const sides = photos.filter((_, i) => i !== mainIdx);
   const online = !!user?.lastActive && (Date.now() - new Date(user.lastActive).getTime()) < 120000;
 
   const basic: { icon: string; label: string; value: string }[] = [];
@@ -108,9 +110,11 @@ export default function MyProfilePage() {
         .mp-page .active{font-size:16px;margin-top:5px}
         .mp-page .active i{display:inline-block;width:10px;height:10px;background:#19bf57;border-radius:50%;margin-right:6px}
         .mp-page .photos{display:grid;grid-template-columns:1.5fr 1fr;gap:9px;padding:0 12px}
+        .mp-page .photos.single{grid-template-columns:1fr}
+        .mp-page .photos.single .mainpic{width:100%}
         .mp-page .photos img{width:100%;object-fit:cover;border-radius:16px;display:block}
         .mp-page .mainpic{height:630px}
-        .mp-page .side{display:grid;grid-template-rows:1fr 1fr;gap:9px}
+        .mp-page .side{display:grid;grid-auto-rows:310px;gap:9px}
         .mp-page .side img{height:310px}
         .mp-page .profile{padding:31px 26px 28px}
         .mp-page h1{font-size:37px;margin:0;letter-spacing:-1px}
@@ -150,8 +154,9 @@ export default function MyProfilePage() {
           .mp-page .active i{width:8px;height:8px}
           .mp-page .photos{flex:1;min-height:0;padding:0 10px;gap:7px}
           .mp-page .mainpic{height:100%}
-          .mp-page .side{grid-template-rows:1fr 1fr;gap:7px}
-          .mp-page .side img{height:100%}
+          .mp-page .side{display:grid;grid-auto-rows:minmax(48px,1fr);gap:7px;overflow:auto;scrollbar-width:none}
+          .mp-page .side::-webkit-scrollbar{display:none}
+          .mp-page .side img{height:100%;width:100%;min-height:48px;cursor:pointer}
           .mp-page .profile{flex:none;padding:12px 16px 13px}
           .mp-page h1{font-size:25px;letter-spacing:-.5px}
           .mp-page h1 b{width:18px;height:18px;font-size:11px;vertical-align:2px}
@@ -220,19 +225,16 @@ export default function MyProfilePage() {
             <div className="mp-state">Loading…</div>
           ) : user ? (
             <>
-              <div className="photos">
+              <div className={`photos${photos.length > 1 ? '' : ' single'}`}>
                 {main ? (
                   <img className="mainpic" src={main} alt={name} />
                 ) : (
                   <div className="mainpic" style={{ display: 'grid', placeItems: 'center', background: 'linear-gradient(135deg,#ef315a,#e48b1a)', color: '#fff', fontSize: 90, fontWeight: 800 }}>{initial}</div>
                 )}
-                {(side.length > 0 || main) && (
+                {photos.length > 1 && (
                   <div className="side">
-                    {side.map((src, i) => (
-                      <img key={i} src={src} alt="" />
-                    ))}
-                    {Array.from({ length: 2 - side.length }).map((_, i) => (
-                      <div key={`f${i}`} style={{ borderRadius: 16, display: 'grid', placeItems: 'center', background: 'linear-gradient(135deg,#ffb3c1,#ffe3ea)', color: '#e90046', fontSize: 34, fontWeight: 800 }}>{name[0] || 'M'}</div>
+                    {photos.map((src, i) => i === mainIdx ? null : (
+                      <img key={i} src={src} alt="" onClick={() => setMainIdx(i)} />
                     ))}
                   </div>
                 )}
