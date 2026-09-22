@@ -77,9 +77,22 @@ export default function MyMatchesPage() {
       })
       .catch(() => {});
     if ((profile as any)?.interestedIn) {
+      let savedLat: number | undefined;
+      let savedLng: number | undefined;
+      try {
+        const raw = localStorage.getItem('dogwu_location');
+        if (raw) {
+          const loc = JSON.parse(raw);
+          if (typeof loc.lat === 'number' && typeof loc.lon === 'number') {
+            savedLat = loc.lat;
+            savedLng = loc.lon;
+          }
+        }
+      } catch {}
       userService.getDiscoverUsers(uid, {
         gender: (profile as any).interestedIn === 'both' ? 'male' : (profile as any).interestedIn,
-        minAge: 18, maxAge: 60, maxDistance: 200,
+        minAge: 18, maxAge: 60, maxDistance: 25,
+        ...(savedLat !== undefined && savedLng !== undefined ? { lat: savedLat, lng: savedLng } : {}),
       }).then((docs: any[]) => setNearbyCount((Array.isArray(docs) ? docs : []).length)).catch(() => {});
     }
   }, [uid]);

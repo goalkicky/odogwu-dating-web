@@ -64,17 +64,31 @@ export default function LikesPage() {
     matchService.getUserMatches(uid)
       .then((res: any) => {
         const docs = Array.isArray(res) ? res : (res?.documents || []);
-        setMatchesCount(docs.length);
+        const newMatches = docs.filter((d: any) => !d.hasConversation);
+        setMatchesCount(newMatches.length);
         setMessagesCount(docs.filter((d: any) => d.hasConversation).length);
-        const first = docs[0]?.matchedUser;
-        if (first?.photos?.[0]) setMatchPhoto(storageService.getFilePreview(first.photos[0]));
+        const firstNew = newMatches[0]?.matchedUser;
+        if (firstNew?.photos?.[0]) setMatchPhoto(storageService.getFilePreview(firstNew.photos[0]));
       })
       .catch(() => {});
     if (profile?.interestedIn) {
+      let savedLat: number | undefined;
+      let savedLng: number | undefined;
+      try {
+        const raw = localStorage.getItem('dogwu_location');
+        if (raw) {
+          const loc = JSON.parse(raw);
+          if (typeof loc.lat === 'number' && typeof loc.lon === 'number') {
+            savedLat = loc.lat;
+            savedLng = loc.lon;
+          }
+        }
+      } catch {}
       userService.getDiscoverUsers(uid, {
         gender: profile.interestedIn === 'both' ? 'male' : profile.interestedIn,
-        minAge: 18, maxAge: 60, maxDistance: 200,
-      }).then((docs: any[]) => setNearbyCount(docs.length)).catch(() => {});
+        minAge: 18, maxAge: 60, maxDistance: 25,
+        ...(savedLat !== undefined && savedLng !== undefined ? { lat: savedLat, lng: savedLng } : {}),
+      }).then((docs: any[]) => setNearbyCount((Array.isArray(docs) ? docs : []).length)).catch(() => {});
     }
   }, [uid, profile]);
 
