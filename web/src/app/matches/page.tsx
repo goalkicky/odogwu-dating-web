@@ -68,7 +68,7 @@ export default function MatchesPage() {
   }, [profile, user]);
 
   const q = searchQuery.toLowerCase();
-  const conversationMatches = matches.filter((m: any) => m.matchedUser && (m.matchedUser.fullName || '').toLowerCase().includes(q));
+  const conversationMatches = matches.filter((m: any) => m.hasConversation && m.matchedUser && (m.matchedUser.fullName || '').toLowerCase().includes(q));
   const requestCount = matches.filter((m: any) => !m.hasConversation).length;
 
   const openProfile = (e: React.MouseEvent, item: any) => {

@@ -85,10 +85,11 @@ export default function MyMatchesPage() {
   }, [uid]);
 
   const nameInitial = (name: string) => (name?.[0] || 'M').toUpperCase();
-  const matchPhoto = matches[0]?.matchedUser?._photoUrl || '';
+  const newMatches = matches.filter((m: any) => !m.hasConversation);
+  const matchPhoto = newMatches[0]?.matchedUser?._photoUrl || '';
 
   const sortedMatches = useMemo(() => {
-    const arr = [...matches];
+    const arr = [...newMatches];
     const getTime = (m: any) => new Date(m?.matchedAt || m?.createdAt || 0).getTime();
     switch (sortBy) {
       case 'oldest': return arr.sort((a, b) => getTime(a) - getTime(b));
@@ -407,7 +408,7 @@ export default function MyMatchesPage() {
                   </svg>
                 </div>
               )}
-              <b className="tmpl-badge">{matches.length}</b>
+              <b className="tmpl-badge">{newMatches.length}</b>
             </span>
             <label>Matches</label>
           </button>
@@ -438,7 +439,7 @@ export default function MyMatchesPage() {
           </div>
         </div>
         <div className="list">
-          {matches.length === 0 && <div className="empty">No matches yet — keep swiping on Discover!</div>}
+          {newMatches.length === 0 && <div className="empty">No matches yet — keep swiping on Discover!</div>}
           {sortedMatches.map((m: any) => {
             const mp = m.matchedUser || {};
             const name = mp.fullName || 'Member';
