@@ -103,6 +103,7 @@ export default function MatchesPage() {
         .msg-avatar-wrap img,.msg-avatar-wrap .msg-avatar-fallback{width:80px;height:80px;display:block;object-fit:cover;border-radius:50%}
         .msg-avatar-fallback{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#FF2E5F,#B44CFF);color:#fff;font-size:34px;font-weight:800}
         .msg-online{position:absolute;width:15px;height:15px;border-radius:50%;background:#13c979;border:2px solid #fff;right:1px;bottom:1px}
+        .msg-online.off{background:#b9bcc2}
         .msg-person-line{display:flex;align-items:center;gap:6px;margin-bottom:6px}
         .msg-person-line strong{font-size:18px;line-height:1.05;letter-spacing:-.3px;color:#101114}
         .msg-verified{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#1496e9;color:#fff;font-size:12px;font-weight:800;line-height:1}
@@ -186,6 +187,7 @@ export default function MatchesPage() {
                 const photoUrl = mp._photoUrl || '';
                 const name = mp.fullName || 'User';
                 const texts = lastTexts[item.$id] || [];
+                const online = !!mp.lastActive && (Date.now() - new Date(mp.lastActive).getTime()) < 120000;
                 const userId = (user as any)?.$id;
                 const preview = texts.length > 0 ? texts.map((t: any) => {
                   let line = t.senderId === userId ? `You: ${t.text}` : t.text;
@@ -207,7 +209,7 @@ export default function MatchesPage() {
                       ) : (
                         <div className="msg-avatar-fallback">{name[0]}</div>
                       )}
-                      <span className="msg-online"></span>
+                      <span className={`msg-online${online ? '' : ' off'}`}></span>
                     </div>
                     <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                       <div className="msg-person-line">
@@ -238,6 +240,7 @@ export default function MatchesPage() {
                 const mp = item.matchedUser || {};
                 const photoUrl = mp._photoUrl || '';
                 const name = mp.fullName || 'User';
+                const online = !!mp.lastActive && (Date.now() - new Date(mp.lastActive).getTime()) < 120000;
                 return (
                   <Link
                     key={item.$id}
@@ -251,7 +254,7 @@ export default function MatchesPage() {
                       ) : (
                         <div className="msg-avatar-fallback">{name[0]}</div>
                       )}
-                      <span className="msg-online"></span>
+                      <span className={`msg-online${online ? '' : ' off'}`}></span>
                     </div>
                     <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                       <div className="msg-person-line">
