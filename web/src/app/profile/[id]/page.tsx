@@ -123,7 +123,9 @@ export default function ProfilePage() {
         .back{position:absolute;bottom:14px;left:18px;width:40px;height:40px;border-radius:50%;background:rgba(20,20,20,.75);color:#fff;display:grid;place-items:center;font-size:24px;line-height:1;cursor:pointer;border:0}
         .content{padding:20px 12px 24px}
         .name-row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-        .name-row h1{margin:0;font-size:30px;line-height:1.1;letter-spacing:-.6px}
+        .name-row h1{margin:0;font-size:30px;line-height:1.1;letter-spacing:-.6px;font-weight:400}
+        .name-row h1 .pf-name{font-weight:800}
+        .name-row h1 .pf-interests{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--pink);color:#fff;font-size:11px;font-weight:400;font-style:normal;vertical-align:middle;margin-left:4px}
         .name-row h1 span{font-weight:500}
         .name-row h1 em{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;background:#2184ee;color:#fff;font-size:12px;font-style:normal;vertical-align:middle;margin-left:4px}
         .location{font-size:15px;color:#222;margin-top:12px;display:flex;gap:7px;align-items:center}
@@ -248,7 +250,7 @@ export default function ProfilePage() {
             <section className="content">
               <div className="name-row">
                 <div>
-                  <h1>{name}{age ? <span>, {age}</span> : null}{user.verified ? <em>✓</em> : null}</h1>
+                  <h1><b className="pf-name">{name}</b>{Array.isArray(user.interests) && user.interests.length > 0 && <span className="pf-interests">♥</span>}{age ? <span>, {age}</span> : null}{user.verified ? <em>✓</em> : null}</h1>
                   {city && <div className="location">⌖ <span>{city}{distance !== null && distance !== undefined && isFinite(distance) ? ` (${distance}km away)` : ''}</span></div>}
                 </div>
                 <div className="actions">
