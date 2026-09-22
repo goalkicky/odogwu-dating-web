@@ -15,6 +15,24 @@ function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): nu
   return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 }
 
+const INTEREST_ICONS: [RegExp, string][] = [
+  [/music|afro|beat|spotify|sound|song|dance|rap|hiphop|hip-hop|culture/i, '♪'],
+  [/football|soccer|sport|ball|chelsea|arsenal|back|man utd|manchester|basket/i, '⚽'],
+  [/gym|fitness|workout|train|exercise|yoga|jog|run/i, '◉'],
+  [/jollof|rice|food|cook|eat|dinner|restaurant|cuisine|meat|chicken/i, '♨'],
+  [/travel|trip|tour|abroad|vacation|hike|beach|safari/i, '♧'],
+  [/movie|film|nollywood|netflix|cinema|hollywood|series|tv/i, '♧'],
+  [/love|relationship|romance|heart|friendship/i, '♡'],
+  [/prayer|church|god|gospel|faith|bible|christian/i, '✝'],
+  [/fashion|style|clothes|design|beauty|makeup/i, '❁'],
+  [/book|read|novel|write|author|poetry/i, '✎'],
+];
+
+function interestIcon(t: string): string {
+  const match = INTEREST_ICONS.find(([re]) => re.test(t));
+  return match ? match[1] : '✦';
+}
+
 export default function ProfilePage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
@@ -137,6 +155,7 @@ export default function ProfilePage() {
         .gift{background:var(--pink);border:2px solid var(--pink);color:#fff}
         .tags{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 19px}
         .tags span{border:1px solid #e1e1e4;border-radius:20px;padding:8px 12px;font-size:14px;color:#303038;white-space:nowrap}
+        .tags span .tag-icon{font-style:normal;color:var(--pink)}
         .profile-page hr{border:0;border-top:1px solid var(--line);margin:0}
         .about{padding:20px 0 17px}
         .about h2{font-size:19px;margin:0 0 12px;letter-spacing:-.2px}
@@ -266,7 +285,7 @@ export default function ProfilePage() {
               {Array.isArray(user.interests) && user.interests.length > 0 && (
                 <div className="tags">
                   {user.interests.map((t: string, i: number) => (
-                    <span key={i}>◉ {t}</span>
+                    <span key={i}><i className="tag-icon">{interestIcon(t)}</i> {t}</span>
                   ))}
                 </div>
               )}
