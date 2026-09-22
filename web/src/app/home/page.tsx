@@ -60,6 +60,7 @@ export default function HomePage() {
   const [likesCount, setLikesCount] = useState(0);
   const [matchesCount, setMatchesCount] = useState(0);
   const [nearby, setNearby] = useState<any[]>([]);
+  const [nearbyCount, setNearbyCount] = useState(0);
   const [stories, setStories] = useState<any[]>([]);
   const [messagesCount, setMessagesCount] = useState(0);
   const [likePhoto, setLikePhoto] = useState('');
@@ -87,18 +88,36 @@ export default function HomePage() {
       }
       if (matchesRes.status === 'fulfilled') {
         const docs = Array.isArray(matchesRes.value) ? matchesRes.value : (matchesRes.value?.documents || []);
-        setMatchesCount(docs.length);
+        const newMatches = docs.filter((d: any) => !d.hasConversation);
+        setMatchesCount(newMatches.length);
         setMessagesCount(docs.filter((d: any) => d.hasConversation).length);
-        const first = docs[0]?.matchedUser;
-        if (first?.photos?.[0]) setMatchPhoto(storageService.getFilePreview(first.photos[0]));
+        const firstNew = newMatches[0]?.matchedUser;
+        if (firstNew?.photos?.[0]) setMatchPhoto(storageService.getFilePreview(firstNew.photos[0]));
       }
     });
 
     if (profile?.interestedIn) {
+      let savedLat: number | undefined;
+      let savedLng: number | undefined;
+      try {
+        const raw = localStorage.getItem('dogwu_location');
+        if (raw) {
+          const loc = JSON.parse(raw);
+          if (typeof loc.lat === 'number' && typeof loc.lon === 'number') {
+            savedLat = loc.lat;
+            savedLng = loc.lon;
+          }
+        }
+      } catch {}
       userService.getDiscoverUsers(uid, {
         gender: profile.interestedIn === 'both' ? 'male' : profile.interestedIn,
-        minAge: 18, maxAge: 60, maxDistance: 200,
-      }).then((docs: any[]) => setNearby(docs.slice(0, 12))).catch(() => {});
+        minAge: 18, maxAge: 60, maxDistance: 25,
+        ...(savedLat !== undefined && savedLng !== undefined ? { lat: savedLat, lng: savedLng } : {}),
+      }).then((docs: any[]) => {
+        const all = Array.isArray(docs) ? docs : [];
+        setNearbyCount(all.length);
+        setNearby(all.slice(0, 12));
+      }).catch(() => {});
     }
 
     feedService.getFeed(profile?.interests || []).then((d: any) => {
@@ -455,7 +474,7 @@ export default function HomePage() {
             <button className="tmpl-quick" onClick={() => go('/nearby')}>
               <span className="tmpl-round-photo location">
                 <svg viewBox="0 0 64 64"><path d="M32 7c-12 0-21 9-21 21 0 15 21 29 21 29s21-14 21-29C53 16 44 7 32 7Zm0 29a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"/></svg>
-                <b className="tmpl-badge">{nearby.length}</b>
+                <b className="tmpl-badge">{nearbyCount}</b>
               </span>
               <label>Nearby</label>
             </button>
