@@ -117,19 +117,19 @@ export default function MyProfilePage() {
         .mp-page .side{display:grid;grid-auto-rows:310px;gap:9px}
         .mp-page .side img{height:310px}
         .mp-page .profile{padding:31px 26px 28px}
-        .mp-page h1{font-size:37px;margin:0;letter-spacing:-1px}
+        .mp-page h1{font-size:37px;margin:0;letter-spacing:-1px;font-weight:800}
         .mp-page h1 b{vertical-align:5px}
         .mp-page .location{display:flex;align-items:center;gap:9px;color:#777;font-size:18px;margin-top:13px}
         .mp-page .location:first-letter{font-size:27px}
         .mp-page .bio{font-size:19px;line-height:1.55;margin:27px 0}
         .mp-page q::before{content:"“";color:#e90046;font-size:45px;font-weight:800;vertical-align:-12px;margin-right:6px}
         .mp-page q::after{content:"”"}
-        .mp-page .profile h2{font-size:18px;margin:0 0 17px}
+        .mp-page .profile h2{font-size:18px;margin:0 0 17px;font-weight:800}
         .mp-page .chips{display:flex;flex-wrap:wrap;gap:10px 8px}
         .mp-page .chips span{border:1px solid #e7e7ea;border-radius:28px;padding:10px 15px;font-size:15px;white-space:nowrap;cursor:pointer;background:#fff}
         .mp-page .chips span.selected{border-color:#e90046;background:#fff0f3;color:#c4003d}
         .mp-page .basic{border:1px solid #e4e4e7;border-radius:17px;margin-top:27px;overflow:hidden}
-        .mp-page .basic-title{padding:13px 16px 8px;font-size:19px}
+        .mp-page .basic-title{padding:13px 16px 8px;font-size:19px;font-weight:800}
         .mp-page .basic-grid{display:grid;grid-template-columns:repeat(3,1fr)}
         .mp-page .basic-grid>div{text-align:center;padding:4px 8px 18px;min-height:135px}
         .mp-page .basic-grid>div+div{border-left:1px solid #e2e2e5}
