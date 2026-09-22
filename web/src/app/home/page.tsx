@@ -61,6 +61,7 @@ export default function HomePage() {
   const [matchesCount, setMatchesCount] = useState(0);
   const [nearby, setNearby] = useState<any[]>([]);
   const [nearbyCount, setNearbyCount] = useState(0);
+  const [activeMembers, setActiveMembers] = useState<any[]>([]);
   const [stories, setStories] = useState<any[]>([]);
   const [messagesCount, setMessagesCount] = useState(0);
   const [likePhoto, setLikePhoto] = useState('');
@@ -117,6 +118,15 @@ export default function HomePage() {
         const all = Array.isArray(docs) ? docs : [];
         setNearbyCount(all.length);
         setNearby(all.slice(0, 12));
+        setActiveMembers(
+          [...all]
+            .sort((a: any, b: any) => {
+              const ta = a.lastActive ? new Date(a.lastActive).getTime() : 0;
+              const tb = b.lastActive ? new Date(b.lastActive).getTime() : 0;
+              return tb - ta;
+            })
+            .slice(0, 6)
+        );
       }).catch(() => {});
     }
 
@@ -523,19 +533,22 @@ export default function HomePage() {
               <button className="tmpl-see-more" onClick={() => go('/active')}>See all</button>
             </div>
             <div className="tmpl-active-grid">
-              {nearby.length === 0 && (
+              {activeMembers.length === 0 && (
                 <div style={{ color: '#999', fontSize: 14, padding: '20px 4px', gridColumn: '1 / -1' }}>
-                  No nearby members yet. Check back soon!
+                  No recently active members yet. Check back soon!
                 </div>
               )}
-              {nearby.slice(0, 6).map((p: any, idx: number) => {
+              {activeMembers.map((p: any, idx: number) => {
+                const mid = p.id || p.$id || '';
                 const photo = p.photos?.[0] ? storageService.getFilePreview(p.photos[0]) : '';
                 const name = p.fullName || 'Member';
+                const online = !!p.lastActive && (Date.now() - new Date(p.lastActive).getTime()) < 120000;
+                const ago = p.lastActive ? formatAgo(p.lastActive) : 'Recently';
                 return (
-                  <button key={p.id || p.$id || idx} className="tmpl-profile-card" onClick={() => go('/discover')}>
+                  <button key={mid || idx} className="tmpl-profile-card" onClick={() => mid && go(`/my-profile/${mid}`)}>
                     <StoryAvatar photo={photo} name={name[0]} />
-                    <i></i>
-                    <div>{name}<small>{Math.max(1, idx + 1) * 2}m ago</small></div>
+                    {online && <i></i>}
+                    <div>{name}<small>{online ? 'Online' : ago}</small></div>
                   </button>
                 );
               })}
