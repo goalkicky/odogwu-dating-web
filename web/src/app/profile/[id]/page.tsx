@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '@/store/AuthContext';
 import { matchService, userService, storageService } from '@/lib/cloudflare/services';
 
@@ -27,6 +28,7 @@ export default function ProfilePage() {
   const [photos, setPhotos] = useState<string[]>([]);
   const [heroIdx, setHeroIdx] = useState(0);
   const [likesCount, setLikesCount] = useState(0);
+  const [messagesCount, setMessagesCount] = useState(0);
   const [failed, setFailed] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -46,6 +48,10 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!uid) return;
     matchService.getWhoLikedMe(uid).then((docs: any) => setLikesCount(Array.isArray(docs) ? docs.length : 0)).catch(() => {});
+    matchService.getUserMatches(uid).then((docs: any) => {
+      const arr = Array.isArray(docs) ? docs : (docs?.documents || []);
+      setMessagesCount(arr.filter((d: any) => d.hasConversation).length);
+    }).catch(() => {});
   }, [uid]);
 
   const distance = useMemo(() => {
@@ -123,8 +129,9 @@ export default function ProfilePage() {
         .location{font-size:15px;color:#222;margin-top:12px;display:flex;gap:7px;align-items:center}
         .location span{color:#4c4c54}
         .actions{display:flex;gap:10px}
-        .action-btn{width:61px;height:61px;border-radius:50%;display:grid;place-items:center;font-size:25px;cursor:pointer}
-        .message{background:#fff;border:2px solid var(--pink);color:#111;letter-spacing:-2px}
+        .action-btn{width:61px;height:61px;border-radius:50%;display:grid;place-items:center;cursor:pointer}
+        .action-btn svg{width:28px;height:28px;fill:none;stroke-width:2.2}
+        .message{background:#fff;border:2px solid var(--pink);color:#111}
         .gift{background:var(--pink);border:2px solid var(--pink);color:#fff}
         .tags{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 19px}
         .tags span{border:1px solid #e1e1e4;border-radius:20px;padding:8px 12px;font-size:14px;color:#303038;white-space:nowrap}
@@ -141,7 +148,7 @@ export default function ProfilePage() {
         .more h2{font-size:19px;margin:0 0 12px;letter-spacing:-.2px}
         .gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
         .gallery img{width:100%;aspect-ratio:1/1.32;object-fit:cover;border-radius:13px;display:block;cursor:pointer}
-        .mobile-bar{display:none}
+        .tmpl-bottom-nav{display:none}
         .profile-state{padding:70px 20px;text-align:center;color:#888;font-size:15px;width:min(100%,540px);margin:0 auto;background:#fff;box-shadow:0 0 0 1px #ededee}
         .profile-state button{margin-top:14px;padding:12px 28px;border-radius:9999px;background:var(--pink);color:#fff;font-size:14px;font-weight:700;cursor:pointer;border:0}
         @media (max-width:760px){
@@ -150,17 +157,25 @@ export default function ProfilePage() {
           .sidebar{display:none}
           .profile-card{width:100%;max-width:none;border-radius:0;box-shadow:none}
           .hero{height:min(108vw,560px)}
-          .content{padding:18px 16px 88px}
+          .content{padding:18px 16px 120px}
           .name-row{align-items:center}
           .name-row h1{font-size:27px}
           .location{font-size:14px}
           .action-btn{width:54px;height:54px}
+          .action-btn svg{width:25px;height:25px}
           .tags{margin-top:22px}
           .tags span{font-size:13px;padding:7px 10px}
           .detail-row{grid-template-columns:27px 1fr 1.08fr;min-height:46px;font-size:14px}
           .gallery{gap:9px}
-          .mobile-bar{position:fixed;left:0;right:0;bottom:0;height:66px;background:#fff;border-top:1px solid #e8e8ea;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;font-size:12px;box-shadow:0 -2px 12px rgba(0,0,0,.04)}
-          .mobile-user{font-size:25px;line-height:24px}
+          .tmpl-bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:710px;height:101px;background:#fff;border-top:1px solid #eee;display:grid;grid-template-columns:1fr 1fr 1.1fr 1fr 1fr;align-items:end;padding:8px 15px 13px;z-index:30;box-sizing:border-box}
+          .tmpl-nav-item{height:70px;color:#777;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:13px;text-decoration:none;background:none;border:0;padding:0;cursor:pointer}
+          .tmpl-nav-item svg{width:29px;height:29px;stroke:currentColor;stroke-width:2.2;fill:currentColor}
+          .tmpl-nav-item:not(.active) svg{fill:none}
+          .tmpl-nav-item.active{color:#d81043}
+          .tmpl-nav-icon-wrap{position:relative;display:grid}
+          .tmpl-nav-icon-wrap b{position:absolute;right:-7px;top:-7px;background:#d81043;color:#fff;border-radius:50%;font-size:11px;width:20px;height:20px;display:grid;place-items:center;font-weight:700}
+          .tmpl-nav-center{height:70px;display:flex;align-items:center;justify-content:center;text-decoration:none;cursor:pointer}
+          .tmpl-nav-center img{width:66px;height:66px;object-fit:cover;border-radius:50%}
           .back{bottom:auto;top:16px;left:18px}
         }
         @media (min-width:761px) and (max-width:1050px){
@@ -176,6 +191,14 @@ export default function ProfilePage() {
           .name-row{gap:5px}
           .name-row h1{font-size:25px}
           .gallery{gap:7px}
+        }
+        @media (max-width:560px){
+          .tmpl-bottom-nav{height:88px;padding:6px 10px 10px}
+          .tmpl-nav-item{height:62px;font-size:12px;gap:4px}
+          .tmpl-nav-item svg{width:26px;height:26px}
+          .tmpl-nav-center{height:62px}
+          .tmpl-nav-center img{width:58px;height:58px}
+          .tmpl-nav-icon-wrap b{width:18px;height:18px;font-size:10px}
         }
       `}</style>
 
@@ -229,8 +252,12 @@ export default function ProfilePage() {
                   {city && <div className="location">⌖ <span>{city}{distance !== null && distance !== undefined && isFinite(distance) ? ` (${distance}km away)` : ''}</span></div>}
                 </div>
                 <div className="actions">
-                  <button className="action-btn message" aria-label="Message" onClick={() => matchId ? router.push(`/chat/${matchId}`) : router.push('/matches')}>•••</button>
-                  <button className="action-btn gift" aria-label="Gift" onClick={() => router.push('/wallet')}>♔</button>
+                  <button className="action-btn message" aria-label="Message" onClick={() => matchId ? router.push(`/chat/${matchId}`) : router.push('/matches')}>
+                    <svg viewBox="0 0 48 48"><path d="M10 36l2-8a14 14 0 1 1 6 6l-8 2Z" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/><circle cx="19" cy="23" r="1.6" fill="currentColor" stroke="none"/><circle cx="24" cy="23" r="1.6" fill="currentColor" stroke="none"/><circle cx="29" cy="23" r="1.6" fill="currentColor" stroke="none"/></svg>
+                  </button>
+                  <button className="action-btn gift" aria-label="Gift" onClick={() => router.push('/wallet')}>
+                    <svg viewBox="0 0 48 48"><path d="M10 21h28v3a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2ZM12 26h24v9a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2ZM24 20v17M24 20c-5 0-8-3-8-6 0-2 2-4 4-4 3 0 4 2 4 4 0-2 1-4 4-4 2 0 4 2 4 4 0 3-3 6-8 6Z" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinejoin="round"/></svg>
+                  </button>
                 </div>
               </div>
 
@@ -282,10 +309,21 @@ export default function ProfilePage() {
         ) : null}
       </div>
 
-      <div className="mobile-bar" onClick={() => router.push('/edit-profile')}>
-        <span className="mobile-user">♙</span>
-        <span>Profile</span>
-      </div>
+      <nav className="tmpl-bottom-nav">
+        <Link href="/home" className="tmpl-nav-item">
+          <svg viewBox="0 0 48 48"><path d="M8 22 24 9l16 13v17H29V28H19v11H8Z"/></svg><span>Home</span>
+        </Link>
+        <Link href="/explore" className="tmpl-nav-item">
+          <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none"/><path d="m19 29 4-10 9-4-4 9-9 5Z"/></svg><span>Explore</span>
+        </Link>
+        <Link href="/discover" className="tmpl-nav-center"><img src="/logo-icon.png?v=2" alt="Discover" /></Link>
+        <Link href="/matches" className="tmpl-nav-item">
+          <span className="tmpl-nav-icon-wrap"><svg viewBox="0 0 48 48"><path d="M9 34l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/><circle cx="19" cy="22" r="2"/><circle cx="25" cy="22" r="2"/><circle cx="31" cy="22" r="2"/></svg><b>{messagesCount || 0}</b></span><span>Messages</span>
+        </Link>
+        <Link href="/edit-profile" className="tmpl-nav-item">
+          <svg viewBox="0 0 48 48"><circle cx="24" cy="17" r="7" fill="none"/><path d="M10 39c1-8 7-12 14-12s13 4 14 12" fill="none"/></svg><span>Profile</span>
+        </Link>
+      </nav>
     </div>
   );
 }
