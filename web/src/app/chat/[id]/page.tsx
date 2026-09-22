@@ -161,10 +161,11 @@ export default function ChatPage() {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingLocked, setRecordingLocked] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
-  const [matchName, setMatchName] = useState('User');
+  const [matchName, setMatchName] = useState('');
   const [otherUserId, setOtherUserId] = useState('');
   const [otherProfile, setOtherProfile] = useState<any>(null);
   const [otherOnline, setOtherOnline] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [sendingImage, setSendingImage] = useState(false);
   const [lightbox, setLightbox] = useState<string | null>(null);
@@ -188,24 +189,25 @@ export default function ChatPage() {
 
   useEffect(() => {
     if (!matchId || !userId) return;
-    matchService.getMatch(matchId).then(doc => {
-      const other = (doc as any).userId === userId ? (doc as any).matchedUserId : (doc as any).userId;
-      setOtherUserId(other);
-      userService.getProfile(other).then(p => {
-        setOtherProfile(p);
-        setMatchName((p as any).displayName || (p as any).fullName || 'User');
-        const lastActive = (p as any).lastActive;
-        setOtherOnline(!!lastActive && Date.now() - new Date(lastActive).getTime() < 120000);
-      }).catch(() => {});
-    }).catch(() => {});
-    messageService.getMessages(matchId).then(res => {
-      const msgs = (res.documents || []).map(docToMessage);
-      setMessages(msgs);
-    }).catch(() => {});
-    callLogService.getCallLogsForMatch(matchId).then(logs => {
-      setCallLogs(logs);
-    }).catch(() => {});
-
+    Promise.allSettled([
+      matchService.getMatch(matchId).then(doc => {
+        const other = (doc as any).userId === userId ? (doc as any).matchedUserId : (doc as any).userId;
+        setOtherUserId(other);
+        return userService.getProfile(other).then(p => {
+          setOtherProfile(p);
+          setMatchName((p as any).displayName || (p as any).fullName || '');
+          const lastActive = (p as any).lastActive;
+          setOtherOnline(!!lastActive && Date.now() - new Date(lastActive).getTime() < 120000);
+        });
+      }),
+      messageService.getMessages(matchId).then(res => {
+        const msgs = (res.documents || []).map(docToMessage);
+        setMessages(msgs);
+      }),
+      callLogService.getCallLogsForMatch(matchId).then(logs => {
+        setCallLogs(logs);
+      }),
+    ]).finally(() => setInitialLoading(false));
     messageService.subscribeToMessages(matchId, (msg) => {
       setMessages(prev => {
         if (prev.some(m => m.id === msg.id)) return prev;
@@ -526,6 +528,7 @@ export default function ChatPage() {
           .ch-name{font-size:17px}
           .ch-header-actions{gap:8px}
         }
+      @keyframes chspin { to { transform: rotate(360deg); } }
       `}</style>
 
       {/* ===== Header ===== */}
@@ -540,7 +543,7 @@ export default function ChatPage() {
               {otherAvatarUrl ? (
                 <img src={otherAvatarUrl} alt={matchName} fetchPriority="high" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
-                <span style={{ color: '#8A8A8F', fontWeight: 800, fontSize: 30 }}>{(matchName[0] || 'U').toUpperCase()}</span>
+                <span style={{ color: '#8A8A8F', fontWeight: 800, fontSize: 30 }}>{matchName ? matchName[0].toUpperCase() : ''}</span>
               )}
             </div>
             <span className="ch-online" style={{ background: otherOnline ? '#18bf74' : '#6b6b6b' }}></span>
@@ -571,7 +574,14 @@ export default function ChatPage() {
 
       {/* ===== Conversation ===== */}
       <div className="ch-conversation">
-        {messages.length === 0 && (
+        {initialLoading && messages.length === 0 && (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: 12, textAlign: 'center', padding: 24 }}>
+            <div className="ch-loading-spinner" style={{ width: 34, height: 34, borderRadius: '50%', border: '3px solid #f1e6ec', borderTopColor: '#d91b70', animation: 'chspin 0.8s linear infinite' }} />
+            <div style={{ fontSize: 13, color: '#8A8A8F' }}>Loading messages…</div>
+          </div>
+        )}
+
+        {!initialLoading && messages.length === 0 && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: 12, textAlign: 'center', padding: 24 }}>
             <div style={{ width: 76, height: 76, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 44px rgba(217,27,112,0.35)', overflow: 'hidden', background: '#EEEEF0' }}>
               {otherAvatarUrl ? (
