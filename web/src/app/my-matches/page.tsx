@@ -456,7 +456,16 @@ export default function MyMatchesPage() {
                   {mp.city && <div className="detail"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-12A7 7 0 0 0 5 9c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.2"/></svg>{mp.city}</div>}
                   {mp.occupation && <div className="detail"><svg viewBox="0 0 24 24"><path d="M5 7h14v12H5zM8 7V4h8v3M8 11h8"/></svg>{mp.occupation}</div>}
                 </div>
-                <span className="time">{timeAgo(m.matchedAt || m.createdAt || '')}</span><span className="arrow">›</span>
+                <span className="time">{timeAgo(m.matchedAt || m.createdAt || '')}</span>
+                <button
+                  className="arrow"
+                  aria-label={`View ${name}'s profile`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const otherId = m.matchedUserId || mp.$id || mp.id;
+                    if (otherId) router.push(`/profile/${otherId}?match=${encodeURIComponent(m.$id)}`);
+                  }}
+                >›</button>
               </article>
             );
           })}
