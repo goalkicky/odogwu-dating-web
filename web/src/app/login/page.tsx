@@ -81,7 +81,7 @@ export default function LoginPage() {
             boxShadow: '0 0 20px rgba(255,46,95,0.5)',
           }}
         >
-          <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu Dating" style={{ width: 60, height: 60, objectFit: 'cover' }} />
+          <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu Dating" fetchPriority="high" decoding="async" style={{ width: 60, height: 60, objectFit: 'cover' }} />
         </div>
         <h1 style={{ fontSize: 32, fontWeight: 800, color: 'white', letterSpacing: 4, textTransform: 'uppercase', margin: 0 }}>
           odogwu dating

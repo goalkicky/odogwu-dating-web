@@ -210,7 +210,7 @@ export default function DiscoverPage() {
 
   const discoverHeader = (
     <header className="uv-topbar" style={{ padding: '2px 0 6px' }}>
-      <img className="uv-brand-logo" src="/o-logo.png" alt="Odogwu" style={{ justifySelf: 'start', height: 28 }} />
+      <img className="uv-brand-logo" src="/o-logo.png" alt="Odogwu" style={{ justifySelf: 'start', height: 28 }} width={28} height={28} decoding="async" />
       <h1 style={{ fontSize: 17, fontWeight: 800, color: '#000', margin: 0, letterSpacing: -0.5, textAlign: 'center' }}>Discover</h1>
       <button
         onClick={() => setShowFilters(true)}

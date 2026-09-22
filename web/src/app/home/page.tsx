@@ -24,7 +24,7 @@ const GRAD_PLACEHOLDER: CSSProperties = {
 };
 
 function StoryAvatar({ photo, name }: { photo: string; name: string }) {
-  if (photo) return <img src={photo} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />;
+  if (photo) return <img src={photo} alt="" loading="lazy" decoding="async" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />;
   return <div style={{ position: 'absolute', inset: 0, ...GRAD_PLACEHOLDER, background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)' }}>{name[0]}</div>;
 }
 
@@ -358,7 +358,7 @@ export default function HomePage() {
       <div className="tmpl-desktop-only" style={{ display: 'none' }}>
         <aside className="tmpl-sidebar">
           <div style={{ display: 'flex', alignItems: 'center', gap: 9, margin: '0 0 58px 7px' }}>
-            <img className="tmpl-brand-mark" src="/o-logo.png" alt="Odogwu" />
+            <img className="tmpl-brand-mark" src="/o-logo.png" alt="Odogwu" width={48} height={48} decoding="async" />
             <div>
               <div className="tmpl-brand-name">DOGWU</div>
               <div className="tmpl-brand-sub"><b>—</b> D A T <span>♥</span> I N G <b>—</b></div>
@@ -393,7 +393,7 @@ export default function HomePage() {
             <button className="tmpl-icon-btn tmpl-menu" aria-label="Menu" onClick={() => go('/settings')}>
               <span></span><span></span><span></span>
             </button>
-            <img className="tmpl-brand-logo" src="/o-logo.png" alt="Odogwu" />
+            <img className="tmpl-brand-logo" src="/o-logo.png" alt="Odogwu" width={44} height={44} decoding="async" />
             <button className="tmpl-messages-top tmpl-icon-btn" aria-label="Messages" onClick={() => go('/matches')}>
               <svg viewBox="0 0 48 48" aria-hidden="true">
                 <path d="M10 35l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none" stroke="currentColor" strokeWidth="3"/>
@@ -478,10 +478,10 @@ export default function HomePage() {
                         className="tmpl-story-card"
                       >
                         {first.img
-                          ? <img src={first.img} alt="" />
+                          ? <img src={first.img} alt="" loading="lazy" decoding="async" />
                           : <StoryAvatar photo="" name={s.name[0]} />}
                         <div className="tmpl-shade"></div>
-                        <div className="tmpl-story-user">{s.avatar ? <img src={s.avatar} alt="" /> : <span>◉</span>}<div>{s.name}<small>{first.ago}</small></div></div>
+                        <div className="tmpl-story-user">{s.avatar ? <img src={s.avatar} alt="" loading="lazy" decoding="async" /> : <span>◉</span>}<div>{s.name}<small>{first.ago}</small></div></div>
                         <p>{first.caption}</p>
                       </Link>
                     );
@@ -530,7 +530,7 @@ export default function HomePage() {
           <Link href="/explore" className="tmpl-nav-item">
             <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none"/><path d="m19 29 4-10 9-4-4 9-9 5Z"/></svg><span>Explore</span>
           </Link>
-          <Link href="/discover" className="tmpl-nav-center"><img src="/logo-icon.png?v=2" alt="Discover" /></Link>
+          <Link href="/discover" className="tmpl-nav-center"><img src="/logo-icon.png?v=2" alt="Discover" width={44} height={44} decoding="async" /></Link>
           <Link href="/matches" className="tmpl-nav-item">
             <span className="tmpl-nav-icon-wrap"><svg viewBox="0 0 48 48"><path d="M9 34l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/><circle cx="19" cy="22" r="2"/><circle cx="25" cy="22" r="2"/><circle cx="31" cy="22" r="2"/></svg><b>{messagesCount || 0}</b></span><span>Messages</span>
           </Link>

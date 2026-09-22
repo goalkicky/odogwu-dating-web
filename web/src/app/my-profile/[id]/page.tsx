@@ -205,7 +205,7 @@ export default function MyProfilePage() {
         <header className="topbar">
           <button className="icon back" aria-label="Back" onClick={() => router.back()}>‹</button>
           <div className="head">
-            {avatar ? <img src={avatar} alt={name} /> : <div className="avatar-fallback">{initial}</div>}
+            {avatar ? <img src={avatar} alt={name} decoding="async" /> : <div className="avatar-fallback">{initial}</div>}
             <div>
               <div className="name">{name}{user?.verified ? <b>✓</b> : null}</div>
               <div className="active"><i></i> {online ? 'Active now' : 'Last seen recently'}</div>
@@ -226,14 +226,14 @@ export default function MyProfilePage() {
             <>
               <div className={`photos${photos.length > 1 ? '' : ' single'}`}>
                 {main ? (
-                  <img className="mainpic" src={main} alt={name} />
+                  <img className="mainpic" src={main} alt={name} fetchPriority="high" decoding="async" />
                 ) : (
                   <div className="mainpic" style={{ display: 'grid', placeItems: 'center', background: 'linear-gradient(135deg,#ef315a,#e48b1a)', color: '#fff', fontSize: 90, fontWeight: 800 }}>{initial}</div>
                 )}
                 {photos.length > 1 && (
                   <div className="side">
                     {photos.map((src, i) => i === mainIdx ? null : (
-                      <img key={i} src={src} alt="" onClick={() => setMainIdx(i)} />
+                      <img key={i} src={src} alt="" onClick={() => setMainIdx(i)} loading="lazy" decoding="async" />
                     ))}
                   </div>
                 )}

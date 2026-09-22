@@ -59,7 +59,7 @@ export default function BlockedUsersPage() {
               return (
                 <div key={b.$id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, backgroundColor: '#F6F6F9', borderRadius: 16 }}>
                   {b._photoUrl ? (
-                    <img src={b._photoUrl} alt={name} style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }} />
+                    <img src={b._photoUrl} alt={name} loading="lazy" decoding="async" style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }} />
                   ) : (
                     <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 800, fontSize: 20 }}>
                       {initial}

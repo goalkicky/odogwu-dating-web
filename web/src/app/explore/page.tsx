@@ -405,7 +405,7 @@ export default function ExplorePage() {
                         aspectRatio: '4 / 5', background: `linear-gradient(160deg, ${category.c1}, ${category.c2})`, textAlign: 'left',
                       }}
                     >
-                      <img src={bg} alt={category.label} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={bg} alt={category.label} loading="lazy" decoding="async" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.62) 100%)' }} />
                       <div style={{ position: 'absolute', left: 14, right: 14, bottom: 14 }}>
                         <div style={{ fontSize: 26, lineHeight: 1 }}>{category.emoji}</div>

@@ -129,7 +129,7 @@ export default function ShareSheet({ postId, postCaption, currentUserId, onClose
                 >
                   <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, #1A1A2E, #2A2A3E)', flexShrink: 0, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {photo ? (
-                      <img src={photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={photo} alt="" loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
                       <span style={{ fontSize: 16, fontWeight: 700, color: '#FF2E5F' }}>{name.charAt(0)}</span>
                     )}

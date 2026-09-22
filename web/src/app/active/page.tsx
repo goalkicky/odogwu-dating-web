@@ -24,7 +24,7 @@ function activeLabel(p: { lastActive?: string }, idx: number): string {
 }
 
 function Photo({ photo, name }: { photo: string; name: string }) {
-  if (photo) return <img className="av-photo" src={photo} alt={`${name}'s profile photo`} />;
+  if (photo) return <img className="av-photo" src={photo} alt={`${name}'s profile photo`} loading="lazy" decoding="async" />;
   return (
     <div
       className="av-photo"
@@ -296,7 +296,7 @@ export default function ActivePage() {
             <button className="icon-btn back" aria-label="Go back" type="button" onClick={() => router.back()}>
               ‹
             </button>
-            <img className="brand-logo" src="/o-logo.png" alt="Odogwu Dating" />
+            <img className="brand-logo" src="/o-logo.png" alt="Odogwu Dating" width={44} height={44} decoding="async" />
             <button className="chat-btn" aria-label="Messages" type="button" onClick={() => router.push('/matches')}>
               <span className="bubble">•••</span><em>{messagesCount || 0}</em>
             </button>

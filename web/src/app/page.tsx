@@ -291,7 +291,7 @@ export default function LandingPage() {
                 <p style={{ fontSize: isMobile ? 15 : 18, color: '#D0D0D0', lineHeight: isMobile ? '24px' : '28px', fontStyle: 'italic', maxWidth: 600, margin: '16px auto 24px' }}>
                   {'\u201C'}{t.text}{'\u201D'}
                 </p>
-                <img src={t.photo} alt={t.name} style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover', margin: '0 auto 8px' }} />
+                <img src={t.photo} alt={t.name} loading="lazy" decoding="async" style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover', margin: '0 auto 8px' }} />
                 <div style={{ fontWeight: 700, fontSize: isMobile ? 14 : 16 }}>{t.name}</div>
                 <div style={{ color: '#6B6B6B', fontSize: 13 }}>{t.location}</div>
               </div>

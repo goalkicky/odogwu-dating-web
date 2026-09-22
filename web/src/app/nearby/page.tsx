@@ -177,7 +177,7 @@ export default function NearbyPage() {
             <button className="icon-btn back" aria-label="Go back" type="button" onClick={() => router.back()}>
               ‹
             </button>
-            <img className="brand-logo" src="/o-logo.png" alt="Odogwu Dating" />
+            <img className="brand-logo" src="/o-logo.png" alt="Odogwu Dating" width={44} height={44} decoding="async" />
             <button className="chat-btn" aria-label="Messages" type="button" onClick={() => router.push('/matches')}>
               <span className="bubble">•••</span><em>{messagesCount || 0}</em>
             </button>
@@ -185,7 +185,7 @@ export default function NearbyPage() {
 
           <main>
             <section className="nb-head">
-              <img className="nb-map" src="/nearby/map.png" alt="" />
+              <img className="nb-map" src="/nearby/map.png" alt="" loading="lazy" decoding="async" />
               <div className="nb-copy">
                 <h1>Nearby</h1>
                 <p className="nb-pink-line">Find singles close to you <span>💕</span></p>
@@ -206,7 +206,7 @@ export default function NearbyPage() {
                 return (
                   <div key={mid || i} className="nb-profile" role="button" tabIndex={0} onClick={() => router.push('/discover')} onKeyDown={(e) => e.key === 'Enter' && router.push('/discover')}>
                     {photo
-                      ? <img src={photo} alt="" />
+                      ? <img src={photo} alt="" loading="lazy" decoding="async" />
                       : <div className="nb-profile-fallback">{initial(member)}</div>}
                     <div className={`nb-status${isOnline ? ' online' : ' recent'}`}>
                       {isOnline

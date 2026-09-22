@@ -297,7 +297,7 @@ export default function EditProfilePage() {
         <div className="app-shell">
           <header className="topbar">
             <button className="icon-btn back" aria-label="Go back" onClick={() => router.back()}>‹</button>
-            <img className="brand-logo" src="/o-logo.png" alt="Odogwu Dating" />
+            <img className="brand-logo" src="/o-logo.png" alt="Odogwu Dating" width={44} height={44} decoding="async" />
             <button className="chat-btn" aria-label="Messages" onClick={() => router.push('/matches')}><span className="bubble">•••</span><em>{messagesCount || 0}</em></button>
           </header>
 
@@ -323,7 +323,7 @@ export default function EditProfilePage() {
             <div className="photo-grid" id="photoGrid">
               {photos.map((id, i) => (
                 <div className="photo-item" key={id}>
-                  <img src={photoUrls[i] || storageService.getFilePreview(id)} alt="Profile photo" />
+                  <img src={photoUrls[i] || storageService.getFilePreview(id)} alt="Profile photo" decoding="async" />
                   <button className="remove" aria-label="Remove photo" onClick={() => removePhoto(i)}>×</button>
                 </div>
               ))}

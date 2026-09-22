@@ -45,8 +45,20 @@ export const authService = {
   },
 };
 
+const _profileCache = new Map<string, { ts: number; value: any }>();
+const PROFILE_CACHE_TTL = 45000;
+
 async function getProfileDoc(userId: string) {
-  return apiFetch(`/api/profile/${encodeURIComponent(userId)}`);
+  const hit = _profileCache.get(userId);
+  if (hit && Date.now() - hit.ts < PROFILE_CACHE_TTL) return hit.value;
+  const value = await apiFetch(`/api/profile/${encodeURIComponent(userId)}`);
+  _profileCache.set(userId, { ts: Date.now(), value });
+  return value;
+}
+
+export function clearProfileCache(userId?: string) {
+  if (userId) _profileCache.delete(userId);
+  else _profileCache.clear();
 }
 
 export const userService = {
@@ -55,6 +67,7 @@ export const userService = {
   },
 
   updateProfile: async (userId: string, data: Partial<UserProfile>) => {
+    clearProfileCache(userId);
     return apiFetch('/api/profile', { method: 'PUT', json: data }).catch((e: any) => {
       if (e?.status === 404) return null;
       throw e;

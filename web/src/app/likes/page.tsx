@@ -154,7 +154,7 @@ export default function LikesPage() {
           <button className="lk menu" aria-label="Menu" onClick={() => router.push('/settings')}>
             <span></span><span></span><span></span>
           </button>
-          <img className="lk brand-logo" src="/o-logo.png" alt="Odogwu" />
+          <img className="lk brand-logo" src="/o-logo.png" alt="Odogwu" width={44} height={44} decoding="async" />
           <button className="lk messages" aria-label="Messages" onClick={() => router.push('/matches')}>
             <svg viewBox="0 0 48 48" aria-hidden="true">
               <path d="M10 35l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none" stroke="currentColor" strokeWidth="3"/>
@@ -170,7 +170,7 @@ export default function LikesPage() {
           <button className="lk quick" onClick={() => router.push('/edit-profile')}>
             <span className="lk round-photo story" style={{ ['--pct' as any]: completion }}>
               {profilePhoto ? (
-                <img src={profilePhoto} alt="" />
+                <img src={profilePhoto} alt="" loading="lazy" decoding="async" />
               ) : (
                 <div className="lk initial">{initial}</div>
               )}
@@ -196,7 +196,7 @@ export default function LikesPage() {
           <button className="lk quick" onClick={() => router.push('/matches')}>
             <span className="lk round-photo">
               {matchPhoto ? (
-                <img src={matchPhoto} alt="" />
+                <img src={matchPhoto} alt="" loading="lazy" decoding="async" />
               ) : (
                 <span className="lk fallback">
                   <svg viewBox="0 0 48 48">
@@ -280,7 +280,7 @@ export default function LikesPage() {
                 return (
                   <article className="lk card" key={item.$id || otherId}>
                     {photoUrl ? (
-                      <img className="lk card-photo" src={photoUrl} alt={name} />
+                      <img className="lk card-photo" src={photoUrl} alt={name} loading="lazy" decoding="async" />
                     ) : (
                       <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#3a3a3f' }}>
                         <span style={{ color: '#fff', fontSize: 58, fontWeight: 700 }}>{name[0]}</span>

@@ -261,7 +261,7 @@ export default function StoryPage() {
 
       <div className="story-frame">
         {slide?.img
-          ? <img className="story-media" src={slide.img} alt={`${current?.name || 'Story'} story`} />
+          ? <img className="story-media" src={slide.img} alt={`${current?.name || 'Story'} story`} fetchPriority="high" decoding="async" />
           : <div className="story-media" style={{ display: 'grid', placeItems: 'center', color: '#777' }}>{stories.length ? '' : 'Loading story…'}</div>}
         <div className="story-shade"></div>
 
@@ -277,7 +277,7 @@ export default function StoryPage() {
         <button className="story-close" aria-label="Close story" onClick={() => router.back()}>✕</button>
 
         <div className="story-author">
-          {current?.avatar ? <img src={current.avatar} alt="" /> : <span>{((current?.name || 'O')[0] || 'O').toUpperCase()}</span>}
+          {current?.avatar ? <img src={current.avatar} alt="" decoding="async" /> : <span>{((current?.name || 'O')[0] || 'O').toUpperCase()}</span>}
           <div style={{ minWidth: 0 }}>
             <b>{current?.name || 'Odogwu'}</b>
             <small>{slide?.ago || ''}</small>

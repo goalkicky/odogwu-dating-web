@@ -123,7 +123,7 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
           <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)', padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: '#000', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {post.userPhoto ? (
-                <img src={storageService.getFilePreview(post.userPhoto)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={storageService.getFilePreview(post.userPhoto)} alt="" decoding="async" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <span style={{ fontSize: 13, fontWeight: 700, color: '#FF2E5F' }}>{post.userName?.charAt(0)?.toUpperCase() || '?'}</span>
               )}
@@ -181,6 +181,8 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onSaveTogg
             src={imgSrc}
             alt=""
             draggable={false}
+            loading="lazy"
+            decoding="async"
             style={{ width: '100%', height: '100%', objectFit: 'cover', userSelect: 'none' }}
           />
 

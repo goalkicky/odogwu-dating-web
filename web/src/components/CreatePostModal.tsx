@@ -99,6 +99,7 @@ export default function CreatePostModal({ currentUserId, category, onClose, onPo
               <img
                 src={previews[activePreview]}
                 alt=""
+                decoding="async"
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
               {/* Image count */}

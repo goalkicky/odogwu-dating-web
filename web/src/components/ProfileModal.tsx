@@ -28,7 +28,7 @@ export default function ProfileModal({ user, onClose }: { user: ProfileModalUser
     <div style={{ position: 'fixed', inset: 0, zIndex: 200, background: '#000', overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
       {/* Photo carousel */}
       <div style={{ position: 'relative', width: '100%', aspectRatio: '3/4', maxHeight: '70dvh', overflow: 'hidden', background: '#16161C' }}>
-        <img src={currentPhoto} alt={user.fullName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <img src={currentPhoto} alt={user.fullName} decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 90, background: 'linear-gradient(rgba(0,0,0,0.5), transparent)' }} />
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 170, background: 'linear-gradient(transparent, rgba(0,0,0,0.85))' }} />
 

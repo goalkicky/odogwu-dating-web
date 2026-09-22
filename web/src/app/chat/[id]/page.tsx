@@ -538,7 +538,7 @@ export default function ChatPage() {
           <div className="ch-avatar-wrap">
             <div className="ch-avatar" style={{ background: '#EEEEF0', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
               {otherAvatarUrl ? (
-                <img src={otherAvatarUrl} alt={matchName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={otherAvatarUrl} alt={matchName} fetchPriority="high" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <span style={{ color: '#8A8A8F', fontWeight: 800, fontSize: 30 }}>{(matchName[0] || 'U').toUpperCase()}</span>
               )}
@@ -575,7 +575,7 @@ export default function ChatPage() {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: 12, textAlign: 'center', padding: 24 }}>
             <div style={{ width: 76, height: 76, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 44px rgba(217,27,112,0.35)', overflow: 'hidden', background: '#EEEEF0' }}>
               {otherAvatarUrl ? (
-                <img src={otherAvatarUrl} alt={matchName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={otherAvatarUrl} alt={matchName} loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <span style={{ color: '#8A8A8F', fontWeight: 800, fontSize: 30 }}>{(matchName[0] || 'U').toUpperCase()}</span>
               )}
@@ -650,11 +650,11 @@ export default function ChatPage() {
               <div className={`ch-row ${isMe ? 'ch-outgoing' : 'ch-incoming'}`}>
                 {!isMe && (
                   <div className="ch-avatar-small" style={{ background: '#EEEEF0', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                    {otherAvatarUrl ? (
-                      <img src={otherAvatarUrl} alt={matchName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    ) : (
-                      <span style={{ color: '#8A8A8F', fontWeight: 800, fontSize: 26 }}>{(matchName[0] || 'U').toUpperCase()}</span>
-                    )}
+{otherAvatarUrl ? (
+                <img src={otherAvatarUrl} alt={matchName} loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                <span style={{ color: '#8A8A8F', fontWeight: 800, fontSize: 30 }}>{(matchName[0] || 'U').toUpperCase()}</span>
+              )}
                   </div>
                 )}
 
@@ -731,6 +731,8 @@ export default function ChatPage() {
                           <img
                             src={resolveMediaUrl(mediaUrl)}
                             alt=""
+                            loading="lazy"
+                            decoding="async"
                             onClick={(e) => { e.stopPropagation(); setLightbox(resolveMediaUrl(mediaUrl)); }}
                             style={{ display: 'block', maxWidth: 240, maxHeight: 280, borderRadius: 12, cursor: 'zoom-in', objectFit: 'cover' }}
                           />
@@ -963,6 +965,7 @@ export default function ChatPage() {
           <img
             src={lightbox}
             alt=""
+            decoding="async"
             onClick={(e) => e.stopPropagation()}
             style={{ maxWidth: '92vw', maxHeight: '88vh', borderRadius: 16, boxShadow: '0 20px 80px rgba(0,0,0,0.8)' }}
           />

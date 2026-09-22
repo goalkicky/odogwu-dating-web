@@ -20,7 +20,7 @@ export default function MarketingFooter() {
       }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-            <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu Dating" style={{ width: 36, height: 36, borderRadius: 10, objectFit: 'cover' }} />
+            <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu Dating" loading="lazy" decoding="async" style={{ width: 36, height: 36, borderRadius: 10, objectFit: 'cover' }} />
             <span style={{ fontSize: 20, fontWeight: 800, color: 'white', letterSpacing: 1 }}>ODOGWU DATING</span>
           </div>
           <p style={{ color: '#6B6B6B', fontSize: 14, lineHeight: '22px', maxWidth: 280 }}>

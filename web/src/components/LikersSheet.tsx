@@ -46,7 +46,7 @@ export default function LikersSheet({ postId, onClose }: LikersSheetProps) {
                 <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, #FF2E5F, #B44CFF)', padding: 2, flexShrink: 0 }}>
                   <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: '#111', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {user.userPhoto ? (
-                      <img src={storageService.getFilePreview(user.userPhoto)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={storageService.getFilePreview(user.userPhoto)} alt="" loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
                       <span style={{ fontSize: 16, fontWeight: 700, color: '#FF2E5F' }}>{(user.fullName || '?').charAt(0)}</span>
                     )}

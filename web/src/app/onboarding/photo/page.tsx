@@ -143,7 +143,7 @@ export default function PhotoPage() {
             >
               {hasPhoto ? (
                 <>
-                  <img src={data.photos[i]} alt="Upload" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={data.photos[i]} alt="Upload" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   <div style={{ position: 'absolute', top: 4, right: 4, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 12, padding: 2, display: 'flex' }}>
                     <CloseCircleIcon size={22} color="white" />
                   </div>

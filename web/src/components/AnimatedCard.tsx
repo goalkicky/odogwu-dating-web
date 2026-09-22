@@ -209,7 +209,7 @@ export default function AnimatedCard({
       </svg>
 
       <div className="dc-photo" style={{ clipPath: 'url(#dc-u-arc)' }}>
-        <img src={photoUri} alt={user.fullName} draggable={false} />
+        <img src={photoUri} alt={user.fullName} draggable={false} loading={isFirst ? 'eager' : 'lazy'} decoding="async" fetchPriority={isFirst ? 'high' : 'low'} />
         <div className="dc-shade" />
 
         <div className="dc-pill dc-pill-left"><span>✦</span> For You</div>

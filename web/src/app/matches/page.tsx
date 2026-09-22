@@ -83,7 +83,7 @@ export default function MatchesPage() {
     <AppShell
       header={
         <header className="uv-topbar" style={{ position: 'relative', alignItems: 'center', paddingTop: 26 }}>
-          <img className="uv-brand-logo" src="/o-logo.png" alt="Odogwu" style={{ height: 30 }} />
+          <img className="uv-brand-logo" src="/o-logo.png" alt="Odogwu" style={{ height: 30 }} width={30} height={30} decoding="async" />
           <span style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', fontSize: 17, fontWeight: 800, color: '#151515', letterSpacing: -0.3, whiteSpace: 'nowrap' }}>Messages</span>
         </header>
       }
@@ -203,7 +203,7 @@ export default function MatchesPage() {
                   >
                     <div className="msg-avatar-wrap" onClick={(e) => openProfile(e, item)} style={{ cursor: 'pointer' }}>
                       {photoUrl ? (
-                        <img src={photoUrl} alt={name} />
+                        <img src={photoUrl} alt={name} loading="lazy" decoding="async" />
                       ) : (
                         <div className="msg-avatar-fallback">{name[0]}</div>
                       )}
@@ -247,7 +247,7 @@ export default function MatchesPage() {
                   >
                     <div className="msg-avatar-wrap" onClick={(e) => openProfile(e, item)} style={{ cursor: 'pointer' }}>
                       {photoUrl ? (
-                        <img src={photoUrl} alt={name} />
+                        <img src={photoUrl} alt={name} loading="lazy" decoding="async" />
                       ) : (
                         <div className="msg-avatar-fallback">{name[0]}</div>
                       )}

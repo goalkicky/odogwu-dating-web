@@ -352,7 +352,7 @@ export default function MyMatchesPage() {
           <button className="tmpl-icon-btn tmpl-menu" aria-label="Menu" onClick={() => router.push('/settings')}>
             <span></span><span></span><span></span>
           </button>
-          <img className="tmpl-brand-logo" src="/o-logo.png" alt="Odogwu" />
+          <img className="tmpl-brand-logo" src="/o-logo.png" alt="Odogwu" width={44} height={44} decoding="async" />
           <button className="tmpl-messages-top tmpl-icon-btn" aria-label="Messages" onClick={() => router.push('/matches')}>
             <svg viewBox="0 0 48 48" aria-hidden="true">
               <path d="M10 35l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none" stroke="currentColor" strokeWidth="3"/>
@@ -447,7 +447,7 @@ export default function MyMatchesPage() {
             return (
               <article key={m.$id} className="match" onClick={() => router.push(`/chat/${m.$id}`)}>
                 <div className="photoWrap">
-                  {photo ? <img src={photo} alt="" /> : <div className="photoFallback">{nameInitial(name)}</div>}
+                  {photo ? <img src={photo} alt="" loading="lazy" decoding="async" /> : <div className="photoFallback">{nameInitial(name)}</div>}
                   {isOnline && <span className="online"></span>}
                   <span className="smallHeart">♥</span>
                 </div>
@@ -479,7 +479,7 @@ export default function MyMatchesPage() {
         <Link href="/explore" className="tmpl-nav-item">
           <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none"/><path d="m19 29 4-10 9-4-4 9-9 5Z"/></svg><span>Explore</span>
         </Link>
-        <Link href="/discover" className="tmpl-nav-center"><img src="/logo-icon.png?v=2" alt="Discover" /></Link>
+        <Link href="/discover" className="tmpl-nav-center"><img src="/logo-icon.png?v=2" alt="Discover" width={44} height={44} decoding="async" /></Link>
         <Link href="/matches" className="tmpl-nav-item active">
           <span className="tmpl-nav-icon-wrap"><svg viewBox="0 0 48 48"><path d="M9 34l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/><circle cx="19" cy="22" r="2"/><circle cx="25" cy="22" r="2"/><circle cx="31" cy="22" r="2"/></svg><b>{messagesCount || 0}</b></span><span>Messages</span>
         </Link>

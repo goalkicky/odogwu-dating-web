@@ -223,11 +223,11 @@ export default function MatchPage() {
 
         <section className="profiles" aria-label="Matched profiles">
           <div className="profile-card left">
-            {myPhoto ? <img src={myPhoto} alt="" /> : <div className="ph-fallback">{(profile as any)?.fullName?.[0] || 'O'}</div>}
+            {myPhoto ? <img src={myPhoto} alt="" fetchPriority="high" decoding="async" /> : <div className="ph-fallback">{(profile as any)?.fullName?.[0] || 'O'}</div>}
           </div>
           <div className="between-heart"><span>♥</span></div>
           <div className="profile-card right">
-            {theirPhoto ? <img src={theirPhoto} alt={firstName} /> : <div className="ph-fallback">{firstName[0]}</div>}
+            {theirPhoto ? <img src={theirPhoto} alt={firstName} fetchPriority="high" decoding="async" /> : <div className="ph-fallback">{firstName[0]}</div>}
           </div>
         </section>
 

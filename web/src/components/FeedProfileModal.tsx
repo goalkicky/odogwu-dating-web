@@ -113,7 +113,7 @@ export default function FeedProfileModal({ userId, userName, userPhoto, currentU
               <div style={{ width: 40, height: 40, borderRadius: 14, border: '3px solid rgba(255,46,95,0.2)', borderTopColor: '#FF2E5F', animation: 'spin 0.8s linear infinite' }} />
             </div>
           ) : photoSrc ? (
-            <img src={photoSrc} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src={photoSrc} alt="" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           ) : (
             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #1A1A2E, #2A2A3E)' }}>
               <span style={{ fontSize: 64, fontWeight: 700, color: '#FF2E5F' }}>{userName?.charAt(0)?.toUpperCase() || '?'}</span>

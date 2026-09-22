@@ -6,7 +6,7 @@ import PremiumPopup from '@/components/PremiumPopup';
 
 const NAV_ITEMS = [
   { label: 'Home', icon: <svg viewBox="0 0 48 48" style={{ width: 22, height: 22 }} fill="white" stroke="white" strokeWidth="1.6"><path d="M8 22 24 9l16 13v17H29V28H19v11H8Z"/></svg>, href: '/home' },
-  { label: 'Discover', icon: <img src="https://kamsirmdlabs.com/img/logo.png" alt="" style={{ width: 22, height: 22, borderRadius: 6, objectFit: 'cover' }} />, href: '/discover' },
+  { label: 'Discover', icon: <img src="https://kamsirmdlabs.com/img/logo.png" alt="" decoding="async" style={{ width: 22, height: 22, borderRadius: 6, objectFit: 'cover' }} />, href: '/discover' },
   { label: 'Explore', icon: <CompassIcon size={22} color="white" />, href: '/explore' },
   { label: 'Messages', icon: <HeartIcon size={22} color="white" />, href: '/matches' },
   { label: 'Likes', icon: <EyeIcon size={22} color="white" />, href: '/likes' },
@@ -36,7 +36,7 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
             <div style={{ padding: '0 24px 32px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div className="grad-ring" style={{ display: 'flex' }}>
-                  <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu Dating" style={{ width: 34, height: 34, borderRadius: 10, objectFit: 'cover' }} />
+                  <img src="https://kamsirmdlabs.com/img/logo.png" alt="Odogwu Dating" fetchPriority="high" decoding="async" style={{ width: 34, height: 34, borderRadius: 10, objectFit: 'cover' }} />
                 </div>
                 <span style={{ fontSize: 20, fontWeight: 800, color: 'white', letterSpacing: 1 }}>
                   ODO<span className="neon-text">GWU</span> DATING

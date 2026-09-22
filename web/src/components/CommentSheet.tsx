@@ -114,7 +114,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
         style={{ width: isReply ? 28 : 32, height: isReply ? 28 : 32, borderRadius: '50%', background: 'linear-gradient(135deg, #1A1A2E, #2A2A3E)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', border: 'none', cursor: comment.userId === currentUserId ? 'default' : 'pointer', padding: 0 }}
       >
         {comment.userPhoto ? (
-          <img src={storageService.getFilePreview(comment.userPhoto)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+          <img src={storageService.getFilePreview(comment.userPhoto)} alt="" loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
         ) : (
           <span style={{ fontSize: isReply ? 11 : 12, fontWeight: 700, color: '#FF2E5F' }}>{comment.userName?.charAt(0)?.toUpperCase()}</span>
         )}
@@ -163,7 +163,7 @@ export default function CommentSheet({ post, currentUserId, onClose, onCommentAd
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 20px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
           <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg, #1A1A2E, #2A2A3E)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
             {post.userPhoto ? (
-              <img src={storageService.getFilePreview(post.userPhoto)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+              <img src={storageService.getFilePreview(post.userPhoto)} alt="" loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
             ) : (
               <span style={{ fontSize: 13, fontWeight: 700, color: '#FF2E5F' }}>{post.userName?.charAt(0)?.toUpperCase()}</span>
             )}
