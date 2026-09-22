@@ -1,10 +1,19 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/store/AuthContext';
 import { matchService, userService, storageService } from '@/lib/cloudflare/services';
 import { profileCompletion } from '@/lib/profileCompletion';
+
+const SORT_OPTIONS = [
+  { value: 'newest', label: 'Newest first' },
+  { value: 'oldest', label: 'Oldest first' },
+  { value: 'name-az', label: 'Name A–Z' },
+  { value: 'name-za', label: 'Name Z–A' },
+  { value: 'age-young', label: 'Youngest first' },
+  { value: 'age-old', label: 'Oldest first' },
+];
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -30,20 +39,14 @@ export default function MyMatchesPage() {
   const [likesCount, setLikesCount] = useState(0);
   const [likesPhoto, setLikesPhoto] = useState('');
   const [nearbyCount, setNearbyCount] = useState(0);
-  const [toast, setToast] = useState('');
-  const toastTimer = React.useRef<any>(null);
+  const [sortBy, setSortBy] = useState('newest');
+  const [sortMenu, setSortMenu] = useState(false);
 
   const uid = (profile as any)?.$id || (profile as any)?.id;
   const profilePhoto = profile?.photos?.[0] ? storageService.getFilePreview(profile.photos[0]) : '';
   const fullName = (profile as any)?.fullName || (profile as any)?.displayName || 'Your';
   const completion = profileCompletion(profile);
   const initial = (fullName[0] || 'O').toUpperCase();
-
-  const showToast = (message: string) => {
-    setToast(message);
-    clearTimeout(toastTimer.current);
-    toastTimer.current = setTimeout(() => setToast(''), 1400);
-  };
 
   useEffect(() => {
     if (!uid) return;
@@ -83,6 +86,26 @@ export default function MyMatchesPage() {
 
   const nameInitial = (name: string) => (name?.[0] || 'M').toUpperCase();
   const matchPhoto = matches[0]?.matchedUser?._photoUrl || '';
+
+  const sortedMatches = useMemo(() => {
+    const arr = [...matches];
+    const getTime = (m: any) => new Date(m?.matchedAt || m?.createdAt || 0).getTime();
+    switch (sortBy) {
+      case 'oldest': return arr.sort((a, b) => getTime(a) - getTime(b));
+      case 'name-az': return arr.sort((a, b) => (a?.matchedUser?.fullName || '').localeCompare(b?.matchedUser?.fullName || ''));
+      case 'name-za': return arr.sort((a, b) => (b?.matchedUser?.fullName || '').localeCompare(a?.matchedUser?.fullName || ''));
+      case 'age-young': return arr.sort((a, b) => (a?.matchedUser?.age || 0) - (b?.matchedUser?.age || 0));
+      case 'age-old': return arr.sort((a, b) => (b?.matchedUser?.age || 0) - (a?.matchedUser?.age || 0));
+      default: return arr;
+    }
+  }, [matches, sortBy]);
+
+  useEffect(() => {
+    if (!sortMenu) return;
+    const onDown = () => setSortMenu(false);
+    window.addEventListener('mousedown', onDown);
+    return () => window.removeEventListener('mousedown', onDown);
+  }, [sortMenu]);
 
   return (
     <div className="app">
@@ -129,6 +152,11 @@ export default function MyMatchesPage() {
         .sort{font-size:19px;color:#555}
         .sort b{color:var(--red);font-size:20px;margin-left:5px}
         .sort span{font-size:23px;color:var(--red);margin-left:5px}
+        .sort-wrap{position:relative}
+        .sort-menu{position:absolute;right:0;top:calc(100% + 6px);z-index:20;background:#fff;border:1px solid #eee;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);min-width:150px;overflow:hidden;padding:4px}
+        .sort-item{display:block;width:100%;text-align:left;padding:9px 12px;font-size:13px;border-radius:8px;color:#333}
+        .sort-item.active{color:var(--red);font-weight:700}
+        .sort-item:hover{background:#fff4f6}
 
         .list{padding:0 40px}
         .match{width:100%;height:158px;border:1px solid var(--border);border-radius:25px;margin-bottom:12px;display:flex;align-items:center;padding:10px 18px 10px 0;overflow:hidden;transition:.2s}
@@ -394,10 +422,24 @@ export default function MyMatchesPage() {
       </div>
 
       <section>
-        <div className="heading"><h1>Your Matches</h1><button className="sort" onClick={() => showToast('Sort options')}>Sort by: <b>Recent</b> <span>⌄</span></button></div>
+        <div className="heading">
+          <h1>Your Matches</h1>
+          <div className="sort-wrap" onMouseDown={(e) => e.stopPropagation()}>
+            <button className="sort" onClick={() => setSortMenu(v => !v)}>Sort by: <b>{SORT_OPTIONS.find(o => o.value === sortBy)?.label.split(' ')[0] || 'Recent'}</b> <span>⌄</span></button>
+            {sortMenu && (
+              <div className="sort-menu">
+                {SORT_OPTIONS.map(o => (
+                  <button key={o.value} className={`sort-item${sortBy === o.value ? ' active' : ''}`} onClick={() => { setSortBy(o.value); setSortMenu(false); }}>
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
         <div className="list">
           {matches.length === 0 && <div className="empty">No matches yet — keep swiping on Discover!</div>}
-          {matches.map((m: any) => {
+          {sortedMatches.map((m: any) => {
             const mp = m.matchedUser || {};
             const name = mp.fullName || 'Member';
             const photo = mp._photoUrl || '';
@@ -437,9 +479,7 @@ export default function MyMatchesPage() {
         </div>
       </nav>
 
-      {toast && <div id="toast">{toast}</div>}
       <style jsx global>{`
-        #toast{position:fixed;z-index:100;left:50%;bottom:112px;transform:translateX(-50%);background:#111;color:#fff;padding:11px 18px;border-radius:24px;font:14px Arial;opacity:1}
         .tmpl-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 710px; height: 101px; background: #fff; border-top: 1px solid #eee; display: grid; grid-template-columns: 1fr 1fr 1.1fr 1fr 1fr; align-items: end; padding: 8px 15px 13px; z-index: 10; box-sizing: border-box; }
         .tmpl-nav-item { height: 70px; color: #777; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 13px; text-decoration: none; background: none; border: 0; padding: 0; cursor: pointer; }
         .tmpl-nav-item svg { width: 29px; height: 29px; stroke: currentColor; stroke-width: 2.2; fill: currentColor; }
