@@ -207,7 +207,7 @@ export default function LikesPage() {
             </span>
             <label>Likes You</label>
           </button>
-          <button className="lk quick" onClick={() => router.push('/matches')}>
+          <button className="lk quick" onClick={() => router.push('/my-matches')}>
             <span className="lk round-photo">
               {matchPhoto ? (
                 <img src={matchPhoto} alt="" loading="lazy" decoding="async" />
