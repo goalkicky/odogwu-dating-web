@@ -67,11 +67,18 @@ export default function ActivePage() {
           maxDistance: 200,
         })
         .then((docs: any[]) => {
-          const sorted = [...docs].sort((a: any, b: any) => {
-            const ta = a.lastActive ? new Date(a.lastActive).getTime() : 0;
-            const tb = b.lastActive ? new Date(b.lastActive).getTime() : 0;
-            return tb - ta;
-          });
+          const RECENT_MS = 7 * 24 * 60 * 60 * 1000;
+          const sorted = [...docs]
+            .filter((p: any) => {
+              if (!p.lastActive) return false;
+              const la = new Date(p.lastActive).getTime();
+              return la > 0 && Date.now() - la <= RECENT_MS;
+            })
+            .sort((a: any, b: any) => {
+              const ta = a.lastActive ? new Date(a.lastActive).getTime() : 0;
+              const tb = b.lastActive ? new Date(b.lastActive).getTime() : 0;
+              return tb - ta;
+            });
           setProfiles(sorted);
         })
         .catch(() => {})
@@ -304,7 +311,7 @@ export default function ActivePage() {
 
             <section className="av-heading">
               <h1>All Recently Active</h1>
-              <p>People who were recently active on the app</p>
+              <p>Members active on the app within the last 7 days</p>
             </section>
 
             <section className="av-grid" aria-live="polite">
@@ -312,7 +319,7 @@ export default function ActivePage() {
                 <div className="av-empty">Loading profiles...</div>
               )}
               {!loadingProfiles && shown.length === 0 && (
-                <div className="av-empty">No profiles found.</div>
+                <div className="av-empty">{term ? 'No profiles found.' : 'No recently active members yet.'}</div>
               )}
               {shown.map((p: any, idx: number) => {
                 const name = p.fullName || 'Member';
