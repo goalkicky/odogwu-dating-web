@@ -65,7 +65,7 @@ export default function MyMatchesPage() {
           };
         });
         setMatches(withPhotos);
-        setMessagesCount(arr.filter((d: any) => d.hasConversation).length);
+        setMessagesCount(arr.reduce((s: number, d: any) => s + Number(d.unreadCount || 0), 0));
       })
       .catch(() => {});
     matchService.getWhoLikedMe(uid)

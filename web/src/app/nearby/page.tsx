@@ -44,7 +44,7 @@ export default function NearbyPage() {
 
     matchService.getUserMatches(uid).then((docs: any) => {
       const arr = Array.isArray(docs) ? docs : (docs?.documents || []);
-      setMessagesCount(arr.filter((d: any) => d.hasConversation).length);
+      setMessagesCount(arr.reduce((s: number, d: any) => s + Number(d.unreadCount || 0), 0));
     }).catch(() => {});
   }, [profile, isAuthenticated, loading]);
 

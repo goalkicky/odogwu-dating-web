@@ -66,7 +66,7 @@ export default function LikesPage() {
         const docs = Array.isArray(res) ? res : (res?.documents || []);
         const newMatches = docs.filter((d: any) => !d.hasConversation);
         setMatchesCount(newMatches.length);
-        setMessagesCount(docs.filter((d: any) => d.hasConversation).length);
+        setMessagesCount(docs.reduce((s: number, d: any) => s + Number(d.unreadCount || 0), 0));
         const firstNew = newMatches[0]?.matchedUser;
         if (firstNew?.photos?.[0]) setMatchPhoto(storageService.getFilePreview(firstNew.photos[0]));
       })

@@ -169,7 +169,7 @@ export default function EditProfilePage() {
     matchService.getUserMatches(uid)
       .then((res: any) => {
         const docs = Array.isArray(res) ? res : (res?.documents || []);
-        setMessagesCount(docs.filter((d: any) => d.hasConversation).length);
+        setMessagesCount(docs.reduce((s: number, d: any) => s + Number(d.unreadCount || 0), 0));
       })
       .catch(() => {});
   }, [uid]);

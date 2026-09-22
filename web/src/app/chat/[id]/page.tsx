@@ -203,6 +203,7 @@ export default function ChatPage() {
       messageService.getMessages(matchId).then(res => {
         const msgs = (res.documents || []).map(docToMessage);
         setMessages(msgs);
+        messageService.markRead(matchId).catch(() => {});
       }),
       callLogService.getCallLogsForMatch(matchId).then(logs => {
         setCallLogs(logs);
@@ -214,6 +215,7 @@ export default function ChatPage() {
         const cleaned = prev.filter(m => !(m.id.startsWith('temp-') && m.senderId === msg.senderId && m.text === msg.text && m.type === msg.type));
         return [...cleaned, msg];
       });
+      if (msg.senderId !== userId) messageService.markRead(matchId).catch(() => {});
     }).then(sub => { unsubRef.current = sub; });
     return () => { if (unsubRef.current) unsubRef.current.unsubscribe(); };
   }, [matchId, userId]);

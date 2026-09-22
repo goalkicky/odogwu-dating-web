@@ -31,7 +31,7 @@ export default function AppShell({ children, header }: { children: React.ReactNo
     matchService.getUserMatches(uid)
       .then((matchesRes: any) => {
         const docs = Array.isArray(matchesRes) ? matchesRes : (matchesRes?.documents || []);
-        setMessagesCount(docs.filter((d: any) => d.hasConversation).length);
+        setMessagesCount(docs.reduce((s: number, d: any) => s + Number(d.unreadCount || 0), 0));
       })
       .catch(() => {});
   }, [loading, isAuthenticated, profile, uid]);
@@ -66,7 +66,7 @@ export default function AppShell({ children, header }: { children: React.ReactNo
     { href: '/home', label: 'Home', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><path d="M8 22 24 9l16 13v17H29V28H19v11H8Z"/></svg> },
     { href: '/discover', label: 'Discover', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><path d="M10 35l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/></svg> },
     { href: '/explore', label: 'Explore', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><circle cx="20" cy="22" r="2"/><circle cx="26" cy="22" r="2"/><circle cx="32" cy="22" r="2"/></svg> },
-    { href: '/matches', label: 'Messages', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><path d="M24 40s-14-9-14-20a8 8 0 0 1 14-5 8 8 0 0 1 14 5c0 11-14 20-14 20Z" fill="none" strokeWidth="2.4"/></svg> },
+    { href: '/matches', label: 'Messages', icon: <span style={{ position: 'relative', display: 'inline-flex', lineHeight: 0 }}><svg viewBox="0 0 48 48" className="uv-nav-svg"><path d="M24 40s-14-9-14-20a8 8 0 0 1 14-5 8 8 0 0 1 14 5c0 11-14 20-14 20Z" fill="none" strokeWidth="2.4"/></svg>{messagesCount > 0 && <b style={{ position: 'absolute', top: -8, right: -12, background: '#d71945', color: '#fff', borderRadius: '50%', minWidth: 17, height: 17, fontSize: 10, fontWeight: 700, display: 'grid', placeItems: 'center', padding: '0 3px', boxSizing: 'border-box' }}>{messagesCount >= 100 ? '99+' : messagesCount}</b>}</span> },
     { href: '/likes', label: 'Likes You', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><circle cx="24" cy="17" r="7" fill="none" strokeWidth="2.6"/><path d="M10 39c1-8 7-12 14-12s13 4 14 12" fill="none" strokeWidth="2.6"/></svg> },
     { href: '/edit-profile', label: 'Profile', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><circle cx="24" cy="17" r="7" fill="none" strokeWidth="2.6"/><path d="M10 39c1-8 7-12 14-12s13 4 14 12" fill="none" strokeWidth="2.6"/></svg> },
     { href: '/settings', label: 'Settings', icon: <svg viewBox="0 0 48 48" className="uv-nav-svg"><circle cx="24" cy="24" r="10" fill="none" strokeWidth="2.6"/><path d="M24 6v6M24 36v6M6 24h6M36 24h6" strokeWidth="2.6"/></svg> },
@@ -201,7 +201,10 @@ export default function AppShell({ children, header }: { children: React.ReactNo
           </Link>
           <Link href="/discover" className="uv-bottom-center"><img src="/logo-icon.png?v=2" alt="Discover" width={44} height={44} decoding="async" /></Link>
           <Link href="/matches" className={`uv-bottom-link ${isActive('/matches') ? 'active' : ''}`}>
-            <svg viewBox="0 0 48 48" className="uv-nav-bl"><path d="M9 34l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/><circle cx="19" cy="22" r="2"/><circle cx="25" cy="22" r="2"/><circle cx="31" cy="22" r="2"/></svg><span>Messages</span>
+            <span style={{ position: 'relative', display: 'inline-flex', lineHeight: 0 }}>
+              <svg viewBox="0 0 48 48" className="uv-nav-bl"><path d="M9 34l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/><circle cx="19" cy="22" r="2"/><circle cx="25" cy="22" r="2"/><circle cx="31" cy="22" r="2"/></svg>
+              {messagesCount > 0 && <b style={{ position: 'absolute', top: -6, right: -10, background: '#d71945', color: '#fff', borderRadius: '50%', minWidth: 16, height: 16, fontSize: 9, fontWeight: 700, display: 'grid', placeItems: 'center', padding: '0 3px', boxSizing: 'border-box' }}>{messagesCount >= 100 ? '99+' : messagesCount}</b>}
+            </span><span>Messages</span>
           </Link>
           <Link href="/edit-profile" className={`uv-bottom-link ${isActive('/edit-profile') ? 'active' : ''}`}>
             <svg viewBox="0 0 48 48" className="uv-nav-bl"><circle cx="24" cy="17" r="7" fill="none" strokeWidth="2.6"/><path d="M10 39c1-8 7-12 14-12s13 4 14 12" fill="none" strokeWidth="2.6"/></svg><span>Profile</span>

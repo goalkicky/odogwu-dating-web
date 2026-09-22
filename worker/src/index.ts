@@ -879,6 +879,19 @@ async function handleGetMatches(env: Env, req: Request, me: string): Promise<Res
     }
   }
 
+  // Per match: unread message count (messages from the other user I haven't read).
+  const unreadMap: Record<string, number> = {};
+  for (let i = 0; i < keys.length; i += 90) {
+    const chunk = keys.slice(i, i + 90);
+    const placeholders = chunk.map(() => '?').join(',');
+    const { results: rows } = await env.DB.prepare(
+      `SELECT match_id, COUNT(*) AS c FROM messages
+       WHERE match_id IN (${placeholders}) AND sender_id != ? AND read_at IS NULL
+       GROUP BY match_id`
+    ).bind(...chunk, me).all();
+    for (const r of rows as any[]) unreadMap[r.match_id] = Number(r.c || 0);
+  }
+
   const docs = await Promise.all(results.map(async (d: any) => {
     const pk = pairKey(d.user_id, d.matched_user_id);
     const hasConvo = convoSet.has(pk) || convoSet.has(d.id);
@@ -887,6 +900,7 @@ async function handleGetMatches(env: Env, req: Request, me: string): Promise<Res
     return {
       ...toMatchDoc(d),
       hasConversation: hasConvo,
+      unreadCount: unreadMap[pk] || unreadMap[d.id] || 0,
       lastMessage: last ? { senderId: last.senderId, text: last.text, createdAt: last.createdAt } : null,
       matchedUser: p ? publicize(toProfile(p)) : null,
     };
@@ -974,6 +988,18 @@ async function handleGetMessages(env: Env, req: Request, me: string): Promise<Re
     'SELECT * FROM messages WHERE match_id = ? ORDER BY created_at ASC LIMIT 2000'
   ).bind(roomKey).all();
   return json({ documents: results.map(toMessageDoc) });
+}
+
+async function handleMarkMessagesRead(env: Env, req: Request, me: string): Promise<Response> {
+  const body = await req.json() as any;
+  const matchId = String(body.matchId || '');
+  const membership = await requireMatchMembership(env, matchId, me);
+  if (!membership) return json({ error: 'Not a match participant' }, 403);
+  const roomKey = pairKey(membership.user_id, membership.matched_user_id);
+  await env.DB.prepare(
+    'UPDATE messages SET read_at = ? WHERE match_id = ? AND sender_id != ? AND read_at IS NULL'
+  ).bind(now(), roomKey, me).run();
+  return json({ ok: true });
 }
 
 async function handleEditMessage(env: Env, req: Request, me: string, messageId: string): Promise<Response> {
@@ -1856,6 +1882,7 @@ export default {
     // Messages
     if (path === '/api/messages' && req.method === 'POST') return handleSendMessage(env, req, me);
     if (path === '/api/messages' && req.method === 'GET') return handleGetMessages(env, req, me);
+    if (path === '/api/messages/read' && req.method === 'POST') return handleMarkMessagesRead(env, req, me);
     const msgEdit = path.match(/^\/api\/messages\/([^/]+)\/reactions$/);
     if (msgEdit && req.method === 'POST') return handleReactToMessage(env, req, me, decodeURIComponent(msgEdit[1]));
     const msgMatch = path.match(/^\/api\/messages\/([^/]+)$/);

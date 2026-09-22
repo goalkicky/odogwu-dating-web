@@ -68,7 +68,7 @@ export default function ProfilePage() {
     matchService.getWhoLikedMe(uid).then((docs: any) => setLikesCount(Array.isArray(docs) ? docs.length : 0)).catch(() => {});
     matchService.getUserMatches(uid).then((docs: any) => {
       const arr = Array.isArray(docs) ? docs : (docs?.documents || []);
-      setMessagesCount(arr.filter((d: any) => d.hasConversation).length);
+      setMessagesCount(arr.reduce((s: number, d: any) => s + Number(d.unreadCount || 0), 0));
     }).catch(() => {});
   }, [uid]);
 

@@ -231,6 +231,10 @@ export const messageService = {
     return apiFetch(`/api/messages?matchId=${encodeURIComponent(matchId)}`);
   },
 
+  markRead: async (matchId: string) => {
+    return apiFetch('/api/messages/read', { method: 'POST', json: { matchId } });
+  },
+
   subscribeToMessages: async (matchId: string, callback: (message: Message) => void) => {
     let lastTs = '';
     const emit = (m: Message) => {

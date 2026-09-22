@@ -84,7 +84,7 @@ export default function ActivePage() {
       .getUserMatches(uid)
       .then((res: any) => {
         const docs = Array.isArray(res) ? res : (res?.documents || []);
-        setMessagesCount(docs.length);
+        setMessagesCount(docs.reduce((s: number, d: any) => s + Number(d.unreadCount || 0), 0));
       })
       .catch(() => {});
   }, [loading, isAuthenticated, profile, uid]);
