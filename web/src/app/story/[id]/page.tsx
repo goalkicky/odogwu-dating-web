@@ -2,6 +2,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { feedService, storageService } from '@/lib/cloudflare/services';
+import CommentSheet from '@/components/CommentSheet';
+import { useAuth } from '@/store/AuthContext';
 
 const DURATION = 5000;
 
@@ -9,10 +11,12 @@ export default function StoryPage() {
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { profile } = useAuth();
 
   const postId = (params?.id as string) || '';
   const keyParam = searchParams.get('key') || 'home-stories';
   const idxParam = Number(searchParams.get('idx') || '0') || 0;
+  const currentUserId = (profile as any)?.$id || (profile as any)?.id || '';
 
   const [stories, setStories] = useState<any[]>([]);
   const [ui, setUi] = useState(0);
@@ -20,6 +24,7 @@ export default function StoryPage() {
   const [likedSet, setLikedSet] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
+  const [commentsOpen, setCommentsOpen] = useState(false);
   const toastTimerRef = useRef<any>(null);
 
   const current = stories[ui] || null;
@@ -86,10 +91,11 @@ export default function StoryPage() {
 
   useEffect(() => {
     if (!current || !slide) return;
+    if (commentsOpen) return;
     const t = setTimeout(advance, DURATION);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [current, slide, ui, si]);
+  }, [current, slide, ui, si, commentsOpen]);
 
   const showToast = (message: string) => {
     setToast(message);
@@ -225,6 +231,17 @@ export default function StoryPage() {
         .story-btn svg { width: 30px; height: 30px; display: block; filter: drop-shadow(0 1px 3px rgba(0,0,0,.5)); }
         .story-btn small { font-size: 11px; font-weight: 600; }
         .story-btn.liked svg { fill: #ff2e5f; stroke: #ff2e5f; }
+        .story-caption {
+          position: absolute; z-index: 6; left: 16px; right: 68px; bottom: 30px;
+          color: #fff; font-size: 14px; line-height: 1.45; font-weight: 600;
+          text-shadow: 0 1px 3px rgba(0,0,0,.8);
+          display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+          word-break: break-word;
+        }
+        .story-caption::before {
+          content: ""; position: absolute; inset: -10px -14px; z-index: -1; border-radius: 12px;
+          background: linear-gradient(to top, rgba(0,0,0,.45), rgba(0,0,0,0));
+        }
         .story-toast {
           position: absolute; z-index: 20; left: 50%; bottom: 5%;
           transform: translate(-50%, 20px); padding: 10px 16px; border-radius: 999px;
@@ -289,7 +306,7 @@ export default function StoryPage() {
             <svg viewBox="0 0 48 48" fill="none" stroke="#fff" strokeWidth="2.6"><path d="M24 40s-14-9-14-20a8 8 0 0 1 14-5 8 8 0 0 1 14 5c0 11-14 20-14 20Z"/></svg>
             <small>{liked ? 'Liked' : 'Like'}</small>
           </button>
-          <button className="story-btn" aria-label="Comment" onClick={() => showToast('Comments opened')}>
+          <button className="story-btn" aria-label="Comment" onClick={() => setCommentsOpen(true)}>
             <svg viewBox="0 0 48 48" fill="none" stroke="#fff" strokeWidth="2.6"><path d="M12 35l2-7a14 14 0 1 1 5 5l-7 2Z"/><circle cx="20" cy="22" r="1.8" fill="#fff"/><circle cx="26" cy="22" r="1.8" fill="#fff"/><circle cx="32" cy="22" r="1.8" fill="#fff"/></svg>
             <small>Comment</small>
           </button>
@@ -304,6 +321,10 @@ export default function StoryPage() {
 
         <div className={`story-toast${toast ? ' show' : ''}`} role="status" aria-live="polite">{toast}</div>
 
+        {slide?.caption ? (
+          <div className="story-caption">{slide.caption}</div>
+        ) : null}
+
         <div className={`story-modal${modalOpen ? ' open' : ''}`} aria-hidden={!modalOpen} onClick={() => setModalOpen(false)}>
           <div className="story-modal-card" onClick={e => e.stopPropagation()}>
             <button className="story-modal-close" aria-label="Close" onClick={() => setModalOpen(false)}>×</button>
@@ -313,6 +334,15 @@ export default function StoryPage() {
             <button className="story-option" onClick={handleCopyLink}>Copy link</button>
           </div>
         </div>
+
+        {commentsOpen && slide?.postId ? (
+          <CommentSheet
+            post={{ id: slide.postId, userName: current?.name || '', userPhoto: '', caption: slide.caption || '' } as any}
+            currentUserId={currentUserId}
+            onClose={() => setCommentsOpen(false)}
+            onCommentAdded={() => {}}
+          />
+        ) : null}
       </div>
     </div>
   );
