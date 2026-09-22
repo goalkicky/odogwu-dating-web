@@ -344,7 +344,7 @@ export default function ActivePage() {
                         <svg viewBox="0 0 24 24"><path d="M12 21s7-6.3 7-12A7 7 0 1 0 5 9c0 5.7 7 12 7 12Z"></path><circle cx="12" cy="9" r="2.2" fill="none" strokeWidth="2"></circle></svg>
                         <span>{p.city || 'Nigeria'}, Nigeria</span>
                       </div>
-                      <div className="av-active"><span className="av-mini"></span>{ago ? `Active ${ago}` : 'Recently active'}</div>
+                      <div className="av-active"><span className="av-mini"></span>{online ? 'Online' : ago || 'Recently'}</div>
                     </div>
                     <div className="av-actions">
                       <button className="av-act av-pass" title="Pass" onClick={() => passProfile(p.id || p.$id)}>
