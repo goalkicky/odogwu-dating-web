@@ -17,12 +17,6 @@ function formatAgo(iso: string): string {
   return `${Math.floor(hr / 24)}d ago`;
 }
 
-function activeLabel(p: { lastActive?: string }, idx: number): string {
-  const real = formatAgo(p.lastActive || '');
-  if (real) return real;
-  return `${Math.max(1, (idx % 29) + 1) * 2}m ago`;
-}
-
 function Photo({ photo, name }: { photo: string; name: string }) {
   if (photo) return <img className="av-photo" src={photo} alt={`${name}'s profile photo`} loading="lazy" decoding="async" />;
   return (
@@ -323,14 +317,17 @@ export default function ActivePage() {
               {shown.map((p: any, idx: number) => {
                 const name = p.fullName || 'Member';
                 const photo = p.photos?.[0] ? storageService.getFilePreview(p.photos[0]) : '';
+                const pid = p.id || p.$id || idx;
+                const online = !!p.lastActive && (Date.now() - new Date(p.lastActive).getTime()) < 120000;
+                const ago = p.lastActive ? formatAgo(p.lastActive) : '';
                 return (
                   <article
-                    key={p.id || p.$id || idx}
+                    key={pid}
                     className="av-card"
                     style={leaving === (p.id || p.$id) ? { transform: 'translateX(-110%) rotate(-8deg)', opacity: 0 } : undefined}
                   >
                     <Photo photo={photo} name={name} />
-                    <span className="av-online"></span>
+                    {online && <span className="av-online"></span>}
                     <div className="av-info">
                       <div className="av-name">
                         {name}, {p.age || ''}
@@ -340,7 +337,7 @@ export default function ActivePage() {
                         <svg viewBox="0 0 24 24"><path d="M12 21s7-6.3 7-12A7 7 0 1 0 5 9c0 5.7 7 12 7 12Z"></path><circle cx="12" cy="9" r="2.2" fill="none" strokeWidth="2"></circle></svg>
                         <span>{p.city || 'Nigeria'}, Nigeria</span>
                       </div>
-                      <div className="av-active"><span className="av-mini"></span>Active {activeLabel(p, idx)}</div>
+                      <div className="av-active"><span className="av-mini"></span>{ago ? `Active ${ago}` : 'Recently active'}</div>
                     </div>
                     <div className="av-actions">
                       <button className="av-act av-pass" title="Pass" onClick={() => passProfile(p.id || p.$id)}>
