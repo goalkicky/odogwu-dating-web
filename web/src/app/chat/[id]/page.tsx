@@ -5,7 +5,6 @@ import {
   SendIcon, PencilIcon, CloseCircleIcon, HappyIcon, KeypadIcon, CoinsIcon,
 } from '@/components/Icons';
 
-import ProfileModal from '@/components/ProfileModal';
 import { useAuth } from '@/store/AuthContext';
 import { messageService, storageService, matchService, userService, walletService, callLogService } from '@/lib/cloudflare/services';
 import { captureStream, mediaConstraints, mediaErrorMessage } from '@/lib/media';
@@ -164,7 +163,6 @@ export default function ChatPage() {
   const [matchName, setMatchName] = useState('User');
   const [otherUserId, setOtherUserId] = useState('');
   const [otherProfile, setOtherProfile] = useState<any>(null);
-  const [showOtherProfile, setShowOtherProfile] = useState(false);
   const [otherOnline, setOtherOnline] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendingImage, setSendingImage] = useState(false);
@@ -530,7 +528,7 @@ export default function ChatPage() {
           <svg viewBox="0 0 24 24"><path d="M15 4.5 7.5 12 15 19.5"/></svg>
         </button>
 
-        <button className="ch-avatar-btn" onClick={() => setShowOtherProfile(true)} aria-label="View profile">
+        <button className="ch-avatar-btn" onClick={() => otherUserId && router.push(`/my-profile/${otherUserId}`)} aria-label="View profile">
           <div className="ch-avatar-wrap">
             <div className="ch-avatar" style={{ background: '#EEEEF0', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
               {otherAvatarUrl ? (
@@ -969,22 +967,6 @@ export default function ChatPage() {
             <CloseCircleIcon size={24} color="white" />
           </button>
         </div>
-      )}
-
-      {/* ===== Other user's full profile ===== */}
-      {showOtherProfile && otherProfile && (
-        <ProfileModal
-          user={{
-            fullName: matchName,
-            age: otherProfile?.age,
-            photos: (otherProfile?.photos || []).map((fid: string) => storageService.getFilePreview(fid)),
-            city: otherProfile?.city,
-            gender: otherProfile?.gender,
-            bio: otherProfile?.bio,
-            interests: otherProfile?.interests || [],
-          }}
-          onClose={() => setShowOtherProfile(false)}
-        />
       )}
     </div>
   );
