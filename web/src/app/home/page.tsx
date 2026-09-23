@@ -198,7 +198,7 @@ export default function HomePage() {
         .tmpl-premium-copy { flex: 1; min-width: 0; }
         .tmpl-premium h3 { font-size: 12.75px; margin: 0 0 3px; color: #111; font-weight: 700; letter-spacing: -0.2px; line-height: 15.75px; }
         .tmpl-premium p { font-size: 10px; line-height: 14.25px; color: #586273; margin: 0; font-weight: 400; }
-        .tmpl-pink-btn { background: #D90540; color: #fff; border: 0; border-radius: 13.5px; width: 50.25px; height: 21px; padding: 0; font-size: 10.5px; font-weight: 600; line-height: 12.75px; text-align: center; display: grid; place-items: center; cursor: pointer; white-space: nowrap; margin-left: 7.5px; flex-shrink: 0; box-sizing: border-box; }
+        .tmpl-pink-btn { background: #D90540; color: #fff; border: 0; border-radius: 13.5px; width: 50.25px; height: 21px; padding: 2px; font-size: 10.5px; font-weight: 600; line-height: 12.75px; text-align: center; display: grid; place-items: center; cursor: pointer; white-space: nowrap; margin-left: 7.5px; flex-shrink: 0; box-sizing: border-box; }
         .tmpl-quick-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 4px 0 24px; }
         .tmpl-quick { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; color: #111; background: none; border: 0; cursor: pointer; padding: 0; min-width: 0; }
         .tmpl-round-photo { width: 59px; height: 59px; border-radius: 50%; padding: 3px; box-sizing: border-box; display: block; position: relative; background: #fff; }
