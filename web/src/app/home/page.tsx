@@ -167,15 +167,20 @@ export default function HomePage() {
     <>
       <style jsx global>{`
         .tmpl-app {
-          width: 100%; max-width: 710px; margin: 0 auto; background: #fff;
-          min-height: 100svh; position: relative; padding: 0 23px 112px;
-          color: #151515; font-family: Arial, Helvetica, sans-serif;
-          box-sizing: border-box;
+          width: 100%; max-width: 710px; margin: 0 auto; background: #FEFEFE;
+          min-height: 100svh; position: relative; padding: 0 12px 108px;
+          color: #111; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', Arial, Helvetica, sans-serif;
+          box-sizing: border-box; -webkit-font-smoothing: antialiased;
         }
-        .tmpl-topbar { display: flex; align-items: center; justify-content: space-between; position: relative; padding: 0 0 16px; }
-        .tmpl-icon-btn { color: #171717; background: none; border: 0; cursor: pointer; padding: 0; }
-        .tmpl-menu { width: 38px; padding: 0; }
-        .tmpl-menu span { display: block; width: 34px; height: 3px; background: #222; margin: 8px 0; border-radius: 2px; }
+        .tmpl-topbar { display: flex; align-items: center; justify-content: space-between; position: relative; height: 64px; padding: 0 0 4px; }
+        .tmpl-icon-btn { color: #111; background: none; border: 0; cursor: pointer; padding: 0; display: grid; place-items: center; }
+        .tmpl-menu { width: 20px; }
+        .tmpl-menu span { display: block; width: 20px; height: 2px; background: #111; margin: 6px 0; border-radius: 2px; }
+        .tmpl-wordmark { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; }
+        .tmpl-wordmark-name { font-size: 27px; font-weight: 800; line-height: 30px; letter-spacing: -0.5px; color: #D90540; }
+        .tmpl-wordmark-sub { font-size: 10px; font-weight: 500; letter-spacing: 4.2px; color: #1A1A1A; line-height: 12px; text-align: center; margin-top: 2px; }
+        .tmpl-wordmark-sub b { color: #D90540; font-weight: 400; letter-spacing: 0; margin: 0 4px; }
+        .tmpl-wordmark-sub span { color: #D90540; }
         .tmpl-brand { display: flex; align-items: center; gap: 9px; }
         .tmpl-brand-mark { width: 66px; height: 66px; border: 7px solid #cf0a13; border-radius: 50%; position: relative; flex-shrink: 0; box-sizing: border-box; object-fit: cover; display: block; }
         .tmpl-brand-mark:before { content: ""; position: absolute; width: 18px; height: 18px; border: 6px solid #fff; border-radius: 50%; background: #cf0a13; left: -5px; top: -5px; box-sizing: border-box; }
@@ -184,63 +189,65 @@ export default function HomePage() {
         .tmpl-brand-sub { text-align: center; font-size: 13px; font-weight: 700; letter-spacing: 6px; margin-top: 8px; }
         .tmpl-brand-sub b { color: #d20a19; letter-spacing: 0; }
         .tmpl-brand-sub span { color: #d20a19; }
-        .tmpl-brand-logo { height: 44px; width: auto; object-fit: contain; display: block; }
-        .tmpl-messages-top { position: relative; width: 50px; height: 50px; background: none; border: 0; cursor: pointer; color: #171717; padding: 0; }
-        .tmpl-messages-top svg { width: 40px; height: 40px; }
-        .tmpl-messages-top em { position: absolute; right: 0; top: -4px; background: #d71945; color: #fff; width: 24px; height: 24px; border-radius: 50%; font-style: normal; font-size: 13px; display: grid; place-items: center; font-weight: 700; }
-        .tmpl-premium { min-height: 105px; height: auto; background: #fff1f5; border-radius: 18px; display: flex; align-items: center; padding: 10px 22px; margin-bottom: 18px; }
-        .tmpl-crown { width: 52px; height: 52px; background: #df164c; color: #ffd12a; border-radius: 50%; display: grid; place-items: center; font-size: 32px; margin-right: 15px; flex-shrink: 0; }
-        .tmpl-premium-copy { flex: 1; }
-        .tmpl-premium h3 { font-size: 16px; margin: 0 0 5px; color: #151515; font-weight: 800; }
-        .tmpl-premium p { font-size: 13px; line-height: 19px; color: #555; margin: 0; font-weight: 700; }
-        .tmpl-pink-btn { background: #FF1747; color: #fff; border-radius: 28px; padding: 15px 27px; font-size: 16px; border: 0; cursor: pointer; font-weight: 600; }
-        .tmpl-quick-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin: 3px 0 26px; }
-        .tmpl-quick { position: relative; display: flex; flex-direction: column; align-items: center; color: #171717; background: none; border: 0; cursor: pointer; padding: 0; min-width: 0; }
-        .tmpl-round-photo { width: 111px; max-width: 100%; height: auto; aspect-ratio: 1/1; border: 4px solid #d30e42; border-radius: 50%; padding: 5px; display: block; position: relative; background: #fff; box-sizing: border-box; }
-        .tmpl-round-photo.dashed { border-style: dashed; border-color: #ec6690; }
-        .tmpl-round-photo.story { border: none; background: conic-gradient(#d30e42 calc(var(--pct,0)*1%), #e9e9ec 0); padding: 5px; }
-        .tmpl-round-photo.story > img, .tmpl-round-photo.story > div { inset: 5px !important; width: calc(100% - 10px) !important; height: calc(100% - 10px) !important; }
-        .tmpl-round-photo > img, .tmpl-round-photo > div { inset: 2px !important; width: calc(100% - 4px) !important; height: calc(100% - 4px) !important; border-radius: 50%; object-fit: cover; display: block; }
-        .tmpl-round-photo.location { display: grid; place-items: center; border-color: #c7a523; }
-        .tmpl-round-photo.location svg { width: 57px; height: 57px; fill: #df164b; }
-        .tmpl-quick label { font-size: 16px; font-weight: 500; margin-top: 10px; color: #171717; text-align: center; line-height: 1.2; }
-        .tmpl-badge, .tmpl-plus { position: absolute; right: -6px; bottom: -6px; background: #d9184b; color: #fff; border-radius: 50%; width: 34px; height: 34px; display: grid; place-items: center; font-size: 15px; font-weight: 700; z-index: 3; border: 2px solid #fff; line-height: 1; }
-        .tmpl-plus { font-size: 25px; font-weight: 400; }
-.tmpl-section h2 { font-size: 20px; margin: 0 0 10px; font-weight: 700; color: #151515; }
+        .tmpl-messages-top { position: relative; width: 27px; height: 27px; background: none; border: 0; cursor: pointer; color: #111; padding: 0; }
+        .tmpl-messages-top svg { width: 27px; height: 27px; }
+        .tmpl-messages-top em { position: absolute; right: -9px; top: -5px; background: #D90540; color: #fff; min-width: 18px; height: 18px; border-radius: 50%; font-style: normal; font-size: 10px; font-weight: 600; line-height: 18px; display: grid; place-items: center; padding: 0 3px; box-sizing: border-box; }
+        .tmpl-premium { height: 57px; background: #FCF1F3; border-radius: 15px; display: flex; align-items: center; padding: 8px 15px; margin-bottom: 20px; box-sizing: border-box; }
+        .tmpl-crown { width: 38px; height: 38px; background: #D90540; color: #FFD21D; border-radius: 50%; display: grid; place-items: center; font-size: 20px; line-height: 1; margin-right: 12px; flex-shrink: 0; }
+        .tmpl-premium-copy { flex: 1; min-width: 0; }
+        .tmpl-premium h3 { font-size: 17px; margin: 0 0 2px; color: #111; font-weight: 700; letter-spacing: -0.2px; line-height: 21px; }
+        .tmpl-premium p { font-size: 13.5px; line-height: 19px; color: #586273; margin: 0; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tmpl-pink-btn { background: #D90540; color: #fff; border: 0; border-radius: 18px; height: 28px; padding: 0 13px; font-size: 14px; font-weight: 600; line-height: 28px; cursor: pointer; white-space: nowrap; margin-left: 10px; flex-shrink: 0; }
+        .tmpl-quick-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 4px 0 24px; }
+        .tmpl-quick { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; color: #111; background: none; border: 0; cursor: pointer; padding: 0; min-width: 0; }
+        .tmpl-round-photo { width: 59px; height: 59px; border-radius: 50%; padding: 3px; box-sizing: border-box; display: block; position: relative; background: #fff; }
+        .tmpl-round-photo:not(.location):not(.story) { background: conic-gradient(#E67A00 0 50%, #D90540 50% 100%); }
+        .tmpl-quick:nth-child(3) .tmpl-round-photo:not(.location):not(.story) { background: conic-gradient(#D90540 0 55%, #FF5A3C 55% 100%); }
+        .tmpl-round-photo.story { border: 2px dashed #E77A99; background: conic-gradient(#D90540 0 calc(var(--pct, 0) * 1%), transparent 0); }
+        .tmpl-round-photo > img, .tmpl-round-photo > div { inset: 3px !important; width: calc(100% - 6px) !important; height: calc(100% - 6px) !important; border-radius: 50%; object-fit: cover; display: block; }
+        .tmpl-round-photo.location { display: block; background: conic-gradient(#D90540 0 180deg, #B9CE1A 180deg 360deg); }
+        .tmpl-round-photo.location svg { position: absolute; inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); background: #F1F0EE; border-radius: 50%; padding: 17%; box-sizing: border-box; fill: #D90540; }
+        .tmpl-quick label { font-size: 14px; font-weight: 500; margin-top: 7px; color: #111; text-align: center; line-height: 18px; }
+        .tmpl-badge, .tmpl-plus { position: absolute; right: -3px; bottom: -3px; background: #D90540; color: #fff; border-radius: 50%; width: 19px; height: 19px; display: grid; place-items: center; font-size: 10px; font-weight: 600; z-index: 3; border: 2px solid #fff; line-height: 1; padding: 0; box-sizing: border-box; }
+        .tmpl-plus { font-size: 15px; font-weight: 500; }
+.tmpl-section h2 { font-size: 20px; margin: 0 0 12px; font-weight: 700; color: #111; letter-spacing: -0.25px; line-height: 24px; }
 .tmpl-section h2 span { font-size: 19px; }
-.tmpl-section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.tmpl-section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .tmpl-section-head h2 { margin-bottom: 0; }
-.tmpl-see-more { background: none; border: none; padding: 0; font-size: 15px; font-weight: 700; color: #FF2E5F; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
-        .tmpl-stories { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 4px; }
-        .tmpl-story-card { height: 225px; flex: 1 0 152px; min-width: 0; border-radius: 15px; overflow: hidden; position: relative; background: #333; color: #fff; cursor: pointer; border: 0; padding: 0; display: block; text-decoration: none; }
+.tmpl-see-more { background: none; border: none; padding: 0; font-size: 14px; font-weight: 600; color: #D90540; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+        .tmpl-stories { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+        .tmpl-stories::-webkit-scrollbar { display: none; }
+        .tmpl-story-card { height: 157px; flex: 0 0 68px; min-width: 0; border-radius: 14px; overflow: hidden; position: relative; background: #E8E8E8; color: #fff; cursor: pointer; border: 0; padding: 0; display: block; text-decoration: none; }
         .tmpl-story-card > img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .tmpl-shade { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.28), transparent 45%, rgba(0,0,0,.65)); }
-        .tmpl-story-user { position: absolute; left: 10px; top: 12px; display: flex; gap: 7px; align-items: flex-start; font-size: 12px; text-shadow: 0 1px 2px #000; }
-        .tmpl-story-user span { width: 28px; height: 28px; border-radius: 50%; background: #222; border: 2px solid #fff; display: grid; place-items: center; font-size: 12px; }
-        .tmpl-story-user img { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #fff; object-fit: cover; display: block; flex-shrink: 0; }
-        .tmpl-story-user small { display: block; font-size: 11px; margin-top: 3px; font-weight: 400; }
-        .tmpl-story-card p { position: absolute; left: 12px; bottom: 0; font-size: 12px; margin: 0 0 11px; }
-        .tmpl-love-banner { height: 125px; border-radius: 18px; background: #fff2f6; margin: 24px 0 13px; display: flex; align-items: center; padding: 18px 24px; gap: 20px; }
-        .tmpl-hearts { font-size: 55px; line-height: 1; }
-        .tmpl-love-banner h3 { font-size: 19px; margin: 0 0 7px; color: #151515; font-weight: 800; }
-        .tmpl-love-banner p { font-size: 15px; line-height: 21px; color: #555; margin: 0; }
-        .tmpl-outline-btn { margin-left: auto; border: 1px solid #f2c7d4; border-radius: 28px; padding: 16px 19px; color: #cc1747; background: #fff; white-space: nowrap; font-weight: 600; cursor: pointer; font-size: 14px; }
-        .tmpl-active-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 14px; }
-        .tmpl-profile-card { aspect-ratio: 3 / 4; border-radius: 14px; overflow: hidden; position: relative; color: #fff; background: #444; cursor: pointer; border: 0; padding: 0; width: 100%; }
+        .tmpl-shade { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.12), rgba(0,0,0,0) 45%, rgba(0,0,0,.67)); }
+        .tmpl-story-user { position: absolute; left: 7px; top: 8px; display: flex; gap: 6px; align-items: center; font-size: 11px; text-shadow: 0 1px 2px rgba(0,0,0,.7); }
+        .tmpl-story-user span { width: 22px; height: 22px; border-radius: 50%; background: #222; border: 1.5px solid #fff; display: grid; place-items: center; font-size: 10px; flex-shrink: 0; }
+        .tmpl-story-user img { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid #fff; object-fit: cover; display: block; flex-shrink: 0; }
+        .tmpl-story-user div { font-size: 11px; font-weight: 600; line-height: 14px; }
+        .tmpl-story-user small { display: block; font-size: 10px; font-weight: 400; line-height: 13px; margin-top: 1px; }
+        .tmpl-story-card p { position: absolute; left: 7px; bottom: 7px; font-size: 11px; font-weight: 400; line-height: 14px; margin: 0; max-width: calc(100% - 14px); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .tmpl-love-banner { height: 68px; border-radius: 16px; background: #FCF1F3; margin: 24px 0 20px; display: flex; align-items: center; padding: 10px 12px; gap: 12px; box-sizing: border-box; }
+        .tmpl-hearts { width: 62px; height: 49px; flex-shrink: 0; display: grid; place-items: center; }
+        .tmpl-hearts svg { width: 100%; height: 100%; display: block; }
+        .tmpl-love-banner h3 { font-size: 17px; margin: 0 0 2px; color: #111; font-weight: 700; letter-spacing: -0.2px; line-height: 21px; white-space: nowrap; }
+        .tmpl-love-banner p { font-size: 13px; line-height: 18px; color: #586273; margin: 0; }
+        .tmpl-outline-btn { margin-left: auto; border: 1px solid #EBCBD2; border-radius: 18px; padding: 0 14px; height: 31px; color: #C91645; background: #FFF9FA; white-space: nowrap; font-weight: 600; cursor: pointer; font-size: 12px; line-height: 16px; flex-shrink: 0; display: grid; place-items: center; }
+        .tmpl-active-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .tmpl-profile-card { aspect-ratio: 1.04 / 1; border-radius: 12px; overflow: hidden; position: relative; color: #fff; background: #E8E8E8; cursor: pointer; border: 0; padding: 0; width: 100%; }
         .tmpl-profile-card > img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .tmpl-profile-card:after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgba(0,0,0,.55)); }
-        .tmpl-profile-card div { position: absolute; left: 12px; bottom: 12px; z-index: 2; font-size: 12px; font-weight: 700; text-align: left; }
-        .tmpl-profile-card small { display: block; font-size: 10px; margin-top: 0; font-weight: 700; line-height: 1; }
-        .tmpl-profile-card i { position: absolute; right: 12px; top: 12px; width: 11px; height: 11px; background: #14e96d; border-radius: 50%; z-index: 3; }
-        .tmpl-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 710px; height: 101px; background: #fff; border-top: 1px solid #eee; display: grid; grid-template-columns: 1fr 1fr 1.1fr 1fr 1fr; align-items: end; padding: 8px 15px 13px; z-index: 10; box-sizing: border-box; }
-        .tmpl-nav-item { height: 70px; color: #777; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 13px; text-decoration: none; background: none; border: 0; padding: 0; cursor: pointer; }
-        .tmpl-nav-item svg { width: 29px; height: 29px; stroke: currentColor; stroke-width: 2.2; fill: currentColor; }
+        .tmpl-profile-card:after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0) 45%, rgba(0,0,0,.62)); }
+        .tmpl-profile-card div { position: absolute; left: 8px; right: 8px; bottom: 6px; z-index: 2; font-size: 13px; font-weight: 600; line-height: 17px; text-align: left; }
+        .tmpl-profile-card small { display: block; font-size: 11px; font-weight: 400; line-height: 14px; margin-top: 0; }
+        .tmpl-profile-card i { position: absolute; right: 8px; top: 8px; width: 8px; height: 8px; background: #16E86D; border-radius: 50%; z-index: 3; }
+        .tmpl-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: calc(100% - 16px); max-width: 377px; height: 75px; background: #fff; border: 0; border-top-left-radius: 24px; border-top-right-radius: 24px; box-shadow: 0 -2px 12px rgba(0,0,0,.035); display: grid; grid-template-columns: repeat(5, 1fr); align-items: end; padding: 8px 12px 12px; z-index: 10; box-sizing: border-box; }
+        .tmpl-nav-item { height: 60px; color: #89919E; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 12px; font-weight: 500; line-height: 16px; text-decoration: none; background: none; border: 0; padding: 0; cursor: pointer; }
+        .tmpl-nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 1.8; fill: currentColor; }
         .tmpl-nav-item:not(.active) svg { fill: none; }
-        .tmpl-nav-item.active { color: #d81043; }
+        .tmpl-nav-item.active { color: #D90540; font-weight: 600; }
         .tmpl-nav-icon-wrap { position: relative; display: grid; }
-        .tmpl-nav-icon-wrap b { position: absolute; right: -7px; top: -7px; background: #d81043; color: #fff; border-radius: 50%; font-size: 11px; width: 20px; height: 20px; display: grid; place-items: center; font-weight: 700; }
-        .tmpl-nav-center { height: 70px; display: flex; align-items: center; justify-content: center; text-decoration: none; cursor: pointer; }
-.tmpl-nav-center img { width: 66px; height: 66px; object-fit: cover; border-radius: 50%; }
+        .tmpl-nav-icon-wrap b { position: absolute; right: -8px; top: -7px; background: #D90540; color: #fff; border-radius: 50%; min-width: 18px; height: 18px; font-size: 10px; font-weight: 600; line-height: 18px; text-align: center; padding: 0 3px; box-sizing: border-box; }
+        .tmpl-nav-center { width: 56px; height: 56px; border-radius: 50%; background: #D90540; position: relative; top: -14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(217,5,64,.35); justify-self: center; text-decoration: none; cursor: pointer; }
+        .tmpl-nav-center img { width: 30px; height: 30px; object-fit: contain; filter: brightness(0) invert(1); }
         .tmpl-profile-tab svg { stroke-width: 1.8; }
 
         .tmpl-sidebar { position: fixed; left: 0; top: 0; width: 255px; height: 100vh; padding: 32px 24px; background: #fff; border-right: 1px solid #ececef; z-index: 30; font-family: Arial, Helvetica, sans-serif; color: #151515; box-sizing: border-box; }
@@ -257,82 +264,13 @@ export default function HomePage() {
         .tmpl-sb-extra { position: absolute; left: 48px; top: 310px; display: flex; flex-direction: column; gap: 12px; }
         .tmpl-sb-extra button { background: none; border: 0; cursor: pointer; color: #65656a; font-size: 15px; text-align: left; padding: 0; }
 
-        @media (max-width: 560px) {
-          .tmpl-app { padding-left: 18px; padding-right: 18px; }
-          .tmpl-brand-name { font-size: 30px; line-height: 28px; }
-          .tmpl-brand-mark { width: 48px; height: 48px; border-width: 5px; }
-          .tmpl-brand-mark:before { width: 13px; height: 13px; border-width: 4px; left: -4px; top: -4px; }
-          .tmpl-brand-mark i { width: 12px; height: 12px; border-width: 3px; right: 6px; top: 3px; }
-          .tmpl-brand-sub { font-size: 8px; letter-spacing: 3px; margin-top: 6px; }
-          .tmpl-topbar { padding: 0 0 12px; }
-          .tmpl-menu span { width: 28px; }
-          .tmpl-messages-top { width: 44px; height: 44px; }
-          .tmpl-messages-top svg { width: 34px; height: 34px; }
-          .tmpl-messages-top em { width: 21px; height: 21px; font-size: 12px; right: -2px; }
-          .tmpl-quick-nav { gap: 10px; margin-left: 0; margin-right: 0; }
-          .tmpl-round-photo { width: 80%; border-width: 3px; padding: 5px; }
-          .tmpl-round-photo.location svg { width: 50%; height: 50%; }
-          .tmpl-pink-btn { margin-left: 12px; flex-shrink: 0; }
-          .tmpl-badge, .tmpl-plus { width: 29px; height: 29px; font-size: 13px; right: -4px; bottom: -4px; }
-          .tmpl-plus { font-size: 21px; }
-          .tmpl-quick label { font-size: 12px; margin-top: 7px; }
-          .tmpl-section h2 { font-size: 18px; }
-          .tmpl-section h2 span { font-size: 17px; }
-          .tmpl-stories { gap: 6px; }
-          .tmpl-story-card { height: 185px; }
-          .tmpl-story-user { font-size: 10px; left: 6px; top: 6px; gap: 4px; }
-          .tmpl-story-user span { width: 20px; height: 20px; }
-          .tmpl-story-user img { width: 20px; height: 20px; }
-          .tmpl-story-user small { font-size: 8px; margin-top: 1px; white-space: nowrap; }
-          .tmpl-story-card p { font-size: 10px; left: 8px; }
-          .tmpl-love-banner { height: auto; min-height: 90px; padding: 12px; gap: 8px; }
-          .tmpl-love-banner .tmpl-hearts { font-size: 34px; flex-shrink: 0; }
-          .tmpl-love-banner > div:nth-child(2) { flex: 1; min-width: 0; }
-          .tmpl-love-banner h3 { font-size: 13px; margin: 0 0 2px; white-space: nowrap; font-weight: 800; }
-          .tmpl-love-banner p { font-size: 11px; line-height: 14px; }
-          .tmpl-outline-btn { margin-left: 8px; padding: 11px 12px; font-size: 11px; flex-shrink: 0; }
-          .tmpl-active-grid { grid-template-columns: repeat(3, 1fr); gap: 9px; }
-          .tmpl-profile-card div { font-size: 11px; font-weight: 700; left: 9px; bottom: 9px; }
-          .tmpl-profile-card i { width: 10px; height: 10px; right: 9px; top: 9px; }
-          .tmpl-bottom-nav { height: 88px; padding: 6px 10px 10px; }
-          .tmpl-nav-item { height: 62px; font-size: 12px; gap: 4px; }
-          .tmpl-nav-item svg { width: 26px; height: 26px; }
-          .tmpl-nav-center { height: 62px; }
-          .tmpl-nav-center img { width: 58px; height: 58px; }
-          .tmpl-nav-icon-wrap b { width: 18px; height: 18px; font-size: 10px; }
-        }
-
-        @media (max-width: 400px) {
-          .tmpl-app { padding-left: 14px; padding-right: 14px; padding-bottom: 96px; }
-          .tmpl-brand-name { font-size: 26px; }
-          .tmpl-brand-mark { width: 42px; height: 42px; }
-          .tmpl-brand-sub { font-size: 7px; letter-spacing: 2px; }
-          .tmpl-topbar { height: 80px; }
-          .tmpl-menu { margin-top: 20px; }
-          .tmpl-menu span { width: 24px; }
-          .tmpl-messages-top { width: 38px; height: 38px; margin-top: 20px; }
-          .tmpl-messages-top svg { width: 30px; height: 30px; }
-          .tmpl-premium { padding: 5px 12px; }
-          .tmpl-crown { width: 44px; height: 44px; font-size: 27px; margin-right: 11px; }
-          .tmpl-premium h3 { font-size: 15px; font-weight: 800; }
-          .tmpl-premium p { font-size: 12px; line-height: 17px; font-weight: 700; }
-          .tmpl-pink-btn { padding: 11px 15px; font-size: 13px; margin-left: 10px; }
-          .tmpl-quick-nav { gap: 6px; }
-          .tmpl-badge, .tmpl-plus { width: 27px; height: 27px; font-size: 12px; }
-          .tmpl-plus { font-size: 19px; }
-          .tmpl-quick label { font-size: 11px; }
-          .tmpl-story-card { height: 155px; }
-          .tmpl-love-banner { gap: 6px; align-items: center; }
-          .tmpl-love-banner .tmpl-hearts { font-size: 28px; }
-          .tmpl-love-banner h3 { font-size: 12px; font-weight: 800; }
-          .tmpl-love-banner p { font-size: 10px; line-height: 13px; }
-          .tmpl-outline-btn { margin-left: 6px; padding: 10px 9px; font-size: 10px; }
-          .tmpl-active-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-
-        @media (max-width: 767px) {
-          .tmpl-stories { gap: 6px; }
-          .tmpl-story-card { flex: 1 1 0; min-width: calc((100% - 24px) / 5); }
+        @media (max-width: 359px) {
+          .tmpl-premium { padding: 8px 10px; }
+          .tmpl-premium p { font-size: 12px; }
+          .tmpl-pink-btn { padding: 0 10px; font-size: 13px; }
+          .tmpl-round-photo { width: 53px; height: 53px; }
+          .tmpl-story-card { height: 150px; flex-basis: 64px; }
+          .tmpl-hearts { width: 52px; height: 42px; }
         }
 
         @media (min-width: 768px) {
@@ -353,17 +291,29 @@ export default function HomePage() {
             width: 100%;
           }
           .tmpl-premium { margin-top: 20px; height: 118px; padding: 20px 28px; }
+          .tmpl-premium h3 { font-size: 24px; margin-bottom: 4px; }
+          .tmpl-premium p { font-size: 17px; white-space: normal; }
+          .tmpl-pink-btn { height: 46px; line-height: 46px; padding: 0 26px; font-size: 17px; border-radius: 23px; }
           .tmpl-quick-nav {
             grid-template-columns: repeat(4, 105px);
             gap: 45px;
             margin: 8px auto 40px;
           }
-          .tmpl-round-photo { width: 105px; border-width: 4px; padding: 5px; }
-          .tmpl-round-photo.location svg { width: 57px; height: 57px; }
+          .tmpl-round-photo { width: 105px; height: 105px; }
+          .tmpl-round-photo.location svg { padding: 12%; }
+          .tmpl-quick label { font-size: 16px; }
           .tmpl-section h2 { font-size: 21px; margin-bottom: 14px; }
           .tmpl-stories { gap: 15px; }
-          .tmpl-story-card { height: 270px; flex: 1 1 0; flex-basis: auto; }
+          .tmpl-story-card { height: 270px; flex: 1 1 0; min-width: 0; }
+          .tmpl-story-user span, .tmpl-story-user img { width: 34px; height: 34px; }
+          .tmpl-story-user div { font-size: 14px; line-height: 17px; }
+          .tmpl-story-user small { font-size: 12px; line-height: 15px; }
+          .tmpl-story-card p { font-size: 14px; line-height: 17px; }
           .tmpl-love-banner { height: 130px; margin-top: 32px; padding: 20px 30px; }
+          .tmpl-hearts { width: 90px; height: 70px; }
+          .tmpl-love-banner h3 { font-size: 20px; }
+          .tmpl-love-banner p { font-size: 16px; line-height: 22px; }
+          .tmpl-outline-btn { height: 46px; padding: 0 22px; font-size: 14px; border-radius: 23px; }
           .tmpl-active-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
           .tmpl-profile-card { aspect-ratio: 3 / 4; }
           .tmpl-bottom-nav { display: none; }
@@ -422,7 +372,10 @@ export default function HomePage() {
             <button className="tmpl-icon-btn tmpl-menu" aria-label="Menu" onClick={() => go('/settings')}>
               <span></span><span></span><span></span>
             </button>
-            <img className="tmpl-brand-logo" src="/o-logo.png" alt="Odogwu" width={44} height={44} decoding="async" />
+            <div className="tmpl-wordmark">
+              <div className="tmpl-wordmark-name">DOGWU</div>
+              <div className="tmpl-wordmark-sub"><b>—</b> D A T <span>♥</span> I N G <b>—</b></div>
+            </div>
             <button className="tmpl-messages-top tmpl-icon-btn" aria-label="Messages" onClick={() => go('/matches')}>
               <svg viewBox="0 0 48 48" aria-hidden="true">
                 <path d="M10 35l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none" stroke="currentColor" strokeWidth="3"/>
@@ -438,7 +391,7 @@ export default function HomePage() {
             <div className="tmpl-crown">♛</div>
             <div className="tmpl-premium-copy">
               <h3>Upgrade to Premium</h3>
-              <p>Unlock all features and<br />connect without limits</p>
+              <p>Unlock all features and connect without limits</p>
             </div>
             <button className="tmpl-pink-btn" onClick={() => go('/premium')}>Upgrade</button>
           </section>
@@ -519,10 +472,18 @@ export default function HomePage() {
           </section>
 
           <section className="tmpl-love-banner">
-            <div className="tmpl-hearts">💗</div>
-            <div>
+            <div className="tmpl-hearts">
+              <svg viewBox="0 0 62 49" aria-hidden="true">
+                <path d="M31 44C31 44 12 32 7 21 3.5 13.5 9 5 17 5c5 0 10 3 14 8.5C35 8 40 5 45 5c8 0 13.5 8.5 10 16-5 11-24 23-24 23Z" fill="#D90540"/>
+                <path d="M31 40C31 40 16 30 12 21 9 14.5 13.5 8 20 8c4 0 7.5 2.5 11 7.5C34.5 10.5 38 8 42 8c6.5 0 11 6.5 8 13-4 9-19 19-19 19Z" fill="#E82C61"/>
+                <path d="M31 35C31 35 19.5 28 16.5 21 14.4 16.5 17.5 11.5 22.5 11.5c3 0 5.5 2 8.5 6 3-4 5.5-6 8.5-6 5 0 8.1 5 6 9.5C40.5 28 31 35 31 35Z" fill="#F8B5C5"/>
+                <path d="M44.5 6.5a1.6 1.6 0 0 1 2.9-1.4 1.6 1.6 0 0 1-2.9 1.4Z" fill="#FFD5DE"/>
+                <path d="M50 15.5a1.1 1.1 0 0 1 2-1 1.1 1.1 0 0 1-2 1Z" fill="#FFD5DE"/>
+              </svg>
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
               <h3>Love is better together <span>💕</span></h3>
-              <p>Complete your profile, increase your<br />visibility and find your perfect match.</p>
+              <p>Complete your profile, increase your visibility and find your perfect match.</p>
             </div>
             <button className="tmpl-outline-btn" onClick={() => go('/edit-profile')}>Complete Profile</button>
           </section>
