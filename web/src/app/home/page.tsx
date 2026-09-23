@@ -194,7 +194,7 @@ export default function HomePage() {
         .tmpl-messages-top em { position: absolute; right: -9px; top: -5px; background: #D90540; color: #fff; min-width: 18px; height: 18px; border-radius: 50%; font-style: normal; font-size: 10px; font-weight: 600; line-height: 18px; display: grid; place-items: center; padding: 0 3px; box-sizing: border-box; }
         .tmpl-premium { min-height: 42.75px; background: #FCF1F3; border-radius: 11.25px; display: flex; align-items: center; padding: 6px 11.25px; margin-bottom: 20px; box-sizing: border-box; }
         .tmpl-crown { width: 38px; height: 38px; background: #D90540; color: #FFD21D; border-radius: 50%; display: grid; place-items: center; margin-right: 9px; flex-shrink: 0; }
-        .tmpl-crown svg { width: 23px; height: 20px; display: block; }
+        .tmpl-crown svg { width: 30px; height: 26px; display: block; }
         .tmpl-premium-copy { flex: 1; min-width: 0; }
         .tmpl-premium h3 { font-size: 12.75px; margin: 0 0 3px; color: #111; font-weight: 700; letter-spacing: -0.2px; line-height: 15.75px; }
         .tmpl-premium p { font-size: 10px; line-height: 14.25px; color: #586273; margin: 0; font-weight: 400; }
