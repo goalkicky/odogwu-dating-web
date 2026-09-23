@@ -193,11 +193,12 @@ export default function HomePage() {
         .tmpl-messages-top svg { width: 27px; height: 27px; }
         .tmpl-messages-top em { position: absolute; right: -9px; top: -5px; background: #D90540; color: #fff; min-width: 18px; height: 18px; border-radius: 50%; font-style: normal; font-size: 10px; font-weight: 600; line-height: 18px; display: grid; place-items: center; padding: 0 3px; box-sizing: border-box; }
         .tmpl-premium { height: 57px; background: #FCF1F3; border-radius: 15px; display: flex; align-items: center; padding: 8px 15px; margin-bottom: 20px; box-sizing: border-box; }
-        .tmpl-crown { width: 38px; height: 38px; background: #D90540; color: #FFD21D; border-radius: 50%; display: grid; place-items: center; font-size: 20px; line-height: 1; margin-right: 12px; flex-shrink: 0; }
+        .tmpl-crown { width: 38px; height: 38px; background: #D90540; color: #FFD21D; border-radius: 50%; display: grid; place-items: center; margin-right: 12px; flex-shrink: 0; }
+        .tmpl-crown svg { width: 23px; height: 20px; display: block; }
         .tmpl-premium-copy { flex: 1; min-width: 0; }
-        .tmpl-premium h3 { font-size: 17px; margin: 0 0 2px; color: #111; font-weight: 700; letter-spacing: -0.2px; line-height: 21px; }
-        .tmpl-premium p { font-size: 13.5px; line-height: 19px; color: #586273; margin: 0; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .tmpl-pink-btn { background: #D90540; color: #fff; border: 0; border-radius: 18px; height: 28px; padding: 0 13px; font-size: 14px; font-weight: 600; line-height: 28px; cursor: pointer; white-space: nowrap; margin-left: 10px; flex-shrink: 0; }
+        .tmpl-premium h3 { font-size: 17px; margin: 0 0 3px; color: #111; font-weight: 700; letter-spacing: -0.2px; line-height: 21px; }
+        .tmpl-premium p { font-size: 14px; line-height: 19px; color: #586273; margin: 0; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tmpl-pink-btn { background: #D90540; color: #fff; border: 0; border-radius: 18px; width: 67px; height: 28px; padding: 0; font-size: 14px; font-weight: 600; line-height: 17px; text-align: center; display: grid; place-items: center; cursor: pointer; white-space: nowrap; margin-left: 10px; flex-shrink: 0; box-sizing: border-box; }
         .tmpl-quick-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 4px 0 24px; }
         .tmpl-quick { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; color: #111; background: none; border: 0; cursor: pointer; padding: 0; min-width: 0; }
         .tmpl-round-photo { width: 59px; height: 59px; border-radius: 50%; padding: 3px; box-sizing: border-box; display: block; position: relative; background: #fff; }
@@ -293,7 +294,7 @@ export default function HomePage() {
           .tmpl-premium { margin-top: 20px; height: 118px; padding: 20px 28px; }
           .tmpl-premium h3 { font-size: 24px; margin-bottom: 4px; }
           .tmpl-premium p { font-size: 17px; white-space: normal; }
-          .tmpl-pink-btn { height: 46px; line-height: 46px; padding: 0 26px; font-size: 17px; border-radius: 23px; }
+          .tmpl-pink-btn { height: 46px; line-height: 46px; width: auto; padding: 0 26px; font-size: 17px; border-radius: 23px; }
           .tmpl-quick-nav {
             grid-template-columns: repeat(4, 105px);
             gap: 45px;
@@ -388,10 +389,12 @@ export default function HomePage() {
           </header>
 
           <section className="tmpl-premium">
-            <div className="tmpl-crown">♛</div>
+            <div className="tmpl-crown">
+              <svg viewBox="0 0 24 18" aria-hidden="true"><path d="M2 14.5 5 6l4 4 3-6 3 6 4-4 3 8.5Z" fill="#FFD21D"/><rect x="2" y="15.5" width="20" height="2.5" rx="1.25" fill="#FFD21D"/></svg>
+            </div>
             <div className="tmpl-premium-copy">
               <h3>Upgrade to Premium</h3>
-              <p>Unlock all features and connect without limits</p>
+              <p>Unlock all features &amp; more</p>
             </div>
             <button className="tmpl-pink-btn" onClick={() => go('/premium')}>Upgrade</button>
           </section>
