@@ -194,7 +194,7 @@ export default function HomePage() {
         .tmpl-messages-top em { position: absolute; right: -9px; top: -5px; background: #D90540; color: #fff; min-width: 18px; height: 18px; border-radius: 50%; font-style: normal; font-size: 10px; font-weight: 600; line-height: 18px; display: grid; place-items: center; padding: 0 3px; box-sizing: border-box; }
         .tmpl-premium { min-height: 42.75px; background: #FCF1F3; border-radius: 11.25px; display: flex; align-items: center; padding: 6px 11.25px; margin-bottom: 20px; box-sizing: border-box; }
         .tmpl-crown { width: 38px; height: 38px; background: #D90540; color: #FFD21D; border-radius: 50%; display: grid; place-items: center; margin-right: 9px; flex-shrink: 0; }
-        .tmpl-crown svg { width: 30px; height: 26px; display: block; }
+        .tmpl-crown svg { width: 30px; height: 24px; display: block; }
         .tmpl-premium-copy { flex: 1; min-width: 0; }
         .tmpl-premium h3 { font-size: 12.75px; margin: 0 0 3px; color: #111; font-weight: 700; letter-spacing: -0.2px; line-height: 15.75px; }
         .tmpl-premium p { font-size: 10px; line-height: 14.25px; color: #586273; margin: 0; font-weight: 400; }
@@ -390,7 +390,32 @@ export default function HomePage() {
 
           <section className="tmpl-premium">
             <div className="tmpl-crown">
-              <svg viewBox="0 0 24 18" aria-hidden="true"><path d="M2 14.5 5 6l4 4 3-6 3 6 4-4 3 8.5Z" fill="#FFD21D"/><rect x="2" y="15.5" width="20" height="2.5" rx="1.25" fill="#FFD21D"/></svg>
+              <svg viewBox="0 0 40 32" aria-hidden="true">
+                <defs>
+                  <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stopColor="#FFF0B5"/>
+                    <stop offset=".4" stopColor="#FFD21D"/>
+                    <stop offset="1" stopColor="#D39400"/>
+                  </linearGradient>
+                  <linearGradient id="cv" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stopColor="#A0162E"/>
+                    <stop offset="1" stopColor="#6E0E1F"/>
+                  </linearGradient>
+                </defs>
+                <path d="M6 21 6 12l4 4 2.5-10L16 15l4-12 4 12 2.5-10L30 16l4-4v9z" fill="url(#cv)"/>
+                <path d="M3 21V13l6 4L11.5 6.5 16 16l4-12 4 12 4.5-9.5L31 17l6-4v8z" fill="url(#cg)" stroke="#B87900" strokeWidth=".6"/>
+                <rect x="1.5" y="20" width="37" height="6.5" rx="1.5" fill="url(#cg)" stroke="#B87900" strokeWidth=".6"/>
+                <rect x="1.5" y="23.2" width="37" height=".9" fill="#D9A400" opacity=".55"/>
+                <circle cx="20" cy="13.5" r="2.6" fill="#E32636" stroke="#A01220" strokeWidth=".5"/>
+                <circle cx="20" cy="13" r=".8" fill="#FF9AA6"/>
+                <circle cx="11.5" cy="14" r="2.2" fill="#215BE0" stroke="#173A93" strokeWidth=".5"/>
+                <circle cx="11" cy="13.5" r=".7" fill="#9CC0FF"/>
+                <circle cx="28.5" cy="14" r="2.2" fill="#1FA864" stroke="#14743F" strokeWidth=".5"/>
+                <circle cx="28" cy="13.5" r=".7" fill="#A6F2C8"/>
+                <circle cx="14.5" cy="23.2" r="1.6" fill="#E32636" stroke="#A01220" strokeWidth=".5"/>
+                <circle cx="25.5" cy="23.2" r="1.6" fill="#215BE0" stroke="#173A93" strokeWidth=".5"/>
+                <rect x="1.5" y="25.4" width="37" height="3.4" rx="1.7" fill="#FBF7F1" stroke="#D9D0C2" strokeWidth=".5"/>
+              </svg>
             </div>
             <div className="tmpl-premium-copy">
               <h3>Upgrade to Premium</h3>
