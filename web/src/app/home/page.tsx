@@ -196,9 +196,9 @@ export default function HomePage() {
         .tmpl-crown { width: 38px; height: 38px; background: #D90540; color: #FFD21D; border-radius: 50%; display: grid; place-items: center; margin-right: 12px; flex-shrink: 0; }
         .tmpl-crown svg { width: 23px; height: 20px; display: block; }
         .tmpl-premium-copy { flex: 1; min-width: 0; }
-        .tmpl-premium h3 { font-size: 17px; margin: 0 0 3px; color: #111; font-weight: 700; letter-spacing: -0.2px; line-height: 21px; }
-        .tmpl-premium p { font-size: 14px; line-height: 19px; color: #586273; margin: 0; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .tmpl-pink-btn { background: #D90540; color: #fff; border: 0; border-radius: 18px; width: 67px; height: 28px; padding: 0; font-size: 14px; font-weight: 600; line-height: 17px; text-align: center; display: grid; place-items: center; cursor: pointer; white-space: nowrap; margin-left: 10px; flex-shrink: 0; box-sizing: border-box; }
+        .tmpl-premium h3 { font-size: 12.75px; margin: 0 0 3px; color: #111; font-weight: 700; letter-spacing: -0.2px; line-height: 21px; }
+        .tmpl-premium p { font-size: 10.5px; line-height: 19px; color: #586273; margin: 0; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tmpl-pink-btn { background: #D90540; color: #fff; border: 0; border-radius: 18px; width: 67px; height: 28px; padding: 0; font-size: 10.5px; font-weight: 600; line-height: 17px; text-align: center; display: grid; place-items: center; cursor: pointer; white-space: nowrap; margin-left: 10px; flex-shrink: 0; box-sizing: border-box; }
         .tmpl-quick-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 4px 0 24px; }
         .tmpl-quick { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; color: #111; background: none; border: 0; cursor: pointer; padding: 0; min-width: 0; }
         .tmpl-round-photo { width: 59px; height: 59px; border-radius: 50%; padding: 3px; box-sizing: border-box; display: block; position: relative; background: #fff; }
