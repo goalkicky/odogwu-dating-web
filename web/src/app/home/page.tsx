@@ -231,7 +231,7 @@ export default function HomePage() {
         .tmpl-hearts { width: 46.5px; height: 36.75px; flex-shrink: 0; display: grid; place-items: center; }
         .tmpl-hearts svg { width: 100%; height: 100%; display: block; }
         .tmpl-love-banner h3 { font-size: 10.75px; margin: 0 0 2px; color: #111; font-weight: 700; letter-spacing: -0.2px; line-height: 15.75px; white-space: nowrap; }
-        .tmpl-love-banner p { font-size: 8px; line-height: 13.5px; color: #586273; margin: 0; }
+        .tmpl-love-banner p { font-size: 8px; line-height: 13.5px; color: #586273; margin: 0; font-weight: 500; }
         .tmpl-outline-btn { margin-left: auto; border: 1px solid #EBCBD2; border-radius: 13.5px; padding: 0 14px; height: 31px; color: #C91645; background: #FFF9FA; white-space: nowrap; font-weight: 600; cursor: pointer; font-size: 9px; line-height: 12px; flex-shrink: 0; display: grid; place-items: center; }
         .tmpl-active-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
         .tmpl-profile-card { aspect-ratio: 1.04 / 1; border-radius: 12px; overflow: hidden; position: relative; color: #fff; background: #E8E8E8; cursor: pointer; border: 0; padding: 0; width: 100%; }
