@@ -481,7 +481,7 @@ export default function HomePage() {
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <h3>Love is better together <span>💕</span></h3>
-              <p>Complete your profile, increase your visibility<br />find your perfect match.</p>
+              <p>Complete your profile, increase your<br />visibility and find your perfect match.</p>
             </div>
             <button className="tmpl-outline-btn" onClick={() => go('/edit-profile')}>Complete Profile</button>
           </section>
