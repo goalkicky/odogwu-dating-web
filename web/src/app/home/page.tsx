@@ -177,7 +177,7 @@ export default function HomePage() {
         .tmpl-menu { width: 20px; }
         .tmpl-menu span { display: block; width: 20px; height: 2px; background: #111; margin: 6px 0; border-radius: 2px; }
         .tmpl-wordmark { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; display: flex; align-items: center; justify-content: center; }
-        .tmpl-wordmark img { height: 46px; width: auto; max-width: 240px; object-fit: contain; display: block; filter: brightness(0.85); }
+        .tmpl-wordmark img { height: 56px; width: auto; max-width: 280px; object-fit: contain; display: block; filter: brightness(0.85); }
         .tmpl-brand { display: flex; align-items: center; gap: 9px; }
         .tmpl-brand-mark { width: 66px; height: 66px; border: 7px solid #cf0a13; border-radius: 50%; position: relative; flex-shrink: 0; box-sizing: border-box; object-fit: cover; display: block; }
         .tmpl-brand-mark:before { content: ""; position: absolute; width: 18px; height: 18px; border: 6px solid #fff; border-radius: 50%; background: #cf0a13; left: -5px; top: -5px; box-sizing: border-box; }
