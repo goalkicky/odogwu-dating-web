@@ -10,8 +10,8 @@ export const INTEREST_CATEGORIES: InterestCategory[] = [
   {
     label: 'Language and Linguistics',
     emoji: '🗣️',
-    c1: '#1E88E5',
-    c2: '#22E5FF',
+    c1: '#1976D2',
+    c2: '#6FA8DC',
     items: [
       'Igbo', 'Tsonga', 'Akan', 'Lingala', 'Yoruba', 'Xhosa', 'Hausa', 'Luganda', 'Luo', 'Zulu',
       'Urhobo', 'Duala', 'Nigerian Pidgin', 'Nupe', 'Mandinka', 'Wolof', 'Shona', 'Setswana', 'Sesotho',
@@ -22,8 +22,8 @@ export const INTEREST_CATEGORIES: InterestCategory[] = [
   {
     label: 'Music',
     emoji: '🎵',
-    c1: '#B44CFF',
-    c2: '#B388FF',
+    c1: '#8E20E8',
+    c2: '#B86BEF',
     items: [
       'Igbo Highlife', 'gospel music', 'Afro beat', 'Amapiano', 'R&B', 'Hip Hop', 'Reggae music',
       'Jazz', 'House music', 'Pop music', 'Trap music', 'UK Drill', 'Igbo Drill', 'Ghana Highlife',
@@ -32,8 +32,8 @@ export const INTEREST_CATEGORIES: InterestCategory[] = [
   {
     label: 'Movies and TV shows',
     emoji: '🎬',
-    c1: '#5C6BC0',
-    c2: '#9FA8DA',
+    c1: '#FF8C12',
+    c2: '#FFB05C',
     items: [
       'Nollywood', 'Documentaries', '90 day fiancé', 'Hollywood', 'K-drama', 'Horror movies',
       'The Real Housewives', 'Big brother Naija', 'Bollywood', 'Comedy', 'Anime',
@@ -42,8 +42,8 @@ export const INTEREST_CATEGORIES: InterestCategory[] = [
   {
     label: 'Sports and Athletics',
     emoji: '⚽',
-    c1: '#2E7D32',
-    c2: '#66BB6A',
+    c1: '#22B879',
+    c2: '#69D3A7',
     items: [
       'Football', 'Basketball', 'volleyball', 'swimming', 'running', 'cycling', 'ịkpọ ụga',
       'Hand ball', 'Netball', 'tennis', 'Golf', 'Boxing',
@@ -52,8 +52,8 @@ export const INTEREST_CATEGORIES: InterestCategory[] = [
   {
     label: 'Food and Drink',
     emoji: '🍲',
-    c1: '#FF7043',
-    c2: '#FFB74D',
+    c1: '#FF8C12',
+    c2: '#FFB05C',
     items: [
       'Ogbono', 'jollof', 'Mogodu', 'wine', 'Beer', 'Egwusi', 'sushi', 'cocktails', 'coffee',
       'Palm wine', 'whiskey', 'Champagne', 'Mocktails', 'plantain', 'Tea',
@@ -92,8 +92,8 @@ export const INTEREST_CATEGORIES: InterestCategory[] = [
   {
     label: 'Social Activities & Adventures',
     emoji: '🌍',
-    c1: '#00897B',
-    c2: '#4DB6AC',
+    c1: '#1976D2',
+    c2: '#6FA8DC',
     items: [
       'Travel', 'camping', 'fishing', 'clubbing', 'snorkeling', 'Atilogwu Dance', 'Date Nights',
       'Owambe', 'Jetskiing', 'Backpacking', 'picnics',
@@ -102,8 +102,8 @@ export const INTEREST_CATEGORIES: InterestCategory[] = [
   {
     label: 'Beauty & Wellness',
     emoji: '🧖',
-    c1: '#7E57C2',
-    c2: '#B39DDB',
+    c1: '#22B879',
+    c2: '#69D3A7',
     items: [
       'Spa', 'skincare', 'makeup', 'Meditation', 'Yoga', 'pedicure', 'Manicure', 'Sauna',
     ],
