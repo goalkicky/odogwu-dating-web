@@ -230,6 +230,7 @@ export default function HomePage() {
         .tmpl-love-banner { height: 68px; border-radius: 16px; background: #FCF1F3; margin: 24px 0 20px; display: flex; align-items: center; padding: 10px 12px; gap: 10px; box-sizing: border-box; }
         .tmpl-hearts { width: 46.5px; height: 36.75px; flex-shrink: 0; display: grid; place-items: center; }
         .tmpl-hearts svg { width: 100%; height: 100%; display: block; }
+        .tmpl-hearts img { width: 100%; height: 100%; object-fit: contain; display: block; }
         .tmpl-love-banner h3 { font-size: 10.75px; margin: 0 0 2px; color: #111; font-weight: 700; letter-spacing: -0.2px; line-height: 15.75px; white-space: nowrap; }
         .tmpl-love-banner p { font-size: 8px; line-height: 13.5px; color: #586273; margin: 0; font-weight: 500; }
         .tmpl-outline-btn { margin-left: auto; border: 1px solid #EBCBD2; border-radius: 13.5px; padding: 0 14px; height: 31px; color: #C91645; background: #FFF9FA; white-space: nowrap; font-weight: 600; cursor: pointer; font-size: 9px; line-height: 12px; flex-shrink: 0; display: grid; place-items: center; }
@@ -476,13 +477,7 @@ export default function HomePage() {
 
           <section className="tmpl-love-banner">
             <div className="tmpl-hearts">
-              <svg viewBox="0 0 62 49" aria-hidden="true">
-                <path d="M31 44C31 44 12 32 7 21 3.5 13.5 9 5 17 5c5 0 10 3 14 8.5C35 8 40 5 45 5c8 0 13.5 8.5 10 16-5 11-24 23-24 23Z" fill="#D90540"/>
-                <path d="M31 40C31 40 16 30 12 21 9 14.5 13.5 8 20 8c4 0 7.5 2.5 11 7.5C34.5 10.5 38 8 42 8c6.5 0 11 6.5 8 13-4 9-19 19-19 19Z" fill="#E82C61"/>
-                <path d="M31 35C31 35 19.5 28 16.5 21 14.4 16.5 17.5 11.5 22.5 11.5c3 0 5.5 2 8.5 6 3-4 5.5-6 8.5-6 5 0 8.1 5 6 9.5C40.5 28 31 35 31 35Z" fill="#F8B5C5"/>
-                <path d="M44.5 6.5a1.6 1.6 0 0 1 2.9-1.4 1.6 1.6 0 0 1-2.9 1.4Z" fill="#FFD5DE"/>
-                <path d="M50 15.5a1.1 1.1 0 0 1 2-1 1.1 1.1 0 0 1-2 1Z" fill="#FFD5DE"/>
-              </svg>
+              <img src="/love-hearts.png" alt="" width={46} height={37} decoding="async" />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <h3>Love is better together <span>💕</span></h3>
