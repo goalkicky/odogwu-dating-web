@@ -249,7 +249,8 @@ export default function HomePage() {
         .tmpl-nav-icon-wrap { position: relative; display: grid; }
         .tmpl-nav-icon-wrap b { position: absolute; right: -8px; top: -7px; background: #D90540; color: #fff; border-radius: 50%; min-width: 18px; height: 18px; font-size: 10px; font-weight: 600; line-height: 18px; text-align: center; padding: 0 3px; box-sizing: border-box; }
         .tmpl-nav-center { width: 56px; height: 56px; border-radius: 50%; background: #D90540; position: relative; top: -14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(217,5,64,.35); justify-self: center; text-decoration: none; cursor: pointer; }
-        .tmpl-nav-center img { width: 30px; height: 30px; object-fit: contain; filter: brightness(0) invert(1); }
+        .tmpl-nav-center img { width: 30px; height: 30px; object-fit: contain; }
+        .tmpl-nav-center svg { width: 30px; height: 30px; display: block; }
         .tmpl-profile-tab svg { stroke-width: 1.8; }
 
         .tmpl-sidebar { position: fixed; left: 0; top: 0; width: 255px; height: 100vh; padding: 32px 24px; background: #fff; border-right: 1px solid #ececef; z-index: 30; font-family: Arial, Helvetica, sans-serif; color: #151515; box-sizing: border-box; }
@@ -521,7 +522,9 @@ export default function HomePage() {
           <Link href="/explore" className="tmpl-nav-item">
             <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none"/><path d="m19 29 4-10 9-4-4 9-9 5Z"/></svg><span>Explore</span>
           </Link>
-          <Link href="/discover" className="tmpl-nav-center"><img src="/logo-icon.png?v=2" alt="Discover" width={44} height={44} decoding="async" /></Link>
+          <Link href="/discover" className="tmpl-nav-center" aria-label="Discover">
+                <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 27C16 27 5 20 5 12.5 5 9 7.8 6 11.2 6c2.2 0 4 1.3 4.8 3.1C16.8 7.3 18.6 6 20.8 6 24.2 6 27 9 27 12.5 27 20 16 27 16 27Z" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinejoin="round" strokeLinecap="round"/></svg>
+              </Link>
           <Link href="/matches" className="tmpl-nav-item">
             <span className="tmpl-nav-icon-wrap"><svg viewBox="0 0 48 48"><path d="M9 34l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/><circle cx="19" cy="22" r="2"/><circle cx="25" cy="22" r="2"/><circle cx="31" cy="22" r="2"/></svg><b>{messagesCount || 0}</b></span><span>Messages</span>
           </Link>
