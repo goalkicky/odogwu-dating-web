@@ -208,7 +208,7 @@ export default function HomePage() {
         .tmpl-round-photo > img, .tmpl-round-photo > div { inset: 3px !important; width: calc(100% - 6px) !important; height: calc(100% - 6px) !important; border-radius: 50%; object-fit: cover; display: block; }
         .tmpl-round-photo.location { display: block; background: conic-gradient(#D90540 0 180deg, #B9CE1A 180deg 360deg); }
         .tmpl-round-photo.location svg { position: absolute; inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); background: #F1F0EE; border-radius: 50%; padding: 17%; box-sizing: border-box; fill: #D90540; }
-        .tmpl-quick label { font-size: 14px; font-weight: 500; margin-top: 7px; color: #111; text-align: center; line-height: 18px; }
+        .tmpl-quick label { font-size: 10.5px; font-weight: 500; margin-top: 7px; color: #111; text-align: center; line-height: 13px; }
         .tmpl-badge, .tmpl-plus { position: absolute; right: -3px; bottom: -3px; background: #D90540; color: #fff; border-radius: 50%; width: 19px; height: 19px; display: grid; place-items: center; font-size: 10px; font-weight: 600; z-index: 3; border: 2px solid #fff; line-height: 1; padding: 0; box-sizing: border-box; }
         .tmpl-plus { font-size: 15px; font-weight: 500; }
 .tmpl-section h2 { font-size: 20px; margin: 0 0 12px; font-weight: 700; color: #111; letter-spacing: -0.25px; line-height: 24px; }
