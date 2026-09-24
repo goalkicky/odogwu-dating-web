@@ -190,11 +190,11 @@ export default function DiscoverPage() {
               <path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 1 0 0-8c-2 0-4 1.33-6 4Z"/>
             </svg>
           </div>
-          <span className="animate-pop" style={{ fontSize: 22, fontWeight: 800, color: '#151515' }}>No more profiles</span>
-          <span style={{ fontSize: 14, color: '#8A8A8F', textAlign: 'center', maxWidth: 260 }}>
+          <span className="animate-pop" style={{ fontSize: 22, fontWeight: 800, color: '#111111' }}>No more profiles</span>
+          <span style={{ fontSize: 14, color: '#5D616A', textAlign: 'center', maxWidth: 260 }}>
             You&apos;ve seen everyone nearby. Check back later for fresh faces.
           </span>
-          <button onClick={loadUsers} style={{ padding: '12px 28px', borderRadius: 9999, border: 'none', background: 'linear-gradient(135deg, #FF2E5F, #FF4530)', color: 'white', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 6px 24px rgba(255,46,95,0.4)' }}>Refresh</button>
+          <button onClick={loadUsers} style={{ padding: '12px 28px', borderRadius: 9999, border: 'none', background: '#E50046', color: 'white', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 6px 24px rgba(229,0,70,0.4)' }}>Refresh</button>
         </div>
       </AppShell>
     );
@@ -209,18 +209,18 @@ export default function DiscoverPage() {
   const actionSmall = isTiny ? 11 : isMobile ? 12 : 18;
 
   const discoverHeader = (
-    <header className="uv-topbar" style={{ padding: '2px 0 6px' }}>
-      <img className="uv-brand-logo" src="/o-logo.png" alt="Odogwu" style={{ justifySelf: 'start', height: 28 }} width={28} height={28} decoding="async" />
-      <h1 style={{ fontSize: 17, fontWeight: 800, color: '#000', margin: 0, letterSpacing: -0.5, textAlign: 'center' }}>Discover</h1>
+    <header className="uv-topbar" style={{ padding: '0 0 8px' }}>
+      <img className="uv-brand-logo" src="/o-logo.png" alt="Odogwu" style={{ justifySelf: 'start', height: 44, filter: 'brightness(0.9)' }} width={44} height={44} decoding="async" />
+      <h1 style={{ fontSize: 20, fontWeight: 700, color: '#111111', margin: 0, letterSpacing: -0.3, textAlign: 'center', lineHeight: 24 }}>Discover</h1>
       <button
         onClick={() => setShowFilters(true)}
         aria-label="Filter preferences"
         style={{
-          width: 34, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center',
-          background: 'none', border: 0, cursor: 'pointer', color: '#17191d', justifySelf: 'end',
+          width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: 'none', border: 0, cursor: 'pointer', color: '#5D616A', justifySelf: 'end',
         }}
       >
-        <FilterIcon size={18} color="#17191d" />
+        <FilterIcon size={20} color="#5D616A" />
       </button>
     </header>
   );
@@ -243,32 +243,32 @@ export default function DiscoverPage() {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: actionGap, padding: isMobile ? '10px 0 4px' : '38px 0 25px' }}>
-            <button onClick={handleSwipeLeft} className="lift" aria-label="Pass" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#101217' }}>
-              <span style={{ width: actionSize, height: actionSize, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff', fontSize: actionFont, fontWeight: 300, color: '#101217' }}>×</span>
-              <small style={{ fontSize: actionSmall, color: '#101217' }}>Pass</small>
+            <button onClick={handleSwipeLeft} className="lift" aria-label="Pass" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#5D616A' }}>
+              <span style={{ width: actionSize, height: actionSize, border: '1px solid #EBEBEE', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff', fontSize: actionFont, fontWeight: 300, color: '#111111' }}>×</span>
+              <small style={{ fontSize: actionSmall, color: '#5D616A', fontWeight: 600 }}>Pass</small>
             </button>
 
-            <button onClick={handleSwipeRight} className="lift" aria-label="Like" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#101217' }}>
-              <span style={{ width: actionSize, height: actionSize, borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 6px 18px rgba(255,45,104,0.35)', background: '#ff2d68', color: '#fff', fontSize: likeFont, fontWeight: 300, paddingBottom: isMobile ? 4 : 6 }}>♥</span>
-              <small style={{ fontSize: actionSmall, color: '#101217' }}>Like</small>
+            <button onClick={handleSwipeRight} className="lift" aria-label="Like" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#5D616A' }}>
+              <span style={{ width: actionSize, height: actionSize, borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 6px 18px rgba(229,0,70,0.32)', background: '#E50046', color: '#fff', fontSize: likeFont, fontWeight: 300, paddingBottom: isMobile ? 4 : 6 }}>♥</span>
+              <small style={{ fontSize: actionSmall, color: '#5D616A', fontWeight: 600 }}>Like</small>
             </button>
 
-            <button onClick={handleSuperLike} className="lift" aria-label="Super Like" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#101217' }}>
+            <button onClick={handleSuperLike} className="lift" aria-label="Super Like" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#5D616A' }}>
               <span style={{ width: actionSize, height: actionSize, borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 6px 18px rgba(63,161,255,0.35)', background: '#3fa1ff', color: '#fff' }}>
                 <svg viewBox="0 0 24 24" style={{ width: Math.round(actionSize * 0.44), height: Math.round(actionSize * 0.44), fill: '#fff' }}>
                   <path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8-6.1-3.4-6.1 3.4 1.4-6.8L2.2 9.1l6.9-.8L12 2z" />
                 </svg>
               </span>
-              <small style={{ fontSize: actionSmall, color: '#101217' }}>Super Like</small>
+              <small style={{ fontSize: actionSmall, color: '#5D616A', fontWeight: 600 }}>Super Like</small>
             </button>
 
-            <button onClick={handleMessage} className="lift" aria-label="Message" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#101217' }}>
-              <span style={{ width: actionSize, height: actionSize, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff', color: '#171a1e' }}>
-                <svg viewBox="0 0 48 48" style={{ width: Math.round(actionSize * 0.64), height: Math.round(actionSize * 0.64), fill: '#171a1e', stroke: '#fff', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' }}>
+            <button onClick={handleMessage} className="lift" aria-label="Message" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#5D616A' }}>
+              <span style={{ width: actionSize, height: actionSize, border: '1px solid #EBEBEE', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff', color: '#111111' }}>
+                <svg viewBox="0 0 48 48" style={{ width: Math.round(actionSize * 0.64), height: Math.round(actionSize * 0.64), fill: '#111111', stroke: '#fff', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' }}>
                   <path d="M6 21a14 14 0 1 1 6 11.6L4 36l2.2-8.2A13.9 13.9 0 0 1 6 21Z" />
                 </svg>
               </span>
-              <small style={{ fontSize: actionSmall, color: '#101217' }}>Message</small>
+              <small style={{ fontSize: actionSmall, color: '#5D616A', fontWeight: 600 }}>Message</small>
             </button>
           </div>
 

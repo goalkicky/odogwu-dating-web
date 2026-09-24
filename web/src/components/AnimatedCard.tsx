@@ -126,10 +126,10 @@ export default function AnimatedCard({
         width: width || '100%',
         height: height || 'auto',
         position: 'relative',
-        borderRadius: 20,
+        borderRadius: 16,
         backgroundColor: '#fff',
         overflow: 'hidden',
-        border: '1px solid #e4e4e6',
+        border: '1px solid #EBEBEE',
         boxShadow: '0 4px 16px rgba(0,0,0,0.09)',
         transform: `translate(${offset.x}px, ${offset.y}px) rotate(${rotation}deg)`,
         transition: isDragging ? 'none' : 'transform 0.3s ease',
@@ -142,7 +142,7 @@ export default function AnimatedCard({
         .dc-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 44%; display: block; }
         .dc-shade { position: absolute; left: 0; right: 0; bottom: 0; height: 320px; z-index: 1; pointer-events: none; background: radial-gradient(140% 120% at 0% 100%, rgba(255,255,255,1) 18%, rgba(255,255,255,0.9) 42%, rgba(255,255,255,0.35) 62%, rgba(255,255,255,0) 78%), linear-gradient(to top, #ffffff 26%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0.4) 74%, rgba(255,255,255,0) 100%); }
         .dc-pill { position: absolute; top: 27px; z-index: 2; padding: 8px 13px; border-radius: 28px; color: #fff; font-size: 14px; font-weight: 600; display: flex; gap: 6px; align-items: center; }
-        .dc-pill-left { left: 24px; background: #f62a65; } .dc-pill-left span { font-size: 16px; line-height: 1; }
+        .dc-pill-left { left: 24px; background: #E50046; } .dc-pill-left span { font-size: 16px; line-height: 1; }
         .dc-pill-right { right: 24px; background: rgba(30,35,40,.88); }
         .dc-pill-check { width: 18px; height: 18px; background: #fff; color: #20252a; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; }
         .dc-blocks { position: absolute; top: 42px; left: 136px; right: 136px; z-index: 3; display: flex; gap: 5px; }
@@ -151,17 +151,17 @@ export default function AnimatedCard({
         .dc-carve { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 8px; text-shadow: 0 2px 10px rgba(255,255,255,0.85), 0 1px 3px rgba(255,255,255,0.9); }
         .dc-carve .dc-name { display: flex; align-items: center; gap: 6px; }
         .dc-carve .dc-name h2 { font-size: 20px; letter-spacing: -0.5px; margin: 0; color: #101217; line-height: 1.15; font-weight: 700; }
-        .dc-carve .dc-verified { width: 20px; height: 20px; border-radius: 50%; background: #f52261; color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+        .dc-carve .dc-verified { width: 20px; height: 20px; border-radius: 50%; background: #E50046; color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
         .dc-carve .dc-location { display: flex; align-items: center; gap: 5px; color: #666; font-size: 13px; margin: 5px 0 0; flex-wrap: wrap; }
         .dc-carve .dc-location svg { width: 15px; height: 15px; }
         .dc-carve .dc-location b { font-size: 12px; }
         .dc-location svg { width: 21px; height: 21px; fill: none; stroke: #72767b; stroke-width: 2; flex-shrink: 0; }
         .dc-location b { font-size: 15px; color: #8a8a8a; }
         .dc-bio { font-size: 11px; line-height: 1.45; margin: 0 0 25px; color: #101217; font-weight: 600; display: flex; align-items: flex-start; gap: 8px; }
-        .dc-bio em { flex-shrink: 0; color: #f43a68; font-size: 25pt; line-height: 1; font-weight: 800; font-style: normal; }
+        .dc-bio em { flex-shrink: 0; color: #E50046; font-size: 25pt; line-height: 1; font-weight: 800; font-style: normal; }
         .dc-int-h { font-size: 13px; margin: 0 0 8px; color: #101217; font-weight: 700; }
         .dc-interests { display: flex; flex-wrap: wrap; gap: 6px 4px; padding-bottom: 8px; }
-        .dc-chip { height: 26px; border: 1px solid #e5e6e9; border-radius: 14px; padding: 0 7px; display: flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: #101217; box-shadow: 0 1px 3px rgba(0,0,0,.03); white-space: nowrap; }
+        .dc-chip { height: 26px; border: 1px solid #EBEBEE; border-radius: 14px; padding: 0 7px; display: flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: #111111; box-shadow: 0 1px 3px rgba(0,0,0,.03); white-space: nowrap; }
         .dc-chip i { font-style: normal; width: 14px; height: 14px; border-radius: 50%; display: grid; place-items: center; font-size: 9px; flex-shrink: 0; }
         .dc-facts { border-top: 1px solid #ddd; display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 12px 0 14px; }
         .dc-fact { position: relative; padding-left: 43px; min-height: 55px; }
