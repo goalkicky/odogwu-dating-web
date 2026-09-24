@@ -235,8 +235,8 @@ export default function HomePage() {
         .tmpl-profile-card { aspect-ratio: 1.04 / 1; border-radius: 12px; overflow: hidden; position: relative; color: #fff; background: #E8E8E8; cursor: pointer; border: 0; padding: 0; width: 100%; }
         .tmpl-profile-card > img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.85); }
         .tmpl-profile-card:after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0) 45%, rgba(0,0,0,.62)); }
-        .tmpl-profile-card div { position: absolute; left: 8px; right: 8px; bottom: 6px; z-index: 2; font-size: 13px; font-weight: 600; line-height: 17px; text-align: left; }
-        .tmpl-profile-card small { display: block; font-size: 11px; font-weight: 400; line-height: 14px; margin-top: 0; }
+        .tmpl-profile-card div { position: absolute; left: 8px; right: 8px; bottom: 6px; z-index: 2; font-size: 10px; font-weight: 600; line-height: 13px; text-align: left; }
+        .tmpl-profile-card small { display: block; font-size: 9px; font-weight: 400; line-height: 11px; margin-top: 0; }
         .tmpl-profile-card i { position: absolute; right: 8px; top: 8px; width: 8px; height: 8px; background: #16E86D; border-radius: 50%; z-index: 3; }
         .tmpl-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: calc(100% - 16px); max-width: 377px; height: 75px; background: #fff; border: 0; border-top-left-radius: 24px; border-top-right-radius: 24px; box-shadow: 0 -2px 12px rgba(0,0,0,.035); display: grid; grid-template-columns: repeat(5, 1fr); align-items: end; padding: 8px 12px 12px; z-index: 10; box-sizing: border-box; }
         .tmpl-nav-item { height: 60px; color: #89919E; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 12px; font-weight: 500; line-height: 16px; text-decoration: none; background: none; border: 0; padding: 0; cursor: pointer; }
