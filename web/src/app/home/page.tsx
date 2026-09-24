@@ -239,7 +239,7 @@ export default function HomePage() {
         .tmpl-profile-card small { display: block; font-size: 9px; font-weight: 400; line-height: 11px; margin-top: 0; }
         .tmpl-profile-card i { position: absolute; right: 8px; top: 8px; width: 8px; height: 8px; background: #16E86D; border-radius: 50%; z-index: 3; }
         .tmpl-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: calc(100% - 16px); max-width: 377px; height: 75px; background: #fff; border: 0; border-top-left-radius: 24px; border-top-right-radius: 24px; box-shadow: 0 -2px 12px rgba(0,0,0,.035); display: grid; grid-template-columns: repeat(5, 1fr); align-items: end; padding: 8px 12px 12px; z-index: 10; box-sizing: border-box; }
-        .tmpl-nav-item { height: 60px; color: #89919E; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 12px; font-weight: 500; line-height: 16px; text-decoration: none; background: none; border: 0; padding: 0; cursor: pointer; }
+        .tmpl-nav-item { height: 60px; color: #89919E; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 9px; font-weight: 500; line-height: 12px; text-decoration: none; background: none; border: 0; padding: 0; cursor: pointer; }
         .tmpl-nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 1.8; fill: currentColor; }
         .tmpl-nav-item:not(.active) svg { fill: none; }
         .tmpl-nav-item.active { color: #D90540; font-weight: 600; }
