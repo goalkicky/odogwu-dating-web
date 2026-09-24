@@ -192,14 +192,14 @@ export default function HomePage() {
         .tmpl-messages-top { position: relative; width: 27px; height: 27px; background: none; border: 0; cursor: pointer; color: #111; padding: 0; }
         .tmpl-messages-top svg { width: 27px; height: 27px; }
         .tmpl-messages-top em { position: absolute; right: -9px; top: -5px; background: #D90540; color: #fff; min-width: 18px; height: 18px; border-radius: 50%; font-style: normal; font-size: 10px; font-weight: 600; line-height: 18px; display: grid; place-items: center; padding: 0 3px; box-sizing: border-box; }
-        .tmpl-premium { min-height: 42.75px; background: #FCF1F3; border-radius: 11.25px; display: flex; align-items: center; padding: 6px 11.25px; margin-bottom: 20px; box-sizing: border-box; }
+        .tmpl-premium { min-height: 42.75px; background: #FCF1F3; border-radius: 11.25px; display: flex; align-items: center; padding: 6px 11.25px; margin-bottom: 14px; box-sizing: border-box; }
         .tmpl-crown { width: 38px; height: 38px; background: #D90540; color: #FFD21D; border-radius: 50%; display: grid; place-items: center; margin-right: 9px; flex-shrink: 0; }
         .tmpl-crown img { width: 30px; height: 30px; display: block; object-fit: contain; }
         .tmpl-premium-copy { flex: 1; min-width: 0; }
         .tmpl-premium h3 { font-size: 12.75px; margin: 0 0 3px; color: #111; font-weight: 700; letter-spacing: -0.2px; line-height: 15.75px; }
         .tmpl-premium p { font-size: 10px; line-height: 14.25px; color: #586273; margin: 0; font-weight: 400; }
         .tmpl-pink-btn { background: #D90540; color: #fff; border: 0; border-radius: 18px; width: 67px; height: 28px; padding: 2px; font-size: 10.5px; font-weight: 500; line-height: 17px; text-align: center; display: grid; place-items: center; cursor: pointer; white-space: nowrap; margin-left: 7.5px; flex-shrink: 0; box-sizing: border-box; }
-        .tmpl-quick-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 4px 0 24px; }
+        .tmpl-quick-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 4px 0 14px; }
         .tmpl-quick { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; color: #111; background: none; border: 0; cursor: pointer; padding: 0; min-width: 0; }
         .tmpl-round-photo { width: 59px; height: 59px; border-radius: 50%; padding: 3px; box-sizing: border-box; display: block; position: relative; background: #fff; }
         .tmpl-round-photo:not(.location):not(.story) { background: conic-gradient(#E67A00 0 50%, #D90540 50% 100%); }
@@ -211,9 +211,9 @@ export default function HomePage() {
         .tmpl-quick label { font-size: 10.5px; font-weight: 500; margin-top: 7px; color: #111; text-align: center; line-height: 13px; }
         .tmpl-badge, .tmpl-plus { position: absolute; right: -3px; bottom: -3px; background: #D90540; color: #fff; border-radius: 50%; width: 19px; height: 19px; display: grid; place-items: center; font-size: 10px; font-weight: 600; z-index: 3; border: 2px solid #fff; line-height: 1; padding: 0; box-sizing: border-box; }
         .tmpl-plus { font-size: 15px; font-weight: 500; }
-.tmpl-section h2 { font-size: 15px; margin: 0 0 8px; font-weight: 700; color: #111; letter-spacing: -0.25px; line-height: 24px; }
+.tmpl-section h2 { font-size: 15px; margin: 0 0 6px; font-weight: 700; color: #111; letter-spacing: -0.25px; line-height: 24px; }
 .tmpl-section h2 span { font-size: 19px; }
-.tmpl-section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.tmpl-section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
 .tmpl-section-head h2 { margin-bottom: 0; }
 .tmpl-see-more { background: none; border: none; padding: 0; font-size: 14px; font-weight: 600; color: #D90540; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
         .tmpl-stories { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
@@ -227,7 +227,7 @@ export default function HomePage() {
         .tmpl-story-user div { font-size: 9px; font-weight: 600; line-height: 10.5px; }
         .tmpl-story-user small { display: block; font-size: 7.5px; font-weight: 400; line-height: 9.75px; margin-top: 1px; }
         .tmpl-story-card p { position: absolute; left: 5.25px; bottom: 5.25px; font-size: 9px; font-weight: 500; line-height: 10.5px; margin: 0; max-width: calc(100% - 10.5px); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        .tmpl-love-banner { height: 68px; border-radius: 16px; background: #FCF1F3; margin: 24px 0 20px; display: flex; align-items: center; padding: 10px 12px; gap: 10px; box-sizing: border-box; }
+        .tmpl-love-banner { height: 68px; border-radius: 16px; background: #FCF1F3; margin: 14px 0; display: flex; align-items: center; padding: 10px 12px; gap: 10px; box-sizing: border-box; }
         .tmpl-hearts { width: 46.5px; height: 36.75px; flex-shrink: 0; display: grid; place-items: center; }
         .tmpl-hearts svg { width: 100%; height: 100%; display: block; }
         .tmpl-hearts img { width: 100%; height: 100%; object-fit: contain; display: block; }
