@@ -176,11 +176,8 @@ export default function HomePage() {
         .tmpl-icon-btn { color: #111; background: none; border: 0; cursor: pointer; padding: 0; display: grid; place-items: center; }
         .tmpl-menu { width: 20px; }
         .tmpl-menu span { display: block; width: 20px; height: 2px; background: #111; margin: 6px 0; border-radius: 2px; }
-        .tmpl-wordmark { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; }
-        .tmpl-wordmark-name { font-size: 27px; font-weight: 800; line-height: 30px; letter-spacing: -0.5px; color: #D90540; }
-        .tmpl-wordmark-sub { font-size: 10px; font-weight: 500; letter-spacing: 4.2px; color: #1A1A1A; line-height: 12px; text-align: center; margin-top: 2px; }
-        .tmpl-wordmark-sub b { color: #D90540; font-weight: 400; letter-spacing: 0; margin: 0 4px; }
-        .tmpl-wordmark-sub span { color: #D90540; }
+        .tmpl-wordmark { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; display: flex; align-items: center; justify-content: center; }
+        .tmpl-wordmark img { height: 38px; width: auto; max-width: 220px; object-fit: contain; display: block; }
         .tmpl-brand { display: flex; align-items: center; gap: 9px; }
         .tmpl-brand-mark { width: 66px; height: 66px; border: 7px solid #cf0a13; border-radius: 50%; position: relative; flex-shrink: 0; box-sizing: border-box; object-fit: cover; display: block; }
         .tmpl-brand-mark:before { content: ""; position: absolute; width: 18px; height: 18px; border: 6px solid #fff; border-radius: 50%; background: #cf0a13; left: -5px; top: -5px; box-sizing: border-box; }
@@ -376,8 +373,7 @@ export default function HomePage() {
               <span></span><span></span><span></span>
             </button>
             <div className="tmpl-wordmark">
-              <div className="tmpl-wordmark-name">DOGWU</div>
-              <div className="tmpl-wordmark-sub"><b>—</b> D A T <span>♥</span> I N G <b>—</b></div>
+              <img className="tmpl-wordmark-img" src="/h-logo.png" alt="Odogwu" decoding="async" />
             </div>
             <button className="tmpl-messages-top tmpl-icon-btn" aria-label="Messages" onClick={() => go('/matches')}>
               <svg viewBox="0 0 48 48" aria-hidden="true">
