@@ -519,7 +519,7 @@ export default function HomePage() {
             <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none"/><path d="m19 29 4-10 9-4-4 9-9 5Z"/></svg><span>Explore</span>
           </Link>
           <Link href="/discover" className="tmpl-nav-center" aria-label="Discover">
-                <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 27C16 27 5 20 5 12.5 5 9 7.8 6 11.2 6c2.2 0 4 1.3 4.8 3.1C16.8 7.3 18.6 6 20.8 6 24.2 6 27 9 27 12.5 27 20 16 27 16 27Z" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinejoin="round" strokeLinecap="round"/></svg>
+                <img src="/c-logo.png" alt="" width={30} height={30} decoding="async" />
               </Link>
           <Link href="/matches" className="tmpl-nav-item">
             <span className="tmpl-nav-icon-wrap"><svg viewBox="0 0 48 48"><path d="M9 34l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/><circle cx="19" cy="22" r="2"/><circle cx="25" cy="22" r="2"/><circle cx="31" cy="22" r="2"/></svg><b>{messagesCount || 0}</b></span><span>Messages</span>
