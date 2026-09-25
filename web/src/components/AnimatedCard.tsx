@@ -140,7 +140,7 @@ export default function AnimatedCard({
       <style jsx>{`
         .dc-photo { width: 100%; height: 560px; position: relative; background: #eee; overflow: hidden; }
         .dc-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 44%; display: block; }
-        .dc-shade { position: absolute; left: 0; right: 0; bottom: 0; height: 320px; z-index: 1; pointer-events: none; background: radial-gradient(140% 120% at 0% 100%, rgba(255,255,255,1) 18%, rgba(255,255,255,0.9) 42%, rgba(255,255,255,0.35) 62%, rgba(255,255,255,0) 78%), linear-gradient(to top, #ffffff 26%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0.4) 74%, rgba(255,255,255,0) 100%); }
+        .dc-shade { position: absolute; left: 0; right: 0; bottom: 0; height: 260px; z-index: 1; pointer-events: none; background: radial-gradient(120% 110% at 0% 100%, rgba(255,255,255,1) 12%, rgba(255,255,255,0.85) 30%, rgba(255,255,255,0.25) 48%, rgba(255,255,255,0) 62%), linear-gradient(to top, #ffffff 10%, rgba(255,255,255,0.96) 22%, rgba(255,255,255,0.5) 42%, rgba(255,255,255,0) 58%); }
         .dc-pill { position: absolute; top: 27px; z-index: 2; padding: 8px 13px; border-radius: 28px; color: #fff; font-size: 14px; font-weight: 600; display: flex; gap: 6px; align-items: center; }
         .dc-pill-left { left: 24px; background: #f62a65; } .dc-pill-left span { font-size: 16px; line-height: 1; }
         .dc-pill-right { right: 24px; background: rgba(30,35,40,.88); }
@@ -176,7 +176,7 @@ export default function AnimatedCard({
           .dc-photo { height: auto; flex: 1 1 0%; min-height: 56px; }
           .dc-pill { font-size: 13px; padding: 7px 11px; }
           .dc-content { margin-top: -110px; padding: 0 18px; }
-          .dc-shade { height: 250px; }
+          .dc-shade { height: 210px; }
           .dc-carve { margin-bottom: 6px; }
           .dc-carve .dc-name h2 { font-size: 18px; }
           .dc-carve .dc-location { font-size: 12px; }
