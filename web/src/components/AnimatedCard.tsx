@@ -126,11 +126,11 @@ export default function AnimatedCard({
         width: width || '100%',
         height: height || 'auto',
         position: 'relative',
-        borderRadius: 16,
+        borderRadius: 20,
         backgroundColor: '#fff',
         overflow: 'hidden',
-        border: '1px solid #F1F1F2',
-        boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+        border: '1px solid #e4e4e6',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.09)',
         transform: `translate(${offset.x}px, ${offset.y}px) rotate(${rotation}deg)`,
         transition: isDragging ? 'none' : 'transform 0.3s ease',
         cursor: 'grab',
@@ -138,62 +138,77 @@ export default function AnimatedCard({
       }}
     >
       <style jsx>{`
-        .dc-photo { width: 100%; height: 372px; position: relative; background: #eee; overflow: hidden; border-top-left-radius: 15px; border-top-right-radius: 15px; }
-        .dc-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
-        .dc-shade { position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 1; pointer-events: none; background: linear-gradient(to bottom, rgba(255,255,255,0) 52%, rgba(255,255,255,0.55) 67%, #FFFFFF 80%); }
-        .dc-pill { position: absolute; top: 27px; z-index: 2; padding: 5px 10px; border-radius: 999px; color: #fff; font-size: 11.5px; font-weight: 500; display: flex; gap: 6px; align-items: center; line-height: 15px; }
-        .dc-pill-left { left: 24px; background: linear-gradient(135deg, #F50B66, #D90540); } .dc-pill-left span { font-size: 12px; line-height: 1; }
-        .dc-pill-right { right: 14px; background: rgba(18,18,18,0.78); }
-        .dc-pill-check { width: 13.5px; height: 13.5px; background: #fff; color: #555555; border-radius: 50%; display: grid; place-items: center; font-size: 8.5px; font-weight: 800; }
-        .dc-blocks { position: absolute; top: 33px; left: 50%; transform: translateX(-50%); z-index: 3; display: flex; gap: 5px; }
-        .dc-block { flex: 0 0 20px; width: 20px; height: 3px; border-radius: 999px; }
-        .dc-content { position: relative; z-index: 1; background: #fff; margin-top: -14px; padding: 0 22px; }
-        .dc-carve { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 10px; }
-        .dc-carve .dc-name { display: flex; align-items: center; gap: 5px; }
-        .dc-carve .dc-name h2 { font-size: 22px; letter-spacing: -0.4px; margin: 0; color: #111111; line-height: 28px; font-weight: 700; }
-        .dc-carve .dc-verified { width: 18px; height: 18px; border-radius: 50%; background: #E50046; color: #fff; display: grid; place-items: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
-        .dc-carve .dc-location { display: flex; align-items: center; gap: 6px; color: #656A72; font-size: 13.5px; margin: 5px 0 0; flex-wrap: wrap; line-height: 19px; font-weight: 400; }
+        .dc-photo { width: 100%; height: 560px; position: relative; background: #eee; overflow: hidden; }
+        .dc-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 44%; display: block; }
+        .dc-shade { position: absolute; left: 0; right: 0; bottom: 0; height: 320px; z-index: 1; pointer-events: none; background: radial-gradient(140% 120% at 0% 100%, rgba(255,255,255,1) 18%, rgba(255,255,255,0.9) 42%, rgba(255,255,255,0.35) 62%, rgba(255,255,255,0) 78%), linear-gradient(to top, #ffffff 26%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0.4) 74%, rgba(255,255,255,0) 100%); }
+        .dc-pill { position: absolute; top: 27px; z-index: 2; padding: 8px 13px; border-radius: 28px; color: #fff; font-size: 14px; font-weight: 600; display: flex; gap: 6px; align-items: center; }
+        .dc-pill-left { left: 24px; background: #f62a65; } .dc-pill-left span { font-size: 16px; line-height: 1; }
+        .dc-pill-right { right: 24px; background: rgba(30,35,40,.88); }
+        .dc-pill-check { width: 18px; height: 18px; background: #fff; color: #20252a; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; }
+        .dc-blocks { position: absolute; top: 42px; left: 136px; right: 136px; z-index: 3; display: flex; gap: 5px; }
+        .dc-block { flex: 1; height: 3px; border-radius: 2px; }
+        .dc-content { position: relative; z-index: 1; background: transparent; margin-top: -150px; padding: 0 20px; }
+        .dc-carve { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 8px; text-shadow: 0 2px 10px rgba(255,255,255,0.85), 0 1px 3px rgba(255,255,255,0.9); }
+        .dc-carve .dc-name { display: flex; align-items: center; gap: 6px; }
+        .dc-carve .dc-name h2 { font-size: 20px; letter-spacing: -0.5px; margin: 0; color: #101217; line-height: 1.15; font-weight: 700; }
+        .dc-carve .dc-verified { width: 20px; height: 20px; border-radius: 50%; background: #f52261; color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+        .dc-carve .dc-location { display: flex; align-items: center; gap: 5px; color: #666; font-size: 13px; margin: 5px 0 0; flex-wrap: wrap; }
         .dc-carve .dc-location svg { width: 15px; height: 15px; }
         .dc-carve .dc-location b { font-size: 12px; }
-        .dc-location svg { width: 15px; height: 15px; fill: none; stroke: #6C7077; stroke-width: 1.8; flex-shrink: 0; }
-        .dc-location b { font-size: 15px; color: #6A6A6A; }
-        .dc-bio { font-size: 14px; line-height: 20px; margin: 13px 0 14px; color: #111111; font-weight: 400; display: flex; align-items: flex-start; gap: 8px; }
-        .dc-bio em { flex-shrink: 0; color: #E50046; font-size: 21px; line-height: 1; font-weight: 700; font-style: normal; width: 18px; }
-        .dc-int-h { font-size: 14px; margin: 0 0 10px; color: #171717; font-weight: 600; line-height: 20px; }
-        .dc-interests { display: flex; flex-wrap: wrap; gap: 7px 5px; padding-bottom: 8px; }
-        .dc-chip { height: 29px; border: 1px solid #EBEBEE; border-radius: 999px; padding: 0 11px; display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 500; color: #111111; background: #fff; white-space: nowrap; box-sizing: border-box; }
-        .dc-chip i { font-style: normal; width: 17px; height: 17px; border-radius: 50%; display: grid; place-items: center; font-size: 10px; flex-shrink: 0; }
-        .dc-facts { border-top: 1px solid #EFEFF1; display: grid; grid-template-columns: 1fr 1fr 1fr; margin-top: 12px; padding: 12px 0 5px; }
-        .dc-fact { display: flex; flex-direction: column; align-items: center; text-align: center; min-height: 38px; justify-content: center; }
-        .dc-fact + .dc-fact { border-left: 1px solid #EEEEEF; }
-        .dc-fact small { display: block; color: #858991; font-size: 12px; line-height: 16px; margin-bottom: 1px; }
-        .dc-fact strong { display: block; font-size: 14px; font-weight: 600; color: #111111; line-height: 18px; white-space: normal; }
+        .dc-location svg { width: 21px; height: 21px; fill: none; stroke: #72767b; stroke-width: 2; flex-shrink: 0; }
+        .dc-location b { font-size: 15px; color: #8a8a8a; }
+        .dc-bio { font-size: 11px; line-height: 1.45; margin: 0 0 25px; color: #101217; font-weight: 600; display: flex; align-items: flex-start; gap: 8px; }
+        .dc-bio em { flex-shrink: 0; color: #f43a68; font-size: 25pt; line-height: 1; font-weight: 800; font-style: normal; }
+        .dc-int-h { font-size: 13px; margin: 0 0 8px; color: #101217; font-weight: 700; }
+        .dc-interests { display: flex; flex-wrap: wrap; gap: 6px 4px; padding-bottom: 8px; }
+        .dc-chip { height: 26px; border: 1px solid #e5e6e9; border-radius: 14px; padding: 0 7px; display: flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: #101217; box-shadow: 0 1px 3px rgba(0,0,0,.03); white-space: nowrap; }
+        .dc-chip i { font-style: normal; width: 14px; height: 14px; border-radius: 50%; display: grid; place-items: center; font-size: 9px; flex-shrink: 0; }
+        .dc-facts { border-top: 1px solid #ddd; display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 12px 0 14px; }
+        .dc-fact { position: relative; padding-left: 43px; min-height: 55px; }
+        .dc-fact + .dc-fact { border-left: 1px solid #ddd; padding-left: 55px; }
+        .dc-fick { position: absolute; left: 8px; top: 4px; font-size: 24px; }
+        .dc-fact + .dc-fact .dc-fick { left: 20px; }
+        .dc-fact small { display: block; color: #8b8d92; font-size: 14px; margin-bottom: 4px; }
+        .dc-fact strong { display: block; font-size: 15px; font-weight: 500; color: #101217; white-space: nowrap; }
 
         @media (max-width: 700px) {
           .dc-card { display: flex; flex-direction: column; }
-          .dc-photo { height: 372px; flex: 0 0 auto; min-height: 0; }
-          .dc-pill { font-size: 11px; padding: 4px 9px; }
-          .dc-content { margin-top: -26px; padding: 0 18px; }
-          .dc-carve { margin-bottom: 8px; }
-          .dc-carve .dc-name h2 { font-size: 20px; line-height: 26px; }
-          .dc-carve .dc-location { font-size: 12.5px; }
-          .dc-bio { font-size: 13px; line-height: 19px; gap: 7px; align-items: flex-start; margin-bottom: 12px; }
-          .dc-chip { font-size: 11px; height: 27px; padding: 0 10px; }
-          .dc-interests { gap: 6px 5px; max-height: none; overflow: visible; }
-          .dc-fact small { font-size: 11px; } .dc-fact strong { font-size: 12px; white-space: normal; }
+          .dc-photo { height: auto; flex: 1 1 0%; min-height: 56px; }
+          .dc-pill { font-size: 13px; padding: 7px 11px; }
+          .dc-content { margin-top: -110px; padding: 0 18px; }
+          .dc-shade { height: 250px; }
+          .dc-carve { margin-bottom: 6px; }
+          .dc-carve .dc-name h2 { font-size: 18px; }
+          .dc-carve .dc-location { font-size: 12px; }
+          .dc-bio { font-size: 11px; gap: 6px; align-items: flex-start; margin-bottom: 12px; }
+          .dc-chip { font-size: 10px; height: 24px; padding: 0 6px; }
+          .dc-interests { gap: 5px 3px; max-height: none; overflow: visible; }
+          .dc-facts { padding-top: 8px; }
+          .dc-fact { min-height: 40px; }
+          .dc-fact { padding-left: 32px; } .dc-fact + .dc-fact { padding-left: 35px; }
+          .dc-fick { left: 0; font-size: 20px; } .dc-fact + .dc-fact .dc-fick { left: 5px; }
+          .dc-fact small { font-size: 12px; } .dc-fact strong { font-size: 12px; white-space: normal; }
         }
         @media (max-width: 390px) {
-          .dc-photo { height: 330px; }
-          .dc-interests { gap: 6px 4px; } .dc-chip { padding: 0 10px; font-size: 11px; }
-          .dc-int-h { font-size: 13px; }
+          .dc-photo { min-height: 50px; }
+          .dc-interests { gap: 5px 3px; } .dc-chip { padding: 0 6px; font-size: 10px; }
+          .dc-int-h { font-size: 12px; }
           .dc-fact strong { font-size: 11px; } .dc-fact small { font-size: 11px; }
         }
         @media (min-width: 1100px) {
-          .dc-photo { height: 372px; }
+          .dc-photo { height: 610px; }
         }
       `}</style>
 
-      <div className="dc-photo">
+      <svg width="0" height="0" aria-hidden="true" style={{ position: 'absolute' }}>
+        <defs>
+          <clipPath id="dc-u-arc" clipPathUnits="objectBoundingBox">
+            <path d="M0,0 L1,0 L1,0.85 Q0.5,1.14 0,0.85 Z" />
+          </clipPath>
+        </defs>
+      </svg>
+
+      <div className="dc-photo" style={{ clipPath: 'url(#dc-u-arc)' }}>
         <img src={photoUri} alt={user.fullName} draggable={false} loading={isFirst ? 'eager' : 'lazy'} decoding="async" fetchPriority={isFirst ? 'high' : 'low'} />
         <div className="dc-shade" />
 
@@ -215,7 +230,7 @@ export default function AnimatedCard({
                   border: 'none',
                   cursor: 'pointer',
                   padding: 0,
-                  background: i === currentPhotoIndex ? '#fff' : 'rgba(255,255,255,0.55)',
+                  background: i === currentPhotoIndex ? '#fff' : 'rgba(255,255,255,0.45)',
                   boxShadow: i === currentPhotoIndex ? '0 0 8px rgba(255,255,255,0.8)' : 'none',
                   transition: 'all 0.2s ease',
                 }}
