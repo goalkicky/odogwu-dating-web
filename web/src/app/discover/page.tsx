@@ -209,18 +209,24 @@ export default function DiscoverPage() {
   const actionSmall = isTiny ? 11 : isMobile ? 12 : 18;
 
   const discoverHeader = (
-    <header className="uv-topbar" style={{ padding: '2px 0 6px' }}>
-      <img className="uv-brand-logo" src="/o-logo.png" alt="Odogwu" style={{ justifySelf: 'start', height: 28 }} width={28} height={28} decoding="async" />
-      <h1 style={{ fontSize: 17, fontWeight: 800, color: '#000', margin: 0, letterSpacing: -0.5, textAlign: 'center' }}>Discover</h1>
-      <button
-        onClick={() => setShowFilters(true)}
-        aria-label="Filter preferences"
-        style={{
-          width: 34, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center',
-          background: 'none', border: 0, cursor: 'pointer', color: '#17191d', justifySelf: 'end',
-        }}
-      >
-        <FilterIcon size={18} color="#17191d" />
+    <header className="uv-topbar" style={{ position: 'relative', height: 57, padding: '0 0 8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+        <svg width={26} height={26} viewBox="0 0 48 48" aria-hidden="true">
+          <circle cx="24" cy="24" r="20" fill="none" stroke="#E50046" strokeWidth="4.5" />
+          <circle cx="24" cy="24" r="9" fill="#E50046" />
+        </svg>
+        <div>
+          <div style={{ fontSize: 21, fontWeight: 800, lineHeight: 24, letterSpacing: -0.5, color: '#E50046', whiteSpace: 'nowrap' }}>DOGWU</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 1 }}>
+            <span style={{ width: 9, height: 1, background: '#E50046' }} />
+            <span style={{ fontSize: 7.5, fontWeight: 600, letterSpacing: 3, color: '#252525', lineHeight: 10, whiteSpace: 'nowrap' }}>DATING</span>
+            <span style={{ width: 9, height: 1, background: '#E50046' }} />
+          </div>
+        </div>
+      </div>
+      <h1 style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 20, fontWeight: 600, color: '#111111', lineHeight: 24, letterSpacing: -0.2, margin: 0, textAlign: 'center' }}>Discover</h1>
+      <button onClick={() => setShowFilters(true)} aria-label="Filter preferences" style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 0, cursor: 'pointer', color: '#111111' }}>
+        <FilterIcon size={24} color="#111111" />
       </button>
     </header>
   );
