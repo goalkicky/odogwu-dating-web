@@ -13,6 +13,10 @@ interface UserCard {
   gender?: string;
   interests?: string[];
   verified?: boolean;
+  education?: string;
+  institution?: string;
+  occupation?: string;
+  relationshipGoals?: string;
 }
 
 interface AnimatedCardProps {
@@ -109,7 +113,6 @@ export default function AnimatedCard({
   const superLikeOpacity = Math.min(Math.max(-offset.y / 150, 0), 1);
 
   const photoUri = user.photos?.[currentPhotoIndex] || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400';
-  const genderLabel = user.gender ? user.gender[0].toUpperCase() + user.gender.slice(1) : '';
 
   return (
     <div
@@ -277,9 +280,9 @@ export default function AnimatedCard({
         )}
 
         <div className="dc-facts">
-          <div className="dc-fact"><span className="dc-fick">🎓</span><small>Age</small><strong>{user.age || '—'}</strong></div>
-          <div className="dc-fact"><span className="dc-fick">📍</span><small>Distance</small><strong>{typeof user.distanceKm === 'number' ? `${user.distanceKm} km` : (user.city || 'Nearby')}</strong></div>
-          <div className="dc-fact"><span className="dc-fick">♥</span><small>Gender</small><strong>{genderLabel || '—'}</strong></div>
+          <div className="dc-fact"><span className="dc-fick">🎓</span><small>Education</small><strong>{user.education || user.institution || '—'}</strong></div>
+          <div className="dc-fact"><span className="dc-fick">💼</span><small>Occupation</small><strong>{user.occupation || '—'}</strong></div>
+          <div className="dc-fact"><span className="dc-fick">♥</span><small>Looking for</small><strong>{user.relationshipGoals || '—'}</strong></div>
         </div>
       </div>
 
