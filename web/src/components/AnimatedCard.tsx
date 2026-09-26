@@ -170,6 +170,7 @@ export default function AnimatedCard({
         .dc-fact { position: relative; padding-left: 43px; min-height: 55px; }
         .dc-fact + .dc-fact { border-left: 1px solid #ddd; padding-left: 55px; }
         .dc-fick { position: absolute; left: 8px; top: 4px; font-size: 24px; }
+        .dc-fick svg { width: 22px; height: 22px; fill: #E50046; display: block; }
         .dc-fact + .dc-fact .dc-fick { left: 20px; }
         .dc-fact small { display: block; color: #8b8d92; font-size: 14px; margin-bottom: 4px; }
         .dc-fact strong { display: block; font-size: 15px; font-weight: 500; color: #101217; white-space: nowrap; }
@@ -280,9 +281,9 @@ export default function AnimatedCard({
         )}
 
         <div className="dc-facts">
-          <div className="dc-fact"><span className="dc-fick">🎓</span><small>Education</small><strong>{user.education || user.institution || '—'}</strong></div>
-          <div className="dc-fact"><span className="dc-fick">💼</span><small>Occupation</small><strong>{user.occupation || '—'}</strong></div>
-          <div className="dc-fact"><span className="dc-fick">♥</span><small>Looking for</small><strong>{user.relationshipGoals || '—'}</strong></div>
+          <div className="dc-fact"><span className="dc-fick"><svg viewBox="0 0 24 24"><path d="M12 3 1 8l11 5 9-4.1V16h2V8L12 3z"/><path d="M5 10.7V16c0 1.1 3.1 2.5 7 2.5s7-1.4 7-2.5v-5.3l-7 3.2-7-3.2z"/></svg></span><small>Education</small><strong>{user.education || user.institution || '—'}</strong></div>
+          <div className="dc-fact"><span className="dc-fick"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M8 7V4h8v3M2 12h20"/></svg></span><small>Occupation</small><strong>{user.occupation || '—'}</strong></div>
+          <div className="dc-fact"><span className="dc-fick"><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.3-7-11a4.5 4.5 0 0 1 7-3.7A4.5 4.5 0 0 1 19 10c0 5.7-7 11-7 11z"/></svg></span><small>Looking for</small><strong>{user.relationshipGoals || '—'}</strong></div>
         </div>
       </div>
 
