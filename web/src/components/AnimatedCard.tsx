@@ -170,7 +170,7 @@ export default function AnimatedCard({
         .dc-fact { position: relative; padding-left: 43px; min-height: 55px; }
         .dc-fact + .dc-fact { border-left: 1px solid #ddd; padding-left: 55px; }
         .dc-fick { position: absolute; left: 8px; top: 4px; font-size: 24px; }
-        .dc-fick svg { width: 22px; height: 22px; fill: #E50046; display: block; }
+        .dc-fick svg { width: 22px; height: 22px; fill: #FF2D68; display: block; }
         .dc-fact + .dc-fact .dc-fick { left: 20px; }
         .dc-fact small { display: block; color: #8b8d92; font-size: 14px; margin-bottom: 4px; }
         .dc-fact strong { display: block; font-size: 15px; font-weight: 500; color: #101217; white-space: nowrap; }
