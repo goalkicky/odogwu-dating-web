@@ -233,7 +233,7 @@ export default function DiscoverPage() {
 
   return (
     <AppShell header={discoverHeader}>
-      <div className="animate-fade-up" style={isMobile ? { paddingTop: 2, height: 'calc(100dvh - 108px)', display: 'flex', flexDirection: 'column', boxSizing: 'border-box' } : { paddingTop: 22 }}>
+      <div className="animate-fade-up" style={isMobile ? { paddingTop: 2, margin: '0 -5px', height: 'calc(100dvh - 108px)', display: 'flex', flexDirection: 'column', boxSizing: 'border-box' } : { paddingTop: 22 }}>
         <div style={{ maxWidth: 760, margin: '0 auto', width: '100%', flex: '1 1 0%', minHeight: 0, display: 'flex', flexDirection: 'column' }}>
           <div style={{ flex: '1 1 0%', minHeight: 0, display: 'flex' }}>
             <AnimatedCard
