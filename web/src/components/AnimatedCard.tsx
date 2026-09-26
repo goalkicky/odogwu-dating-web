@@ -153,7 +153,7 @@ export default function AnimatedCard({
         .dc-content { position: relative; z-index: 1; background: transparent; margin-top: -150px; padding: 0 20px; }
         .dc-carve { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 8px; text-shadow: 0 2px 10px rgba(255,255,255,0.85), 0 1px 3px rgba(255,255,255,0.9); }
         .dc-carve .dc-name { display: flex; align-items: center; gap: 6px; }
-        .dc-carve .dc-name h2 { font-size: 20px; letter-spacing: -0.5px; margin: 0; color: #101217; line-height: 1.15; font-weight: 700; }
+        .dc-carve .dc-name h2 { font-size: 25px; letter-spacing: -0.5px; margin: 0; color: #101217; line-height: 1.15; font-weight: 700; }
         .dc-carve .dc-verified { width: 20px; height: 20px; border-radius: 50%; background: #f52261; color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
         .dc-carve .dc-location { display: flex; align-items: center; gap: 5px; color: #666; font-size: 13px; margin: 5px 0 0; flex-wrap: wrap; }
         .dc-carve .dc-location svg { width: 15px; height: 15px; }
@@ -182,7 +182,7 @@ export default function AnimatedCard({
           .dc-content { margin-top: -110px; padding: 0 18px; }
           .dc-shade { height: 210px; }
           .dc-carve { margin-bottom: 6px; }
-          .dc-carve .dc-name h2 { font-size: 18px; }
+          .dc-carve .dc-name h2 { font-size: 22px; }
           .dc-carve .dc-location { font-size: 12px; }
           .dc-bio { font-size: 11px; gap: 6px; align-items: flex-start; margin-bottom: 12px; }
           .dc-chip { font-size: 10px; height: 24px; padding: 0 6px; }
