@@ -1,10 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Montserrat } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
 });
 
@@ -33,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} h-full antialiased`}>
       <body className="h-full overflow-y-auto flex flex-col">
         <link rel="preload" as="image" href="/o-logo.png" fetchPriority="high" />
         <link rel="preload" as="image" href="/logo-icon.png?v=2" fetchPriority="high" />
