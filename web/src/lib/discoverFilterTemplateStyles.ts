@@ -3,7 +3,7 @@ export const DISCOVER_FILTER_TEMPLATE_CSS = `
 .dpr{
   --pink:#e90052;--pink2:#d90a57;--pink-soft:#fff1f7;--text:#17171a;--muted:#6d6d75;--line:#e9e9ed;--purple:#6718d4;
   min-height:100%;display:flex;justify-content:center;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter",sans-serif;
   color:var(--text);background:#f5f5f7;
 }
 .dpr button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
