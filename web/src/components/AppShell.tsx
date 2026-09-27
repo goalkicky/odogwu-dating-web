@@ -75,7 +75,7 @@ export default function AppShell({ children, header }: { children: React.ReactNo
   return (
     <div className="uv-shell">
       <style jsx global>{`
-        .uv-shell { background: #ececec; min-height: 100svh; color: #111111; font-family: var(--font-montserrat), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Arial, Helvetica, sans-serif; }
+        .uv-shell { background: #ececec; min-height: 100svh; color: #111111; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", var(--font-montserrat), Arial, Helvetica, sans-serif; }
         .uv-shell a { text-decoration: none; }
 
         .uv-brand { display: flex; align-items: center; gap: 9px; }
