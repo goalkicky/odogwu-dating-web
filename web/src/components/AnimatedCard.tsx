@@ -173,7 +173,7 @@ export default function AnimatedCard({
         .dc-fick { position: absolute; left: 8px; top: 4px; font-size: 24px; }
         .dc-fick svg { width: 22px; height: 22px; fill: #FF2D68; display: block; }
         .dc-fact + .dc-fact .dc-fick { left: 20px; }
-        .dc-fact small { display: block; color: #8b8d92; font-size: 7px; font-weight: 600; margin-bottom: 4px; }
+        .dc-fact small { display: block; color: #8b8d92; font-size: 8px; font-weight: 600; margin-bottom: 4px; }
         .dc-fact strong { display: block; font-size: 15px; font-weight: 500; color: #101217; white-space: nowrap; }
 
         @media (max-width: 700px) {
@@ -192,13 +192,13 @@ export default function AnimatedCard({
           .dc-fact { min-height: 40px; }
           .dc-fact { padding-left: 32px; } .dc-fact + .dc-fact { padding-left: 35px; }
           .dc-fick { left: 0; font-size: 20px; } .dc-fact + .dc-fact .dc-fick { left: 5px; }
-          .dc-fact small { font-size: 7px; } .dc-fact strong { font-size: 12px; white-space: normal; }
+          .dc-fact small { font-size: 8px; } .dc-fact strong { font-size: 12px; white-space: normal; }
         }
         @media (max-width: 390px) {
           .dc-photo { min-height: 50px; }
           .dc-interests { gap: 5px 3px; } .dc-chip { padding: 0 6px; font-size: 8px; }
           .dc-int-h { font-size: 12px; }
-          .dc-fact strong { font-size: 11px; } .dc-fact small { font-size: 7px; }
+          .dc-fact strong { font-size: 11px; } .dc-fact small { font-size: 8px; }
         }
         @media (min-width: 1100px) {
           .dc-photo { height: 610px; }
