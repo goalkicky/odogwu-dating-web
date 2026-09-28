@@ -166,7 +166,7 @@ export default function AnimatedCard({
         .dc-int-h { font-size: 13px; margin: 0 0 8px; color: #101217; font-weight: 700; }
         .dc-interests { display: flex; flex-wrap: wrap; gap: 6px 4px; padding-bottom: 8px; }
         .dc-chip { height: 26px; border: 1px solid #e5e6e9; border-radius: 14px; padding: 0 7px; display: flex; align-items: center; gap: 3px; font-size: 8px; font-weight: 700; color: #101217; box-shadow: 0 1px 3px rgba(0,0,0,.03); white-space: nowrap; }
-        .dc-chip i { font-style: normal; width: 14px; height: 14px; border-radius: 50%; display: grid; place-items: center; font-size: 9px; flex-shrink: 0; }
+        .dc-chip i { font-style: normal; font-size: 16px; line-height: 1; flex-shrink: 0; }
         .dc-facts { border-top: 1px solid #ddd; display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 12px 0 14px; }
         .dc-fact { position: relative; padding-left: 43px; min-height: 55px; }
         .dc-fact + .dc-fact { border-left: 1px solid #ddd; padding-left: 55px; }
@@ -272,7 +272,7 @@ export default function AnimatedCard({
                 const cat = interestCategory(it);
                 return (
                   <span key={it} className="dc-chip">
-                    <i style={{ background: cat ? cat.c1 : '#eef0f3', color: cat ? '#fff' : '#999' }}>{cat ? cat.emoji : '✦'}</i>
+                    <i>{cat ? cat.emoji : '✦'}</i>
                     {it}
                   </span>
                 );
