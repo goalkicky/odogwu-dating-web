@@ -186,7 +186,7 @@ export default function AnimatedCard({
           .dc-carve .dc-location { font-size: 10px; }
           .dc-bio { font-size: 11px; gap: 6px; align-items: flex-start; margin-bottom: 6px; max-height: 32px; overflow: hidden; }
           .dc-chip { font-size: 8px; height: 24px; padding: 0 6px; }
-          .dc-interests { gap: 5px 3px; max-height: 83px; overflow: hidden; }
+          .dc-interests { gap: 5px 3px; max-height: 89px; padding-bottom: 6px; overflow: hidden; }
           .dc-facts { padding-top: 4px; }
           .dc-fact { min-height: 32px; }
           .dc-fact { padding-left: 28px; } .dc-fact + .dc-fact { padding-left: 30px; }
@@ -195,7 +195,7 @@ export default function AnimatedCard({
         }
         @media (max-width: 390px) {
           .dc-photo { min-height: 50px; }
-          .dc-interests { gap: 5px 3px; max-height: 83px; } .dc-chip { padding: 0 6px; font-size: 8px; }
+          .dc-interests { gap: 5px 3px; max-height: 89px; padding-bottom: 6px; } .dc-chip { padding: 0 6px; font-size: 8px; }
           .dc-int-h { font-size: 12px; margin-bottom: 4px; }
           .dc-carve .dc-name h2 { font-size: 25px; }
           .dc-fact { min-height: 30px; } .dc-fact strong { font-size: 10px; } .dc-fact small { font-size: 8px; }
