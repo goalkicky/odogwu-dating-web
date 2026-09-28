@@ -33,6 +33,21 @@ img[src*=".gif"] {
   -webkit-filter: none;
 }
 
+/* Discover card: white fade over photo (bottom-left, stops around center) */
+.dc-shade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 260px;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(60% 110% at 0% 100%, rgba(255,255,255,1) 12%, rgba(255,255,255,0.85) 30%, rgba(255,255,255,0.25) 48%, rgba(255,255,255,0) 62%), linear-gradient(to top, #ffffff 10%, rgba(255,255,255,0.96) 22%, rgba(255,255,255,0.5) 42%, rgba(255,255,255,0) 58%);
+}
+@media (max-width: 700px) {
+  .dc-shade { height: 210px; }
+}
+
 :root {
   --background: #04040A;
   --foreground: #FFFFFF;

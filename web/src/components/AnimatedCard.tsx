@@ -144,7 +144,7 @@ export default function AnimatedCard({
         .dc-card { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", var(--font-montserrat), sans-serif; }
         .dc-photo { width: 100%; height: 560px; position: relative; background: #eee; overflow: hidden; }
         .dc-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 44%; display: block; }
-        .dc-shade { position: absolute; left: 0; right: 0; bottom: 0; height: 260px; z-index: 1; pointer-events: none; background: radial-gradient(60% 110% at 0% 100%, rgba(255,255,255,1) 12%, rgba(255,255,255,0.85) 30%, rgba(255,255,255,0.25) 48%, rgba(255,255,255,0) 62%), linear-gradient(to top, #ffffff 10%, rgba(255,255,255,0.96) 22%, rgba(255,255,255,0.5) 42%, rgba(255,255,255,0) 58%); }
+        
         .dc-pill { position: absolute; top: 16px; z-index: 2; border-radius: 999px; color: #fff; display: flex; gap: 5px; align-items: center; }
         .dc-pill-left { left: 24px; padding: 4px 10px; background: linear-gradient(135deg, #F50B66, #D90540); font-size: 11.5px; font-weight: 500; line-height: 15px; } .dc-pill-left span { font-size: 12px; line-height: 1; }
         .dc-pill-right { right: 24px; top: 27px; padding: 8px 13px; font-size: 14px; font-weight: 600; background: rgba(30,35,40,.88); }
@@ -181,7 +181,6 @@ export default function AnimatedCard({
           .dc-photo { height: auto; flex: 1 1 0%; min-height: 56px; }
           .dc-pill-left { font-size: 11px; padding: 3px 9px; }
           .dc-content { margin-top: -110px; padding: 0 18px; }
-          .dc-shade { height: 210px; }
           .dc-carve { margin-bottom: 6px; }
           .dc-carve .dc-name h2 { font-size: 28px; }
           .dc-carve .dc-location { font-size: 10px; }
