@@ -1,5 +1,6 @@
 'use client';
 export const dynamic = 'force-dynamic';
+import './dc-shade-override.css';
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { FilterIcon } from '@/components/Icons';
