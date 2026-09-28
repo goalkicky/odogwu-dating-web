@@ -206,7 +206,7 @@ export default function DiscoverPage() {
   const actionGap = isTiny ? 14 : isMobile ? 20 : 74;
   const actionFont = isTiny ? 36 : isMobile ? 40 : 57;
   const likeFont = isTiny ? 28 : isMobile ? 34 : 47;
-  const actionSmall = isTiny ? 11 : isMobile ? 12 : 18;
+  const actionSmall = isTiny ? 9 : isMobile ? 10 : 12;
 
   const discoverHeader = (
     <header className="uv-topbar" style={{ position: 'relative', height: 57, padding: '0 0 8px' }}>
@@ -251,12 +251,12 @@ export default function DiscoverPage() {
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: actionGap, padding: isMobile ? '10px 0 4px' : '38px 0 25px' }}>
             <button onClick={handleSwipeLeft} aria-label="Pass" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#101217', outline: 'none', WebkitTapHighlightColor: 'transparent' }}>
               <span style={{ width: actionSize, height: actionSize, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff', fontSize: actionFont, fontWeight: 300, color: '#101217' }}>×</span>
-              <small style={{ fontSize: actionSmall, color: '#101217' }}>Pass</small>
+              <small style={{ fontSize: actionSmall, fontWeight: 700, color: '#000' }}>Pass</small>
             </button>
 
             <button onClick={handleSwipeRight} aria-label="Like" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#101217', outline: 'none', WebkitTapHighlightColor: 'transparent' }}>
               <span style={{ width: actionSize, height: actionSize, borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 6px 18px rgba(255,45,104,0.35)', background: '#ff2d68', color: '#fff', fontSize: likeFont, fontWeight: 300, paddingBottom: isMobile ? 4 : 6 }}>♥</span>
-              <small style={{ fontSize: actionSmall, color: '#101217' }}>Like</small>
+              <small style={{ fontSize: actionSmall, fontWeight: 700, color: '#000' }}>Like</small>
             </button>
 
             <button onClick={handleSuperLike} aria-label="Super Like" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#101217', outline: 'none', WebkitTapHighlightColor: 'transparent' }}>
@@ -265,7 +265,7 @@ export default function DiscoverPage() {
                   <path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8-6.1-3.4-6.1 3.4 1.4-6.8L2.2 9.1l6.9-.8L12 2z" />
                 </svg>
               </span>
-              <small style={{ fontSize: actionSmall, color: '#101217' }}>Super Like</small>
+              <small style={{ fontSize: actionSmall, fontWeight: 700, color: '#000' }}>Super Like</small>
             </button>
 
             <button onClick={handleMessage} aria-label="Message" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#101217', outline: 'none', WebkitTapHighlightColor: 'transparent' }}>
@@ -274,7 +274,7 @@ export default function DiscoverPage() {
                   <path d="M6 21a14 14 0 1 1 6 11.6L4 36l2.2-8.2A13.9 13.9 0 0 1 6 21Z" />
                 </svg>
               </span>
-              <small style={{ fontSize: actionSmall, color: '#101217' }}>Message</small>
+              <small style={{ fontSize: actionSmall, fontWeight: 700, color: '#000' }}>Message</small>
             </button>
           </div>
 
