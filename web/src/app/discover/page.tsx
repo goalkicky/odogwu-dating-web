@@ -248,7 +248,7 @@ export default function DiscoverPage() {
             />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: actionGap, padding: isMobile ? '10px 0 4px' : '38px 0 25px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: actionGap, padding: isMobile ? '6px 0 2px' : '22px 0 14px' }}>
             <button onClick={handleSwipeLeft} aria-label="Pass" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#101217', outline: 'none', WebkitTapHighlightColor: 'transparent' }}>
               <span style={{ width: actionSize, height: actionSize, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff', fontSize: actionFont, fontWeight: 300, color: '#101217' }}>×</span>
               <small style={{ fontSize: actionSmall, fontWeight: 700, color: '#000' }}>Pass</small>
