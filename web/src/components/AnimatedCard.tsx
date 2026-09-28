@@ -156,7 +156,7 @@ export default function AnimatedCard({
         .dc-carve .dc-name { display: flex; align-items: center; gap: 6px; }
         .dc-carve .dc-name h2 { font-size: 32px; letter-spacing: -0.8px; margin: 0; color: #101217; line-height: 1.15; font-weight: 700; text-shadow: none; }
         .dc-carve .dc-verified { width: 20px; height: 20px; border-radius: 50%; background: #f52261; color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
-        .dc-carve .dc-location { display: flex; align-items: center; gap: 5px; color: #555; font-size: 10px; font-weight: 500; margin: 5px 0 0; flex-wrap: wrap; }
+        .dc-carve .dc-location { display: flex; align-items: center; gap: 5px; color: #555; font-size: 10px; font-weight: 600; margin: 5px 0 0; flex-wrap: wrap; }
         .dc-carve .dc-location svg { width: 15px; height: 15px; }
         .dc-carve .dc-location b { font-size: 10px; font-weight: 400; color: #8a8a8a; }
         .dc-location svg { width: 21px; height: 21px; fill: none; stroke: #72767b; stroke-width: 2; flex-shrink: 0; }
