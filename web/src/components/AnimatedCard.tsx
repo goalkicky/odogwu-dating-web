@@ -165,7 +165,7 @@ export default function AnimatedCard({
         .dc-bio em { flex-shrink: 0; color: #f43a68; font-size: 25pt; line-height: 1; font-weight: 800; font-style: normal; }
         .dc-int-h { font-size: 13px; margin: 0 0 8px; color: #101217; font-weight: 700; }
         .dc-interests { display: flex; flex-wrap: wrap; gap: 6px 4px; padding-bottom: 8px; }
-        .dc-chip { height: 26px; border: 1px solid #e5e6e9; border-radius: 14px; padding: 0 7px; display: flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: #101217; box-shadow: 0 1px 3px rgba(0,0,0,.03); white-space: nowrap; }
+        .dc-chip { height: 26px; border: 1px solid #e5e6e9; border-radius: 14px; padding: 0 7px; display: flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; color: #101217; box-shadow: 0 1px 3px rgba(0,0,0,.03); white-space: nowrap; }
         .dc-chip i { font-style: normal; width: 14px; height: 14px; border-radius: 50%; display: grid; place-items: center; font-size: 9px; flex-shrink: 0; }
         .dc-facts { border-top: 1px solid #ddd; display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 12px 0 14px; }
         .dc-fact { position: relative; padding-left: 43px; min-height: 55px; }
@@ -186,7 +186,7 @@ export default function AnimatedCard({
           .dc-carve .dc-name h2 { font-size: 28px; }
           .dc-carve .dc-location { font-size: 10px; }
           .dc-bio { font-size: 11px; gap: 6px; align-items: flex-start; margin-bottom: 12px; }
-          .dc-chip { font-size: 10px; height: 24px; padding: 0 6px; }
+          .dc-chip { font-size: 9px; height: 24px; padding: 0 6px; }
           .dc-interests { gap: 5px 3px; max-height: none; overflow: visible; }
           .dc-facts { padding-top: 8px; }
           .dc-fact { min-height: 40px; }
@@ -196,7 +196,7 @@ export default function AnimatedCard({
         }
         @media (max-width: 390px) {
           .dc-photo { min-height: 50px; }
-          .dc-interests { gap: 5px 3px; } .dc-chip { padding: 0 6px; font-size: 10px; }
+          .dc-interests { gap: 5px 3px; } .dc-chip { padding: 0 6px; font-size: 9px; }
           .dc-int-h { font-size: 12px; }
           .dc-fact strong { font-size: 11px; } .dc-fact small { font-size: 11px; }
         }
