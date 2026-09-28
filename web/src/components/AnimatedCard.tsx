@@ -180,24 +180,25 @@ export default function AnimatedCard({
           .dc-card { display: flex; flex-direction: column; }
           .dc-photo { height: auto; flex: 1 1 0%; min-height: 56px; }
           .dc-pill-left { font-size: 11px; padding: 3px 9px; }
-          .dc-content { margin-top: -110px; padding: 0 18px; }
-          .dc-carve { margin-bottom: 6px; }
+          .dc-content { margin-top: -100px; padding: 0 14px; }
+          .dc-carve { margin-bottom: 4px; }
           .dc-carve .dc-name h2 { font-size: 28px; }
           .dc-carve .dc-location { font-size: 10px; }
-          .dc-bio { font-size: 11px; gap: 6px; align-items: flex-start; margin-bottom: 12px; }
+          .dc-bio { font-size: 11px; gap: 6px; align-items: flex-start; margin-bottom: 6px; max-height: 32px; overflow: hidden; }
           .dc-chip { font-size: 8px; height: 24px; padding: 0 6px; }
-          .dc-interests { gap: 5px 3px; max-height: none; overflow: visible; }
-          .dc-facts { padding-top: 8px; }
-          .dc-fact { min-height: 40px; }
-          .dc-fact { padding-left: 32px; } .dc-fact + .dc-fact { padding-left: 35px; }
-          .dc-fick { left: 0; font-size: 20px; } .dc-fact + .dc-fact .dc-fick { left: 5px; }
-          .dc-fact small { font-size: 8px; } .dc-fact strong { font-size: 12px; white-space: normal; }
+          .dc-interests { gap: 5px 3px; max-height: 54px; overflow: hidden; }
+          .dc-facts { padding-top: 4px; }
+          .dc-fact { min-height: 32px; }
+          .dc-fact { padding-left: 28px; } .dc-fact + .dc-fact { padding-left: 30px; }
+          .dc-fick { left: 0; font-size: 17px; } .dc-fact + .dc-fact .dc-fick { left: 5px; }
+          .dc-fact strong { font-size: 11px; white-space: normal; }
         }
         @media (max-width: 390px) {
           .dc-photo { min-height: 50px; }
-          .dc-interests { gap: 5px 3px; } .dc-chip { padding: 0 6px; font-size: 8px; }
-          .dc-int-h { font-size: 12px; }
-          .dc-fact strong { font-size: 11px; } .dc-fact small { font-size: 8px; }
+          .dc-interests { gap: 5px 3px; max-height: 52px; } .dc-chip { padding: 0 6px; font-size: 8px; }
+          .dc-int-h { font-size: 12px; margin-bottom: 4px; }
+          .dc-carve .dc-name h2 { font-size: 25px; }
+          .dc-fact { min-height: 30px; } .dc-fact strong { font-size: 10px; } .dc-fact small { font-size: 8px; }
         }
         @media (min-width: 1100px) {
           .dc-photo { height: 610px; }
