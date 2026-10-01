@@ -245,6 +245,15 @@ export default function DiscoverPage() {
               <small style={{ fontSize: actionSmall, fontWeight: 700, color: '#000' }}>Pass</small>
             </button>
 
+            <button onClick={handleMessage} aria-label="Message" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#101217', outline: 'none', WebkitTapHighlightColor: 'transparent' }}>
+              <span style={{ width: actionSize, height: actionSize, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff', color: '#171a1e' }}>
+                <svg viewBox="0 0 48 48" style={{ width: Math.round(actionSize * 0.64), height: Math.round(actionSize * 0.64), fill: '#171a1e', stroke: '#fff', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' }}>
+                  <path d="M6 21a14 14 0 1 1 6 11.6L4 36l2.2-8.2A13.9 13.9 0 0 1 6 21Z" />
+                </svg>
+              </span>
+              <small style={{ fontSize: actionSmall, fontWeight: 700, color: '#000' }}>Message</small>
+            </button>
+
             <button onClick={handleSwipeRight} aria-label="Like" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#101217', outline: 'none', WebkitTapHighlightColor: 'transparent' }}>
               <span style={{ width: actionSize, height: actionSize, borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 6px 18px rgba(255,45,104,0.35)', background: '#ff2d68', color: '#fff', fontSize: likeFont, fontWeight: 300, paddingBottom: isMobile ? 4 : 6 }}>♥</span>
               <small style={{ fontSize: actionSmall, fontWeight: 700, color: '#000' }}>Like</small>
@@ -257,15 +266,6 @@ export default function DiscoverPage() {
                 </svg>
               </span>
               <small style={{ fontSize: actionSmall, fontWeight: 700, color: '#000' }}>Super Like</small>
-            </button>
-
-            <button onClick={handleMessage} aria-label="Message" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 0, cursor: 'pointer', color: '#101217', outline: 'none', WebkitTapHighlightColor: 'transparent' }}>
-              <span style={{ width: actionSize, height: actionSize, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff', color: '#171a1e' }}>
-                <svg viewBox="0 0 48 48" style={{ width: Math.round(actionSize * 0.64), height: Math.round(actionSize * 0.64), fill: '#171a1e', stroke: '#fff', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' }}>
-                  <path d="M6 21a14 14 0 1 1 6 11.6L4 36l2.2-8.2A13.9 13.9 0 0 1 6 21Z" />
-                </svg>
-              </span>
-              <small style={{ fontSize: actionSmall, fontWeight: 700, color: '#000' }}>Message</small>
             </button>
           </div>
 
