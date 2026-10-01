@@ -21,7 +21,8 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .progress span{height:6px;background:#dd0050;border-radius:5px;flex:1}
         .ep .progress-label{font-size:12px;color:#c31a4d}
         .ep .missing{list-style:none;margin:8px 20px 0;padding:8px 12px;background:#fff4f6;border:1px solid #f6dfe5;border-radius:9px;font-size:11px;color:#a83455;text-align:left;line-height:1.7}
-        .ep .card{border:1px solid #eee;border-radius:15px;margin-top:14px;padding:16px 10px 15px;background:#fff;box-shadow:0 1px 7px rgba(0,0,0,.025)}
+        .ep .card{border:1px solid #eee;border-radius:15px;margin-top:14px;padding:16px 10px 15px;background:#fff;box-shadow:0 1px 7px rgba(0,0,0,.025);min-width:0}
+        .ep .interests-card{overflow:hidden}
         .ep .section-head{display:flex;align-items:center;gap:12px;padding:0 10px 11px}
         .ep .section-head h2{font-size:18px;margin:0;font-weight:700;letter-spacing:-.3px}
         .ep .section-head p{margin:2px 0 0;color:#777;font-size:12px}
@@ -57,8 +58,8 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .pref div{font-size:22px;color:#d5164d;height:29px}
         .ep .pref label{display:block;font-size:10px;color:#777;margin:3px 0}
         .ep .pref b{font-size:11px;color:#151515}
-        .ep .interest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:0 7px}
-        .ep .interest{--ic:clamp(13px,3.7vw,16px);--nm:clamp(8px,2.5vw,10px);--ct:clamp(5.5px,1.8vw,7px);min-height:calc(var(--ic) * 3.3);border:1px solid #eee;border-radius:11px;padding:calc(var(--ic) * .3) calc(var(--ic) * .9) calc(var(--ic) * .3) calc(var(--ic) * .34);display:flex;align-items:center;gap:calc(var(--ic) * .34);position:relative;background:#fff;font-family:inherit;width:100%;text-align:left}
+        .ep .interest-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:0 7px}
+        .ep .interest{--ic:clamp(13px,3.7vw,16px);--nm:clamp(8px,2.5vw,10px);--ct:clamp(5.5px,1.8vw,7px);min-width:0;min-height:calc(var(--ic) * 3.3);border:1px solid #eee;border-radius:11px;padding:calc(var(--ic) * .3) calc(var(--ic) * .9) calc(var(--ic) * .3) calc(var(--ic) * .34);display:flex;align-items:center;gap:calc(var(--ic) * .34);position:relative;background:#fff;font-family:inherit;width:100%;text-align:left}
         .ep .interest>span{font-size:var(--ic);width:calc(var(--ic) * 1.18);text-align:center;flex:none;line-height:1}
         .ep .interest .itxt{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
         .ep .interest .icat{font-style:normal;font-size:var(--ct);font-weight:600;letter-spacing:.2px;line-height:1.35;text-transform:uppercase;color:#c0315e;background:#fff1f5;border-radius:4px;padding:1px 4px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
