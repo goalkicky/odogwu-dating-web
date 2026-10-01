@@ -58,10 +58,10 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .pref label{display:block;font-size:10px;color:#777;margin:3px 0}
         .ep .pref b{font-size:11px;color:#151515}
         .ep .interest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:0 7px}
-        .ep .interest{min-height:50px;border:1px solid #eee;border-radius:12px;padding:0 26px 0 8px;display:flex;align-items:center;gap:8px;position:relative;background:#fff;font-family:inherit;width:100%;text-align:left}
-        .ep .interest>span{font-size:20px;width:27px;text-align:center;flex:none}
-        .ep .interest b{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#151515}
-        .ep .interest em{right:9px;top:50%;transform:translateY(-50%);font-style:normal}
+        .ep .interest{min-height:42px;border:1px solid #eee;border-radius:11px;padding:0 18px 0 6px;display:flex;align-items:center;gap:6px;position:relative;background:#fff;font-family:inherit;width:100%;text-align:left}
+        .ep .interest>span{font-size:16px;width:20px;text-align:center;flex:none}
+        .ep .interest b{font-size:10px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#151515}
+        .ep .interest em{right:7px;top:50%;transform:translateY(-50%);font-style:normal;font-size:13px}
         .ep .save{display:block;width:100%;border:0;border-radius:22px;background:#df003f;color:white;font-size:17px;font-weight:600;padding:11px 15px;margin:19px 0 10px;cursor:pointer;box-shadow:0 2px 4px rgba(223,0,63,.12);font-family:inherit}
         .ep .save:active{transform:scale(.99)}
         .ep .save:disabled{opacity:.6}
@@ -101,8 +101,8 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .info{min-height:62px}
           .ep .preferences .pref label{font-size:9px}
           .ep .preferences .pref b{font-size:10px}
-          .ep .interest{min-height:44px;padding:0 16px 0 5px;gap:5px}
-          .ep .interest>span{font-size:16px;width:18px}
+          .ep .interest{min-height:40px;padding:0 15px 0 5px;gap:5px}
+          .ep .interest>span{font-size:15px;width:17px}
           .ep .interest b{font-size:9px}
           .ep .progress{margin-left:45px;margin-right:45px}
         }
@@ -110,8 +110,8 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .photo-item{height:78px}
           .ep .intro h1{font-size:20px}
           .ep .section-head h2{font-size:15px}
-          .ep .interest>span{font-size:15px;width:16px}
-          .ep .interest{min-height:40px;padding-right:13px}
+          .ep .interest>span{font-size:14px;width:15px}
+          .ep .interest{min-height:36px;padding-right:12px}
           .ep .interest b{font-size:8px}
           .ep .pref b{font-size:9px}
         }
