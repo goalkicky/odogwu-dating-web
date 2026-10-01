@@ -86,9 +86,7 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .section-head h2{font-size:16px}
           .ep .section-head p{font-size:10px}
           .ep .info{padding-left:8px}
-          .ep .interest-grid{grid-template-columns:1fr 1fr;gap:7px}
-          .ep .interest:nth-child(9){grid-column:2}
-          .ep .interest:nth-child(10){grid-column:1}
+          .ep .interest-grid{grid-template-columns:repeat(3,1fr);gap:7px}
           .ep .save{font-size:16px}
           .ep .home-indicator{display:block;width:135px;height:5px;border-radius:5px;background:#111;margin:20px auto 0}
           .ep.toast,.ep .toast{bottom:92px}
@@ -103,17 +101,18 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .info{min-height:62px}
           .ep .preferences .pref label{font-size:9px}
           .ep .preferences .pref b{font-size:10px}
-          .ep .interest{min-height:46px}
-          .ep .interest b{font-size:10px}
+          .ep .interest{min-height:44px;padding:0 16px 0 5px;gap:5px}
+          .ep .interest>span{font-size:16px;width:18px}
+          .ep .interest b{font-size:9px}
           .ep .progress{margin-left:45px;margin-right:45px}
         }
         @media(max-width:350px){
           .ep .photo-item{height:78px}
           .ep .intro h1{font-size:20px}
           .ep .section-head h2{font-size:15px}
-          .ep .interest>span{font-size:18px;width:23px}
-          .ep .interest{padding-right:20px}
-          .ep .interest b{font-size:9px}
+          .ep .interest>span{font-size:15px;width:16px}
+          .ep .interest{min-height:40px;padding-right:13px}
+          .ep .interest b{font-size:8px}
           .ep .pref b{font-size:9px}
         }
       `;
