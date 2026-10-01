@@ -385,7 +385,10 @@ export default function EditProfilePage() {
                   return (
                     <div className="interest" key={it}>
                       <span>{cat ? cat.emoji : '✦'}</span>
-                      <b>{it}</b>
+                      <div className="itxt">
+                        <i className="icat">{cat ? cat.label : 'Other'}</i>
+                        <b>{it}</b>
+                      </div>
                       <em>✓</em>
                     </div>
                   );
