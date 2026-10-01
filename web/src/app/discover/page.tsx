@@ -172,9 +172,21 @@ export default function DiscoverPage() {
     }
   }, [users, profile, router]);
 
+  const discoverHeader = (
+    <header className="uv-topbar" style={{ position: 'relative', height: 57, padding: '0 0 8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', minWidth: 0 }}>
+        <img src="/h-logo.png" alt="Odogwu" style={{ height: 40, width: 'auto', objectFit: 'contain', display: 'block' }} />
+      </div>
+      <h1 style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 17, fontWeight: 700, color: '#111111', lineHeight: 24, letterSpacing: -0.2, margin: 0, textAlign: 'center' }}>Discover</h1>
+      <button onClick={() => setShowFilters(true)} aria-label="Filter preferences" style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 0, cursor: 'pointer', color: '#111111' }}>
+        <FilterIcon size={24} color="#111111" />
+      </button>
+    </header>
+  );
+
   if (loading) {
     return (
-      <AppShell>
+      <AppShell header={discoverHeader}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 18 }}>
           <div style={{ width: 56, height: 56, borderRadius: 18, border: '3px solid rgba(255,46,95,0.2)', borderTopColor: '#FF2E5F', animation: 'spin 0.8s linear infinite' }} />
           <span className="neon-text" style={{ fontSize: 16, fontWeight: 700 }}>Loading profiles...</span>
@@ -185,7 +197,7 @@ export default function DiscoverPage() {
 
   if (users.length === 0) {
     return (
-      <AppShell>
+      <AppShell header={discoverHeader}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100dvh', gap: 16 }}>
           <div style={{ width: 96, height: 96, borderRadius: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff', border: '1px solid #EDEDF1', boxShadow: '0 1px 4px rgba(20,20,25,0.03)' }}>
             <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FF7BA0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -209,18 +221,6 @@ export default function DiscoverPage() {
   const actionFont = isTiny ? 36 : isMobile ? 40 : 57;
   const likeFont = isTiny ? 28 : isMobile ? 34 : 47;
   const actionSmall = isTiny ? 9 : isMobile ? 10 : 12;
-
-  const discoverHeader = (
-    <header className="uv-topbar" style={{ position: 'relative', height: 57, padding: '0 0 8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', minWidth: 0 }}>
-        <img src="/h-logo.png" alt="Odogwu" style={{ height: 40, width: 'auto', objectFit: 'contain', display: 'block' }} />
-      </div>
-      <h1 style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 17, fontWeight: 700, color: '#111111', lineHeight: 24, letterSpacing: -0.2, margin: 0, textAlign: 'center' }}>Discover</h1>
-      <button onClick={() => setShowFilters(true)} aria-label="Filter preferences" style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 0, cursor: 'pointer', color: '#111111' }}>
-        <FilterIcon size={24} color="#111111" />
-      </button>
-    </header>
-  );
 
   return (
     <AppShell header={discoverHeader}>

@@ -40,8 +40,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} h-full antialiased`}>
       <body className="h-full overflow-y-auto flex flex-col">
-        <link rel="preload" as="image" href="/o-logo.png" fetchPriority="high" />
-        <link rel="preload" as="image" href="/logo-icon.png?v=2" fetchPriority="high" />
         <link rel="preconnect" href="https://kamsirmdlabs.com" />
         <Providers>{children}</Providers>
       </body>
