@@ -8,7 +8,7 @@ import { matchService } from '@/lib/cloudflare/services';
 function Brand() {
   return (
     <div className="uv-brand">
-      <img className="uv-brand-mark" src="/o-logo.png" alt="Odogwu" width={48} height={48} decoding="async" />
+      <img className="uv-brand-mark" src="/o-logo.png" alt="Odogwu" width={48} height={48} loading="lazy" decoding="async" />
       <div>
         <div className="uv-brand-name">DOGWU</div>
         <div className="uv-brand-sub"><b>—</b> D A T <span>♥</span> I N G <b>—</b></div>
