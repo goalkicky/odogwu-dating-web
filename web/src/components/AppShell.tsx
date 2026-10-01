@@ -4,11 +4,14 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/store/AuthContext';
 import { matchService } from '@/lib/cloudflare/services';
+import { useMobile } from '@/lib/useMediaQuery';
 
-function Brand() {
+function Brand({ showImg }: { showImg: boolean }) {
   return (
     <div className="uv-brand">
-      <img className="uv-brand-mark" src="/o-logo.png" alt="Odogwu" width={48} height={48} loading="lazy" decoding="async" />
+      {showImg
+        ? <img className="uv-brand-mark" src="/o-logo.png" alt="Odogwu" width={48} height={48} decoding="async" />
+        : <span className="uv-brand-mark" aria-hidden="true" />}
       <div>
         <div className="uv-brand-name">DOGWU</div>
         <div className="uv-brand-sub"><b>—</b> D A T <span>♥</span> I N G <b>—</b></div>
@@ -21,6 +24,9 @@ export default function AppShell({ children, header }: { children: React.ReactNo
   const pathname = usePathname();
   const router = useRouter();
   const { profile, loading, isAuthenticated } = useAuth();
+  const isMobileShell = useMobile();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const [messagesCount, setMessagesCount] = useState(0);
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
 
@@ -168,7 +174,7 @@ export default function AppShell({ children, header }: { children: React.ReactNo
 
       {/* Desktop sidebar */}
       <aside className="uv-sidebar uv-desktop-only">
-        <Brand />
+        <Brand showImg={mounted && !isMobileShell} />
         <nav className="uv-desktop-nav">
           {desktopNav.map(item => (
             <Link key={item.href} href={item.href} className={`uv-desktop-link ${isActive(item.href) ? 'active' : ''}`}>
