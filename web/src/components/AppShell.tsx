@@ -141,7 +141,7 @@ export default function AppShell({ children, header }: { children: React.ReactNo
         .uv-bottom-link.active { color: #E50046; }
         .uv-bottom-center {
           height: 46px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
-          text-decoration: none; cursor: pointer; color: #E50046; font-size: 10.5px; font-weight: 600; line-height: 1;
+          text-decoration: none; cursor: pointer; color: #E50046; font-size: 9.5px; font-weight: 700; line-height: 1;
         }
         .uv-bottom-center img { width: 36px; height: 36px; object-fit: cover; border-radius: 50%; }
 
