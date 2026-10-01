@@ -295,13 +295,8 @@ export default function EditProfilePage() {
 
       <main className="ep">
         <div className="app-shell">
-          <header className="topbar">
-            <button className="icon-btn back" aria-label="Go back" onClick={() => router.back()}>‹</button>
-            <img className="brand-logo" src="/o-logo.png" alt="Odogwu Dating" width={44} height={44} decoding="async" />
-            <button className="chat-btn" aria-label="Messages" onClick={() => router.push('/matches')}><span className="bubble">•••</span><em>{messagesCount || 0}</em></button>
-          </header>
-
           <section className="intro">
+            <button className="icon-btn back intro-back" aria-label="Go back" onClick={() => router.back()}>‹</button>
             <h1>Complete Your Profile</h1>
             <p>Complete your profile to get more matches <span>♥</span></p>
             <div className="progress">
