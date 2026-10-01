@@ -199,7 +199,7 @@ export default function AppShell({ children, header }: { children: React.ReactNo
           <Link href="/explore" className={`uv-bottom-link ${isActive('/explore') ? 'active' : ''}`}>
             <svg viewBox="0 0 48 48" className="uv-nav-bl"><circle cx="24" cy="24" r="15" fill="none"/><path d="m19 29 4-10 9-4-4 9-9 5Z"/></svg><span>Explore</span>
           </Link>
-          <Link href="/discover" className="uv-bottom-center"><img src="/logo-icon.png?v=2" alt="Discover" width={44} height={44} decoding="async" /></Link>
+          <Link href="/discover" className="uv-bottom-center"><img src="/jico.png" alt="Discover" width={44} height={44} decoding="async" /></Link>
           <Link href="/matches" className={`uv-bottom-link ${isActive('/matches') ? 'active' : ''}`}>
             <span style={{ position: 'relative', display: 'inline-flex', lineHeight: 0 }}>
               <svg viewBox="0 0 48 48" className="uv-nav-bl"><path d="M9 34l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/><circle cx="19" cy="22" r="2"/><circle cx="25" cy="22" r="2"/><circle cx="31" cy="22" r="2"/></svg>
