@@ -173,7 +173,7 @@ export default function DiscoverPage() {
   }, [users, profile, router]);
 
   const discoverHeader = (
-    <header className="uv-topbar" style={{ position: 'relative', height: 57, padding: '0 0 8px' }}>
+    <header className="uv-topbar" style={{ position: 'relative', height: 57, padding: '0 0 8px', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Arial, Helvetica, sans-serif' }}>
       <div style={{ display: 'flex', alignItems: 'center', minWidth: 0 }}>
         <img src="/h-logo.png" alt="Odogwu" style={{ height: 40, width: 'auto', objectFit: 'contain', display: 'block' }} />
       </div>
@@ -224,7 +224,7 @@ export default function DiscoverPage() {
 
   return (
     <AppShell header={discoverHeader}>
-      <div className="animate-fade-up" style={isMobile ? { paddingTop: 2, margin: '0 -5px', height: 'calc(100svh - 130px)', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', overflow: 'hidden' } : { paddingTop: 22 }}>
+      <div className="animate-fade-up" style={isMobile ? { paddingTop: 2, margin: '0 -5px', height: 'calc(100svh - 130px)', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', overflow: 'hidden', fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Arial, Helvetica, sans-serif' } : { paddingTop: 22, fontFamily: 'var(--font-montserrat), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Arial, Helvetica, sans-serif' }}>
         <div style={{ maxWidth: 760, margin: '0 auto', width: '100%', flex: '1 1 0%', minHeight: 0, display: 'flex', flexDirection: 'column' }}>
           <div style={{ flex: '1 1 0%', minHeight: 0, display: 'flex' }}>
             <AnimatedCard

@@ -141,7 +141,7 @@ export default function AnimatedCard({
       }}
     >
       <style jsx>{`
-        .dc-card { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", var(--font-montserrat), sans-serif; }
+        .dc-card { font-family: var(--font-montserrat), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif; }
         .dc-photo { width: 100%; height: 560px; position: relative; background: #eee; overflow: hidden; }
         .dc-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 44%; display: block; }
         
