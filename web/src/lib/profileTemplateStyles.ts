@@ -58,12 +58,12 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .pref label{display:block;font-size:10px;color:#777;margin:3px 0}
         .ep .pref b{font-size:11px;color:#151515}
         .ep .interest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:0 7px}
-        .ep .interest{min-height:52px;border:1px solid #eee;border-radius:11px;padding:5px 16px 5px 6px;display:flex;align-items:center;gap:6px;position:relative;background:#fff;font-family:inherit;width:100%;text-align:left}
-        .ep .interest>span{font-size:16px;width:20px;text-align:center;flex:none}
+        .ep .interest{--ic:clamp(13px,3.7vw,16px);--nm:clamp(8px,2.5vw,10px);--ct:clamp(5.5px,1.8vw,7px);min-height:calc(var(--ic) * 3.3);border:1px solid #eee;border-radius:11px;padding:calc(var(--ic) * .3) calc(var(--ic) * .9) calc(var(--ic) * .3) calc(var(--ic) * .34);display:flex;align-items:center;gap:calc(var(--ic) * .34);position:relative;background:#fff;font-family:inherit;width:100%;text-align:left}
+        .ep .interest>span{font-size:var(--ic);width:calc(var(--ic) * 1.18);text-align:center;flex:none;line-height:1}
         .ep .interest .itxt{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
-        .ep .interest .icat{font-style:normal;font-size:7px;font-weight:600;letter-spacing:.2px;text-transform:uppercase;color:#c0315e;background:#fff1f5;border-radius:4px;padding:1px 4px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .ep .interest b{font-size:10px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#151515}
-        .ep .interest em{right:7px;top:50%;transform:translateY(-50%);font-style:normal;font-size:13px}
+        .ep .interest .icat{font-style:normal;font-size:var(--ct);font-weight:600;letter-spacing:.2px;line-height:1.35;text-transform:uppercase;color:#c0315e;background:#fff1f5;border-radius:4px;padding:1px 4px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .ep .interest b{font-size:var(--nm);font-weight:600;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#151515}
+        .ep .interest em{right:calc(var(--ic) * .34);top:50%;transform:translateY(-50%);font-style:normal;font-size:calc(var(--ic) * .72)}
         .ep .save{display:block;width:100%;border:0;border-radius:22px;background:#df003f;color:white;font-size:17px;font-weight:600;padding:11px 15px;margin:19px 0 10px;cursor:pointer;box-shadow:0 2px 4px rgba(223,0,63,.12);font-family:inherit}
         .ep .save:active{transform:scale(.99)}
         .ep .save:disabled{opacity:.6}
@@ -103,20 +103,12 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .info{min-height:62px}
           .ep .preferences .pref label{font-size:9px}
           .ep .preferences .pref b{font-size:10px}
-          .ep .interest{min-height:50px;padding:5px 14px 5px 5px;gap:5px}
-          .ep .interest>span{font-size:15px;width:17px}
-          .ep .interest .icat{font-size:6.5px;padding:1px 3px}
-          .ep .interest b{font-size:9px}
           .ep .progress{margin-left:45px;margin-right:45px}
         }
         @media(max-width:350px){
           .ep .photo-item{height:78px}
           .ep .intro h1{font-size:20px}
           .ep .section-head h2{font-size:15px}
-          .ep .interest>span{font-size:14px;width:15px}
-          .ep .interest{min-height:46px;padding-right:12px}
-          .ep .interest .icat{font-size:6px}
-          .ep .interest b{font-size:8px}
           .ep .pref b{font-size:9px}
         }
       `;
