@@ -147,8 +147,8 @@ export default function AnimatedCard({
         
         .dc-pill { position: absolute; top: 16px; z-index: 2; border-radius: 999px; color: #fff; display: flex; gap: 5px; align-items: center; }
         .dc-pill-left { left: 24px; padding: 4px 10px; background: linear-gradient(135deg, #F50B66, #D90540); font-size: 11.5px; font-weight: 500; line-height: 15px; } .dc-pill-left span { font-size: 12px; line-height: 1; }
-        .dc-pill-right { right: 24px; top: 27px; padding: 8px 13px; font-size: 14px; font-weight: 600; background: rgba(30,35,40,.88); }
-        .dc-pill-check { width: 18px; height: 18px; background: #fff; color: #20252a; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; }
+        .dc-pill-right { right: 24px; top: 27px; padding: 4px 10px; font-size: 11.5px; line-height: 15px; font-weight: 600; background: rgba(30,35,40,.88); }
+        .dc-pill-check { width: 13px; height: 13px; background: #fff; color: #20252a; border-radius: 50%; display: grid; place-items: center; font-size: 9px; font-weight: 700; }
         .dc-blocks { position: absolute; top: 42px; left: 136px; right: 136px; z-index: 3; display: flex; gap: 5px; }
         .dc-block { flex: 1; height: 3px; border-radius: 2px; }
         .dc-content { position: relative; z-index: 1; background: transparent; margin-top: -150px; padding: 0 20px; }
@@ -180,6 +180,7 @@ export default function AnimatedCard({
           .dc-card { display: flex; flex-direction: column; }
           .dc-photo { height: auto; flex: 1 1 0%; min-height: 56px; }
           .dc-pill-left { font-size: 11px; padding: 3px 9px; }
+          .dc-pill-right { font-size: 11px; padding: 3px 9px; }
           .dc-content { margin-top: -100px; padding: 0 14px; }
           .dc-carve { margin-bottom: 4px; }
           .dc-carve .dc-name h2 { font-size: 28px; }
