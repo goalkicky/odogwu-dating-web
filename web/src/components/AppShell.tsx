@@ -135,7 +135,7 @@ export default function AppShell({ children, header }: { children: React.ReactNo
         .uv-nav-bl { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2.2; fill: currentColor; }
         .uv-bottom-link {
           height: 46px; color: #858991; display: flex; flex-direction: column;
-          align-items: center; justify-content: center; gap: 2px; font-size: 10.5px;
+          align-items: center; justify-content: center; gap: 2px; font-size: 9.5px; font-weight: 700;
         }
         .uv-bottom-link:not(.active) .uv-nav-bl { fill: none; }
         .uv-bottom-link.active { color: #E50046; }
