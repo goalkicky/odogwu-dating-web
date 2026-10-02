@@ -31,10 +31,10 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .section-head strong.count{margin-left:auto;display:flex;align-items:center;gap:5px;flex:none}
         .ep .section-head strong.count span{color:#cf1a4e;font-size:17px;line-height:1;display:block}
         .ep .photo-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;padding:0 4px}
-        .ep .photo-item{height:min(23vw,168px);position:relative;overflow:hidden;border-radius:9px;background:#f5f5f5}
+        .ep .photo-item{height:168px;position:relative;overflow:hidden;border-radius:9px;background:#f5f5f5}
         .ep .photo-item img{width:100%;height:100%;object-fit:cover;display:block}
         .ep .remove{position:absolute;right:5px;top:5px;border:0;background:rgba(255,255,255,.93);width:20px;height:20px;border-radius:50%;font-size:19px;line-height:17px;color:#555;cursor:pointer}
-        .ep .add-tile{height:min(23vw,168px);border:1px dashed #e5e5e5;background:#fff;border-radius:9px;color:#c71c4c;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;cursor:pointer;font-family:inherit}
+        .ep .add-tile{height:168px;border:1px dashed #e5e5e5;background:#fff;border-radius:9px;color:#c71c4c;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;cursor:pointer;font-family:inherit}
         .ep .add-tile span{font-size:32px;font-weight:200;line-height:1}
         .ep .add-tile small{font-size:11px;color:#c71c4c}
         .ep .video-icon{font-size:25px!important}
@@ -86,7 +86,7 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .progress{margin:12px 70px 6px;gap:6px}
           .ep .card{margin-top:8px;padding:10px 5px 9px}
           .ep .photo-grid{gap:8px;padding:0 3px}
-          .ep .photo-item,.ep .add-tile{height:min(20vw,120px)}
+          .ep .photo-item,.ep .add-tile{height:165px}
           .ep .section-head{padding:0 5px 7px;gap:9px}
           .ep .section-head h2{font-size:16px}
           .ep .section-head p{font-size:10px}
@@ -101,7 +101,7 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .topbar{grid-template-columns:42px 1fr 42px}
           .ep .brand-logo{height:36px}
           .ep .photo-grid{grid-template-columns:repeat(6,1fr);gap:8px}
-          .ep .photo-item,.ep .add-tile{height:min(15vw,88px)}
+          .ep .photo-item,.ep .add-tile{height:88px}
           .ep .info-grid{grid-template-columns:1fr 1fr}
           .ep .info{min-height:50px}
           .ep .preferences .pref label{font-size:9px}
