@@ -28,6 +28,8 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .section-head p{margin:2px 0 0;color:#777;font-size:12px}
         .ep .section-head>div:first-child:not(.title-icon){flex:1}
         .ep .section-head strong{color:#cf1a4e;font-size:15px;white-space:nowrap}
+        .ep .section-head strong.count{margin-left:auto;display:flex;align-items:center;gap:5px;flex:none}
+        .ep .section-head strong.count span{color:#cf1a4e;font-size:17px;line-height:1;display:block}
         .ep .photo-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;padding:0 4px}
         .ep .photo-item{height:168px;position:relative;overflow:hidden;border-radius:9px;background:#f5f5f5}
         .ep .photo-item img{width:100%;height:100%;object-fit:cover;display:block}

@@ -376,7 +376,7 @@ export default function EditProfilePage() {
           <section className="card interests-card" onClick={() => router.push('/edit-profile/interests')} style={{ cursor: 'pointer' }}>
             <div className="section-head">
               <div className="title-icon star">☆</div><div><h2>Interests</h2><p>Pick your interests</p></div>
-              <strong>{interests.length}/{MAX_INTERESTS}<span>›</span></strong>
+              <strong className="count">{interests.length}/{MAX_INTERESTS}<span>›</span></strong>
             </div>
             {interests.length > 0 && (
               <div className="interest-grid" id="interestsBody">
