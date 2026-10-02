@@ -326,7 +326,7 @@ export default function EditProfilePage() {
 
           <section className="card basic-card" style={{ cursor: 'pointer' }} onClick={() => router.push('/edit-profile/basic')}>
             <div className="section-head accordion-title" data-target="basicBody">
-              <div className="title-icon person">♙</div><h2>Basic Information</h2><strong>{basicsFilled}/7 <span>›</span></strong>
+              <div className="title-icon person">♙</div><h2>Basic Information</h2><strong className="photo-count">{basicsFilled}/7 <span>›</span></strong>
             </div>
             <div className="info-grid" id="basicBody">
               {basics.map(b => (
@@ -341,7 +341,7 @@ export default function EditProfilePage() {
 
           <section className="card about-card">
             <div className="section-head accordion-title" data-target="aboutBody" onClick={() => setOpenAbout(o => !o)}>
-              <div className="title-icon quote">“</div><h2>About You</h2><strong>{bio ? '1/1' : '0/1'} <span>{openAbout ? '⌃' : '⌄'}</span></strong>
+              <div className="title-icon quote">“</div><h2>About You</h2><strong className="photo-count">{bio ? '1/1' : '0/1'} <span>{openAbout ? '⌃' : '⌄'}</span></strong>
             </div>
             {openAbout && (
               <div
@@ -357,7 +357,7 @@ export default function EditProfilePage() {
 
           <section className="card preferences-card" style={{ cursor: 'pointer' }} onClick={() => router.push('/edit-profile/preferences')}>
             <div className="section-head accordion-title" data-target="prefsBody">
-              <div className="title-icon heart">♡</div><h2>Your Preferences</h2><strong>{[relationshipGoals, ageRange, maxDistance, wantsKids].filter(Boolean).length}/4 <span>›</span></strong>
+              <div className="title-icon heart">♡</div><h2>Your Preferences</h2><strong className="photo-count">{[relationshipGoals, ageRange, maxDistance, wantsKids].filter(Boolean).length}/4 <span>›</span></strong>
             </div>
             <div className="preferences" id="prefsBody">
               <div className="pref"><div>▣</div><label>Age Range</label><b>{ageRange || '—'}</b></div>
@@ -370,7 +370,7 @@ export default function EditProfilePage() {
           <section className="card interests-card" onClick={() => router.push('/edit-profile/interests')} style={{ cursor: 'pointer' }}>
             <div className="section-head">
               <div className="title-icon star">☆</div><div><h2>Interests</h2><p>Pick your interests</p></div>
-              <strong className="count">{interests.length}/{MAX_INTERESTS}<span>›</span></strong>
+              <strong className="count photo-count">{interests.length}/{MAX_INTERESTS}<span>›</span></strong>
             </div>
             {interests.length > 0 && (
               <div className="interest-grid" id="interestsBody">
