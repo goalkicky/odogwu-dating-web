@@ -17,9 +17,9 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .intro h1{font-size:14.5px;letter-spacing:-.3px;margin:0 0 2px;font-weight:700}
         .ep .intro p{font-size:8.5px;color:#777;margin:0}
         .ep .intro p span{color:var(--red)}
-        .ep .progress{display:flex;gap:7px;margin:14px 78px 6px}
-        .ep .progress span{height:5px;background:#dd0050;border-radius:5px;flex:1}
-        .ep .progress-label{font-size:12px;color:#c31a4d}
+        .ep .progress{display:flex;gap:5px;margin:11px 78px 4px}
+        .ep .progress span{height:3px;background:#dd0050;border-radius:3px;flex:1}
+        .ep .progress-label{font-size:9px;color:#c31a4d}
         .ep .missing{list-style:none;margin:6px 16px 0;padding:7px 11px;background:#fff4f6;border:1px solid #f6dfe5;border-radius:9px;font-size:11px;color:#a83455;text-align:left;line-height:1.7}
         .ep .card{border:1px solid #eee;border-radius:15px;margin-top:9px;padding:12px 6px 11px;background:#fff;box-shadow:0 1px 7px rgba(0,0,0,.025);min-width:0}
         .ep .interests-card{overflow:hidden}
@@ -83,7 +83,7 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .intro{padding-top:4px}
           .ep .intro h1{font-size:13.5px}
           .ep .intro p{font-size:8px}
-          .ep .progress{margin:12px 70px 6px;gap:6px}
+          .ep .progress{margin:9px 70px 4px;gap:4px}
           .ep .card{margin-top:8px;padding:10px 5px 9px}
           .ep .photo-grid{gap:8px;padding:0 3px}
           .ep .photo-item,.ep .add-tile{height:165px}
