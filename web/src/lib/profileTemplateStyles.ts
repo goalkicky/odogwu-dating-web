@@ -1,5 +1,5 @@
 export const PROFILE_TEMPLATE_CSS = `
-        .ep{--red:#df003f;--red2:#e50046;--pink:#fff1f5;--text:#151515;--muted:#777;--line:#eee;--card:#fff;color:#151515;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+        .ep{--red:#df003f;--red2:#e50046;--pink:#fff1f5;--text:#151515;--muted:#777;--line:#eee;--card:#fff;color:#151515;font-family:var(--font-montserrat),-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
         .ep *{box-sizing:border-box}
         .ep .app-shell{width:min(100%,710px);margin:auto;background:#fff;min-height:100vh;padding:8px 6px 10px}
         .uv-mobile>main{padding-left:4px!important;padding-right:4px!important}
