@@ -1,9 +1,9 @@
 export const PROFILE_TEMPLATE_CSS = `
         .ep{--red:#df003f;--red2:#e50046;--pink:#fff1f5;--text:#151515;--muted:#777;--line:#eee;--card:#fff;color:#151515;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
         .ep *{box-sizing:border-box}
-        .ep .app-shell{width:min(100%,710px);margin:auto;background:#fff;min-height:100vh;padding:14px 14px 14px}
-        .uv-mobile>main{padding-left:8px!important;padding-right:8px!important}
-        .uv-content-inner{padding-left:8px!important;padding-right:8px!important}
+        .ep .app-shell{width:min(100%,710px);margin:auto;background:#fff;min-height:100vh;padding:8px 6px 10px}
+        .uv-mobile>main{padding-left:4px!important;padding-right:4px!important}
+        .uv-content-inner{padding-left:4px!important;padding-right:4px!important}
         .ep .topbar{height:85px;display:grid;grid-template-columns:50px 1fr 50px;align-items:center}
         .ep .icon-btn,.ep .chat-btn{border:0;background:transparent}
         .ep .back{font-size:43px;font-weight:200;line-height:1;text-align:left;color:#202020;transform:translateY(-2px);cursor:pointer;padding:0}
@@ -12,23 +12,23 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .bubble{border:2px solid #222;border-radius:50%;padding:2px 5px;font-size:14px;letter-spacing:1px;display:inline-block;line-height:20px;position:relative}
         .ep .bubble:after{content:"";position:absolute;bottom:-5px;left:5px;border-width:5px 5px 0 0;border-style:solid;border-color:#222 transparent transparent transparent}
         .ep .chat-btn em{position:absolute;right:-2px;top:-5px;background:var(--red);color:#fff;width:22px;height:22px;border-radius:50%;font-size:12px;font-style:normal;display:grid;place-items:center;font-weight:700}
-        .ep .intro{text-align:center;padding:8px 0 11px;position:relative}
-        .ep .intro .intro-back{position:absolute;left:0;top:8px;font-size:34px;font-weight:200;line-height:1;transform:none;padding:0}
-        .ep .intro h1{font-size:25px;letter-spacing:-.6px;margin:0 0 4px;font-weight:700}
+        .ep .intro{text-align:center;padding:4px 0 6px;position:relative}
+        .ep .intro .intro-back{position:absolute;left:0;top:2px;font-size:30px;font-weight:200;line-height:1;transform:none;padding:0}
+        .ep .intro h1{font-size:25px;letter-spacing:-.6px;margin:0 0 3px;font-weight:700}
         .ep .intro p{font-size:15px;color:#777;margin:0}
         .ep .intro p span{color:var(--red)}
-        .ep .progress{display:flex;gap:7px;margin:22px 84px 9px}
-        .ep .progress span{height:6px;background:#dd0050;border-radius:5px;flex:1}
+        .ep .progress{display:flex;gap:7px;margin:14px 78px 6px}
+        .ep .progress span{height:5px;background:#dd0050;border-radius:5px;flex:1}
         .ep .progress-label{font-size:12px;color:#c31a4d}
-        .ep .missing{list-style:none;margin:8px 20px 0;padding:8px 12px;background:#fff4f6;border:1px solid #f6dfe5;border-radius:9px;font-size:11px;color:#a83455;text-align:left;line-height:1.7}
-        .ep .card{border:1px solid #eee;border-radius:15px;margin-top:14px;padding:16px 10px 15px;background:#fff;box-shadow:0 1px 7px rgba(0,0,0,.025);min-width:0}
+        .ep .missing{list-style:none;margin:6px 16px 0;padding:7px 11px;background:#fff4f6;border:1px solid #f6dfe5;border-radius:9px;font-size:11px;color:#a83455;text-align:left;line-height:1.7}
+        .ep .card{border:1px solid #eee;border-radius:15px;margin-top:9px;padding:12px 6px 11px;background:#fff;box-shadow:0 1px 7px rgba(0,0,0,.025);min-width:0}
         .ep .interests-card{overflow:hidden}
-        .ep .section-head{display:flex;align-items:center;gap:12px;padding:0 10px 11px}
+        .ep .section-head{display:flex;align-items:center;gap:10px;padding:0 6px 8px}
         .ep .section-head h2{font-size:18px;margin:0;font-weight:700;letter-spacing:-.3px}
         .ep .section-head p{margin:2px 0 0;color:#777;font-size:12px}
         .ep .section-head>div:first-child:not(.title-icon){flex:1}
         .ep .section-head strong{color:#cf1a4e;font-size:15px;white-space:nowrap}
-        .ep .photo-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;padding:0 7px}
+        .ep .photo-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;padding:0 4px}
         .ep .photo-item{height:168px;position:relative;overflow:hidden;border-radius:9px;background:#f5f5f5}
         .ep .photo-item img{width:100%;height:100%;object-fit:cover;display:block}
         .ep .remove{position:absolute;right:5px;top:5px;border:0;background:rgba(255,255,255,.93);width:20px;height:20px;border-radius:50%;font-size:19px;line-height:17px;color:#555;cursor:pointer}
@@ -36,7 +36,7 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .add-tile span{font-size:32px;font-weight:200;line-height:1}
         .ep .add-tile small{font-size:11px;color:#c71c4c}
         .ep .video-icon{font-size:25px!important}
-        .ep .hint{background:#fff0f5;border-radius:6px;margin:8px 7px 0;padding:4px 6px;color:#5f5f5f;font-size:7px;font-weight:700}
+        .ep .hint{background:#fff0f5;border-radius:6px;margin:7px 4px 0;padding:4px 6px;color:#5f5f5f;font-size:7px;font-weight:700}
         .ep .hint span{font-size:21px;color:#d31a4d;vertical-align:middle;margin-right:8px}
         .ep .title-icon{width:35px;height:35px;border-radius:8px;background:#fff0f5;color:#d4154c;display:grid;place-items:center;font-size:23px;flex:none}
         .ep .accordion-title{cursor:pointer}
@@ -58,44 +58,44 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .pref div{font-size:22px;color:#d5164d;height:29px}
         .ep .pref label{display:block;font-size:10px;color:#777;margin:3px 0}
         .ep .pref b{font-size:11px;color:#151515}
-        .ep .interest-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:0 7px}
+        .ep .interest-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0 4px}
         .ep .interest{--ic:clamp(11px,3.1vw,13px);--nm:clamp(8px,2.5vw,10px);--ct:clamp(5.5px,1.8vw,7px);min-width:0;min-height:calc(var(--ic) * 3.3);border:1px solid #eee;border-radius:11px;padding:calc(var(--ic) * .3) calc(var(--ic) * .9) calc(var(--ic) * .3) calc(var(--ic) * .34);display:flex;align-items:center;gap:calc(var(--ic) * .34);position:relative;background:#fff;font-family:inherit;width:100%;text-align:left}
         .ep .interest>span{font-size:var(--ic);width:calc(var(--ic) * 1.18);text-align:center;flex:none;line-height:1}
         .ep .interest .itxt{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
         .ep .interest .icat{font-style:normal;font-size:var(--ct);font-weight:600;letter-spacing:.2px;line-height:1.35;text-transform:uppercase;color:#151515;background:none;border-radius:0;padding:0;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .ep .interest b{font-size:var(--nm);font-weight:600;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#df003f}
         .ep .interest em{right:calc(var(--ic) * .34);top:50%;transform:translateY(-50%);font-style:normal;font-size:calc(var(--ic) * .72)}
-        .ep .save{display:block;width:100%;border:0;border-radius:22px;background:#df003f;color:white;font-size:17px;font-weight:600;padding:11px 15px;margin:19px 0 10px;cursor:pointer;box-shadow:0 2px 4px rgba(223,0,63,.12);font-family:inherit}
+        .ep .save{display:block;width:100%;border:0;border-radius:22px;background:#df003f;color:white;font-size:17px;font-weight:600;padding:11px 15px;margin:13px 0 8px;cursor:pointer;box-shadow:0 2px 4px rgba(223,0,63,.12);font-family:inherit}
         .ep .save:active{transform:scale(.99)}
         .ep .save:disabled{opacity:.6}
-        .ep .logout{display:block;width:100%;border:1.5px solid #df003f;border-radius:22px;background:#fff;color:#df003f;font-size:16px;font-weight:600;padding:11px 15px;margin:0 0 10px;cursor:pointer;font-family:inherit}
+        .ep .logout{display:block;width:100%;border:1.5px solid #df003f;border-radius:22px;background:#fff;color:#df003f;font-size:16px;font-weight:600;padding:11px 15px;margin:0 0 8px;cursor:pointer;font-family:inherit}
         .ep .logout:active{transform:scale(.99)}
         .ep .footer-note{text-align:center;font-size:12px;color:#777;margin:0 0 4px}
         .ep .home-indicator{display:none}
         .ep.toast,.ep .toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,20px);opacity:0;background:#222;color:#fff;padding:11px 18px;border-radius:22px;font-size:13px;transition:.25s;pointer-events:none;z-index:400;white-space:nowrap;max-width:calc(100% - 40px);overflow:hidden;text-overflow:ellipsis}
         .ep.toast.show,.ep .toast.show{opacity:1;transform:translate(-50%,0)}
         @media(max-width:620px){
-          .ep .app-shell{padding:6px 8px 12px}
+          .ep .app-shell{padding:4px 5px 8px}
           .ep .topbar{height:72px}
           .ep .brand-logo{height:40px}
-          .ep .intro{padding-top:7px}
+          .ep .intro{padding-top:4px}
           .ep .intro h1{font-size:22px}
           .ep .intro p{font-size:13px}
-          .ep .progress{margin:20px 75px 9px;gap:6px}
-          .ep .card{margin-top:12px;padding:14px 8px}
-          .ep .photo-grid{gap:8px;padding:0 5px}
+          .ep .progress{margin:12px 70px 6px;gap:6px}
+          .ep .card{margin-top:8px;padding:10px 5px 9px}
+          .ep .photo-grid{gap:8px;padding:0 3px}
           .ep .photo-item,.ep .add-tile{height:165px}
-          .ep .section-head{padding:0 8px 10px;gap:9px}
+          .ep .section-head{padding:0 5px 7px;gap:9px}
           .ep .section-head h2{font-size:16px}
           .ep .section-head p{font-size:10px}
           .ep .info{padding-left:8px}
-          .ep .interest-grid{grid-template-columns:repeat(3,1fr);gap:7px}
+          .ep .interest-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0 3px}
           .ep .save{font-size:16px}
-          .ep .home-indicator{display:block;width:135px;height:5px;border-radius:5px;background:#111;margin:20px auto 0}
+          .ep .home-indicator{display:block;width:135px;height:5px;border-radius:5px;background:#111;margin:14px auto 0}
           .ep.toast,.ep .toast{bottom:92px}
         }
         @media(max-width:430px){
-          .ep .app-shell{padding-left:6px;padding-right:6px}
+          .ep .app-shell{padding-left:4px;padding-right:4px}
           .ep .topbar{grid-template-columns:42px 1fr 42px}
           .ep .brand-logo{height:36px}
           .ep .photo-grid{grid-template-columns:repeat(6,1fr);gap:8px}
@@ -104,7 +104,7 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .info{min-height:62px}
           .ep .preferences .pref label{font-size:9px}
           .ep .preferences .pref b{font-size:10px}
-          .ep .progress{margin-left:45px;margin-right:45px}
+          .ep .progress{margin-left:40px;margin-right:40px}
         }
         @media(max-width:350px){
           .ep .photo-item{height:78px}
