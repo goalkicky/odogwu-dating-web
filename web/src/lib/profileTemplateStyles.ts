@@ -15,7 +15,7 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .intro{text-align:center;padding:4px 0 6px;position:relative}
         .ep .intro .intro-back{position:absolute;left:0;top:-1px;font-size:22px;font-weight:200;line-height:1;transform:none;padding:0}
         .ep .intro h1{font-size:14.5px;letter-spacing:-.3px;margin:0 0 2px;font-weight:700}
-        .ep .intro p{font-size:10px;color:#777;margin:0}
+        .ep .intro p{font-size:8.5px;color:#777;margin:0}
         .ep .intro p span{color:var(--red)}
         .ep .progress{display:flex;gap:7px;margin:14px 78px 6px}
         .ep .progress span{height:5px;background:#dd0050;border-radius:5px;flex:1}
@@ -82,7 +82,7 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .brand-logo{height:40px}
           .ep .intro{padding-top:4px}
           .ep .intro h1{font-size:13.5px}
-          .ep .intro p{font-size:9.5px}
+          .ep .intro p{font-size:8px}
           .ep .progress{margin:12px 70px 6px;gap:6px}
           .ep .card{margin-top:8px;padding:10px 5px 9px}
           .ep .photo-grid{gap:8px;padding:0 3px}
