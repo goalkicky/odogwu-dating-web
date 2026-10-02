@@ -31,33 +31,33 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .section-head strong.count{margin-left:auto;display:flex;align-items:center;gap:5px;flex:none}
         .ep .section-head strong.count span{color:#cf1a4e;font-size:17px;line-height:1;display:block}
         .ep .photo-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;padding:0 4px}
-        .ep .photo-item{height:168px;position:relative;overflow:hidden;border-radius:9px;background:#f5f5f5}
+        .ep .photo-item{height:min(23vw,168px);position:relative;overflow:hidden;border-radius:9px;background:#f5f5f5}
         .ep .photo-item img{width:100%;height:100%;object-fit:cover;display:block}
         .ep .remove{position:absolute;right:5px;top:5px;border:0;background:rgba(255,255,255,.93);width:20px;height:20px;border-radius:50%;font-size:19px;line-height:17px;color:#555;cursor:pointer}
-        .ep .add-tile{height:168px;border:1px dashed #e5e5e5;background:#fff;border-radius:9px;color:#c71c4c;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;cursor:pointer;font-family:inherit}
+        .ep .add-tile{height:min(23vw,168px);border:1px dashed #e5e5e5;background:#fff;border-radius:9px;color:#c71c4c;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;cursor:pointer;font-family:inherit}
         .ep .add-tile span{font-size:32px;font-weight:200;line-height:1}
         .ep .add-tile small{font-size:11px;color:#c71c4c}
         .ep .video-icon{font-size:25px!important}
         .ep .hint{background:#fff0f5;border-radius:6px;margin:7px 4px 0;padding:4px 6px;color:#5f5f5f;font-size:7px;font-weight:700}
         .ep .hint span{font-size:21px;color:#d31a4d;vertical-align:middle;margin-right:8px}
-        .ep .title-icon{width:35px;height:35px;border-radius:8px;background:#fff0f5;color:#d4154c;display:grid;place-items:center;font-size:23px;flex:none}
+        .ep .title-icon{width:30px;height:30px;border-radius:8px;background:#fff0f5;color:#d4154c;display:grid;place-items:center;font-size:19px;flex:none}
         .ep .accordion-title{cursor:pointer}
         .ep .accordion-title>h2,.ep .accordion-title>.title-icon+h2{flex:1}
         .ep .accordion-title>div:nth-child(2){flex:1}
         .ep .accordion-title strong span{margin-left:5px;color:#777}
         .ep .info-grid{display:grid;grid-template-columns:1fr 1fr}
-        .ep .info{min-height:61px;border:0;border-top:1px solid #eee;padding:10px 25px 7px 10px;position:relative;width:100%;background:transparent;text-align:left;font-family:inherit;cursor:pointer}
-        .ep .info label{display:block;font-size:11px;color:#777;margin-bottom:4px}
+        .ep .info{min-height:52px;border:0;border-top:1px solid #eee;padding:7px 22px 5px 9px;position:relative;width:100%;background:transparent;text-align:left;font-family:inherit;cursor:pointer}
+        .ep .info label{display:block;font-size:11px;color:#777;margin-bottom:2px}
         .ep .info b{display:block;font-size:12px;font-weight:500;color:#151515}
         .ep .info small{display:block;font-size:11px;color:#333;margin-top:2px}
         .ep .info span,.ep .about-body>span,.ep .interest em{position:absolute;right:10px;color:#cf164b;font-size:16px}
-        .ep .info span{top:29px}
+        .ep .info span{top:24px}
         .ep .about-body{position:relative;border:1px solid #f0f0f0;border-radius:10px;margin:0 7px;padding:13px 14px;font-size:12px;line-height:1.6;color:#404040;cursor:pointer}
         .ep .about-body>span{right:12px;bottom:13px}
         .ep .preferences{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #eee}
-        .ep .pref{text-align:center;padding:12px 3px 3px;min-height:81px;border:0;border-right:1px dashed #ddd;background:transparent;font-family:inherit;cursor:pointer}
+        .ep .pref{text-align:center;padding:8px 3px 3px;min-height:64px;border:0;border-right:1px dashed #ddd;background:transparent;font-family:inherit;cursor:pointer}
         .ep .pref:last-child{border:0}
-        .ep .pref div{font-size:22px;color:#d5164d;height:29px}
+        .ep .pref div{font-size:20px;color:#d5164d;height:24px}
         .ep .pref label{display:block;font-size:10px;color:#777;margin:3px 0}
         .ep .pref b{font-size:11px;color:#151515}
         .ep .interest-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0 4px}
@@ -67,12 +67,12 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .interest .icat{font-style:normal;font-size:var(--ct);font-weight:600;letter-spacing:.2px;line-height:1.35;text-transform:uppercase;color:#151515;background:none;border-radius:0;padding:0;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .ep .interest b{font-size:var(--nm);font-weight:600;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#df003f}
         .ep .interest em{right:calc(var(--ic) * .34);top:50%;transform:translateY(-50%);font-style:normal;font-size:calc(var(--ic) * .72)}
-        .ep .save{display:block;width:100%;border:0;border-radius:22px;background:#df003f;color:white;font-size:17px;font-weight:600;padding:11px 15px;margin:13px 0 8px;cursor:pointer;box-shadow:0 2px 4px rgba(223,0,63,.12);font-family:inherit}
+        .ep .save{display:block;width:100%;border:0;border-radius:22px;background:#df003f;color:white;font-size:17px;font-weight:600;padding:11px 15px;margin:11px 0 6px;cursor:pointer;box-shadow:0 2px 4px rgba(223,0,63,.12);font-family:inherit}
         .ep .save:active{transform:scale(.99)}
         .ep .save:disabled{opacity:.6}
         .ep .logout{display:block;width:100%;border:1.5px solid #df003f;border-radius:22px;background:#fff;color:#df003f;font-size:16px;font-weight:600;padding:11px 15px;margin:0 0 8px;cursor:pointer;font-family:inherit}
         .ep .logout:active{transform:scale(.99)}
-        .ep .footer-note{text-align:center;font-size:12px;color:#777;margin:0 0 4px}
+        .ep .footer-note{text-align:center;font-size:11px;color:#777;margin:0 0 0}
         .ep .home-indicator{display:none}
         .ep.toast,.ep .toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,20px);opacity:0;background:#222;color:#fff;padding:11px 18px;border-radius:22px;font-size:13px;transition:.25s;pointer-events:none;z-index:400;white-space:nowrap;max-width:calc(100% - 40px);overflow:hidden;text-overflow:ellipsis}
         .ep.toast.show,.ep .toast.show{opacity:1;transform:translate(-50%,0)}
@@ -86,14 +86,14 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .progress{margin:12px 70px 6px;gap:6px}
           .ep .card{margin-top:8px;padding:10px 5px 9px}
           .ep .photo-grid{gap:8px;padding:0 3px}
-          .ep .photo-item,.ep .add-tile{height:165px}
+          .ep .photo-item,.ep .add-tile{height:min(20vw,120px)}
           .ep .section-head{padding:0 5px 7px;gap:9px}
           .ep .section-head h2{font-size:16px}
           .ep .section-head p{font-size:10px}
           .ep .info{padding-left:8px}
           .ep .interest-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0 3px}
           .ep .save{font-size:16px}
-          .ep .home-indicator{display:block;width:135px;height:5px;border-radius:5px;background:#111;margin:14px auto 0}
+          .ep .home-indicator{display:block;width:110px;height:4px;border-radius:5px;background:#111;margin:8px auto 0}
           .ep.toast,.ep .toast{bottom:92px}
         }
         @media(max-width:430px){
@@ -101,9 +101,9 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .topbar{grid-template-columns:42px 1fr 42px}
           .ep .brand-logo{height:36px}
           .ep .photo-grid{grid-template-columns:repeat(6,1fr);gap:8px}
-          .ep .photo-item,.ep .add-tile{height:88px}
+          .ep .photo-item,.ep .add-tile{height:min(15vw,88px)}
           .ep .info-grid{grid-template-columns:1fr 1fr}
-          .ep .info{min-height:62px}
+          .ep .info{min-height:50px}
           .ep .preferences .pref label{font-size:9px}
           .ep .preferences .pref b{font-size:10px}
           .ep .progress{margin-left:40px;margin-right:40px}

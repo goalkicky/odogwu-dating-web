@@ -20,7 +20,7 @@ function Brand({ showImg }: { showImg: boolean }) {
   );
 }
 
-export default function AppShell({ children, header }: { children: React.ReactNode; header?: React.ReactNode }) {
+export default function AppShell({ children, header, hideBottomNav }: { children: React.ReactNode; header?: React.ReactNode; hideBottomNav?: boolean }) {
   const pathname = usePathname();
   const router = useRouter();
   const { profile, loading, isAuthenticated } = useAuth();
@@ -194,10 +194,11 @@ export default function AppShell({ children, header }: { children: React.ReactNo
 
       {/* Mobile content + bottom nav */}
       <aside className="uv-mobile" style={{ display: 'none' }}>
-        <main style={{ minHeight: '100svh', background: '#fff', padding: '0 16px 72px', boxSizing: 'border-box' }}>
+        <main style={{ minHeight: '100svh', background: '#fff', padding: hideBottomNav ? '0 16px' : '0 16px 72px', boxSizing: 'border-box' }}>
           {header ?? defaultHeader}
           {children}
         </main>
+        {!hideBottomNav && (
         <nav className="uv-bottom-nav">
           <Link href="/home" className={`uv-bottom-link ${isActive('/home') ? 'active' : ''}`}>
             <svg viewBox="0 0 48 48" className="uv-nav-bl"><path d="M8 22 24 9l16 13v17H29V28H19v11H8Z"/></svg><span>Home</span>
@@ -216,6 +217,7 @@ export default function AppShell({ children, header }: { children: React.ReactNo
             <svg viewBox="0 0 48 48" className="uv-nav-bl"><circle cx="24" cy="17" r="7" fill="none" strokeWidth="2.6"/><path d="M10 39c1-8 7-12 14-12s13 4 14 12" fill="none" strokeWidth="2.6"/></svg><span>Profile</span>
           </Link>
         </nav>
+        )}
       </aside>
 
       <style jsx>{`

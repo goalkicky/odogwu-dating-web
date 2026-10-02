@@ -94,7 +94,7 @@ function TextSheet({ label, value, type, multiline, maxLength, placeholder, onSa
 
 export default function EditProfilePage() {
   const router = useRouter();
-  const { profile, refreshUser, logout } = useAuth();
+  const { profile, refreshUser } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState('');
@@ -281,14 +281,8 @@ export default function EditProfilePage() {
     setSaving(false);
   };
 
-  const handleLogout = async () => {
-    if (!window.confirm('Log out of your account?')) return;
-    await logout();
-    router.replace('/login');
-  };
-
   return (
-    <AppShell header={<></>}>
+    <AppShell header={<></>} hideBottomNav>
       <style jsx global>{PROFILE_TEMPLATE_CSS}</style>
 
       <input ref={fileInputRef} type="file" accept="image/*" onChange={handlePhotoPick} hidden />
@@ -401,7 +395,6 @@ export default function EditProfilePage() {
             {saving ? 'Saving...' : 'Save & Continue'}
           </button>
           <p className="footer-note">You can always update this later</p>
-          <button className="logout" onClick={handleLogout}>Log Out</button>
           <div className="home-indicator"></div>
         </div>
       </main>
