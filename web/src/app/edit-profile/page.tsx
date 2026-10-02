@@ -307,7 +307,7 @@ export default function EditProfilePage() {
           <section className="card photos-card">
             <div className="section-head">
               <div><h2>Add Your Photos</h2><p>Profiles with 4+ photos get 5x more matches</p></div>
-              <strong>{photos.length}/{MAX_PHOTOS}</strong>
+              <strong className="photo-count">{photos.length}/{MAX_PHOTOS}</strong>
             </div>
             <div className="photo-grid" id="photoGrid">
               {photos.map((id, i) => (
