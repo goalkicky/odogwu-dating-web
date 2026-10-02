@@ -48,14 +48,14 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .accordion-title>div:nth-child(2){flex:1}
         .ep .accordion-title strong span{margin-left:5px;color:#777}
         .ep .info-grid{display:grid;grid-template-columns:1fr 1fr}
-        .ep .info{min-height:44px;border:0;border-top:1px solid #eee;padding:6px 20px 4px 9px;position:relative;width:100%;background:transparent;text-align:left;font-family:inherit;cursor:pointer}
-        .ep .info label{display:block;font-size:9px;color:#777;margin-bottom:1px}
-        .ep .info b{display:block;font-size:10px;font-weight:500;color:#151515}
-        .ep .info small{display:block;font-size:9px;color:#333;margin-top:1px}
+        .ep .info{min-height:38px;border:0;border-top:1px solid #eee;padding:5px 16px 3px 8px;position:relative;width:100%;background:transparent;text-align:left;font-family:inherit;cursor:pointer}
+        .ep .info label{display:block;font-size:7.5px;color:#777;margin-bottom:1px}
+        .ep .info b{display:block;font-size:8.5px;font-weight:500;color:#151515}
+        .ep .info small{display:block;font-size:7.5px;color:#333;margin-top:1px}
         .ep .info span,.ep .about-body>span,.ep .interest em{position:absolute;right:10px;color:#cf164b;font-size:16px}
-        .ep .info span{top:20px}
-        .ep .about-body{position:relative;border:1px solid #f0f0f0;border-radius:10px;margin:0 4px;padding:9px 10px;font-size:9.5px;line-height:1.5;color:#404040;cursor:pointer}
-        .ep .about-body>span{right:9px;bottom:9px}
+        .ep .info span{top:16px}
+        .ep .about-body{position:relative;border:1px solid #f0f0f0;border-radius:10px;margin:0 4px;padding:7px 8px;font-size:8px;line-height:1.45;color:#404040;cursor:pointer}
+        .ep .about-body>span{right:7px;bottom:7px}
         .ep .preferences{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #eee}
         .ep .pref{text-align:center;padding:8px 3px 3px;min-height:64px;border:0;border-right:1px dashed #ddd;background:transparent;font-family:inherit;cursor:pointer}
         .ep .pref:last-child{border:0}
@@ -105,7 +105,7 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .photo-grid{grid-template-columns:repeat(6,1fr);gap:8px}
           .ep .photo-item,.ep .add-tile{height:88px}
           .ep .info-grid{grid-template-columns:1fr 1fr}
-          .ep .info{min-height:42px}
+          .ep .info{min-height:36px}
           .ep .preferences .pref label{font-size:9px}
           .ep .preferences .pref b{font-size:10px}
           .ep .progress{margin-left:40px;margin-right:40px}
