@@ -24,8 +24,8 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .card{border:1px solid #eee;border-radius:15px;margin-top:9px;padding:12px 6px 11px;background:#fff;box-shadow:0 1px 7px rgba(0,0,0,.025);min-width:0}
         .ep .interests-card{overflow:hidden}
         .ep .section-head{display:flex;align-items:center;gap:10px;padding:0 6px 8px}
-        .ep .section-head h2{font-size:13px;margin:0;font-weight:700;letter-spacing:-.2px;line-height:1.2}
-        .ep .section-head p{margin:1px 0 0;color:#777;font-size:8.5px;line-height:1.25}
+        .ep .section-head h2{font-size:11px;margin:0;font-weight:700;letter-spacing:-.1px;line-height:1.2}
+        .ep .section-head p{margin:1px 0 0;color:#777;font-size:7px;line-height:1.25}
         .ep .section-head>div:first-child:not(.title-icon){flex:1}
         .ep .section-head strong{color:#cf1a4e;font-size:15px;white-space:nowrap}
         .ep .section-head strong.count{margin-left:auto;display:flex;align-items:center;gap:5px;flex:none}
@@ -88,8 +88,8 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .photo-grid{gap:8px;padding:0 3px}
           .ep .photo-item,.ep .add-tile{height:165px}
           .ep .section-head{padding:0 5px 7px;gap:9px}
-          .ep .section-head h2{font-size:12px}
-          .ep .section-head p{font-size:7.5px}
+          .ep .section-head h2{font-size:10px}
+          .ep .section-head p{font-size:6.5px}
           .ep .info{padding-left:8px}
           .ep .interest-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0 3px}
           .ep .save{font-size:16px}
@@ -111,7 +111,7 @@ export const PROFILE_TEMPLATE_CSS = `
         @media(max-width:350px){
           .ep .photo-item{height:78px}
           .ep .intro h1{font-size:12.5px}
-          .ep .section-head h2{font-size:11px}
+          .ep .section-head h2{font-size:9.5px}
           .ep .pref b{font-size:9px}
         }
       `;
