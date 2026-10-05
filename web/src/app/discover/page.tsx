@@ -219,8 +219,9 @@ export default function DiscoverPage() {
   const actionSize = isTiny ? 58 : isMobile ? 64 : 110;
   const actionGap = isTiny ? 14 : isMobile ? 20 : 74;
   const actionSmall = isTiny ? 9 : isMobile ? 10 : 12;
-  const glyphSize = Math.round(actionSize * 0.55);
-  const starSize = Math.round(actionSize * 0.85);
+  const iconPad = Math.round(actionSize * 0.18);
+  const glyphSize = Math.round(actionSize * 0.5);
+  const starSize = Math.round(actionSize * 0.72);
   const labelGap = 4;
 
   return (
@@ -242,15 +243,15 @@ export default function DiscoverPage() {
 
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: actionGap, padding: isMobile ? '6px 0 2px' : '22px 0 14px' }}>
             <button onClick={handleSwipeLeft} aria-label="Pass" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: labelGap, background: 'none', border: 0, cursor: 'pointer', color: '#101217', outline: 'none', WebkitTapHighlightColor: 'transparent' }}>
-              <span style={{ width: actionSize, height: actionSize, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff' }}>
-                <img src="/icons/pass.png" alt="" style={{ display: 'block', height: glyphSize, width: 'auto' }} />
+              <span style={{ width: actionSize, height: actionSize, boxSizing: 'border-box', padding: iconPad, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff' }}>
+                <img src="/icons/pass.png" alt="" style={{ display: 'block', height: glyphSize, width: 'auto', maxWidth: '100%', maxHeight: '100%' }} />
               </span>
               <small style={{ fontSize: actionSmall, fontWeight: 700, color: '#000' }}>Pass</small>
             </button>
 
             <button onClick={handleMessage} aria-label="Message" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: labelGap, background: 'none', border: 0, cursor: 'pointer', color: '#101217', outline: 'none', WebkitTapHighlightColor: 'transparent' }}>
-              <span style={{ width: actionSize, height: actionSize, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff' }}>
-                <img src="/icons/message.png" alt="" style={{ display: 'block', height: glyphSize, width: 'auto' }} />
+              <span style={{ width: actionSize, height: actionSize, boxSizing: 'border-box', padding: iconPad, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff' }}>
+                <img src="/icons/message.png" alt="" style={{ display: 'block', height: glyphSize, width: 'auto', maxWidth: '100%', maxHeight: '100%' }} />
               </span>
               <small style={{ fontSize: actionSmall, fontWeight: 700, color: '#000' }}>Message</small>
             </button>
@@ -263,8 +264,8 @@ export default function DiscoverPage() {
             </button>
 
             <button onClick={handleSuperLike} aria-label="Super Like" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: labelGap, background: 'none', border: 0, cursor: 'pointer', color: '#101217', outline: 'none', WebkitTapHighlightColor: 'transparent' }}>
-              <span style={{ width: actionSize, height: actionSize, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff' }}>
-                <img src="/icons/superlike.png" alt="" style={{ display: 'block', height: starSize, width: 'auto' }} />
+              <span style={{ width: actionSize, height: actionSize, boxSizing: 'border-box', padding: iconPad, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff' }}>
+                <img src="/icons/superlike.png" alt="" style={{ display: 'block', height: starSize, width: 'auto', maxWidth: '100%', maxHeight: '100%' }} />
               </span>
               <small style={{ fontSize: actionSmall, fontWeight: 700, color: '#000' }}>Super Like</small>
             </button>
