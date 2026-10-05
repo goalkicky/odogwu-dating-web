@@ -220,8 +220,8 @@ export default function DiscoverPage() {
   const actionGap = isTiny ? 14 : isMobile ? 20 : 74;
   const actionSmall = isTiny ? 9 : isMobile ? 10 : 12;
   const glyphSize = Math.round(actionSize * 0.55);
-  const starSize = Math.round(actionSize * 1.22);
-  const labelGap = Math.max(4, Math.round((starSize - actionSize) / 2) + 4);
+  const starSize = Math.round(actionSize * 0.85);
+  const labelGap = 4;
 
   return (
     <AppShell header={discoverHeader}>
@@ -263,7 +263,7 @@ export default function DiscoverPage() {
             </button>
 
             <button onClick={handleSuperLike} aria-label="Super Like" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: labelGap, background: 'none', border: 0, cursor: 'pointer', color: '#101217', outline: 'none', WebkitTapHighlightColor: 'transparent' }}>
-              <span style={{ width: actionSize, height: actionSize, display: 'grid', placeItems: 'center' }}>
+              <span style={{ width: actionSize, height: actionSize, border: '1px solid #ececef', borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: '0 3px 10px rgba(0,0,0,0.04)', background: '#fff' }}>
                 <img src="/icons/superlike.png" alt="" style={{ display: 'block', height: starSize, width: 'auto' }} />
               </span>
               <small style={{ fontSize: actionSmall, fontWeight: 700, color: '#000' }}>Super Like</small>
