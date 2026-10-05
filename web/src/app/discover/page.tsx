@@ -177,7 +177,7 @@ export default function DiscoverPage() {
       <div style={{ display: 'flex', alignItems: 'center', minWidth: 0 }}>
         <img src="/o-logo.png" alt="Odogwu" style={{ height: 40, width: 'auto', objectFit: 'contain', display: 'block' }} />
       </div>
-      <h1 style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 17, fontWeight: 700, color: '#111111', lineHeight: 24, letterSpacing: -0.2, margin: 0, textAlign: 'center' }}>Discover</h1>
+      <h1 style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 57, margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, fontWeight: 700, color: '#111111', lineHeight: 28, letterSpacing: -0.4, textAlign: 'center', pointerEvents: 'none' }}>Discover</h1>
       <button onClick={() => setShowFilters(true)} aria-label="Filter preferences" style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 0, cursor: 'pointer', color: '#111111' }}>
         <FilterIcon size={24} color="#111111" />
       </button>
