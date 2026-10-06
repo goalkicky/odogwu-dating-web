@@ -25,7 +25,7 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .interests-card{overflow:hidden}
         .ep .section-head{display:flex;align-items:center;gap:10px;padding:0 6px 8px}
         .ep .section-head h2{font-size:11px;margin:0;font-weight:700;letter-spacing:-.1px;line-height:1.2}
-        .ep .section-head p{margin:1px 0 0;color:#777;font-size:7px;line-height:1.25;font-weight:500}
+        .ep .section-head p{margin:1px 0 0;color:#777;font-size:9px;line-height:1.25;font-weight:500}
         .ep .section-head>div:first-child:not(.title-icon){flex:1}
         .ep .section-head strong{color:#cf1a4e;font-size:15px;white-space:nowrap}
         .ep .section-head strong.photo-count{font-size:10px;color:#c0315e;background:#fff1f5;border-radius:9px;padding:2px 7px;line-height:1.3;flex:none;display:flex;align-items:center;gap:4px}
@@ -91,7 +91,7 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .photo-item,.ep .add-tile{height:165px}
           .ep .section-head{padding:0 5px 7px;gap:9px}
           .ep .section-head h2{font-size:10px}
-          .ep .section-head p{font-size:6.5px}
+          .ep .section-head p{font-size:8px}
           .ep .info{padding-left:8px}
           .ep .interest-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0 3px}
           .ep .save{font-size:16px}
