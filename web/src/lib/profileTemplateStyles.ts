@@ -96,6 +96,7 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .section-head p{font-size:8px}
           .ep .info{padding-left:8px}
           .ep .interest-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0 3px}
+          .ep .interest b{font-size:8px}
           .ep .save{font-size:16px}
           .ep .home-indicator{display:block;width:110px;height:4px;border-radius:5px;background:#111;margin:8px auto 0}
           .ep.toast,.ep .toast{bottom:92px}
