@@ -341,7 +341,12 @@ export default function EditProfilePage() {
 
           <section className="card about-card">
             <div className="section-head accordion-title" data-target="aboutBody" onClick={() => setOpenAbout(o => !o)}>
-              <div className="title-icon quote">“</div><h2>About You</h2><strong className="photo-count">{bio ? '1/1' : '0/1'} <span>{openAbout ? '⌃' : '⌄'}</span></strong>
+              <div className="title-icon quote">“</div>
+              <div style={{ minWidth: 0 }}>
+                <h2>About You</h2>
+                <p>Tell others about yourself</p>
+              </div>
+              <strong className="photo-count">{bio ? '1/1' : '0/1'} <span>{openAbout ? '⌃' : '⌄'}</span></strong>
             </div>
             {openAbout && (
               <div

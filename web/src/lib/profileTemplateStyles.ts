@@ -43,6 +43,7 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .hint{background:#fff0f5;border-radius:6px;margin:7px 4px 0;padding:4px 6px;color:#5f5f5f;font-size:7px;font-weight:700}
         .ep .hint span{font-size:21px;color:#d31a4d;vertical-align:middle;margin-right:8px}
         .ep .title-icon{width:30px;height:30px;border-radius:8px;background:#fff0f5;color:#d4154c;display:grid;place-items:center;font-size:19px;flex:none}
+        .ep .title-icon.quote{font-size:26px}
         .ep .accordion-title{cursor:pointer}
         .ep .accordion-title>h2,.ep .accordion-title>.title-icon+h2{flex:1}
         .ep .accordion-title>div:nth-child(2){flex:1}
