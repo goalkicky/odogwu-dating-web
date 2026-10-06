@@ -325,7 +325,12 @@ export default function EditProfilePage() {
 
           <section className="card basic-card" style={{ cursor: 'pointer' }} onClick={() => router.push('/edit-profile/basic')}>
             <div className="section-head accordion-title" data-target="basicBody">
-              <div className="title-icon person">♙</div><h2>Basic Information</h2><strong className="photo-count">{basicsFilled}/6 <span>›</span></strong>
+              <div className="title-icon person">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4.5 20.5c1.4-3.7 4.1-5.6 7.5-5.6s6.1 1.9 7.5 5.6" />
+                </svg>
+              </div><h2>Basic Information</h2><strong className="photo-count">{basicsFilled}/6 <span>›</span></strong>
             </div>
             <div className="info-grid" id="basicBody">
               {basics.map(b => (
