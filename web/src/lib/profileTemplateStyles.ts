@@ -13,7 +13,7 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .bubble:after{content:"";position:absolute;bottom:-5px;left:5px;border-width:5px 5px 0 0;border-style:solid;border-color:#222 transparent transparent transparent}
         .ep .chat-btn em{position:absolute;right:-2px;top:-5px;background:var(--red);color:#fff;width:22px;height:22px;border-radius:50%;font-size:12px;font-style:normal;display:grid;place-items:center;font-weight:700}
         .ep .intro{text-align:center;padding:4px 0 6px;position:relative}
-        .ep .intro .intro-back{position:absolute;left:0;top:-1px;font-size:22px;font-weight:200;line-height:1;transform:none;padding:0}
+        .ep .intro .intro-back{position:absolute;left:0;top:-1px;font-size:30px;font-weight:500;line-height:1;transform:none;padding:0}
         .ep .intro h1{font-size:14.5px;letter-spacing:-.3px;margin:0 0 2px;font-weight:700}
         .ep .intro p{font-size:8.5px;color:#777;margin:0}
         .ep .intro p span{color:var(--red)}
