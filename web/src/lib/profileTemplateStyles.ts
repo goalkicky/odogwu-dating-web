@@ -25,14 +25,14 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .interests-card{overflow:hidden}
         .ep .section-head{display:flex;align-items:center;gap:10px;padding:0 6px 8px}
         .ep .section-head h2{font-size:11px;margin:0;font-weight:700;letter-spacing:-.1px;line-height:1.2}
-        .ep .section-head p{margin:1px 0 0;color:#777;font-size:7px;line-height:1.25}
+        .ep .section-head p{margin:1px 0 0;color:#777;font-size:7px;line-height:1.25;font-weight:500}
         .ep .section-head>div:first-child:not(.title-icon){flex:1}
         .ep .section-head strong{color:#cf1a4e;font-size:15px;white-space:nowrap}
         .ep .section-head strong.photo-count{font-size:10px;color:#c0315e;background:#fff1f5;border-radius:9px;padding:2px 7px;line-height:1.3;flex:none;display:flex;align-items:center;gap:4px}
         .ep .section-head strong.photo-count span{color:#c0315e;font-size:11px;line-height:1;margin-left:0}
         .ep .section-head strong.count{margin-left:auto;display:flex;align-items:center;gap:5px;flex:none}
         .ep .section-head strong.count span{color:#cf1a4e;font-size:17px;line-height:1;display:block}
-        .ep .photo-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;padding:0 4px}
+        .ep .photo-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;padding:0;margin:0 -6px}
         .ep .photo-item{height:168px;position:relative;overflow:hidden;border-radius:9px;background:#f5f5f5}
         .ep .photo-item img{width:100%;height:100%;object-fit:cover;display:block}
         .ep .remove{position:absolute;right:5px;top:5px;border:0;background:rgba(255,255,255,.93);width:20px;height:20px;border-radius:50%;font-size:19px;line-height:17px;color:#555;cursor:pointer}
@@ -87,7 +87,7 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .intro p{font-size:8px}
           .ep .progress{margin:9px 70px 4px;gap:4px}
           .ep .card{margin-top:8px;padding:10px 5px 9px}
-          .ep .photo-grid{gap:8px;padding:0 3px}
+          .ep .photo-grid{gap:5px;padding:0;margin:0 -5px}
           .ep .photo-item,.ep .add-tile{height:165px}
           .ep .section-head{padding:0 5px 7px;gap:9px}
           .ep .section-head h2{font-size:10px}
@@ -102,7 +102,7 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .app-shell{padding-left:4px;padding-right:4px}
           .ep .topbar{grid-template-columns:42px 1fr 42px}
           .ep .brand-logo{height:36px}
-          .ep .photo-grid{grid-template-columns:repeat(6,1fr);gap:8px}
+          .ep .photo-grid{grid-template-columns:repeat(6,1fr);gap:4px}
           .ep .photo-item,.ep .add-tile{height:88px}
           .ep .info-grid{grid-template-columns:1fr 1fr}
           .ep .info{min-height:36px}
