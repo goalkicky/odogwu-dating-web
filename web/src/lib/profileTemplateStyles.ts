@@ -61,8 +61,8 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .pref{text-align:center;padding:8px 3px 3px;min-height:64px;border:0;border-right:1px dashed #ddd;background:transparent;font-family:inherit;cursor:pointer}
         .ep .pref:last-child{border:0}
         .ep .pref div{font-size:20px;color:#d5164d;height:24px}
-        .ep .pref label{display:block;font-size:10px;color:#777;margin:3px 0}
-        .ep .pref b{font-size:11px;color:#151515}
+        .ep .pref label{display:block;font-size:8px;color:#000;margin:3px 0 0;line-height:1.1}
+        .ep .pref b{font-size:9px;color:#151515;line-height:1.15}
         .ep .interest-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0 4px}
         .ep .interest{--ic:clamp(11px,3.1vw,13px);--nm:clamp(8px,2.5vw,10px);--ct:clamp(5.5px,1.8vw,7px);min-width:0;min-height:calc(var(--ic) * 3.3);border:1px solid #eee;border-radius:11px;padding:calc(var(--ic) * .3) calc(var(--ic) * .9) calc(var(--ic) * .3) calc(var(--ic) * .34);display:flex;align-items:center;gap:calc(var(--ic) * .34);position:relative;background:#fff;font-family:inherit;width:100%;text-align:left}
         .ep .interest>span{font-size:var(--ic);width:calc(var(--ic) * 1.18);text-align:center;flex:none;line-height:1}
@@ -107,14 +107,14 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .photo-item,.ep .add-tile{height:88px}
           .ep .info-grid{grid-template-columns:1fr 1fr}
           .ep .info{min-height:36px}
-          .ep .preferences .pref label{font-size:9px}
-          .ep .preferences .pref b{font-size:10px}
+          .ep .preferences .pref label{font-size:7.5px}
+          .ep .preferences .pref b{font-size:8.5px}
           .ep .progress{margin-left:40px;margin-right:40px}
         }
         @media(max-width:350px){
           .ep .photo-item{height:78px}
           .ep .intro h1{font-size:12.5px}
           .ep .section-head h2{font-size:9.5px}
-          .ep .pref b{font-size:9px}
+          .ep .preferences .pref b{font-size:8px}
         }
       `;
