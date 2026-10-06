@@ -366,7 +366,7 @@ export default function EditProfilePage() {
             </div>
             <div className="preferences" id="prefsBody">
               <div className="pref"><div>▣</div><label>Age Range</label><b>{ageRange || '—'}</b></div>
-              <div className="pref"><div>♡</div><label>Looking For</label><b>{relationshipGoals || '—'}</b></div>
+              <div className="pref"><div>♡</div><label>Looking For</label><b>{relationshipGoals === 'Long-term relationship' ? 'Long-term' : relationshipGoals || '—'}</b></div>
               <div className="pref"><div>⌾</div><label>Distance</label><b>{maxDistance || '—'}</b></div>
               <div className="pref"><div>♧</div><label>Kids</label><b>{wantsKids || '—'}</b></div>
             </div>
