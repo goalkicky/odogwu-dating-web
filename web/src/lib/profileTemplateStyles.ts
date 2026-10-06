@@ -53,7 +53,7 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .info b{display:block;font-size:8.5px;font-weight:700;color:#000}
         .ep .info small{display:block;font-size:7.5px;color:#000;margin-top:1px}
         .ep .info span,.ep .about-body>span,.ep .interest em{position:absolute;right:10px;color:#cf164b;font-size:16px}
-        .ep .info span{top:16px}
+        .ep .info span{top:16px;font-size:10px}
         .ep .about-body{position:relative;border:1px solid #f0f0f0;border-radius:10px;margin:0 4px;padding:7px 8px;font-size:8px;line-height:1.45;color:#404040;cursor:pointer}
         .ep .about-body>span{right:7px;bottom:7px}
         .ep .preferences{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #eee}
