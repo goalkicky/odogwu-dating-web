@@ -60,8 +60,8 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .preferences{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #eee}
         .ep .pref{text-align:center;padding:8px 3px 3px;min-height:64px;border:0;border-right:1px dashed #ddd;background:transparent;font-family:inherit;cursor:pointer}
         .ep .pref:last-child{border:0}
-        .ep .pref div{font-size:20px;color:#d5164d;height:24px}
-        .ep .pref div svg{width:20px;height:20px;display:block;margin:2px auto 0}
+        .ep .pref div{width:30px;height:30px;border-radius:8px;background:#fff0f5;color:#d4154c;font-size:19px;margin:0 auto;display:grid;place-items:center}
+        .ep .pref div svg{width:18px;height:18px;display:block}
         .ep .pref label{display:block;font-size:8px;color:#000;margin:3px 0 0;line-height:1.1}
         .ep .pref b{font-size:9px;color:#151515;line-height:1.15}
         .ep .interest-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0 4px}
