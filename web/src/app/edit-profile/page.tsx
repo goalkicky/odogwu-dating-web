@@ -320,7 +320,14 @@ export default function EditProfilePage() {
                 fileInputRef.current?.click();
               }}><span>＋</span><small>Add Photo</small></button>
             </div>
-            <div className="hint"><span>♧</span> Show your best self! Clear photos with a smiling face work best.</div>
+            <div className="hint">
+              <span style={{ fontSize: 0, display: 'inline-flex', verticalAlign: 'middle' }}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9.5 18.5h5M10.5 21.5h3" />
+                  <path d="M12 2.5a6.5 6.5 0 0 0-3.9 11.7c.7.5 1.1 1.3 1.2 2.1l.1.7h5.2l.1-.7c.1-.8.5-1.6 1.2-2.1A6.5 6.5 0 0 0 12 2.5Z" />
+                  <path d="M12 1.2v1.3M4.2 4.6l1 1M19.8 4.6l-1 1M1.8 12H3.2M20.8 12h1.4" />
+                </svg>
+              </span> Show your best self! Clear photos with a smiling face work best.</div>
           </section>
 
           <section className="card basic-card" style={{ cursor: 'pointer' }} onClick={() => router.push('/edit-profile/basic')}>
