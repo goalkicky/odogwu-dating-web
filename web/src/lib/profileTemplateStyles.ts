@@ -55,7 +55,7 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .info span,.ep .about-body>span,.ep .interest em{position:absolute;right:10px;color:#cf164b;font-size:16px}
         .ep .info span{top:16px;font-size:10px}
         .ep .about-body{position:relative;border:1px solid #f0f0f0;border-radius:10px;margin:0 4px;padding:7px 8px;font-size:8px;line-height:1.45;color:#404040;cursor:pointer}
-        .ep .about-body>span{right:7px;bottom:7px}
+        .ep .about-body>span{right:7px;bottom:7px;font-size:10px}
         .ep .preferences{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #eee}
         .ep .pref{text-align:center;padding:8px 3px 3px;min-height:64px;border:0;border-right:1px dashed #ddd;background:transparent;font-family:inherit;cursor:pointer}
         .ep .pref:last-child{border:0}
