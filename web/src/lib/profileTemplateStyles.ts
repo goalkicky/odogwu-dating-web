@@ -15,7 +15,7 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .intro{text-align:center;padding:4px 0 6px;position:relative}
         .ep .intro .intro-back{position:absolute;left:0;top:-1px;font-size:30px;font-weight:500;line-height:1;transform:none;padding:0}
         .ep .intro h1{font-size:14.5px;letter-spacing:-.3px;margin:0 0 2px;font-weight:700}
-        .ep .intro p{font-size:8.5px;color:#777;margin:0}
+        .ep .intro p{font-size:8.5px;color:#777;margin:0;font-weight:500}
         .ep .intro p span{color:var(--red)}
         .ep .progress{display:flex;gap:5px;margin:11px 78px 4px}
         .ep .progress span{height:3px;background:#dd0050;border-radius:3px;flex:1}
