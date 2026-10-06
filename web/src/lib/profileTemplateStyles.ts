@@ -49,9 +49,9 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .accordion-title strong span{margin-left:5px;color:#777}
         .ep .info-grid{display:grid;grid-template-columns:1fr 1fr}
         .ep .info{min-height:38px;border:0;border-top:1px solid #eee;padding:5px 16px 3px 8px;position:relative;width:100%;background:transparent;text-align:left;font-family:inherit;cursor:pointer}
-        .ep .info label{display:block;font-size:7.5px;color:#777;margin-bottom:1px}
-        .ep .info b{display:block;font-size:8.5px;font-weight:500;color:#151515}
-        .ep .info small{display:block;font-size:7.5px;color:#333;margin-top:1px}
+        .ep .info label{display:block;font-size:7.5px;color:#000;margin-bottom:1px}
+        .ep .info b{display:block;font-size:8.5px;font-weight:700;color:#000}
+        .ep .info small{display:block;font-size:7.5px;color:#000;margin-top:1px}
         .ep .info span,.ep .about-body>span,.ep .interest em{position:absolute;right:10px;color:#cf164b;font-size:16px}
         .ep .info span{top:16px}
         .ep .about-body{position:relative;border:1px solid #f0f0f0;border-radius:10px;margin:0 4px;padding:7px 8px;font-size:8px;line-height:1.45;color:#404040;cursor:pointer}
