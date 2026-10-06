@@ -70,6 +70,27 @@ function TextSheet({ label, value, type, maxLength, placeholder, onSave, onClose
   );
 }
 
+function EducationSheet({ course, institution, onSave, onClose }: { course: string; institution: string; onSave: (c: string, i: string) => void; onClose: () => void }) {
+  const [c, setC] = useState(course || '');
+  const [i, setI] = useState(institution || '');
+  const inputStyle: React.CSSProperties = { width: '100%', boxSizing: 'border-box', background: '#F6F6F9', border: '1px solid #EDEDF1', borderRadius: 14, color: '#151515', padding: 14, fontSize: 16, outline: 'none', fontFamily: 'inherit' };
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 300, display: 'flex', alignItems: 'flex-end', background: 'rgba(0,0,0,0.6)' }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ width: '100%', background: '#fff', borderRadius: '20px 20px 0 0', padding: '24px 24px 40px', display: 'flex', flexDirection: 'column' }}>
+        <h3 style={{ fontSize: 18, fontWeight: 700, color: '#151515', marginBottom: 16, textAlign: 'center' }}>Education</h3>
+        <input value={c} onChange={e => setC(e.target.value)} placeholder="e.g. Computer Science" style={inputStyle} />
+        <input value={i} onChange={e => setI(e.target.value)} placeholder="e.g. University of Lagos" style={{ ...inputStyle, marginTop: 10 }} />
+        <button
+          onClick={() => { onSave(c.trim(), i.trim()); onClose(); }}
+          style={{ marginTop: 16, width: '100%', padding: '14px', borderRadius: 9999, border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #FF2E5F, #FF7BA0)', color: 'white', fontWeight: 800, fontSize: 15, boxShadow: '0 8px 24px rgba(255,46,95,0.35)' }}
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function BasicInfoPage() {
   const router = useRouter();
   const { profile, refreshUser } = useAuth();
@@ -83,6 +104,7 @@ export default function BasicInfoPage() {
   const [occupation, setOccupation] = useState('');
   const [showGender, setShowGender] = useState(false);
   const [textSheet, setTextSheet] = useState<null | { label: string; value: string; onSave: (v: string) => void; type?: string; placeholder?: string }>(null);
+  const [eduSheet, setEduSheet] = useState(false);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState('');
   const [toastVisible, setToastVisible] = useState(false);
@@ -119,18 +141,18 @@ export default function BasicInfoPage() {
   }, [profile]);
 
   const age = calcAge(dob);
+  const education = [courseOfStudy, institution].filter(Boolean).join(', ');
   const basics = [
     { field: 'Name', value: name || '—', sub: 'This is how it will appear on your profile.', twoLine: false, onEdit: () => setTextSheet({ label: 'Name', value: name, placeholder: 'Your name', onSave: (v: string) => { setName(v); showToast('Name updated'); } }) },
     { field: 'Age', value: age ? String(age) : '—', sub: "Your age won't be shown on your profile.", twoLine: false, onEdit: () => setTextSheet({ label: 'Date of Birth', value: dob, type: 'date', onSave: (v: string) => { setDob(v); showToast('Age updated'); } }) },
     { field: 'Gender', value: gender ? (gender.charAt(0).toUpperCase() + gender.slice(1)) : '—', sub: 'This helps us show you better matches.', twoLine: false, onEdit: () => setShowGender(true) },
     { field: 'Location', value: city || '—', sub: 'Your location helps us find matches near you.', twoLine: false, onEdit: () => { window.location.href = '/location.html?return=/edit-profile/basic'; } },
-    { field: 'Course of Study', value: courseOfStudy || '—', sub: 'What did you study?', twoLine: false, onEdit: () => setTextSheet({ label: 'Course of Study', value: courseOfStudy, placeholder: 'e.g. Computer Science', onSave: (v: string) => { setCourseOfStudy(v); showToast('Course updated'); } }) },
-    { field: 'Institution', value: institution || '—', sub: 'Where did you attend?', twoLine: false, onEdit: () => setTextSheet({ label: 'Institution', value: institution, placeholder: 'e.g. University of Lagos', onSave: (v: string) => { setInstitution(v); showToast('Institution updated'); } }) },
+    { field: 'Education', value: education || '—', sub: 'Your course of study and institution.', twoLine: false, onEdit: () => setEduSheet(true) },
     { field: 'Occupation', value: occupation || '—', sub: 'What do you do?', twoLine: false, onEdit: () => setTextSheet({ label: 'Occupation', value: occupation, placeholder: 'e.g. Software Developer', onSave: (v: string) => { setOccupation(v); showToast('Occupation updated'); } }) },
   ];
   const basicsFilled = basics.filter(b => b.value !== '—').length;
-  const progressFilled = Math.round((basicsFilled / 7) * 4);
-  const percent = Math.round((basicsFilled / 7) * 100);
+  const progressFilled = Math.round((basicsFilled / 6) * 4);
+  const percent = Math.round((basicsFilled / 6) * 100);
 
   const handleSave = async () => {
     setSaving(true);
@@ -159,6 +181,7 @@ export default function BasicInfoPage() {
     if (field === 'Age') return <svg viewBox="0 0 32 32"><rect x="6" y="7" width="20" height="20" rx="2.5" /><path d="M10 4.5v5M22 4.5v5M6 12h20" /><path d="M11 16h3M18 16h3M11 21h3M18 21h3" /></svg>;
     if (field === 'Gender') return <svg viewBox="0 0 32 32"><circle cx="12" cy="12" r="5" /><path d="M12 17v9M8 22h8M21 9l5-5M21 4h5v5" /><path d="M21 17a5 5 0 1 0-2.8-9.1" /></svg>;
     if (field === 'Location') return <svg viewBox="0 0 32 32"><path d="M16 28s9-8.1 9-15a9 9 0 1 0-18 0c0 6.9 9 15 9 15Z" /><circle cx="16" cy="13" r="3" /></svg>;
+    if (field === 'Education') return <svg viewBox="0 0 32 32"><path d="m4 11 12-6 12 6-12 6Z" /><path d="M8 13v8c4 3 12 3 16 0v-8M28 11v8" /></svg>;
     if (field === 'Course of Study') return <svg viewBox="0 0 32 32"><path d="m4 11 12-6 12 6-12 6Z" /><path d="M8 13v8c4 3 12 3 16 0v-8M28 11v8" /></svg>;
     if (field === 'Institution') return <svg viewBox="0 0 32 32"><path d="M5 14h22M7 14v11M25 14v11M7 25h18" /><rect x="11" y="17" width="3" height="4" /><rect x="18" y="17" width="3" height="4" /></svg>;
     return <svg viewBox="0 0 32 32"><rect x="5" y="9" width="22" height="17" rx="2.5" /><path d="M11 9V6h10v3M5 16h22M13 16v3h6v-3" /></svg>;
@@ -178,7 +201,7 @@ export default function BasicInfoPage() {
               <h1>Basic Information</h1>
               <p>Tell us a little about yourself.</p>
             </div>
-            <div className="complete">{basicsFilled}/7 Complete</div>
+            <div className="complete">{basicsFilled}/6 Complete</div>
           </header>
 
           <section className="progress" aria-label="Profile completion">
@@ -250,6 +273,14 @@ export default function BasicInfoPage() {
           placeholder={textSheet.placeholder}
           onSave={textSheet.onSave}
           onClose={() => setTextSheet(null)}
+        />
+      )}
+      {eduSheet && (
+        <EducationSheet
+          course={courseOfStudy}
+          institution={institution}
+          onSave={(c, i) => { setCourseOfStudy(c); setInstitution(i); showToast('Education updated'); }}
+          onClose={() => setEduSheet(false)}
         />
       )}
     </AppShell>

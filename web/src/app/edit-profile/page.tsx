@@ -213,8 +213,7 @@ export default function EditProfilePage() {
     { label: 'Age', value: age ? String(age) : '—', onEdit: () => openText('Date of Birth', dob, setDob, { type: 'date' }) },
     { label: 'Gender', value: gender || '—', onEdit: () => setShowGender(true) },
     { label: 'Location', value: city || '—', onEdit: () => { window.location.href = '/location.html?return=/edit-profile'; } },
-    { label: 'Course of Study', value: courseOfStudy || '—', onEdit: () => openText('Course of Study', courseOfStudy, setCourseOfStudy, { placeholder: 'e.g. Computer Science' }) },
-    { label: 'Institution', value: institution || '—', onEdit: () => openText('Institution', institution, setInstitution, { placeholder: 'e.g. University of Lagos' }) },
+    { label: 'Education', value: [courseOfStudy, institution].filter(Boolean).join(', ') || '—', onEdit: () => router.push('/edit-profile/basic') },
     { label: 'Occupation', value: occupation || '—', onEdit: () => openText('Occupation', occupation, setOccupation, { placeholder: 'e.g. Software Developer' }) },
   ];
   const basicsFilled = basics.filter(b => b.value !== '—').length;
@@ -326,7 +325,7 @@ export default function EditProfilePage() {
 
           <section className="card basic-card" style={{ cursor: 'pointer' }} onClick={() => router.push('/edit-profile/basic')}>
             <div className="section-head accordion-title" data-target="basicBody">
-              <div className="title-icon person">♙</div><h2>Basic Information</h2><strong className="photo-count">{basicsFilled}/7 <span>›</span></strong>
+              <div className="title-icon person">♙</div><h2>Basic Information</h2><strong className="photo-count">{basicsFilled}/6 <span>›</span></strong>
             </div>
             <div className="info-grid" id="basicBody">
               {basics.map(b => (

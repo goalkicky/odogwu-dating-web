@@ -43,8 +43,7 @@ export function profileCompletionMissing(p: any): string[] {
     ['interestedIn', 'Choose who you are interested in'],
     ['dateOfBirth', 'Set your date of birth'],
     ['city', 'Add your location'],
-    ['courseOfStudy', 'Add your course of study'],
-    ['institution', 'Add your institution'],
+    ['__education', 'Add your education'],
     ['occupation', 'Add your occupation'],
     ['relationshipGoals', 'Choose your relationship goal'],
     ['ageRange', 'Set your preferred age range'],
@@ -52,7 +51,8 @@ export function profileCompletionMissing(p: any): string[] {
     ['wantsKids', 'Set your kids preference'],
   ];
   for (const [k, label] of labels) {
-    if (!filled(p[k])) missing.push(label);
+    const ok = k === '__education' ? filled(p.courseOfStudy) || filled(p.institution) : filled(p[k]);
+    if (!ok) missing.push(label);
   }
   return missing;
 }
