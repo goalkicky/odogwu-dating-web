@@ -25,7 +25,7 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .interests-card{overflow:hidden}
         .ep .section-head{display:flex;align-items:center;gap:10px;padding:0 6px 8px}
         .ep .section-head h2{font-size:11px;margin:0;font-weight:700;letter-spacing:-.1px;line-height:1.2}
-        .ep .section-head p{margin:1px 0 0;color:#777;font-size:9px;line-height:1.25;font-weight:500}
+        .ep .section-head p{margin:1px 0 0;color:#000;font-size:9px;line-height:1.25;font-weight:500}
         .ep .section-head>div:first-child:not(.title-icon){flex:1}
         .ep .section-head strong{color:#cf1a4e;font-size:15px;white-space:nowrap}
         .ep .section-head strong.photo-count{font-size:10px;color:#c0315e;background:#fff1f5;border-radius:9px;padding:2px 7px;line-height:1.3;flex:none;display:flex;align-items:center;gap:4px}
@@ -37,8 +37,8 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .photo-item img{width:100%;height:100%;object-fit:cover;display:block}
         .ep .remove{position:absolute;right:5px;top:5px;border:0;background:rgba(255,255,255,.93);width:20px;height:20px;border-radius:50%;font-size:19px;line-height:17px;color:#555;cursor:pointer}
         .ep .add-tile{height:168px;border:1px dashed #e5e5e5;background:#fff;border-radius:9px;color:#c71c4c;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;cursor:pointer;font-family:inherit}
-        .ep .add-tile span{font-size:32px;font-weight:200;line-height:1}
-        .ep .add-tile small{font-size:11px;color:#c71c4c}
+        .ep .add-tile span{font-size:24px;font-weight:200;line-height:1}
+        .ep .add-tile small{font-size:9px;color:#c71c4c}
         .ep .video-icon{font-size:25px!important}
         .ep .hint{background:#fff0f5;border-radius:6px;margin:7px 4px 0;padding:4px 6px;color:#5f5f5f;font-size:7px;font-weight:700}
         .ep .hint span{font-size:21px;color:#d31a4d;vertical-align:middle;margin-right:8px}
