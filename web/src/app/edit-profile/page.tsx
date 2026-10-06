@@ -365,10 +365,19 @@ export default function EditProfilePage() {
               <div className="title-icon heart">♡</div><h2>Your Preferences</h2><strong className="photo-count">{[relationshipGoals, ageRange, maxDistance, wantsKids].filter(Boolean).length}/4 <span>›</span></strong>
             </div>
             <div className="preferences" id="prefsBody">
-              <div className="pref"><div>▣</div><label>Age Range</label><b>{ageRange || '—'}</b></div>
+              <div className="pref">
+                <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5" /><path d="M3 9.5h18M8 3v4M16 3v4M7.5 13h2M11 13h2M14.5 13h2M7.5 16.5h2M11 16.5h2M14.5 16.5h2" /></svg></div>
+                <label>Age Range</label><b>{ageRange || '—'}</b>
+              </div>
               <div className="pref"><div>♡</div><label>Looking For</label><b>{relationshipGoals === 'Long-term relationship' ? 'Long-term' : relationshipGoals || '—'}</b></div>
-              <div className="pref"><div>⌾</div><label>Distance</label><b>{maxDistance || '—'}</b></div>
-              <div className="pref"><div>♧</div><label>Kids</label><b>{wantsKids || '—'}</b></div>
+              <div className="pref">
+                <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 21s7-5.9 7-11a7 7 0 1 0-14 0c0 5.1 7 11 7 11Z" /><circle cx="12" cy="10" r="2.6" /></svg></div>
+                <label>Distance</label><b>{maxDistance || '—'}</b>
+              </div>
+              <div className="pref">
+                <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="15.5" cy="8" r="3" /><path d="M11.8 21c0-2.4 1.9-4.3 4.3-4.3s4.3 1.9 4.3 4.3Z" /><circle cx="9.5" cy="8.6" r="4" fill="#fff" /><path d="M2.4 21c0-3.2 2.7-5.8 6-5.8s6 2.6 6 5.8Z" fill="#fff" /></svg></div>
+                <label>Kids</label><b>{wantsKids || '—'}</b>
+              </div>
             </div>
           </section>
 
