@@ -2,7 +2,7 @@ export const BASIC_TEMPLATE_CSS = `
 *{box-sizing:border-box}
 .bk{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#17171c;background:#fff}
 .bk button{font:inherit}
-.bk .app-shell{width:100%;max-width:708px;min-height:100vh;margin:auto;padding:0 27px 20px;background:#fff;position:relative}
+.bk .app-shell{width:100%;max-width:708px;min-height:100vh;margin:auto;padding:0 18px 20px;background:#fff;position:relative}
 .bk .topbar{height:86px;display:grid;grid-template-columns:55px 1fr auto;align-items:start;position:relative}
 .bk .back-btn{border:0;background:none;padding:6px 0 0 0;width:40px;height:40px;cursor:pointer}
 .bk .back-btn svg{width:28px;height:28px;fill:none;stroke:#222;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -31,7 +31,7 @@ export const BASIC_TEMPLATE_CSS = `
 .bk .home-indicator{width:218px;height:6px;background:#080808;border-radius:8px;margin:49px auto 0}
 .bk.toast,.bk .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#222;color:white;padding:11px 17px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:400;white-space:nowrap;max-width:calc(100% - 40px)}.bk.toast.show,.bk .toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:600px){
- .bk .app-shell{padding:0 24px 17px}
+ .bk .app-shell{padding:0 14px 17px}
  .bk .topbar{height:78px;grid-template-columns:42px 1fr auto}.bk .back-btn{padding-top:3px}.bk .heading h1{font-size:21px}.bk .heading p{font-size:13px;margin-top:6px}.bk .complete{font-size:13px;padding-top:5px}
  .bk .progress{gap:9px;height:7px}.bk .progress span{height:7px}.bk .percent{font-size:13px;margin:14px 0 18px}
  .bk .info-row{grid-template-columns:50px minmax(0,1fr) auto 25px;column-gap:9px;min-height:94px;padding:11px 11px 11px 12px}.bk .icon-box{width:42px;height:42px;border-radius:10px}.bk .icon-box svg{width:25px;height:25px}.bk .labels strong{font-size:15px;margin-bottom:4px}.bk .labels small{font-size:11.5px}.bk .value{font-size:14px;max-width:145px}.bk .value.two-line b{font-size:14px}.bk .value.two-line small{font-size:11px}.bk .edit svg{width:23px;height:23px}
@@ -40,7 +40,7 @@ export const BASIC_TEMPLATE_CSS = `
  .bk .actions{padding-top:53px}.bk .save-btn{height:44px;font-size:15px}.bk .skip-btn{font-size:14px;margin-top:23px}.bk .home-indicator{width:160px;height:5px;margin-top:42px}
 }
 @media(max-width:380px){
- .bk .app-shell{padding-left:17px;padding-right:17px}.bk .info-row{grid-template-columns:43px minmax(0,1fr) auto 22px;column-gap:7px;padding-left:8px;padding-right:8px}.bk .icon-box{width:38px;height:38px}.bk .icon-box svg{width:23px;height:23px}.bk .labels small{font-size:10.5px}.bk .value{font-size:12px;max-width:115px}.bk .value.two-line b{font-size:12px}.bk .value.two-line small{font-size:10px}.bk .edit svg{width:21px}.bk .safe-card{padding-left:13px;padding-right:13px}.bk .safe-card p{font-size:10.5px}.bk .tips-card li{font-size:10.5px}
+ .bk .app-shell{padding-left:10px;padding-right:10px}.bk .info-row{grid-template-columns:43px minmax(0,1fr) auto 22px;column-gap:7px;padding-left:8px;padding-right:8px}.bk .icon-box{width:38px;height:38px}.bk .icon-box svg{width:23px;height:23px}.bk .labels small{font-size:10.5px}.bk .value{font-size:12px;max-width:115px}.bk .value.two-line b{font-size:12px}.bk .value.two-line small{font-size:10px}.bk .edit svg{width:21px}.bk .safe-card{padding-left:13px;padding-right:13px}.bk .safe-card p{font-size:10.5px}.bk .tips-card li{font-size:10.5px}
 }
 @media(min-width:709px){.bk .app-shell{box-shadow:0 0 30px rgba(0,0,0,.04)}}
 `;
