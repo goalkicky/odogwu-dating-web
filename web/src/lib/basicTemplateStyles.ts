@@ -10,7 +10,7 @@ export const BASIC_TEMPLATE_CSS = `
  .bk .complete{font-size:13px;color:#df0b4d;font-weight:650;white-space:nowrap;padding-top:7px}
 .bk .progress{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 2px;height:9px}
 .bk .progress span{height:8px;background:#ed0750;border-radius:8px}
-.bk .percent{text-align:center;color:#d80b4c;font-size:15px;font-weight:500;margin:16px 0 22px}
+ .bk .percent{text-align:center;color:#d80b4c;font-size:12px;font-weight:400;margin:16px 0 22px}
 .bk .info-card{border:1px solid #ececef;border-radius:13px;overflow:hidden;box-shadow:0 1px 4px rgba(20,20,30,.025)}
 .bk .info-row{min-height:109px;display:grid;grid-template-columns:59px minmax(0,1fr) auto 29px;column-gap:11px;align-items:center;padding:13px 16px 13px 17px;border-bottom:1px solid #ececef;width:100%;text-align:left;background:#fff;cursor:pointer}
 .bk .info-row:last-child{border-bottom:0}
@@ -33,7 +33,7 @@ export const BASIC_TEMPLATE_CSS = `
 @media(max-width:600px){
  .bk .app-shell{padding:0 4px 17px}
  .bk .topbar{height:78px;grid-template-columns:42px 1fr auto}.bk .back-btn{padding-top:3px}.bk .back-btn svg{width:18px;height:18px}.bk .heading{padding-top:6px}.bk .heading h1{font-size:17px}.bk .heading p{font-size:11px;margin-top:6px}.bk .complete{font-size:11px;padding-top:5px}
- .bk .progress{gap:9px;height:7px}.bk .progress span{height:7px}.bk .percent{font-size:13px;margin:14px 0 18px}
+ .bk .progress{gap:9px;height:7px}.bk .progress span{height:7px}.bk .percent{font-size:10px;margin:14px 0 18px}
  .bk .info-row{grid-template-columns:50px minmax(0,1fr) auto 25px;column-gap:9px;min-height:94px;padding:11px 11px 11px 12px}.bk .icon-box{width:42px;height:42px;border-radius:10px}.bk .icon-box svg{width:25px;height:25px}.bk .labels strong{font-size:15px;margin-bottom:4px}.bk .labels small{font-size:11.5px}.bk .value{font-size:14px;max-width:145px}.bk .value.two-line b{font-size:14px}.bk .value.two-line small{font-size:11px}.bk .edit svg{width:23px;height:23px}
  .bk .safe-card{margin-top:22px;padding:16px 18px;min-height:93px;gap:12px}.bk .safe-icon svg{width:29px;height:29px}.bk .safe-card h2,.bk .tips-card h2{font-size:14px;margin-bottom:6px}.bk .safe-card p{font-size:11.5px}
  .bk .tips-card{margin-top:20px;padding:18px 19px}.bk .tips-title{gap:13px}.bk .tips-title svg{width:27px;height:27px}.bk .tips-card ul{margin-top:16px}.bk .tips-card li{font-size:11.5px;gap:11px;margin:11px 0}.bk .tips-card li span{width:18px;height:18px;flex-basis:18px;font-size:11px}
