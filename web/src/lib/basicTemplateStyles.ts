@@ -6,7 +6,7 @@ export const BASIC_TEMPLATE_CSS = `
 .bk .topbar{height:86px;display:grid;grid-template-columns:55px 1fr auto;align-items:start;position:relative}
 .bk .back-btn{border:0;background:none;padding:6px 0 0 0;width:40px;height:40px;cursor:pointer}
  .bk .back-btn svg{width:22px;height:22px;fill:none;stroke:#222;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
- .bk .heading{text-align:center;margin-top:1px}.bk .heading h1{font-size:20px;line-height:1.15;margin:0;font-weight:650;letter-spacing:-.5px}.bk .heading p{font-size:13px;color:#666d78;margin:7px 0 0}
+ .bk .heading{text-align:center;margin-top:1px;padding-top:8px}.bk .heading h1{font-size:20px;line-height:1.15;margin:0;font-weight:650;letter-spacing:-.5px}.bk .heading p{font-size:13px;color:#666d78;margin:7px 0 0}
  .bk .complete{font-size:13px;color:#df0b4d;font-weight:650;white-space:nowrap;padding-top:7px}
 .bk .progress{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 2px;height:9px}
 .bk .progress span{height:8px;background:#ed0750;border-radius:8px}
@@ -32,7 +32,7 @@ export const BASIC_TEMPLATE_CSS = `
 .bk.toast,.bk .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#222;color:white;padding:11px 17px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:400;white-space:nowrap;max-width:calc(100% - 40px)}.bk.toast.show,.bk .toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:600px){
  .bk .app-shell{padding:0 4px 17px}
- .bk .topbar{height:78px;grid-template-columns:42px 1fr auto}.bk .back-btn{padding-top:3px}.bk .back-btn svg{width:18px;height:18px}.bk .heading h1{font-size:17px}.bk .heading p{font-size:11px;margin-top:6px}.bk .complete{font-size:11px;padding-top:5px}
+ .bk .topbar{height:78px;grid-template-columns:42px 1fr auto}.bk .back-btn{padding-top:3px}.bk .back-btn svg{width:18px;height:18px}.bk .heading{padding-top:6px}.bk .heading h1{font-size:17px}.bk .heading p{font-size:11px;margin-top:6px}.bk .complete{font-size:11px;padding-top:5px}
  .bk .progress{gap:9px;height:7px}.bk .progress span{height:7px}.bk .percent{font-size:13px;margin:14px 0 18px}
  .bk .info-row{grid-template-columns:50px minmax(0,1fr) auto 25px;column-gap:9px;min-height:94px;padding:11px 11px 11px 12px}.bk .icon-box{width:42px;height:42px;border-radius:10px}.bk .icon-box svg{width:25px;height:25px}.bk .labels strong{font-size:15px;margin-bottom:4px}.bk .labels small{font-size:11.5px}.bk .value{font-size:14px;max-width:145px}.bk .value.two-line b{font-size:14px}.bk .value.two-line small{font-size:11px}.bk .edit svg{width:23px;height:23px}
  .bk .safe-card{margin-top:22px;padding:16px 18px;min-height:93px;gap:12px}.bk .safe-icon svg{width:29px;height:29px}.bk .safe-card h2,.bk .tips-card h2{font-size:14px;margin-bottom:6px}.bk .safe-card p{font-size:11.5px}
