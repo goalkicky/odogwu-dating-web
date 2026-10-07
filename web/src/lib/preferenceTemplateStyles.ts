@@ -6,7 +6,8 @@
 .pf .app-shell{width:100%;max-width:768px;min-height:100vh;margin:0 auto;padding:18px 29px 18px;background:#fff}
 .pf .title-row{display:grid;grid-template-columns:45px 1fr 105px;align-items:center;margin-top:8px}
 .pf .back{border:0;background:transparent;padding:6px 0;text-align:left;color:#15153b;font-size:35px;line-height:1;font-weight:300;cursor:pointer}
-.pf .heading{text-align:center}.pf .heading h1{margin:0;font-size:24px;line-height:1.15;font-weight:700;letter-spacing:-.4px}
+ .pf .back svg{width:26px;height:26px;display:block}
+ .pf .heading{text-align:center}.pf .heading h1{margin:0;font-size:19px;line-height:1.15;font-weight:700;letter-spacing:-.4px}
 .pf .complete{text-align:right;color:#c92a58;font-size:14px;font-weight:700}
 .pf .subtitle{text-align:center;color:#656875;font-size:15px;margin:5px 0 14px}
 .pf .progress{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;height:7px}
@@ -62,8 +63,8 @@
 @media(max-width:600px){
  .pf .app-shell{padding:13px 15px 15px}
  .pf .title-row{grid-template-columns:35px 1fr 86px;margin-top:5px}
- .pf .back{font-size:30px}
- .pf .heading h1{font-size:20px}
+ .pf .back{font-size:30px}.pf .back svg{width:22px;height:22px}
+ .pf .heading h1{font-size:16px}
  .pf .complete{font-size:11px}
  .pf .subtitle{font-size:12px;margin:5px 0 12px}
  .pf .progress{gap:7px;height:5px}.pf .progress span{height:5px}

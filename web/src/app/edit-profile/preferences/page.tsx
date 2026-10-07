@@ -124,14 +124,18 @@ export default function PreferencesPage() {
   };
 
   return (
-    <AppShell header={<></>}>
+    <AppShell header={<></>} hideBottomNav>
       <style jsx global>{PREFERENCE_TEMPLATE_CSS}</style>
 
       <main className="pf">
         <div className="app-shell">
           <header>
             <div className="title-row">
-              <button className="back" aria-label="Go back" onClick={() => router.back()}>ΓÇ╣</button>
+              <button className="back" aria-label="Go back" onClick={() => router.back()}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M15 4.5 7.5 12 15 19.5" />
+                </svg>
+              </button>
               <div className="heading"><h1>Your Preferences</h1></div>
               <div className="complete">{filled}/4 Complete</div>
             </div>
