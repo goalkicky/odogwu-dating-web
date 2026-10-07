@@ -71,7 +71,7 @@ export const PROFILE_TEMPLATE_CSS = `
         .ep .interest .icat{font-style:normal;font-size:var(--ct);font-weight:600;letter-spacing:.2px;line-height:1.35;text-transform:uppercase;color:#151515;background:none;border-radius:0;padding:0;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .ep .interest b{font-size:var(--nm);font-weight:600;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#df003f}
         .ep .interest em{right:calc(var(--ic) * .34);top:50%;transform:translateY(-50%);font-style:normal;font-size:calc(var(--ic) * .72)}
-        .ep .save{display:block;width:100%;border:0;border-radius:22px;background:#df003f;color:white;font-size:17px;font-weight:600;padding:11px 15px;margin:11px 0 6px;cursor:pointer;box-shadow:0 2px 4px rgba(223,0,63,.12);font-family:inherit}
+        .ep .save{display:block;width:100%;border:0;border-radius:20px;background:#df003f;color:white;font-size:15px;font-weight:600;padding:8px 15px;margin:9px 0 5px;cursor:pointer;box-shadow:0 2px 4px rgba(223,0,63,.12);font-family:inherit}
         .ep .save:active{transform:scale(.99)}
         .ep .save:disabled{opacity:.6}
         .ep .logout{display:block;width:100%;border:1.5px solid #df003f;border-radius:22px;background:#fff;color:#df003f;font-size:16px;font-weight:600;padding:11px 15px;margin:0 0 8px;cursor:pointer;font-family:inherit}
@@ -97,7 +97,7 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .info{padding-left:8px}
           .ep .interest-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0 3px}
           .ep .interest b{font-size:8px}
-          .ep .save{font-size:16px}
+          .ep .save{font-size:14px}
           .ep .home-indicator{display:block;width:110px;height:4px;border-radius:5px;background:#111;margin:8px auto 0}
           .ep.toast,.ep .toast{bottom:92px}
         }
