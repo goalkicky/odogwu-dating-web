@@ -12,7 +12,7 @@ export const BASIC_TEMPLATE_CSS = `
  .bk .progress span{height:5px;background:#ed0750;border-radius:8px}
  .bk .percent{text-align:center;color:#d80b4c;font-size:12px;font-weight:400;margin:16px 0 22px}
 .bk .info-card{border:1px solid #ececef;border-radius:13px;overflow:hidden;box-shadow:0 1px 4px rgba(20,20,30,.025)}
- .bk .info-row{min-height:92px;display:grid;grid-template-columns:50px minmax(0,1fr) auto 25px;column-gap:10px;align-items:center;padding:11px 13px 11px 14px;border-bottom:1px solid #ececef;width:100%;text-align:left;background:#fff;cursor:pointer}
+ .bk .info-row{min-height:78px;display:grid;grid-template-columns:50px minmax(0,1fr) auto 25px;column-gap:10px;align-items:center;padding:7px 13px 7px 14px;border-bottom:1px solid #ececef;width:100%;text-align:left;background:#fff;cursor:pointer}
  .bk .info-row:last-child{border-bottom:0}
  .bk .icon-box{width:40px;height:40px;border-radius:10px;background:#fff3f7;display:flex;align-items:center;justify-content:center}
  .bk .icon-box svg{width:24px;height:24px;fill:none;stroke:#dc0a4b;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -34,7 +34,7 @@ export const BASIC_TEMPLATE_CSS = `
  .bk .app-shell{padding:0 4px 17px}
  .bk .topbar{height:78px;grid-template-columns:42px 1fr auto}.bk .back-btn{padding-top:3px}.bk .back-btn svg{width:18px;height:18px}.bk .heading{padding-top:6px}.bk .heading h1{font-size:17px}.bk .heading p{font-size:11px;margin-top:6px}.bk .complete{font-size:11px;padding-top:5px}
  .bk .progress{gap:9px;height:5px}.bk .progress span{height:4px}.bk .percent{font-size:10px;margin:14px 0 18px}
- .bk .info-row{grid-template-columns:44px minmax(0,1fr) auto 22px;column-gap:8px;min-height:80px;padding:9px 10px}.bk .icon-box{width:36px;height:36px;border-radius:9px}.bk .icon-box svg{width:21px;height:21px}.bk .labels strong{font-size:13px;margin-bottom:3px}.bk .labels small{font-size:10.5px}.bk .value{font-size:12.5px;max-width:130px}.bk .value.two-line b{font-size:12.5px}.bk .value.two-line small{font-size:10px}.bk .edit svg{width:20px;height:20px}
+ .bk .info-row{grid-template-columns:44px minmax(0,1fr) auto 22px;column-gap:8px;min-height:66px;padding:6px 10px}.bk .icon-box{width:36px;height:36px;border-radius:9px}.bk .icon-box svg{width:21px;height:21px}.bk .labels strong{font-size:13px;margin-bottom:3px}.bk .labels small{font-size:10.5px}.bk .value{font-size:12.5px;max-width:130px}.bk .value.two-line b{font-size:12.5px}.bk .value.two-line small{font-size:10px}.bk .edit svg{width:20px;height:20px}
  .bk .safe-card{margin-top:22px;padding:16px 18px;min-height:93px;gap:12px}.bk .safe-icon svg{width:29px;height:29px}.bk .safe-card h2,.bk .tips-card h2{font-size:14px;margin-bottom:6px}.bk .safe-card p{font-size:11.5px}
  .bk .tips-card{margin-top:20px;padding:18px 19px}.bk .tips-title{gap:13px}.bk .tips-title svg{width:27px;height:27px}.bk .tips-card ul{margin-top:16px}.bk .tips-card li{font-size:11.5px;gap:11px;margin:11px 0}.bk .tips-card li span{width:18px;height:18px;flex-basis:18px;font-size:11px}
  .bk .actions{padding-top:53px}.bk .save-btn{height:44px;font-size:15px}.bk .skip-btn{font-size:14px;margin-top:23px}.bk .home-indicator{width:160px;height:5px;margin-top:42px}
