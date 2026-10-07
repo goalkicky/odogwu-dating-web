@@ -1,9 +1,9 @@
-﻿export const PREFERENCE_TEMPLATE_CSS = `
+export const PREFERENCE_TEMPLATE_CSS = `
 *{box-sizing:border-box}
 .pf{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;color:#17171a;-webkit-font-smoothing:antialiased;background:#fff}
 .pf button{cursor:pointer;font:inherit}
 .pf input{font:inherit}
-.pf .app-shell{width:100%;max-width:768px;min-height:100vh;margin:0 auto;padding:18px 29px 18px;background:#fff}
+.pf .app-shell{width:100%;max-width:1200px;min-height:100vh;margin:0 auto;padding:18px 8px 18px;background:#fff}
 .pf .title-row{display:grid;grid-template-columns:45px 1fr 105px;align-items:center;margin-top:8px}
 .pf .back{border:0;background:transparent;padding:6px 0;text-align:left;color:#15153b;font-size:35px;line-height:1;font-weight:300;cursor:pointer}
  .pf .back svg{width:26px;height:26px;display:block}
@@ -61,7 +61,7 @@
  .pf .app-shell{margin:20px auto;min-height:calc(100vh - 40px);border-radius:24px;box-shadow:0 12px 50px rgba(0,0,0,.08)}
 }
 @media(max-width:600px){
- .pf .app-shell{padding:13px 15px 15px}
+ .pf .app-shell{padding:13px 5px 15px}
  .pf .title-row{grid-template-columns:35px 1fr 86px;margin-top:5px}
  .pf .back{font-size:30px}.pf .back svg{width:22px;height:22px}
  .pf .heading h1{font-size:16px}
@@ -99,7 +99,7 @@
  .pf .home-indicator{width:105px;height:4px;margin-top:14px}
 }
 @media(max-width:360px){
- .pf .app-shell{padding-left:10px;padding-right:10px}
+ .pf .app-shell{padding-left:4px;padding-right:4px}
  .pf .title-row{grid-template-columns:30px 1fr 77px}
  .pf .complete{font-size:10px}
  .pf .head-value{font-size:12px}
