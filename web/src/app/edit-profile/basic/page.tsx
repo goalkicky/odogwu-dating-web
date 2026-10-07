@@ -188,7 +188,7 @@ export default function BasicInfoPage() {
   };
 
   return (
-    <AppShell header={<></>}>
+    <AppShell header={<></>} hideBottomNav>
       <style jsx global>{BASIC_TEMPLATE_CSS}</style>
 
       <main className="bk">
