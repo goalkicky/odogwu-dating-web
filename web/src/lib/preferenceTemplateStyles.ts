@@ -128,21 +128,42 @@ export const PREFERENCE_TEMPLATE_CSS = `
  .pf .save{height:38px;font-size:14px}
  .pf .home-indicator{margin-top:6px}
 }
-@media(max-width:600px) and (max-height:670px){
- .pf .head-sub,.pf .option-sub{display:none}
- .pf .card-head{padding:5px 10px 4px}
- .pf .head-title{font-size:11.5px}
- .pf .option{min-height:34px;padding:4px 10px}
- .pf .option-title{font-size:10.5px}
- .pf .option-icon{flex-basis:22px;width:22px;height:22px}
- .pf .option-icon svg{width:13px;height:13px}
- .pf .age-body{padding:6px 12px 7px}
- .pf .distance-body,.pf .kids-body{padding:3px 9px 7px}
- .pf .distance-btn,.pf .kids-btn{height:31px;font-size:8.5px}
- .pf .subtitle{font-size:9.5px;margin:2px 0 5px}
- .pf .complete-percent{font-size:9.5px;margin:4px 0 5px}
- .pf .save{height:34px;font-size:13px}
- .pf .home-indicator{display:none}
+ @media(max-width:600px) and (max-height:670px){
+  .pf .app-shell{padding:5px 5px 7px}
+  .pf .title-row{grid-template-columns:28px 1fr 74px;margin-top:1px}
+  .pf .back{padding:3px 0}.pf .back svg{width:15px;height:15px}
+  .pf .heading h1{font-size:13px}
+  .pf .complete{font-size:9.5px}
+  .pf .subtitle{font-size:9px;margin:2px 0 4px}
+  .pf .progress{height:4px}.pf .progress span{height:4px}
+  .pf .complete-percent{font-size:9px;margin:3px 0 4px}
+  .pf .card{margin-bottom:5px}
+  .pf .card-head{padding:4px 9px 3px;gap:7px}
+  .pf .icon-box{flex-basis:24px;width:24px;height:24px}
+  .pf .icon-box svg{width:13px;height:13px}
+  .pf .head-title{font-size:11px;margin:1px 0 1px}
+  .pf .head-sub{font-size:7.5px}
+  .pf .head-value{font-size:11px}
+  .pf .age-body{padding:5px 11px 6px}
+  .pf .age-labels{font-size:10px;margin-bottom:3px}
+  .pf .age-ticks{font-size:9px;margin-top:6px}
+  .pf .age-ticks span{width:26px}
+  .pf .thumb{width:17px;height:17px}
+  .pf .option{min-height:32px;padding:3px 9px;gap:7px}
+  .pf .option-icon{flex-basis:20px;width:20px;height:20px}
+  .pf .option-icon svg{width:12px;height:12px}
+  .pf .option-title{font-size:10px;margin-bottom:1px}
+  .pf .option-sub{font-size:7.5px}
+  .pf .radio{width:17px;height:17px;flex-basis:17px}
+  .pf .radio.selected:after{width:7px;height:7px}
+  .pf .distance-body,.pf .kids-body{padding:3px 8px 6px}
+  .pf .distance-buttons{gap:5px}
+  .pf .kids-buttons{gap:5px}
+  .pf .distance-btn,.pf .kids-btn{height:28px;font-size:8.5px;padding:0 5px}
+  .pf .mini-radio{width:15px;height:15px}
+  .pf .mini-radio:after{width:7px!important;height:7px!important}
+  .pf .save{height:32px;font-size:12.5px}
+  .pf .home-indicator{width:80px;height:3px;margin-top:5px}
 }
 @media(max-width:360px){
  .pf .app-shell{padding-left:4px;padding-right:4px}
