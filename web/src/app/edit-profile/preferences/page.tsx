@@ -235,7 +235,7 @@ export default function PreferencesPage() {
           </section>
 
           <button className="save" id="saveBtn" onClick={handleSave} disabled={saving}>
-            {done ? 'Preferences Saved Γ£ô' : saving ? 'Saving...' : 'Save Preferences'}
+            {done ? 'Preferences Saved ✓' : saving ? 'Saving...' : 'Save Preferences'}
           </button>
           <div className="home-indicator"></div>
         </div>
