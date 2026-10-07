@@ -20,9 +20,9 @@ export const BASIC_TEMPLATE_CSS = `
  .bk .value{text-align:right;font-size:14.5px;color:#4c5260;max-width:210px;white-space:nowrap}
  .bk .value.two-line{white-space:normal;line-height:1.35}.bk .value.two-line b{display:block;font-size:14.5px;font-weight:500}.bk .value.two-line small{display:block;color:#69707c;font-size:11.5px}
  .bk .edit{border:0;background:transparent;padding:2px 0;cursor:pointer}.bk .edit svg{width:22px;height:22px;fill:none;stroke:#db0a4b;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-.bk .safe-card{margin-top:26px;background:#fff2f6;border-radius:13px;min-height:104px;padding:20px 24px;display:flex;gap:17px;align-items:flex-start}
+ .bk .safe-card{margin-top:26px;background:#fff2f6;border-radius:13px;min-height:60px;padding:11px 16px;display:flex;gap:17px;align-items:flex-start}
 .bk .safe-icon svg{width:34px;height:34px;fill:none;stroke:#dc0a4b;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.bk .safe-icon{padding-top:1px}
- .bk .safe-card h2{font-size:13px;margin:0 0 6px;font-weight:650}.bk .tips-card h2{font-size:16px;margin:0 0 8px;font-weight:650}.bk .safe-card p{font-size:11.5px;color:#687080;line-height:1.45;margin:0}
+ .bk .safe-card h2{font-size:11px;margin:0 0 5px;font-weight:650}.bk .tips-card h2{font-size:16px;margin:0 0 8px;font-weight:650}.bk .safe-card p{font-size:10px;color:#687080;line-height:1.4;margin:0}
 .bk .tips-card{margin-top:25px;background:#fdfdfe;border-radius:13px;padding:22px 25px 20px;box-shadow:0 1px 8px rgba(20,20,30,.035)}
 .bk .tips-title{display:flex;align-items:center;gap:17px}.bk .tips-title svg{width:30px;height:30px;fill:none;stroke:#20232a;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.bk .tips-title h2{margin:0}
 .bk .tips-card ul{list-style:none;margin:20px 0 0;padding:0}.bk .tips-card li{display:flex;align-items:center;gap:15px;color:#606877;font-size:14px;line-height:1.35;margin:13px 0}.bk .tips-card li span{flex:0 0 21px;width:21px;height:21px;border:1.5px solid #e58caf;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#db0a4b;font-size:13px}
@@ -35,12 +35,12 @@ export const BASIC_TEMPLATE_CSS = `
  .bk .topbar{height:78px;grid-template-columns:42px 1fr auto}.bk .back-btn{padding-top:3px}.bk .back-btn svg{width:18px;height:18px}.bk .heading{padding-top:6px}.bk .heading h1{font-size:17px}.bk .heading p{font-size:11px;margin-top:6px}.bk .complete{font-size:11px;padding-top:5px}
  .bk .progress{gap:9px;height:5px}.bk .progress span{height:4px}.bk .percent{font-size:10px;margin:14px 0 18px}
  .bk .info-row{grid-template-columns:44px minmax(0,1fr) auto 22px;column-gap:8px;min-height:66px;padding:6px 10px}.bk .icon-box{width:36px;height:36px;border-radius:9px}.bk .icon-box svg{width:21px;height:21px}.bk .labels strong{font-size:13px;margin-bottom:3px}.bk .labels small{font-size:10.5px}.bk .value{font-size:12.5px;max-width:130px}.bk .value.two-line b{font-size:12.5px}.bk .value.two-line small{font-size:10px}.bk .edit svg{width:20px;height:20px}
- .bk .safe-card{margin-top:22px;padding:16px 18px;min-height:93px;gap:12px}.bk .safe-icon svg{width:29px;height:29px} .bk .safe-card h2{font-size:12px;margin-bottom:5px}.bk .tips-card h2{font-size:14px;margin-bottom:6px}.bk .safe-card p{font-size:10px}
+ .bk .safe-card{margin-top:22px;padding:10px 14px;min-height:0;gap:12px}.bk .safe-icon svg{width:29px;height:29px} .bk .safe-card h2{font-size:10.5px;margin-bottom:4px}.bk .tips-card h2{font-size:14px;margin-bottom:6px}.bk .safe-card p{font-size:9px}
  .bk .tips-card{margin-top:20px;padding:18px 19px}.bk .tips-title{gap:13px}.bk .tips-title svg{width:27px;height:27px}.bk .tips-card ul{margin-top:16px}.bk .tips-card li{font-size:11.5px;gap:11px;margin:11px 0}.bk .tips-card li span{width:18px;height:18px;flex-basis:18px;font-size:11px}
  .bk .actions{padding-top:53px}.bk .save-btn{height:44px;font-size:15px}.bk .skip-btn{font-size:14px;margin-top:23px}.bk .home-indicator{width:160px;height:5px;margin-top:42px}
 }
 @media(max-width:380px){
- .bk .app-shell{padding-left:3px;padding-right:3px} .bk .info-row{grid-template-columns:38px minmax(0,1fr) auto 20px;column-gap:6px;padding-left:7px;padding-right:7px}.bk .icon-box{width:32px;height:32px}.bk .icon-box svg{width:19px;height:19px}.bk .labels small{font-size:9.5px}.bk .value{font-size:11px;max-width:105px}.bk .value.two-line b{font-size:11px}.bk .value.two-line small{font-size:9.5px}.bk .edit svg{width:18px}.bk .safe-card{padding-left:13px;padding-right:13px}.bk .safe-card p{font-size:10.5px}.bk .tips-card li{font-size:10.5px}
+ .bk .app-shell{padding-left:3px;padding-right:3px} .bk .info-row{grid-template-columns:38px minmax(0,1fr) auto 20px;column-gap:6px;padding-left:7px;padding-right:7px}.bk .icon-box{width:32px;height:32px}.bk .icon-box svg{width:19px;height:19px}.bk .labels small{font-size:9.5px}.bk .value{font-size:11px;max-width:105px}.bk .value.two-line b{font-size:11px}.bk .value.two-line small{font-size:9.5px}.bk .edit svg{width:18px}.bk .safe-card{padding-left:10px;padding-right:10px}.bk .safe-card p{font-size:8.5px}.bk .tips-card li{font-size:10.5px}
 }
 @media(min-width:709px){.bk .app-shell{box-shadow:0 0 30px rgba(0,0,0,.04)}}
 `;
