@@ -61,42 +61,88 @@ export const PREFERENCE_TEMPLATE_CSS = `
  .pf .app-shell{margin:20px auto;min-height:calc(100vh - 40px);border-radius:24px;box-shadow:0 12px 50px rgba(0,0,0,.08)}
 }
 @media(max-width:600px){
- .pf .app-shell{padding:13px 5px 15px}
- .pf .title-row{grid-template-columns:35px 1fr 86px;margin-top:5px}
- .pf .back{font-size:30px}.pf .back svg{width:22px;height:22px}
- .pf .heading h1{font-size:16px}
+ .pf .app-shell{padding:10px 5px 12px}
+ .pf .title-row{grid-template-columns:35px 1fr 86px;margin-top:3px}
+ .pf .back{padding:4px 0;font-size:26px}.pf .back svg{width:20px;height:20px}
+ .pf .heading h1{font-size:15px}
  .pf .complete{font-size:11px}
- .pf .subtitle{font-size:12px;margin:5px 0 12px}
+ .pf .subtitle{font-size:11px;margin:4px 0 8px}
  .pf .progress{gap:7px;height:5px}.pf .progress span{height:5px}
- .pf .complete-percent{font-size:12px;margin:9px 0 13px}
- .pf .card{border-radius:13px;margin-bottom:14px}
- .pf .card-head{padding:11px 12px 9px;gap:9px}
- .pf .icon-box{flex-basis:32px;width:32px;height:32px}
- .pf .icon-box svg{width:18px;height:18px}
- .pf .head-title{font-size:13px;margin-top:1px}
- .pf .head-sub{font-size:9px}
- .pf .head-value{font-size:12.5px}
- .pf .age-body{padding:13px 14px 15px}
- .pf .age-labels{font-size:11px}
- .pf .age-ticks{font-size:10px;margin-top:14px}
+ .pf .complete-percent{font-size:11px;margin:6px 0 8px}
+ .pf .card{border-radius:13px;margin-bottom:8px}
+ .pf .card-head{padding:8px 12px 7px;gap:9px}
+ .pf .icon-box{flex-basis:30px;width:30px;height:30px}
+ .pf .icon-box svg{width:17px;height:17px}
+ .pf .head-title{font-size:12.5px;margin:1px 0 2px}
+ .pf .head-sub{font-size:8.5px}
+ .pf .head-value{font-size:12px}
+ .pf .age-body{padding:10px 14px 12px}
+ .pf .age-labels{font-size:11px;margin-bottom:5px}
+ .pf .age-ticks{font-size:10px;margin-top:10px}
  .pf .age-ticks span{width:30px}
- .pf .thumb{width:23px;height:23px}
- .pf .option{min-height:62px;padding:9px 12px;gap:9px}
- .pf .option-icon{flex-basis:30px;width:30px;height:30px}
- .pf .option-icon svg{width:17px;height:17px}
- .pf .option-title{font-size:11.5px;margin-bottom:3px}
- .pf .option-sub{font-size:9.5px}
- .pf .radio{width:21px;height:21px;flex-basis:21px}
- .pf .radio.selected:after{width:9px;height:9px}
- .pf .distance-body,.pf .kids-body{padding:6px 11px 13px}
- .pf .distance-buttons{gap:7px}
- .pf .distance-btn{height:40px;border-radius:12px;font-size:9.5px;padding:0 5px}
- .pf .kids-buttons{gap:7px}
- .pf .kids-btn{height:40px;border-radius:12px;font-size:9.5px;padding:0 9px}
- .pf .mini-radio{width:19px;height:19px}
- .pf .mini-radio:after{width:9px!important;height:9px!important}
- .pf .save{height:51px;font-size:16px}
- .pf .home-indicator{width:105px;height:4px;margin-top:14px}
+ .pf .thumb{width:21px;height:21px}
+ .pf .option{min-height:46px;padding:6px 12px;gap:9px}
+ .pf .option-icon{flex-basis:28px;width:28px;height:28px}
+ .pf .option-icon svg{width:16px;height:16px}
+ .pf .option-title{font-size:11.5px;margin-bottom:2px}
+ .pf .option-sub{font-size:9px}
+ .pf .radio{width:20px;height:20px;flex-basis:20px}
+ .pf .radio.selected:after{width:8px;height:8px}
+ .pf .distance-body,.pf .kids-body{padding:5px 11px 11px}
+ .pf .distance-buttons{gap:6px}
+ .pf .distance-btn{height:38px;border-radius:11px;font-size:9.5px;padding:0 4px}
+ .pf .kids-buttons{gap:6px}
+ .pf .kids-btn{height:38px;border-radius:11px;font-size:9.5px;padding:0 8px}
+ .pf .mini-radio{width:18px;height:18px}
+ .pf .mini-radio:after{width:8px!important;height:8px!important}
+ .pf .save{height:42px;font-size:15px;border-radius:24px}
+ .pf .home-indicator{width:95px;height:4px;margin-top:8px}
+}
+@media(max-width:600px) and (max-height:780px){
+ .pf .app-shell{padding:7px 5px 9px}
+ .pf .title-row{grid-template-columns:30px 1fr 80px;margin-top:2px}
+ .pf .back svg{width:17px;height:17px}
+ .pf .heading h1{font-size:14px}
+ .pf .subtitle{font-size:10px;margin:3px 0 6px}
+ .pf .complete-percent{font-size:10px;margin:5px 0 6px}
+ .pf .card{margin-bottom:6px}
+ .pf .card-head{padding:6px 11px 5px;gap:8px}
+ .pf .icon-box{flex-basis:27px;width:27px;height:27px}
+ .pf .icon-box svg{width:15px;height:15px}
+ .pf .head-title{font-size:12px}
+ .pf .head-sub{font-size:8px}
+ .pf .head-value{font-size:11.5px}
+ .pf .age-body{padding:8px 13px 9px}
+ .pf .age-labels{font-size:10.5px;margin-bottom:4px}
+ .pf .age-ticks{font-size:9.5px;margin-top:8px}
+ .pf .thumb{width:19px;height:19px}
+ .pf .option{min-height:40px;padding:5px 11px;gap:8px}
+ .pf .option-icon{flex-basis:25px;width:25px;height:25px}
+ .pf .option-icon svg{width:14px;height:14px}
+ .pf .option-title{font-size:11px;margin-bottom:1px}
+ .pf .option-sub{font-size:8.5px}
+ .pf .radio{width:19px;height:19px;flex-basis:19px}
+ .pf .distance-body,.pf .kids-body{padding:4px 10px 9px}
+ .pf .distance-btn{height:34px;font-size:9px}
+ .pf .kids-btn{height:34px;font-size:9px;padding:0 7px}
+ .pf .save{height:38px;font-size:14px}
+ .pf .home-indicator{margin-top:6px}
+}
+@media(max-width:600px) and (max-height:670px){
+ .pf .head-sub,.pf .option-sub{display:none}
+ .pf .card-head{padding:5px 10px 4px}
+ .pf .head-title{font-size:11.5px}
+ .pf .option{min-height:34px;padding:4px 10px}
+ .pf .option-title{font-size:10.5px}
+ .pf .option-icon{flex-basis:22px;width:22px;height:22px}
+ .pf .option-icon svg{width:13px;height:13px}
+ .pf .age-body{padding:6px 12px 7px}
+ .pf .distance-body,.pf .kids-body{padding:3px 9px 7px}
+ .pf .distance-btn,.pf .kids-btn{height:31px;font-size:8.5px}
+ .pf .subtitle{font-size:9.5px;margin:2px 0 5px}
+ .pf .complete-percent{font-size:9.5px;margin:4px 0 5px}
+ .pf .save{height:34px;font-size:13px}
+ .pf .home-indicator{display:none}
 }
 @media(max-width:360px){
  .pf .app-shell{padding-left:4px;padding-right:4px}
