@@ -15,8 +15,8 @@ export const INTERESTS_TEMPLATE_CSS = `
 .pi .search input::placeholder{color:#999ca7}
 .pi section{margin-bottom:18px}
 .pi .title{font-size:12.5px;font-weight:600;margin:0 0 13px}
-.pi .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 10px}
-.pi .lang{height:44px;border:1px solid #e7e7eb;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 11px;font-size:11.5px;min-width:0;text-align:left;width:100%}
+.pi .grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px 10px}
+.pi .lang{height:44px;border:1px solid #e7e7eb;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 5px 0 7px;font-size:11.5px;min-width:0;text-align:left;width:100%}
 .pi .lang>span:first-child{min-width:0;line-height:1.25}
 .pi .plus{width:20px;height:20px;border:1.5px solid #777b85;border-radius:50%;display:grid;place-items:center;color:#666b76;font-size:15px;line-height:1;flex:none;margin-left:5px}
 .pi .lang.selected{border:2px solid #e90058;background:#fff7fa}
@@ -54,8 +54,9 @@ export const INTERESTS_TEMPLATE_CSS = `
  .pi .search{height:40px;margin-bottom:18px}
  .pi .search input{font-size:11px}
  .pi .title{font-size:11.5px}
- .pi .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 8px}
- .pi .lang{font-size:10.5px;height:40px}
+ .pi .grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px 6px}
+ .pi .lang{font-size:10px;height:40px;padding:0 4px 0 6px}
+ .pi .plus{width:17px;height:17px;font-size:13px}
  .pi .selectedArea{margin-top:24px}
  .pi .selhead h2{font-size:11.5px}
  .pi .clear{font-size:11px}
@@ -63,15 +64,15 @@ export const INTERESTS_TEMPLATE_CSS = `
  .pi .save{height:48px;font-size:15px}
 }
 @media(max-width:430px){
- .pi .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .pi .lang{font-size:10px;padding-left:9px;padding-right:8px}
- .pi .plus{width:19px;height:19px}
+ .pi .grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+ .pi .lang{font-size:9.5px;padding-left:6px;padding-right:4px}
+ .pi .plus{width:16px;height:16px;font-size:12px}
 }
 @media(max-width:370px){
  .pi .app-shell{padding-left:4px;padding-right:4px}
- .pi .grid{gap:9px 7px}
- .pi .lang{height:38px;border-radius:12px;font-size:9.5px;padding-left:8px;padding-right:7px}
- .pi .plus{width:18px;height:18px}
+ .pi .grid{gap:9px 5px}
+ .pi .lang{height:38px;border-radius:12px;font-size:9px;padding-left:5px;padding-right:3px}
+ .pi .plus{width:15px;height:15px;font-size:11px}
  .pi .head h1{font-size:13.5px}
  .pi .counttop{font-size:9px}
  .pi .chip{height:30px;font-size:10.5px}
