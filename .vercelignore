@@ -9,3 +9,5 @@ worker
 *.md
 .gitignore
 package-lock.json
+**/.vercel
+web/template
