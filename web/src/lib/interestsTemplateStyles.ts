@@ -14,9 +14,9 @@ export const INTERESTS_TEMPLATE_CSS = `
 .pi .search input{border:0;outline:0;width:100%;padding:0 10px;background:transparent;color:#222;font-size:12px}
 .pi .search input::placeholder{color:#999ca7}
 .pi section{margin-bottom:18px}
-.pi .title{font-size:12.5px;font-weight:600;margin:0 0 13px}
+.pi .title{font-size:12.5px;font-weight:700;margin:0 0 13px}
 .pi .grid{display:flex;flex-wrap:wrap;gap:12px 10px}
-.pi .lang{height:44px;border:1px solid #e7e7eb;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 5px 0 7px;font-size:11.5px;min-width:0;text-align:left;width:auto;flex:1 1 auto}
+.pi .lang{height:44px;border:1px solid #e7e7eb;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 5px 0 7px;font-size:11.5px;font-weight:700;min-width:0;text-align:left;width:auto;flex:1 1 auto}
 .pi .lang>span:first-child{min-width:0;line-height:1.25}
 .pi .plus{width:20px;height:20px;border:1.5px solid #777b85;border-radius:50%;display:grid;place-items:center;color:#666b76;font-size:15px;line-height:1;flex:none;margin-left:5px}
 .pi .lang.selected{border:2px solid #e90058;background:#fff7fa}
