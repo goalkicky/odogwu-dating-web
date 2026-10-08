@@ -1,6 +1,6 @@
 export const PREFERENCE_TEMPLATE_CSS = `
 *{box-sizing:border-box}
-.pf{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;color:#17171a;-webkit-font-smoothing:antialiased;background:#fff}
+.pf{font-family:var(--font-montserrat),-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;color:#17171a;-webkit-font-smoothing:antialiased;background:#fff}
 .pf button{cursor:pointer;font:inherit}
 .pf input{font:inherit}
 .pf .app-shell{width:100%;max-width:1200px;min-height:100vh;margin:0 auto;padding:18px 8px 18px;background:#fff}
