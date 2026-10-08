@@ -15,8 +15,8 @@ export const INTERESTS_TEMPLATE_CSS = `
 .pi .search input::placeholder{color:#999ca7}
 .pi section{margin-bottom:18px}
 .pi .title{font-size:12.5px;font-weight:600;margin:0 0 13px}
-.pi .grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px 10px}
-.pi .lang{height:44px;border:1px solid #e7e7eb;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 5px 0 7px;font-size:11.5px;min-width:0;text-align:left;width:100%}
+.pi .grid{display:flex;flex-wrap:wrap;gap:12px 10px}
+.pi .lang{height:44px;border:1px solid #e7e7eb;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 5px 0 7px;font-size:11.5px;min-width:0;text-align:left;width:auto;flex:1 1 auto}
 .pi .lang>span:first-child{min-width:0;line-height:1.25}
 .pi .plus{width:20px;height:20px;border:1.5px solid #777b85;border-radius:50%;display:grid;place-items:center;color:#666b76;font-size:15px;line-height:1;flex:none;margin-left:5px}
 .pi .lang.selected{border:2px solid #e90058;background:#fff7fa}
@@ -54,7 +54,7 @@ export const INTERESTS_TEMPLATE_CSS = `
  .pi .search{height:40px;margin-bottom:18px}
  .pi .search input{font-size:11px}
  .pi .title{font-size:11.5px}
- .pi .grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px 6px}
+ .pi .grid{gap:10px 6px}
  .pi .lang{font-size:10px;height:40px;padding:0 4px 0 6px}
  .pi .plus{width:17px;height:17px;font-size:13px}
  .pi .selectedArea{margin-top:24px}
@@ -64,7 +64,6 @@ export const INTERESTS_TEMPLATE_CSS = `
  .pi .save{height:48px;font-size:15px}
 }
 @media(max-width:430px){
- .pi .grid{grid-template-columns:repeat(5,minmax(0,1fr))}
  .pi .lang{font-size:9.5px;padding-left:6px;padding-right:4px}
  .pi .plus{width:16px;height:16px;font-size:12px}
 }
