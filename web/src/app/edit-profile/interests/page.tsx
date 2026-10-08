@@ -54,7 +54,7 @@ export default function InterestsPage() {
   };
 
   return (
-    <AppShell header={<></>}>
+    <AppShell header={<></>} hideBottomNav>
       <style jsx global>{INTERESTS_TEMPLATE_CSS}</style>
 
       <main className="pi">
