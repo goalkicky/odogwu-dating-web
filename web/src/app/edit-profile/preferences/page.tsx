@@ -152,7 +152,7 @@ export default function PreferencesPage() {
                 <svg viewBox="0 0 24 24"><path d="M8 4h8v4h4v12H4V8h4z" /><path d="M9 4v4h6V4" /><path d="M8 12h8M8 16h5" /></svg>
               </div>
               <div className="head-copy">
-                <div className="head-title">Age Range</div>
+                <div className="head-title compact">Age Range</div>
                 <div className="head-sub">Select the age range you&apos;re interested in.</div>
               </div>
               <div className="head-value" id="ageValue">{age[0]} - {age[1]}</div>
