@@ -179,4 +179,9 @@ export const PREFERENCE_TEMPLATE_CSS = `
  .pf .kids-buttons{gap:4px}
  .pf .kids-btn{font-size:9px;padding:0 6px}
 }
+@media(max-width:600px),(max-height:500px) and (max-width:960px){
+ html,body{overflow:hidden}
+ .pf{height:100vh;height:100dvh;overflow:hidden}
+ .pf .app-shell{min-height:0}
+}
 `;

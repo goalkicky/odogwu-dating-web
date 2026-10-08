@@ -55,6 +55,8 @@ export default function PreferencesPage() {
   const router = useRouter();
   const { profile, refreshUser } = useAuth();
   const rangeRef = useRef<HTMLDivElement>(null);
+  const shellRef = useRef<HTMLDivElement>(null);
+  const fitRef = useRef<() => void>(() => {});
 
   const [age, setAge] = useState<[number, number]>([AGE_MIN, AGE_MAX]);
   const [goals, setGoals] = useState('Long-term relationship');
@@ -70,6 +72,61 @@ export default function PreferencesPage() {
     setDistance(mapDistance((profile as any).maxDistance || ''));
     setKids(mapKids((profile as any).wantsKids || ''));
   }, [profile]);
+
+  useEffect(() => {
+    const el = shellRef.current;
+    if (!el) return;
+    const mql = window.matchMedia('(max-width:600px), (max-height:500px) and (max-width:960px)');
+    let raf = 0;
+    const reset = () => {
+      el.style.transform = '';
+      el.style.transformOrigin = '';
+      el.style.margin = '';
+      el.style.width = '';
+    };
+    const fit = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        reset();
+        if (!mql.matches) return;
+        el.style.margin = '0';
+        const r = el.getBoundingClientRect();
+        const availW = r.width;
+        const availH = window.innerHeight - r.top;
+        if (availW < 40 || availH < 40) { reset(); return; }
+        let s = 1;
+        for (let i = 0; i < 5; i++) {
+          el.style.width = `${Math.round(availW / s)}px`;
+          const h = el.getBoundingClientRect().height;
+          if (!h) break;
+          const next = availH / h;
+          if (Math.abs(next - s) < 0.004) { s = next; break; }
+          s = next;
+        }
+        el.style.transformOrigin = 'top left';
+        el.style.transform = `scale(${s})`;
+      });
+    };
+    fitRef.current = fit;
+    fit();
+    window.addEventListener('resize', fit);
+    window.addEventListener('orientationchange', fit);
+    document.fonts?.ready.then(fit).catch(() => {});
+    const t1 = setTimeout(fit, 400);
+    const t2 = setTimeout(fit, 1500);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', fit);
+      window.removeEventListener('orientationchange', fit);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      reset();
+    };
+  }, []);
+
+  useEffect(() => {
+    fitRef.current();
+  }, [age, goals, distance, kids, done, saving]);
 
   const setAgeFromX = (which: 'min' | 'max', clientX: number) => {
     const rect = rangeRef.current?.getBoundingClientRect();
@@ -128,7 +185,7 @@ export default function PreferencesPage() {
       <style jsx global>{PREFERENCE_TEMPLATE_CSS}</style>
 
       <main className="pf">
-        <div className="app-shell">
+        <div className="app-shell" ref={shellRef}>
           <header>
             <div className="title-row">
               <button className="back" aria-label="Go back" onClick={() => router.back()}>
