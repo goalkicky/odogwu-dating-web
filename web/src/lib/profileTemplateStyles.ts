@@ -90,7 +90,7 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .progress{margin:9px 70px 4px;gap:4px}
           .ep .card{margin-top:8px;padding:10px 5px 9px}
           .ep .photo-grid{gap:5px;padding:0;margin:0 -5px}
-          .ep .photo-item,.ep .add-tile{height:165px}
+          .ep .photo-item,.ep .add-tile{height:88px}
           .ep .section-head{padding:0 5px 7px;gap:9px}
           .ep .section-head h2{font-size:10px}
           .ep .section-head p{font-size:8px}
@@ -114,7 +114,6 @@ export const PROFILE_TEMPLATE_CSS = `
           .ep .progress{margin-left:40px;margin-right:40px}
         }
         @media(max-width:350px){
-          .ep .photo-item{height:78px}
           .ep .intro h1{font-size:12.5px}
           .ep .section-head h2{font-size:9.5px}
           .ep .preferences .pref b{font-size:8px}
