@@ -9,9 +9,9 @@ export const INTERESTS_TEMPLATE_CSS = `
 .pi .head h1{font-size:18px;font-weight:700;letter-spacing:-.4px;line-height:1.2;margin:0}
 .pi .counttop{position:absolute;right:0;top:2px;color:#c82a58;font-size:11.5px;font-weight:600}
 .pi .head p{margin:6px 0 14px;color:#777b87;font-size:11.5px}
-.pi .search{height:46px;border:1px solid #dedee3;border-radius:14px;display:flex;align-items:center;padding:0 12px;margin-bottom:22px}
-.pi .search svg{width:20px;height:20px;color:#6f7480;flex:none}
-.pi .search input{border:0;outline:0;width:100%;padding:0 10px;background:transparent;color:#222;font-size:12px}
+.pi .search{height:36px;border:1px solid #dedee3;border-radius:11px;display:flex;align-items:center;padding:0 10px;margin-bottom:16px}
+.pi .search svg{width:16px;height:16px;color:#6f7480;flex:none}
+.pi .search input{border:0;outline:0;width:100%;padding:0 8px;background:transparent;color:#222;font-size:11px}
 .pi .search input::placeholder{color:#999ca7}
 .pi section{margin-bottom:18px}
 .pi .title{font-size:12.5px;font-weight:700;margin:0 0 13px}
@@ -51,8 +51,8 @@ export const INTERESTS_TEMPLATE_CSS = `
  .pi .head h1{font-size:15px}
  .pi .counttop{font-size:10px}
  .pi .head p{font-size:9.5px;margin:5px 0 12px}
- .pi .search{height:40px;margin-bottom:18px}
- .pi .search input{font-size:11px}
+ .pi .search{height:32px;margin-bottom:14px}
+ .pi .search input{font-size:10px}
  .pi .title{font-size:11.5px}
  .pi .grid{gap:10px 6px}
  .pi .lang{font-size:10px;height:40px;padding:0 4px 0 6px}
