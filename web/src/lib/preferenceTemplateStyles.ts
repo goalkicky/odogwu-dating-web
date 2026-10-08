@@ -19,6 +19,7 @@ export const PREFERENCE_TEMPLATE_CSS = `
 .pf .icon-box svg{width:21px;height:21px;stroke:currentColor;stroke-width:2;fill:none}
 .pf .head-copy{min-width:0;flex:1}
 .pf .head-title{font-size:14px;font-weight:700;line-height:1.2;margin:2px 0 4px}
+.pf .head-title.compact{font-size:12px}
 .pf .head-sub{font-size:10.5px;color:#5e6370;line-height:1.35}
 .pf .head-value{margin-left:auto;color:#c92957;font-size:14px;font-weight:700;white-space:nowrap;padding-top:2px}
 .pf .age-body{padding:15px 24px 18px}
@@ -37,7 +38,7 @@ export const PREFERENCE_TEMPLATE_CSS = `
 .pf .option-icon{flex:0 0 36px;width:36px;height:36px;border-radius:50%;background:#fff1f6;display:grid;place-items:center;color:#db2459}
 .pf .option-icon svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2}
 .pf .option-copy{flex:1;min-width:0}
-.pf .option-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.pf .option-title{font-size:11px;font-weight:700;margin-bottom:4px}
 .pf .option-sub{font-size:10.5px;color:#656976}
 .pf .radio{flex:0 0 22px;width:22px;height:22px;border:2px solid #dfe0e4;border-radius:50%;display:grid;place-items:center}
 .pf .radio.selected{border-color:#db1653}
@@ -74,6 +75,7 @@ export const PREFERENCE_TEMPLATE_CSS = `
  .pf .icon-box{flex-basis:30px;width:30px;height:30px}
  .pf .icon-box svg{width:17px;height:17px}
  .pf .head-title{font-size:12.5px;margin:1px 0 2px}
+ .pf .head-title.compact{font-size:10.5px}
  .pf .head-sub{font-size:8.5px}
  .pf .head-value{font-size:12px}
  .pf .age-body{padding:10px 14px 12px}
@@ -84,7 +86,7 @@ export const PREFERENCE_TEMPLATE_CSS = `
  .pf .option{min-height:46px;padding:6px 12px;gap:9px}
  .pf .option-icon{flex-basis:28px;width:28px;height:28px}
  .pf .option-icon svg{width:16px;height:16px}
- .pf .option-title{font-size:11.5px;margin-bottom:2px}
+ .pf .option-title{font-size:10px;margin-bottom:2px}
  .pf .option-sub{font-size:9px}
  .pf .radio{width:20px;height:20px;flex-basis:20px}
  .pf .radio.selected:after{width:8px;height:8px}
@@ -110,6 +112,7 @@ export const PREFERENCE_TEMPLATE_CSS = `
  .pf .icon-box{flex-basis:27px;width:27px;height:27px}
  .pf .icon-box svg{width:15px;height:15px}
  .pf .head-title{font-size:12px}
+ .pf .head-title.compact{font-size:10.5px}
  .pf .head-sub{font-size:8px}
  .pf .head-value{font-size:11.5px}
  .pf .age-body{padding:8px 13px 9px}
@@ -119,7 +122,7 @@ export const PREFERENCE_TEMPLATE_CSS = `
  .pf .option{min-height:40px;padding:5px 11px;gap:8px}
  .pf .option-icon{flex-basis:25px;width:25px;height:25px}
  .pf .option-icon svg{width:14px;height:14px}
- .pf .option-title{font-size:11px;margin-bottom:1px}
+ .pf .option-title{font-size:10px;margin-bottom:1px}
  .pf .option-sub{font-size:8.5px}
  .pf .radio{width:19px;height:19px;flex-basis:19px}
  .pf .distance-body,.pf .kids-body{padding:4px 10px 9px}
@@ -142,6 +145,7 @@ export const PREFERENCE_TEMPLATE_CSS = `
   .pf .icon-box{flex-basis:24px;width:24px;height:24px}
   .pf .icon-box svg{width:13px;height:13px}
   .pf .head-title{font-size:11px;margin:1px 0 1px}
+  .pf .head-title.compact{font-size:9.5px}
   .pf .head-sub{font-size:7.5px}
   .pf .head-value{font-size:11px}
   .pf .age-body{padding:5px 11px 6px}
@@ -152,7 +156,7 @@ export const PREFERENCE_TEMPLATE_CSS = `
   .pf .option{min-height:32px;padding:3px 9px;gap:7px}
   .pf .option-icon{flex-basis:20px;width:20px;height:20px}
   .pf .option-icon svg{width:12px;height:12px}
-  .pf .option-title{font-size:10px;margin-bottom:1px}
+  .pf .option-title{font-size:9px;margin-bottom:1px}
   .pf .option-sub{font-size:7.5px}
   .pf .radio{width:17px;height:17px;flex-basis:17px}
   .pf .radio.selected:after{width:7px;height:7px}

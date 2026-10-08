@@ -176,7 +176,7 @@ export default function PreferencesPage() {
                 <svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.4-8.8 10.1-8.8 10.1S3.2 14.2 3.2 8.8A4.8 4.8 0 0 1 12 6a4.8 4.8 0 0 1 8.8 2.8Z" /></svg>
               </div>
               <div className="head-copy">
-                <div className="head-title">Looking For</div>
+                <div className="head-title compact">Looking For</div>
                 <div className="head-sub">What type of relationship are you looking for?</div>
               </div>
               <div className="head-value" id="relationshipValue">{goals}</div>
@@ -198,7 +198,7 @@ export default function PreferencesPage() {
                 <svg viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z" /><circle cx="12" cy="9" r="2.3" /></svg>
               </div>
               <div className="head-copy">
-                <div className="head-title">Distance</div>
+                <div className="head-title compact">Distance</div>
                 <div className="head-sub">How far are you willing to go?</div>
               </div>
               <div className="head-value" id="distanceValue">{distance}</div>
