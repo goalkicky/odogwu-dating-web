@@ -27,7 +27,7 @@ export const PREFERENCE_TEMPLATE_CSS = `
 .pf .age-labels{font-size:12px;font-weight:500;margin-bottom:7px}
 .pf .range{position:relative;height:9px;background:#dfe0e4;border-radius:10px;touch-action:none}
 .pf .range-fill{position:absolute;top:0;height:9px;background:#e90057;border-radius:10px}
-.pf .thumb{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:#dc1651;transform:translate(-50%,-50%);box-shadow:0 0 0 1px rgba(0,0,0,.02);cursor:grab;touch-action:none}
+.pf .thumb{position:absolute;top:50%;width:13px;height:13px;border-radius:50%;background:#dc1651;transform:translate(-50%,-50%);box-shadow:0 0 0 1px rgba(0,0,0,.02);cursor:grab;touch-action:none}
 .pf .age-ticks{margin-top:15px;color:#555a68;font-size:11px}
 .pf .age-ticks span{width:40px;text-align:center}
 .pf .age-ticks span:first-child{text-align:left}
@@ -82,7 +82,7 @@ export const PREFERENCE_TEMPLATE_CSS = `
  .pf .age-labels{font-size:11px;margin-bottom:5px}
  .pf .age-ticks{font-size:10px;margin-top:10px}
  .pf .age-ticks span{width:30px}
- .pf .thumb{width:14px;height:14px}
+ .pf .thumb{width:11px;height:11px}
  .pf .option{min-height:46px;padding:6px 12px;gap:9px}
  .pf .option-icon{flex-basis:28px;width:28px;height:28px}
  .pf .option-icon svg{width:16px;height:16px}
@@ -118,7 +118,7 @@ export const PREFERENCE_TEMPLATE_CSS = `
  .pf .age-body{padding:8px 13px 9px}
  .pf .age-labels{font-size:10.5px;margin-bottom:4px}
  .pf .age-ticks{font-size:9.5px;margin-top:8px}
- .pf .thumb{width:12px;height:12px}
+ .pf .thumb{width:10px;height:10px}
  .pf .option{min-height:40px;padding:5px 11px;gap:8px}
  .pf .option-icon{flex-basis:25px;width:25px;height:25px}
  .pf .option-icon svg{width:14px;height:14px}
@@ -152,7 +152,7 @@ export const PREFERENCE_TEMPLATE_CSS = `
   .pf .age-labels{font-size:10px;margin-bottom:3px}
   .pf .age-ticks{font-size:9px;margin-top:6px}
   .pf .age-ticks span{width:26px}
-  .pf .thumb{width:10px;height:10px}
+  .pf .thumb{width:8px;height:8px}
   .pf .option{min-height:32px;padding:3px 9px;gap:7px}
   .pf .option-icon{flex-basis:20px;width:20px;height:20px}
   .pf .option-icon svg{width:12px;height:12px}
