@@ -5,7 +5,7 @@ export const INTERESTS_TEMPLATE_CSS = `
 .pi input{font:inherit}
 .pi .app-shell{width:100%;max-width:1200px;min-height:100vh;background:#fff;margin:0 auto;padding:18px 8px}
 .pi .head{position:relative;text-align:center;margin-top:4px}
-.pi .back{position:absolute;left:0;top:-6px;border:0;background:none;font-size:29px;font-weight:300;line-height:1;padding:0;color:#111;outline:0}
+.pi .back{position:absolute;left:0;top:-6px;border:0;background:none;font-size:30px;font-weight:500;line-height:1;padding:0;color:#111;outline:0}
 .pi .head h1{font-size:18px;font-weight:700;letter-spacing:-.4px;line-height:1.2;margin:0}
 .pi .counttop{position:absolute;right:0;top:2px;color:#c82a58;font-size:11.5px;font-weight:600}
 .pi .head p{margin:6px 0 14px;color:#777b87;font-size:11.5px}
@@ -47,7 +47,6 @@ export const INTERESTS_TEMPLATE_CSS = `
 @media(max-width:600px){
  .pi .app-shell{padding:10px 5px 12px}
  .pi .head{margin-top:2px}
- .pi .back{font-size:26px}
  .pi .head h1{font-size:15px}
  .pi .counttop{font-size:10px}
  .pi .head p{font-size:9.5px;margin:5px 0 12px}
