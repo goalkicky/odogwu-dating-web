@@ -104,10 +104,10 @@ export default function MatchesPage() {
         .msg-avatar-fallback{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#FF2E5F,#B44CFF);color:#fff;font-size:24px;font-weight:800}
         .msg-online{position:absolute;width:12px;height:12px;border-radius:50%;background:#13c979;border:2px solid #fff;right:0;bottom:0}
         .msg-online.off{background:#b9bcc2}
-        .msg-person-line{display:flex;align-items:center;gap:5px;margin-bottom:4px}
+        .msg-person-line{display:flex;align-items:center;gap:5px;margin-bottom:7px}
         .msg-person-line strong{font-size:14px;line-height:1.05;letter-spacing:-.3px;color:#101114}
         .msg-verified{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#1496e9;color:#fff;font-size:10px;font-weight:800;line-height:1}
-        .msg-preview{font-size:12.5px;font-weight:700;line-height:1.55;color:#3f4046;letter-spacing:.05px;overflow:hidden;text-overflow:ellipsis}
+        .msg-preview{font-size:12.5px;font-weight:600;line-height:1.72;color:#3f4046;letter-spacing:.05px;overflow:hidden;text-overflow:ellipsis}
         .msg-meta{height:100%;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:16px}
         .msg-meta time{font-size:12px;color:#62636a;white-space:nowrap}
         .msg-unread-badge{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:#d71945;color:#fff;font-size:18px;font-weight:700}
