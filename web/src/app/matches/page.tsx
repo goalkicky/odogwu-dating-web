@@ -91,13 +91,13 @@ export default function MatchesPage() {
       <style>{`
         .msg-search{height:50px;border:1.5px solid #dedee2;border-radius:14px;display:flex;align-items:center;padding:0 10px;box-shadow:0 1px 3px rgba(0,0,0,.02)}
         .msg-search svg{width:22px;height:22px;stroke:#aeb0b7;fill:none;stroke-width:1.8;margin-right:12px;flex-shrink:0}
-        .msg-search input{width:100%;border:0;outline:0;color:#333;background:transparent;font-size:14px}
+        .msg-search input{width:100%;border:0;outline:0;color:#333;background:transparent;font-size:12px}
         .msg-search input::placeholder{color:#b7b8bd;opacity:1}
         .msg-tabs{height:64px;display:flex;align-items:center;gap:24px}
-        .msg-tab{position:relative;height:100%;font-size:22px;font-weight:600;color:#17181d;padding:0;cursor:pointer}
+        .msg-tab{position:relative;height:100%;font-size:16px;font-weight:600;color:#17181d;padding:0;cursor:pointer}
         .msg-tab.active{color:#d71945}
         .msg-tab.active:after{content:"";position:absolute;height:3px;background:#d71945;left:-1px;right:-1px;bottom:5px;border-radius:4px}
-        .msg-request-count{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;margin-left:7px;border-radius:50%;background:#d71945;color:#fff;font-size:18px;vertical-align:middle}
+        .msg-request-count{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;margin-left:5px;border-radius:50%;background:#d71945;color:#fff;font-size:13px;vertical-align:middle}
         .msg-conv{height:92px;border-bottom:1px solid #e8e8eb;display:grid;grid-template-columns:80px 1fr 86px;column-gap:14px;align-items:center}
         .msg-avatar-wrap{width:80px;height:80px;position:relative}
         .msg-avatar-wrap img,.msg-avatar-wrap .msg-avatar-fallback{width:80px;height:80px;display:block;object-fit:cover;border-radius:50%}
@@ -113,7 +113,7 @@ export default function MatchesPage() {
         .msg-unread-badge{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:#d71945;color:#fff;font-size:18px;font-weight:700}
         @media (max-width:620px){
           .msg-tabs{height:62px;gap:22px}
-          .msg-tab{font-size:20px}
+          .msg-tab{font-size:15px}
           .msg-conv{height:92px;grid-template-columns:76px 1fr 68px;column-gap:12px}
           .msg-avatar-wrap,.msg-avatar-wrap img,.msg-avatar-wrap .msg-avatar-fallback{width:76px;height:76px}
           .msg-avatar-fallback{font-size:32px}
@@ -124,10 +124,10 @@ export default function MatchesPage() {
         }
         @media (max-width:450px){
           .msg-search{height:46px;border-radius:12px}
-          .msg-search input{font-size:12px}
+          .msg-search input{font-size:11px}
           .msg-tabs{height:58px;gap:18px}
-          .msg-tab{font-size:18px}
-          .msg-request-count{width:31px;height:31px;font-size:16px}
+          .msg-tab{font-size:14px}
+          .msg-request-count{width:24px;height:24px;font-size:12px}
           .msg-conv{height:82px;grid-template-columns:64px minmax(0,1fr) 48px;column-gap:10px}
           .msg-avatar-wrap,.msg-avatar-wrap img,.msg-avatar-wrap .msg-avatar-fallback{width:64px;height:64px}
           .msg-avatar-fallback{font-size:27px}
