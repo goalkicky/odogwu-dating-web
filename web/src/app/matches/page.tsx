@@ -82,7 +82,7 @@ export default function MatchesPage() {
   return (
     <AppShell
       header={
-        <header className="uv-topbar" style={{ position: 'relative', alignItems: 'center', paddingTop: 26 }}>
+        <header className="uv-topbar" style={{ position: 'relative', alignItems: 'center', paddingTop: 10 }}>
           <img className="uv-brand-logo" src="/o-logo.png" alt="Odogwu" style={{ height: 30 }} width={30} height={30} decoding="async" />
           <span style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', fontSize: 17, fontWeight: 800, color: '#151515', letterSpacing: -0.3, whiteSpace: 'nowrap' }}>Messages</span>
         </header>
@@ -91,7 +91,7 @@ export default function MatchesPage() {
       <style>{`
         .msg-search{height:50px;border:1.5px solid #dedee2;border-radius:14px;display:flex;align-items:center;padding:0 10px;box-shadow:0 1px 3px rgba(0,0,0,.02)}
         .msg-search svg{width:22px;height:22px;stroke:#aeb0b7;fill:none;stroke-width:1.8;margin-right:12px;flex-shrink:0}
-        .msg-search input{width:100%;border:0;outline:0;color:#333;background:transparent;font-size:18px}
+        .msg-search input{width:100%;border:0;outline:0;color:#333;background:transparent;font-size:14px}
         .msg-search input::placeholder{color:#b7b8bd;opacity:1}
         .msg-tabs{height:64px;display:flex;align-items:center;gap:24px}
         .msg-tab{position:relative;height:100%;font-size:22px;font-weight:600;color:#17181d;padding:0;cursor:pointer}
@@ -124,7 +124,7 @@ export default function MatchesPage() {
         }
         @media (max-width:450px){
           .msg-search{height:46px;border-radius:12px}
-          .msg-search input{font-size:15px}
+          .msg-search input{font-size:12px}
           .msg-tabs{height:58px;gap:18px}
           .msg-tab{font-size:18px}
           .msg-request-count{width:31px;height:31px;font-size:16px}
