@@ -269,6 +269,11 @@ export default function ExplorePage() {
 
   return (
     <AppShell>
+      <style>{`
+        .uv-bottom-center{color:#858991}
+        .uv-bottom-center img{display:none}
+        .uv-bottom-center::before{content:"";width:36px;height:36px;flex:0 0 auto;background-color:currentColor;-webkit-mask:url(/jico.png) no-repeat center/contain;mask:url(/jico.png) no-repeat center/contain}
+      `}</style>
       <div style={{ minHeight: '100svh', padding: isMobile ? '18px 16px 110px' : '24px 16px 60px' }}>
         {activeCategory ? (
           <div className="animate-fade-up" style={{ maxWidth: 560, margin: '0 auto' }}>
