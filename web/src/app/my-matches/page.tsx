@@ -128,7 +128,7 @@ export default function MyMatchesPage() {
         :root{--red:#ed1744;--dark:#111;--muted:#555;--border:#ececec}
         html,body{margin:0;background:#fff;color:var(--dark);font-family:Inter,Arial,Helvetica,sans-serif}
         button{font:inherit;border:0;background:none;cursor:pointer}
-        .app{width:100%;max-width:1100px;min-height:100vh;margin:auto;padding-bottom:105px}
+        .app{width:100%;max-width:1100px;min-height:100vh;margin:auto;padding-bottom:72px}
 
         .header{height:190px;position:relative;display:flex;align-items:flex-start;justify-content:center;padding-top:30px}
         .menu{position:absolute;left:37px;top:92px;width:42px;height:40px;display:flex;flex-direction:column;justify-content:space-between;padding:4px 0}
@@ -200,7 +200,7 @@ export default function MyMatchesPage() {
         .empty{padding:44px 20px;text-align:center;font-size:18px;color:#999}
 
         @media(max-width:700px){
-         .app{padding-bottom:90px}
+          .app{padding-bottom:72px}
          .header{height:193px;padding-top:37px}
          .logo{font-size:47px;letter-spacing:-3px}
          .logoMark{width:55px;height:55px;border-width:4px;vertical-align:-5px;margin-right:-12px}
@@ -493,30 +493,29 @@ export default function MyMatchesPage() {
         <Link href="/explore" className="tmpl-nav-item">
           <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none"/><path d="m19 29 4-10 9-4-4 9-9 5Z"/></svg><span>Explore</span>
         </Link>
-        <Link href="/discover" className="tmpl-nav-center"><img src="/logo-icon.png?v=2" alt="Discover" width={44} height={44} decoding="async" /></Link>
+        <Link href="/discover" className="tmpl-nav-center"><img src="/jico.png" alt="Discover" width={36} height={36} decoding="async" /><span>Discover</span></Link>
         <Link href="/matches" className="tmpl-nav-item active">
-          <span className="tmpl-nav-icon-wrap"><svg viewBox="0 0 48 48"><path d="M9 34l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/><circle cx="19" cy="22" r="2"/><circle cx="25" cy="22" r="2"/><circle cx="31" cy="22" r="2"/></svg><b>{messagesCount || 0}</b></span><span>Messages</span>
+          <span className="tmpl-nav-icon-wrap"><svg viewBox="0 0 48 48"><path d="M9 34l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none"/><circle cx="19" cy="22" r="2"/><circle cx="25" cy="22" r="2"/><circle cx="31" cy="22" r="2"/></svg>{messagesCount > 0 && <b>{messagesCount}</b>}</span><span>Messages</span>
         </Link>
         <div role="button" tabIndex={0} onClick={() => router.push('/edit-profile')} onKeyDown={(e) => e.key === 'Enter' && router.push('/edit-profile')} className="tmpl-nav-item" style={{ cursor: 'pointer' }}>
-          <svg viewBox="0 0 48 48"><circle cx="24" cy="17" r="7" fill="none"/><path d="M10 39c1-8 7-12 14-12s13 4 14 12" fill="none"/></svg><span>Profile</span>
+          <svg viewBox="0 0 48 48"><circle cx="24" cy="17" r="7" fill="none" strokeWidth="2.6"/><path d="M10 39c1-8 7-12 14-12s13 4 14 12" fill="none" strokeWidth="2.6"/></svg><span>Profile</span>
         </div>
       </nav>
 
       <style jsx global>{`
-        .tmpl-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 710px; height: 101px; background: #fff; border-top: 1px solid #eee; display: grid; grid-template-columns: 1fr 1fr 1.1fr 1fr 1fr; align-items: end; padding: 8px 15px 13px; z-index: 10; box-sizing: border-box; }
-        .tmpl-nav-item { height: 70px; color: #777; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 13px; text-decoration: none; background: none; border: 0; padding: 0; cursor: pointer; }
-        .tmpl-nav-item svg { width: 29px; height: 29px; stroke: currentColor; stroke-width: 2.2; fill: currentColor; }
+        .tmpl-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 710px; z-index: 40; height: 60px; background: #fff; border-top: 1px solid #EBEBEE; display: grid; grid-template-columns: 1fr 1fr 1.1fr 1fr 1fr; align-items: end; padding: 4px 8px 6px; box-sizing: border-box; }
+        .tmpl-nav-item { height: 46px; color: #858991; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 9.5px; font-weight: 700; text-decoration: none; background: none; border: 0; padding: 0; cursor: pointer; }
+        .tmpl-nav-item svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2.2; fill: currentColor; }
         .tmpl-nav-item:not(.active) svg { fill: none; }
-        .tmpl-nav-item.active { color: #d81043; }
+        .tmpl-nav-item.active { color: #E50046; }
         .tmpl-nav-icon-wrap { position: relative; display: grid; }
-        .tmpl-nav-icon-wrap b { position: absolute; right: -7px; top: -7px; background: #d81043; color: #fff; border-radius: 50%; font-size: 11px; width: 20px; height: 20px; display: grid; place-items: center; font-weight: 700; }
-        .tmpl-nav-center { height: 70px; display: flex; align-items: center; justify-content: center; text-decoration: none; cursor: pointer; }
-        .tmpl-nav-center img { width: 66px; height: 66px; object-fit: cover; border-radius: 50%; }
+        .tmpl-nav-icon-wrap b { position: absolute; right: -10px; top: -6px; background: #D90040; color: #fff; border-radius: 50%; min-width: 16px; height: 16px; font-size: 9px; font-weight: 700; display: grid; place-items: center; padding: 0 3px; box-sizing: border-box; }
+        .tmpl-nav-center { height: 46px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; text-decoration: none; cursor: pointer; color: #858991; font-size: 9.5px; font-weight: 700; line-height: 1; }
+        .tmpl-nav-center img { width: 36px; height: 36px; object-fit: cover; border-radius: 50%; }
       `}</style>
       <style>{`
-        .tmpl-nav-center{color:#777}
         .tmpl-nav-center img{display:none}
-        .tmpl-nav-center::before{content:"";width:66px;height:66px;flex:0 0 auto;border-radius:50%;background-color:currentColor;-webkit-mask:url(/logo-icon.png?v=2) no-repeat center/contain;mask:url(/logo-icon.png?v=2) no-repeat center/contain}
+        .tmpl-nav-center::before{content:"";width:36px;height:36px;flex:0 0 auto;background-color:currentColor;-webkit-mask:url(/jico.png) no-repeat center/contain;mask:url(/jico.png) no-repeat center/contain}
       `}</style>
     </div>
   );
