@@ -97,6 +97,11 @@ export default function NearbyPage() {
   return (
     <AppShell header={<></>}>
       <style jsx global>{PROFILE_TEMPLATE_CSS}</style>
+      <style>{`
+        .uv-bottom-center{color:#858991}
+        .uv-bottom-center img{display:none}
+        .uv-bottom-center::before{content:"";width:36px;height:36px;flex:0 0 auto;background-color:currentColor;-webkit-mask:url(/jico.png) no-repeat center/contain;mask:url(/jico.png) no-repeat center/contain}
+      `}</style>
       <style jsx global>{`
         .nb-head { display: grid; grid-template-columns: 114px 1fr auto; gap: 17px; align-items: center; margin-bottom: 20px; }
         .nb-map { width: 114px; height: 114px; border-radius: 50%; object-fit: cover; }

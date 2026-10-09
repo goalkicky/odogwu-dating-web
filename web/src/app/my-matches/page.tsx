@@ -513,6 +513,11 @@ export default function MyMatchesPage() {
         .tmpl-nav-center { height: 70px; display: flex; align-items: center; justify-content: center; text-decoration: none; cursor: pointer; }
         .tmpl-nav-center img { width: 66px; height: 66px; object-fit: cover; border-radius: 50%; }
       `}</style>
+      <style>{`
+        .tmpl-nav-center{color:#777}
+        .tmpl-nav-center img{display:none}
+        .tmpl-nav-center::before{content:"";width:66px;height:66px;flex:0 0 auto;border-radius:50%;background-color:currentColor;-webkit-mask:url(/logo-icon.png?v=2) no-repeat center/contain;mask:url(/logo-icon.png?v=2) no-repeat center/contain}
+      `}</style>
     </div>
   );
 }
