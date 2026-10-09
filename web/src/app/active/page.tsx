@@ -150,6 +150,11 @@ export default function ActivePage() {
   return (
     <AppShell header={<></>}>
       <style jsx global>{PROFILE_TEMPLATE_CSS}</style>
+      <style>{`
+        .uv-bottom-center{color:#858991}
+        .uv-bottom-center img{display:none}
+        .uv-bottom-center::before{content:"";width:36px;height:36px;flex:0 0 auto;background-color:currentColor;-webkit-mask:url(/jico.png) no-repeat center/contain;mask:url(/jico.png) no-repeat center/contain}
+      `}</style>
       <style jsx global>{`
         .av-search {
           height: 54px; border-radius: 29px; background: #fff0f4;
