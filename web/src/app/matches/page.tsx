@@ -98,6 +98,8 @@ export default function MatchesPage() {
         .msg-tab.active{color:#d71945}
         .msg-tab.active:after{content:"";position:absolute;height:3px;background:#d71945;left:-1px;right:-1px;bottom:5px;border-radius:4px}
         .msg-request-count{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;margin-left:5px;border-radius:50%;background:#d71945;color:#fff;font-size:13px;vertical-align:middle}
+        .uv-bottom-center{color:#000}
+        .uv-bottom-center img{filter:brightness(0)}
         .msg-conv{height:72px;border-bottom:1px solid #e8e8eb;display:grid;grid-template-columns:56px 1fr 62px;column-gap:12px;align-items:center}
         .msg-avatar-wrap{width:56px;height:56px;position:relative}
         .msg-avatar-wrap img,.msg-avatar-wrap .msg-avatar-fallback{width:56px;height:56px;display:block;object-fit:cover;border-radius:50%}
