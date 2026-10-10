@@ -137,9 +137,9 @@ export default function NearbyPage() {
         .nb-premium-icon { width: 57px; height: 57px; flex: 0 0 57px; border-radius: 50%; background: #ffe1e8; color: #ed1734; display: grid; place-items: center; }
         .nb-premium-icon svg { width: 36px; height: 36px; }
         .nb-premium-copy { flex: 1; display: flex; flex-direction: column; gap: 7px; }
-        .nb-premium-copy strong { font-size: 18px; line-height: 1.15; }
-        .nb-premium-copy span { font-size: 15px; color: #5b5d64; line-height: 1.28; }
-        .nb-upgrade { border: 0; background: #ed1734; color: #fff; border-radius: 28px; padding: 15px 29px; font-size: 17px; font-weight: 700; cursor: pointer; min-width: 132px; }
+        .nb-premium-copy strong { font-size: 15px; line-height: 1.15; }
+        .nb-premium-copy span { font-size: 13px; color: #5b5d64; line-height: 1.28; font-weight: 700; }
+        .nb-upgrade { border: 0; background: #ed1734; color: #fff; border-radius: 19px; padding: 10px 18px; font-size: 13px; font-weight: 700; cursor: pointer; min-width: 100px; }
         @media (max-width: 620px) {
           .nb-head { grid-template-columns: 70px 1fr auto; gap: 12px; margin-bottom: 18px; }
           .nb-map { width: 70px; height: 70px; }
@@ -149,9 +149,9 @@ export default function NearbyPage() {
           .nb-profiles { gap: 10px; }
           .nb-premium { padding: 14px 16px; gap: 11px; border-radius: 19px; min-height: 111px; }
           .nb-premium-icon { width: 50px; height: 50px; flex-basis: 50px; }
-          .nb-premium-copy strong { font-size: 15px; }
-          .nb-premium-copy span { font-size: 13px; }
-          .nb-upgrade { min-width: 105px; padding: 13px 16px; font-size: 15px; }
+          .nb-premium-copy strong { font-size: 13px; }
+          .nb-premium-copy span { font-size: 11.5px; font-weight: 700; }
+          .nb-upgrade { min-width: 88px; padding: 9px 12px; font-size: 12px; }
         }
         @media (max-width: 420px) {
           .nb-head { grid-template-columns: 60px 1fr auto; gap: 10px; }
@@ -162,16 +162,16 @@ export default function NearbyPage() {
           .nb-profiles { gap: 8px; }
           .nb-premium { margin-top: 16px; padding: 12px 12px; }
           .nb-premium-icon { width: 45px; height: 45px; flex-basis: 45px; }
-          .nb-premium-copy strong { font-size: 13px; }
-          .nb-premium-copy span { font-size: 11px; }
-          .nb-upgrade { min-width: 88px; font-size: 13px; padding: 12px 13px; }
+          .nb-premium-copy strong { font-size: 12px; }
+          .nb-premium-copy span { font-size: 10.5px; font-weight: 700; }
+          .nb-upgrade { min-width: 72px; font-size: 11px; padding: 8px 10px; }
         }
         @media (max-width: 350px) {
           .nb-copy p:last-child { display: none; }
           .nb-premium-icon { display: none; }
-          .nb-premium-copy strong { font-size: 12px; }
-          .nb-premium-copy span { font-size: 10px; }
-          .nb-upgrade { min-width: 74px; padding: 10px 9px; font-size: 12px; }
+          .nb-premium-copy strong { font-size: 11px; }
+          .nb-premium-copy span { font-size: 9.5px; font-weight: 700; }
+          .nb-upgrade { min-width: 60px; padding: 7px 8px; font-size: 10.5px; }
         }
       `}</style>
 
