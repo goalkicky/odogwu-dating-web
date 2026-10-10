@@ -103,10 +103,10 @@ export default function NearbyPage() {
         .uv-bottom-center::before{content:"";width:36px;height:36px;flex:0 0 auto;background-color:currentColor;-webkit-mask:url(/jico.png) no-repeat center/contain;mask:url(/jico.png) no-repeat center/contain}
       `}</style>
       <style jsx global>{`
-        .nb-head { display: grid; grid-template-columns: 114px 1fr auto; gap: 17px; align-items: center; margin-bottom: 20px; }
-        .nb-map { width: 114px; height: 114px; border-radius: 50%; object-fit: cover; }
-        .nb-copy h1 { font-size: 31px; line-height: 1.05; margin: 0 0 10px; font-weight: 750; letter-spacing: -.7px; }
-        .nb-copy p { margin: 0 0 6px; font-size: 17px; line-height: 1.2; color: #50535b; font-weight: 500; }
+        .nb-head { display: grid; grid-template-columns: 76px 1fr auto; gap: 14px; align-items: center; margin-bottom: 20px; }
+        .nb-map { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; }
+        .nb-copy h1 { font-size: 22px; line-height: 1.05; margin: 0 0 6px; font-weight: 750; letter-spacing: -.7px; }
+        .nb-copy p { margin: 0 0 6px; font-size: 13px; line-height: 1.2; color: #50535b; font-weight: 500; }
         .nb-copy .nb-pink-line { color: #404249; }
         .nb-location { height: 53px; padding: 0 18px; border: 1px solid #f0e2e6; border-radius: 28px; background: #fff; color: #d9293e; font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 7px; box-shadow: 0 1px 5px rgba(0,0,0,.02); cursor: pointer; white-space: nowrap; }
         .nb-location svg { width: 20px; height: 20px; }
@@ -141,10 +141,10 @@ export default function NearbyPage() {
         .nb-premium-copy span { font-size: 15px; color: #5b5d64; line-height: 1.28; }
         .nb-upgrade { border: 0; background: #ed1734; color: #fff; border-radius: 28px; padding: 15px 29px; font-size: 17px; font-weight: 700; cursor: pointer; min-width: 132px; }
         @media (max-width: 620px) {
-          .nb-head { grid-template-columns: 105px 1fr; gap: 13px; margin-bottom: 18px; }
-          .nb-map { width: 105px; height: 105px; }
-          .nb-copy h1 { font-size: 28px; }
-          .nb-copy p { font-size: 15px; }
+          .nb-head { grid-template-columns: 70px 1fr; gap: 12px; margin-bottom: 18px; }
+          .nb-map { width: 70px; height: 70px; }
+          .nb-copy h1 { font-size: 20px; }
+          .nb-copy p { font-size: 12px; }
           .nb-location { grid-column: 1/-1; justify-self: end; margin-top: -4px; height: 47px; }
           .nb-profiles { gap: 10px; }
           .nb-premium { padding: 14px 16px; gap: 11px; border-radius: 19px; min-height: 111px; }
@@ -154,10 +154,10 @@ export default function NearbyPage() {
           .nb-upgrade { min-width: 105px; padding: 13px 16px; font-size: 15px; }
         }
         @media (max-width: 420px) {
-          .nb-head { grid-template-columns: 88px 1fr; gap: 10px; }
-          .nb-map { width: 88px; height: 88px; }
-          .nb-copy h1 { font-size: 24px; margin-bottom: 6px; }
-          .nb-copy p { font-size: 13px; }
+          .nb-head { grid-template-columns: 60px 1fr; gap: 10px; }
+          .nb-map { width: 60px; height: 60px; }
+          .nb-copy h1 { font-size: 18px; margin-bottom: 6px; }
+          .nb-copy p { font-size: 11px; }
           .nb-location { font-size: 13px; height: 44px; }
           .nb-profiles { gap: 8px; }
           .nb-premium { margin-top: 16px; padding: 12px 12px; }
