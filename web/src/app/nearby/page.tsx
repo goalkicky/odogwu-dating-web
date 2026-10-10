@@ -141,11 +141,11 @@ export default function NearbyPage() {
         .nb-premium-copy span { font-size: 15px; color: #5b5d64; line-height: 1.28; }
         .nb-upgrade { border: 0; background: #ed1734; color: #fff; border-radius: 28px; padding: 15px 29px; font-size: 17px; font-weight: 700; cursor: pointer; min-width: 132px; }
         @media (max-width: 620px) {
-          .nb-head { grid-template-columns: 70px 1fr; gap: 12px; margin-bottom: 18px; }
+          .nb-head { grid-template-columns: 70px 1fr auto; gap: 12px; margin-bottom: 18px; }
           .nb-map { width: 70px; height: 70px; }
           .nb-copy h1 { font-size: 16px; }
           .nb-copy p { font-size: 9px; }
-          .nb-location { grid-column: 1/-1; justify-self: end; margin-top: -4px; height: 36px; }
+          .nb-location { height: 36px; }
           .nb-profiles { gap: 10px; }
           .nb-premium { padding: 14px 16px; gap: 11px; border-radius: 19px; min-height: 111px; }
           .nb-premium-icon { width: 50px; height: 50px; flex-basis: 50px; }
@@ -154,7 +154,7 @@ export default function NearbyPage() {
           .nb-upgrade { min-width: 105px; padding: 13px 16px; font-size: 15px; }
         }
         @media (max-width: 420px) {
-          .nb-head { grid-template-columns: 60px 1fr; gap: 10px; }
+          .nb-head { grid-template-columns: 60px 1fr auto; gap: 10px; }
           .nb-map { width: 60px; height: 60px; }
           .nb-copy h1 { font-size: 14.5px; margin-bottom: 6px; }
           .nb-copy p { font-size: 8.5px; }
@@ -168,7 +168,6 @@ export default function NearbyPage() {
         }
         @media (max-width: 350px) {
           .nb-copy p:last-child { display: none; }
-          .nb-location { grid-column: 2; }
           .nb-premium-icon { display: none; }
           .nb-premium-copy strong { font-size: 12px; }
           .nb-premium-copy span { font-size: 10px; }
