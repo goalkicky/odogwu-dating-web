@@ -332,35 +332,35 @@ export default function MyMatchesPage() {
         .app .sort b { font-size: 13px; font-weight: 600; }
         .app .sort span { font-size: 13px; }
         .app .list { padding: 0 16px; }
-        .app .match { height: auto; min-height: 118px; padding: 8px 0 8px 0; border-radius: 18px; margin-bottom: 10px; }
-        .app .photoWrap { width: 148px; height: 102px; margin-right: 18px; }
+        .app .match { height: auto; min-height: 100px; padding: 8px 0 8px 0; border-radius: 18px; margin-bottom: 10px; }
+        .app .photoWrap { width: 120px; height: 84px; margin-right: 14px; }
         .app .photoWrap img, .app .photoFallback { border-radius: 14px; }
-        .app .photoFallback { font-size: 44px; }
+        .app .photoFallback { font-size: 34px; }
         .app .online { left: 10px; top: 10px; width: 11px; height: 11px; }
         .app .smallHeart { width: 32px; height: 32px; font-size: 18px; }
-        .app .personName { font-size: 18px; margin-bottom: 5px; }
+        .app .personName { font-size: 15px; margin-bottom: 5px; }
         .app .verify { width: 16px; height: 16px; font-size: 10px; }
-        .app .detail { font-size: 13px; margin: 5px 0; gap: 7px; }
-        .app .detail svg { width: 16px; height: 16px; }
+        .app .detail { font-size: 11px; font-weight: 600; margin: 5px 0; gap: 7px; }
+        .app .detail svg { width: 15px; height: 15px; stroke-width: 2.4; }
         .app .time { display: block; flex-shrink: 0; font-size: 12px; margin-top: 14px; }
         .app .arrow { font-size: 26px; margin-left: 14px; margin-right: 0; flex-shrink: 0; }
 
         @media (max-width: 560px) {
-          .app .match { min-height: 104px; padding-right: 0; border-radius: 15px; }
-          .app .photoWrap { width: 126px; height: 88px; margin-right: 13px; }
-          .app .personName { font-size: 16px; }
-          .app .detail { font-size: 12px; }
-          .app .detail svg { width: 15px; height: 15px; }
+          .app .match { min-height: 90px; padding-right: 0; border-radius: 15px; }
+          .app .photoWrap { width: 104px; height: 72px; margin-right: 11px; }
+          .app .personName { font-size: 13.5px; }
+          .app .detail { font-size: 10px; font-weight: 600; }
+          .app .detail svg { width: 14px; height: 14px; stroke-width: 2.4; }
           .app .time { font-size: 11px; }
           .app .heading h1 { font-size: 14px; font-weight: 700; }
         }
         @media (max-width: 390px) {
-          .app .match { min-height: 92px; padding-right: 0; }
-          .app .photoWrap { width: 108px; height: 76px; margin-right: 10px; border-radius: 12px; }
+          .app .match { min-height: 80px; padding-right: 0; }
+          .app .photoWrap { width: 90px; height: 64px; margin-right: 9px; border-radius: 12px; }
           .app .photoWrap img, .app .photoFallback { border-radius: 12px; }
-          .app .personName { font-size: 15px; }
-          .app .detail { font-size: 11px; }
-          .app .detail svg { width: 14px; height: 14px; }
+          .app .personName { font-size: 12.5px; }
+          .app .detail { font-size: 9.5px; font-weight: 600; }
+          .app .detail svg { width: 13px; height: 13px; stroke-width: 2.4; }
           .app .time { font-size: 10px; }
           .app .arrow { font-size: 22px; margin-left: 7px; }
           .app .heading h1 { font-size: 13px; font-weight: 700; }
