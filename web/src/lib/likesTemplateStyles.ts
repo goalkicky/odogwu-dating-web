@@ -42,7 +42,7 @@ export const LIKES_TEMPLATE_CSS = `
         .lk .sort-item:hover{background:#fff4f6}
 
         /* Cards */
-        .lk .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:0 10px}
+        .lk .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:0 4px}
         .lk .card{position:relative;height:180px;border-radius:12px;overflow:hidden;background:#222;box-shadow:0 1px 3px rgba(0,0,0,.12)}
         .lk .card-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;filter:saturate(1.02)}
         .lk .card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 25%,rgba(0,0,0,.76) 100%)}
@@ -89,7 +89,7 @@ export const LIKES_TEMPLATE_CSS = `
           .lk .section-head{padding:2px 6px 4px}
           .lk .section-title{font-size:17px}
           .lk .sort{font-size:12px}
-          .lk .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;padding:0 6px}
+          .lk .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;padding:0 2px}
           .lk .card{height:160px;border-radius:10px}
           .lk .name{font-size:13px}
           .lk .meta{font-size:10px}
