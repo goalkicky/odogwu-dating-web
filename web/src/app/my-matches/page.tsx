@@ -277,40 +277,55 @@ export default function MyMatchesPage() {
         .tmpl-messages-top { position: relative; width: 50px; height: 50px; background: none; border: 0; cursor: pointer; color: #171717; padding: 0; }
         .tmpl-messages-top svg { width: 40px; height: 40px; }
         .tmpl-messages-top em { position: absolute; right: 0; top: -4px; background: #d71945; color: #fff; width: 24px; height: 24px; border-radius: 50%; font-style: normal; font-size: 13px; display: grid; place-items: center; font-weight: 700; }
-        .mm-home .tmpl-premium { min-height: 88px; height: auto; background: #fff1f5; border-radius: 16px; display: flex; align-items: center; padding: 8px 12px; margin: 0 0 12px; }
-        .mm-home .tmpl-crown { width: 38px; height: 38px; background: #df164c; color: #ffd12a; border-radius: 50%; display: grid; place-items: center; font-size: 22px; margin-right: 11px; flex-shrink: 0; }
-        .mm-home .tmpl-premium-copy { flex: 1; min-width: 0; }
-        .mm-home .tmpl-premium h3 { font-size: 13px; margin: 0 0 3px; color: #151515; font-weight: 800; }
-        .mm-home .tmpl-premium p { font-size: 11px; line-height: 15px; color: #555; margin: 0; font-weight: 700; }
-        .mm-home .tmpl-pink-btn { background: #FF1747; color: #fff; border-radius: 20px; padding: 10px 15px; font-size: 12.5px; border: 0; cursor: pointer; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
-        @media(max-width:480px){
-          .mm-home .tmpl-premium { min-height: 78px; padding: 7px 10px; border-radius: 14px; margin-bottom: 10px; }
-          .mm-home .tmpl-crown { width: 32px; height: 32px; font-size: 18px; margin-right: 9px; }
-          .mm-home .tmpl-premium h3 { font-size: 12px; margin-bottom: 2px; }
-          .mm-home .tmpl-premium p { font-size: 10px; line-height: 13px; }
-          .mm-home .tmpl-pink-btn { padding: 9px 11px; font-size: 11px; border-radius: 16px; }
+        .tmpl-premium { min-height: 42.75px; background: #FCF1F3; border-radius: 11.25px; display: flex; align-items: center; padding: 6px 11.25px; margin-bottom: 14px; box-sizing: border-box; }
+        .tmpl-crown { width: 38px; height: 38px; background: #D90540; color: #FFD21D; border-radius: 50%; display: grid; place-items: center; margin-right: 9px; flex-shrink: 0; }
+        .tmpl-crown img { width: 30px; height: 30px; display: block; object-fit: contain; }
+        .tmpl-premium-copy { flex: 1; min-width: 0; }
+        .tmpl-premium h3 { font-size: 12.75px; margin: 0 0 3px; color: #111; font-weight: 700; letter-spacing: -0.2px; line-height: 15.75px; }
+        .tmpl-premium p { font-size: 10px; line-height: 14.25px; color: #586273; margin: 0; font-weight: 400; }
+        .tmpl-pink-btn { background: #D90540; color: #fff; border: 0; border-radius: 18px; width: 67px; height: 28px; padding: 2px; font-size: 10.5px; font-weight: 500; line-height: 17px; text-align: center; display: grid; place-items: center; cursor: pointer; white-space: nowrap; margin-left: 7.5px; flex-shrink: 0; box-sizing: border-box; }
+        .tmpl-quick-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 4px 0 14px; }
+        .tmpl-quick { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; color: #111; background: none; border: 0; cursor: pointer; padding: 0; min-width: 0; }
+        .tmpl-round-photo { width: 59px; height: 59px; border-radius: 50%; padding: 3px; box-sizing: border-box; display: block; position: relative; background: #fff; }
+        .tmpl-round-photo:not(.location):not(.story) { background: conic-gradient(#E67A00 0 50%, #D90540 50% 100%); }
+        .tmpl-quick:nth-child(3) .tmpl-round-photo:not(.location):not(.story) { background: conic-gradient(#D90540 0 55%, #FF5A3C 55% 100%); }
+        .tmpl-round-photo.story { border: 2px dashed #E77A99; background: conic-gradient(#D90540 0 calc(var(--pct, 0) * 1%), transparent 0); }
+        .tmpl-round-photo > img, .tmpl-round-photo > div { inset: 3px !important; width: calc(100% - 6px) !important; height: calc(100% - 6px) !important; border-radius: 50%; object-fit: cover; display: block; filter: brightness(0.85); }
+        .tmpl-round-photo.location { display: block; background: conic-gradient(#D90540 0 180deg, #B9CE1A 180deg 360deg); }
+        .tmpl-round-photo.location svg { position: absolute; inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); background: #F1F0EE; border-radius: 50%; padding: 17%; box-sizing: border-box; fill: #D90540; }
+        .tmpl-quick label { font-size: 10.5px; font-weight: 500; margin-top: 7px; color: #111; text-align: center; line-height: 13px; }
+        .tmpl-badge, .tmpl-plus { position: absolute; right: -3px; bottom: -3px; background: #D90540; color: #fff; border-radius: 50%; width: 19px; height: 19px; display: grid; place-items: center; font-size: 10px; font-weight: 600; z-index: 3; border: 2px solid #fff; line-height: 1; padding: 0; box-sizing: border-box; }
+        .tmpl-plus { font-size: 15px; font-weight: 500; }
+        @media (max-width: 359px) {
+          .tmpl-premium { padding: 8px 10px; }
+          .tmpl-premium p { font-size: 12px; }
+          .tmpl-pink-btn { padding: 0 10px; font-size: 13px; }
+          .tmpl-round-photo { width: 53px; height: 53px; }
         }
-        .tmpl-quick-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin: 3px 0 26px; }
-        .tmpl-quick { position: relative; display: flex; flex-direction: column; align-items: center; color: #171717; background: none; border: 0; cursor: pointer; padding: 0; min-width: 0; }
-        .tmpl-round-photo { width: 111px; max-width: 100%; height: auto; aspect-ratio: 1/1; border: 4px solid #d30e42; border-radius: 50%; padding: 5px; display: block; position: relative; background: #fff; box-sizing: border-box; }
-        .tmpl-round-photo.story { border: none; background: conic-gradient(#d30e42 calc(var(--pct,0)*1%), #e9e9ec 0); padding: 5px; }
-        .tmpl-round-photo.story > img, .tmpl-round-photo.story > div { inset: 5px !important; width: calc(100% - 10px) !important; height: calc(100% - 10px) !important; }
-        .tmpl-round-photo > img, .tmpl-round-photo > div { inset: 2px !important; width: calc(100% - 4px) !important; height: calc(100% - 4px) !important; border-radius: 50%; object-fit: cover; display: block; }
-        .tmpl-round-photo.location { display: grid; place-items: center; border-color: #c7a523; }
-        .tmpl-round-photo.location svg { width: 57px; height: 57px; fill: #df164b; }
-        .tmpl-quick label { font-size: 16px; font-weight: 500; margin-top: 10px; color: #171717; text-align: center; line-height: 1.2; }
-        .tmpl-badge, .tmpl-plus { position: absolute; right: -6px; bottom: -6px; background: #d9184b; color: #fff; border-radius: 50%; width: 34px; height: 34px; display: grid; place-items: center; font-size: 15px; font-weight: 700; z-index: 3; border: 2px solid #fff; line-height: 1; }
-        .tmpl-plus { font-size: 25px; font-weight: 400; }
+        @media (min-width: 768px) {
+          .tmpl-premium,
+          .tmpl-quick-nav {
+            max-width: 1240px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+          }
+          .tmpl-premium { margin-top: 20px; height: 118px; padding: 20px 28px; }
+          .tmpl-premium h3 { font-size: 24px; margin-bottom: 4px; }
+          .tmpl-premium p { font-size: 17px; white-space: normal; }
+          .tmpl-pink-btn { height: 46px; line-height: 46px; width: auto; padding: 0 26px; font-size: 17px; border-radius: 23px; }
+          .tmpl-quick-nav {
+            grid-template-columns: repeat(4, 105px);
+            gap: 45px;
+            margin: 8px auto 40px;
+          }
+          .tmpl-round-photo { width: 105px; height: 105px; }
+          .tmpl-round-photo.location svg { padding: 12%; }
+          .tmpl-quick label { font-size: 16px; }
+        }
       `}</style>
 
       <style jsx global>{`
-        .mm-home .tmpl-quick-nav { gap: 16px; margin: 2px 0 18px; }
-        .mm-home .tmpl-round-photo { width: 92px; padding: 4px; }
-        .mm-home .tmpl-round-photo.location svg { width: 48px; height: 48px; }
-        .mm-home .tmpl-quick label { font-size: 13px; margin-top: 7px; }
-        .mm-home .tmpl-badge, .mm-home .tmpl-plus { width: 28px; height: 28px; font-size: 13px; right: -5px; bottom: -5px; }
-        .mm-home .tmpl-plus { font-size: 20px; }
-
         .app .heading { padding: 0 16px 12px; }
         .app .heading h1 { font-size: 22px; margin: 0; }
         .app .sort { font-size: 14px; }
@@ -331,11 +346,6 @@ export default function MyMatchesPage() {
         .app .arrow { font-size: 26px; margin-left: 14px; margin-right: 0; flex-shrink: 0; }
 
         @media (max-width: 560px) {
-          .mm-home .tmpl-round-photo { width: 76px; }
-          .mm-home .tmpl-round-photo.location svg { width: 40px; height: 40px; }
-          .mm-home .tmpl-quick label { font-size: 11px; }
-          .mm-home .tmpl-badge, .mm-home .tmpl-plus { width: 24px; height: 24px; font-size: 12px; right: -4px; bottom: -4px; }
-          .mm-home .tmpl-plus { font-size: 18px; }
           .app .match { min-height: 104px; padding-right: 0; border-radius: 15px; }
           .app .photoWrap { width: 126px; height: 88px; margin-right: 13px; }
           .app .personName { font-size: 16px; }
@@ -345,10 +355,6 @@ export default function MyMatchesPage() {
           .app .heading h1 { font-size: 19px; }
         }
         @media (max-width: 390px) {
-          .mm-home .tmpl-round-photo { width: 66px; }
-          .mm-home .tmpl-round-photo.location svg { width: 34px; height: 34px; }
-          .mm-home .tmpl-quick label { font-size: 10px; margin-top: 6px; }
-          .mm-home .tmpl-round-photo.story > img, .mm-home .tmpl-round-photo.story > div { inset: 4px !important; width: calc(100% - 8px) !important; height: calc(100% - 8px) !important; }
           .app .match { min-height: 92px; padding-right: 0; }
           .app .photoWrap { width: 108px; height: 76px; margin-right: 10px; border-radius: 12px; }
           .app .photoWrap img, .app .photoFallback { border-radius: 12px; }
@@ -379,11 +385,13 @@ export default function MyMatchesPage() {
         </header>
 
         <section className="tmpl-premium">
-          <div className="tmpl-crown">♛</div>
-          <div className="tmpl-premium-copy">
-            <h3>Upgrade to Premium</h3>
-            <p>Unlock all features and<br />connect without limits</p>
-          </div>
+          <div className="tmpl-crown">
+              <img src="/premium-crown.png" alt="" width={30} height={30} decoding="async" />
+            </div>
+            <div className="tmpl-premium-copy">
+              <h3>Upgrade to Premium</h3>
+              <p>Unlock all features and<br />connect without limit</p>
+            </div>
           <button className="tmpl-pink-btn" onClick={() => router.push('/premium')}>Upgrade</button>
         </section>
 
