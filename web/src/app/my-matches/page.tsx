@@ -327,7 +327,7 @@ export default function MyMatchesPage() {
 
       <style jsx global>{`
         .app .heading { padding: 0 16px 12px; }
-        .app .heading h1 { font-size: 22px; margin: 0; }
+        .app .heading h1 { font-size: 16px; margin: 0; font-weight: 700; }
         .app .sort { font-size: 14px; }
         .app .sort b { font-size: 15px; }
         .app .sort span { font-size: 16px; }
@@ -352,7 +352,7 @@ export default function MyMatchesPage() {
           .app .detail { font-size: 12px; }
           .app .detail svg { width: 15px; height: 15px; }
           .app .time { font-size: 11px; }
-          .app .heading h1 { font-size: 19px; }
+          .app .heading h1 { font-size: 14px; font-weight: 700; }
         }
         @media (max-width: 390px) {
           .app .match { min-height: 92px; padding-right: 0; }
@@ -363,7 +363,7 @@ export default function MyMatchesPage() {
           .app .detail svg { width: 14px; height: 14px; }
           .app .time { font-size: 10px; }
           .app .arrow { font-size: 22px; margin-left: 7px; }
-          .app .heading h1 { font-size: 18px; }
+          .app .heading h1 { font-size: 13px; font-weight: 700; }
         }
       `}</style>
 
