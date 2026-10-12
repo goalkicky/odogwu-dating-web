@@ -316,8 +316,8 @@ export default function LikesPage() {
                         {name}{age ? `, ${age}` : ''}
                         {isVerified && <span className="lk verified">✓</span>}
                       </div>
-                      {occupation && <div className="lk meta">▣ &nbsp;{occupation}</div>}
-                      {city && <div className="lk meta">⌖ &nbsp;{city}</div>}
+                      {occupation && <div className="lk meta"><svg viewBox="0 0 24 24"><path d="M5 7h14v12H5z"/><path d="M8 7V4h8v3"/><path d="M8 11h8"/></svg>{occupation}</div>}
+                      {city && <div className="lk meta"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-12A7 7 0 0 0 5 9c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.2"/></svg>{city}</div>}
                     </div>
                     <div className="lk card-actions">
                       <button className="lk card-btn" aria-label="Pass" onClick={() => handleReject(otherId)}>✕</button>
