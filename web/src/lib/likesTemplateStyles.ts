@@ -1,7 +1,7 @@
 export const LIKES_TEMPLATE_CSS = `
         .lk{--red:#e71943;--pink:#f12655;--text:#151515;--muted:#666;--line:#eee;--bg:#fff;--soft:#fff4f6}
         .lk button{font:inherit;border:0;background:none;cursor:pointer}
-        .lk .app{width:100%;max-width:1100px;margin:0 -24px;min-height:100vh;padding-bottom:10px}
+        .lk .app{width:100%;max-width:1360px;margin:0 -24px;min-height:100vh;padding-bottom:10px}
 
         /* Header (matches home) */
         .lk .topbar{display:flex;align-items:center;justify-content:space-between;position:relative;padding:6px 10px 12px;background:#fff}

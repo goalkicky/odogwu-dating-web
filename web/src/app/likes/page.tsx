@@ -166,6 +166,7 @@ export default function LikesPage() {
         .uv-bottom-center{color:#858991}
         .uv-bottom-center img{display:none}
         .uv-bottom-center::before{content:"";width:36px;height:36px;flex:0 0 auto;background-color:currentColor;-webkit-mask:url(/jico.png) no-repeat center/contain;mask:url(/jico.png) no-repeat center/contain}
+        .uv-content-inner{max-width:1320px}
       `}</style>
 
       <div className="lk app">
