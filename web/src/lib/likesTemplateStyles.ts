@@ -31,8 +31,8 @@ export const LIKES_TEMPLATE_CSS = `
 
         /* Section title */
         .lk .section-head{display:flex;align-items:center;justify-content:space-between;padding:2px 10px 6px}
-        .lk .section-title{font-size:20px;font-weight:700}
-        .lk .section-title span{font-size:12px;background:var(--red);color:#fff;border-radius:20px;padding:1px 5px;vertical-align:middle}
+        .lk .section-title{font-size:15px;font-weight:700}
+        .lk .section-title span{font-size:9px;background:var(--red);color:#fff;border-radius:20px;padding:1px 4px;vertical-align:middle}
         .lk .sort{display:flex;align-items:center;gap:5px;color:var(--red);font-size:14px;padding:2px}
         .lk .sort svg{width:18px;height:18px;stroke:var(--red);fill:none;stroke-width:1.8}
         .lk .sort-wrap{position:relative}
@@ -87,7 +87,7 @@ export const LIKES_TEMPLATE_CSS = `
           .lk .quick{gap:4px}
           .lk .quick label{font-size:10px;margin-top:0}
           .lk .section-head{padding:2px 6px 4px}
-          .lk .section-title{font-size:17px}
+          .lk .section-title{font-size:13.5px}
           .lk .sort{font-size:12px}
           .lk .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;padding:0}
           .lk .card{height:160px;border-radius:10px}
