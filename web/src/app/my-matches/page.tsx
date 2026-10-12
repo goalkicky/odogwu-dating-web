@@ -7,7 +7,7 @@ import { matchService, userService, storageService } from '@/lib/cloudflare/serv
 import { profileCompletion } from '@/lib/profileCompletion';
 
 const SORT_OPTIONS = [
-  { value: 'newest', label: 'Newest first' },
+  { value: 'newest', label: 'Recent first' },
   { value: 'oldest', label: 'Oldest first' },
   { value: 'name-az', label: 'Name A–Z' },
   { value: 'name-za', label: 'Name Z–A' },
@@ -293,7 +293,7 @@ export default function MyMatchesPage() {
         .tmpl-round-photo > img, .tmpl-round-photo > div { inset: 3px !important; width: calc(100% - 6px) !important; height: calc(100% - 6px) !important; border-radius: 50%; object-fit: cover; display: block; filter: brightness(0.85); }
         .tmpl-round-photo.location { display: block; background: conic-gradient(#D90540 0 180deg, #B9CE1A 180deg 360deg); }
         .tmpl-round-photo.location svg { position: absolute; inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); background: #F1F0EE; border-radius: 50%; padding: 17%; box-sizing: border-box; fill: #D90540; }
-        .tmpl-quick label { font-size: 10.5px; font-weight: 500; margin-top: 7px; color: #111; text-align: center; line-height: 13px; }
+        .tmpl-quick label { font-size: 9px; font-weight: 600; margin-top: 7px; color: #111; text-align: center; line-height: 13px; }
         .tmpl-badge, .tmpl-plus { position: absolute; right: -3px; bottom: -3px; background: #D90540; color: #fff; border-radius: 50%; width: 19px; height: 19px; display: grid; place-items: center; font-size: 10px; font-weight: 600; z-index: 3; border: 2px solid #fff; line-height: 1; padding: 0; box-sizing: border-box; }
         .tmpl-plus { font-size: 15px; font-weight: 500; }
         @media (max-width: 359px) {
@@ -321,16 +321,16 @@ export default function MyMatchesPage() {
           }
           .tmpl-round-photo { width: 105px; height: 105px; }
           .tmpl-round-photo.location svg { padding: 12%; }
-          .tmpl-quick label { font-size: 16px; }
+          .tmpl-quick label { font-size: 13px; }
         }
       `}</style>
 
       <style jsx global>{`
         .app .heading { padding: 0 16px 12px; }
         .app .heading h1 { font-size: 16px; margin: 0; font-weight: 700; }
-        .app .sort { font-size: 14px; }
-        .app .sort b { font-size: 15px; }
-        .app .sort span { font-size: 16px; }
+        .app .sort { font-size: 12px; font-weight: 600; }
+        .app .sort b { font-size: 13px; }
+        .app .sort span { font-size: 13px; }
         .app .list { padding: 0 16px; }
         .app .match { height: auto; min-height: 118px; padding: 8px 0 8px 0; border-radius: 18px; margin-bottom: 10px; }
         .app .photoWrap { width: 148px; height: 102px; margin-right: 18px; }
