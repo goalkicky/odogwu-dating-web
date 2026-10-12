@@ -329,7 +329,7 @@ export default function MyMatchesPage() {
         .app .heading { padding: 0 16px 12px; }
         .app .heading h1 { font-size: 16px; margin: 0; font-weight: 700; }
         .app .sort { font-size: 12px; font-weight: 600; }
-        .app .sort b { font-size: 13px; }
+        .app .sort b { font-size: 13px; font-weight: 600; }
         .app .sort span { font-size: 13px; }
         .app .list { padding: 0 16px; }
         .app .match { height: auto; min-height: 118px; padding: 8px 0 8px 0; border-radius: 18px; margin-bottom: 10px; }
