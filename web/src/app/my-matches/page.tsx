@@ -126,9 +126,9 @@ export default function MyMatchesPage() {
       <style jsx global>{`
         *{box-sizing:border-box}
         :root{--red:#ed1744;--dark:#111;--muted:#555;--border:#ececec}
-        html,body{margin:0;background:#fff;color:var(--dark);font-family:Inter,Arial,Helvetica,sans-serif}
+        html,body{margin:0;background:#fff;color:var(--dark);font-family:var(--font-montserrat),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,Helvetica,sans-serif}
         button{font:inherit;border:0;background:none;cursor:pointer}
-        .app{width:100%;max-width:1100px;min-height:100vh;margin:auto;padding-bottom:72px}
+        .app{width:100%;max-width:1100px;min-height:100vh;margin:auto;padding-bottom:72px;font-family:var(--font-montserrat),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,Helvetica,sans-serif}
 
         .header{height:190px;position:relative;display:flex;align-items:flex-start;justify-content:center;padding-top:30px}
         .menu{position:absolute;left:37px;top:92px;width:42px;height:40px;display:flex;flex-direction:column;justify-content:space-between;padding:4px 0}
