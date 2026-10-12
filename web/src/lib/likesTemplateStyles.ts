@@ -15,17 +15,17 @@ export const LIKES_TEMPLATE_CSS = `
         /* Quick nav (matches home) */
         .lk .quick-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:2px 10px 4px}
         .lk .quick{display:flex;flex-direction:column;align-items:center;gap:5px;padding:0;color:#171717;min-width:0}
-        .lk .round-photo{width:70px;max-width:100%;aspect-ratio:1/1;border:3px solid #d30e42;border-radius:50%;padding:4px;display:block;position:relative;background:#fff;box-sizing:border-box}
-        .lk .round-photo.story{border:none;padding:4px;background:conic-gradient(#d30e42 calc(var(--pct,0)*1%),#e9e9ec 0)}
-        .lk .round-photo.story img,.lk .round-photo.story .initial,.lk .round-photo.story .fallback{inset:4px;width:calc(100% - 8px);height:calc(100% - 8px)}
+        .lk .round-photo{width:54px;max-width:100%;aspect-ratio:1/1;border:2.5px solid #d30e42;border-radius:50%;padding:3px;display:block;position:relative;background:#fff;box-sizing:border-box}
+        .lk .round-photo.story{border:none;padding:3px;background:conic-gradient(#d30e42 calc(var(--pct,0)*1%),#e9e9ec 0)}
+        .lk .round-photo.story img,.lk .round-photo.story .initial,.lk .round-photo.story .fallback{inset:3px;width:calc(100% - 6px);height:calc(100% - 6px)}
         .lk .round-photo img{position:absolute;inset:2px;width:calc(100% - 4px);height:calc(100% - 4px);border-radius:50%;object-fit:cover;display:block}
         .lk .round-photo .fallback{position:absolute;inset:2px;width:calc(100% - 4px);height:calc(100% - 4px);border-radius:50%;object-fit:cover;display:grid;place-items:center}
         .lk .round-photo .fallback svg{width:38%;height:38%;fill:#FF2E5F;display:block}
-        .lk .round-photo .initial{position:absolute;inset:2px;width:calc(100% - 4px);height:calc(100% - 4px);border-radius:50%;display:grid;place-items:center;font-size:18px;font-weight:800;color:#fff;background:linear-gradient(135deg,#FF2E5F,#B44CFF)}
+        .lk .round-photo .initial{position:absolute;inset:2px;width:calc(100% - 4px);height:calc(100% - 4px);border-radius:50%;display:grid;place-items:center;font-size:15px;font-weight:800;color:#fff;background:linear-gradient(135deg,#FF2E5F,#B44CFF)}
         .lk .round-photo.location{border-color:#c7a523;display:grid;place-items:center}
         .lk .round-photo.location svg{width:46%;height:46%;fill:#df164b;display:block}
-        .lk .badge-count,.lk .plus{position:absolute;right:-4px;bottom:-4px;background:#d9184b;color:#fff;border-radius:50%;width:25px;height:25px;display:grid;place-items:center;font-size:12px;font-weight:700;z-index:3;border:2px solid #fff;line-height:1}
-        .lk .plus{font-size:18px;font-weight:400}
+        .lk .badge-count,.lk .plus{position:absolute;right:-3px;bottom:-3px;background:#d9184b;color:#fff;border-radius:50%;width:21px;height:21px;display:grid;place-items:center;font-size:11px;font-weight:700;z-index:3;border:2px solid #fff;line-height:1}
+        .lk .plus{font-size:16px;font-weight:400}
         .lk .quick label{font-size:13px;font-weight:500;margin-top:0;color:#171717;text-align:center;line-height:1.2;cursor:pointer}
         .lk .quick.active label{color:var(--red);font-weight:700}
 
@@ -78,12 +78,12 @@ export const LIKES_TEMPLATE_CSS = `
           .lk .messages svg{width:34px;height:34px}
           .lk .messages em{width:21px;height:21px;font-size:12px;right:-2px}
           .lk .quick-nav{gap:6px;padding:2px 6px 4px}
-          .lk .round-photo{width:84%;border-width:2.5px;padding:3px}
+          .lk .round-photo{width:64%;border-width:2.5px;padding:3px}
           .lk .round-photo.story{padding:3px}
           .lk .round-photo.story img,.lk .round-photo.story .initial,.lk .round-photo.story .fallback{inset:3px;width:calc(100% - 6px);height:calc(100% - 6px)}
-          .lk .round-photo .initial{font-size:14px}
-          .lk .badge-count,.lk .plus{width:21px;height:21px;font-size:10px;right:-3px;bottom:-3px}
-          .lk .plus{font-size:15px}
+          .lk .round-photo .initial{font-size:12px}
+          .lk .badge-count,.lk .plus{width:18px;height:18px;font-size:9px;right:-2px;bottom:-2px}
+          .lk .plus{font-size:13px}
           .lk .quick{gap:4px}
           .lk .quick label{font-size:10px;margin-top:0}
           .lk .section-head{padding:2px 6px 4px}
@@ -102,9 +102,9 @@ export const LIKES_TEMPLATE_CSS = `
           .lk .messages{width:38px;height:38px}
           .lk .messages svg{width:30px;height:30px}
           .lk .topbar{padding:4px 6px 10px}
-          .lk .round-photo{width:80%}
-          .lk .badge-count,.lk .plus{width:18px;height:18px;font-size:9px;right:-2px;bottom:-2px}
-          .lk .plus{font-size:13px}
+          .lk .round-photo{width:60%}
+          .lk .badge-count,.lk .plus{width:16px;height:16px;font-size:8px;right:-2px;bottom:-2px}
+          .lk .plus{font-size:12px}
           .lk .quick label{font-size:9px}
           .lk .card{height:150px}
           .lk .card-btn{width:30px;height:30px;font-size:14px}
