@@ -58,34 +58,30 @@ export default function ActivePage() {
   useEffect(() => {
     if (loading || !isAuthenticated || !profile || !uid) return;
 
-    if (profile?.interestedIn) {
-      userService
-        .getDiscoverUsers(uid, {
-          gender: profile.interestedIn || 'both',
-          minAge: 18,
-          maxAge: 60,
-          maxDistance: 200,
-        })
-        .then((docs: any[]) => {
-          const RECENT_MS = 30 * 24 * 60 * 60 * 1000;
-          const all = Array.isArray(docs) ? docs : [];
-          const sortDesc = (a: any, b: any) => {
-            const ta = a.lastActive ? new Date(a.lastActive).getTime() : 0;
-            const tb = b.lastActive ? new Date(b.lastActive).getTime() : 0;
-            return tb - ta;
-          };
-          const everActive = all.filter((p: any) => !!p.lastActive).sort(sortDesc);
-          const recent = everActive.filter((p: any) => {
-            const la = new Date(p.lastActive).getTime();
-            return la > 0 && Date.now() - la <= RECENT_MS;
-          });
-          setProfiles(recent.length >= 9 ? recent : everActive);
-        })
-        .catch(() => {})
-        .finally(() => setLoadingProfiles(false));
-    } else {
-      setLoadingProfiles(false);
-    }
+    userService
+      .getDiscoverUsers(uid, {
+        gender: 'both',
+        minAge: 18,
+        maxAge: 60,
+        maxDistance: 0,
+      })
+      .then((docs: any[]) => {
+        const RECENT_MS = 30 * 24 * 60 * 60 * 1000;
+        const all = Array.isArray(docs) ? docs : [];
+        const sortDesc = (a: any, b: any) => {
+          const ta = a.lastActive ? new Date(a.lastActive).getTime() : 0;
+          const tb = b.lastActive ? new Date(b.lastActive).getTime() : 0;
+          return tb - ta;
+        };
+        const everActive = all.filter((p: any) => !!p.lastActive).sort(sortDesc);
+        const recent = everActive.filter((p: any) => {
+          const la = new Date(p.lastActive).getTime();
+          return la > 0 && Date.now() - la <= RECENT_MS;
+        });
+        setProfiles(recent.length >= 9 ? recent : everActive);
+      })
+      .catch(() => {})
+      .finally(() => setLoadingProfiles(false));
 
     matchService
       .getUserMatches(uid)

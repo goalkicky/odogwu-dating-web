@@ -111,7 +111,7 @@ export default function HomePage() {
         }
       } catch {}
       userService.getDiscoverUsers(uid, {
-        gender: profile.interestedIn === 'both' ? 'male' : profile.interestedIn,
+        gender: profile.interestedIn,
         minAge: 18, maxAge: 60, maxDistance: 25,
         ...(savedLat !== undefined && savedLng !== undefined ? { lat: savedLat, lng: savedLng } : {}),
       }).then((docs: any[]) => {
@@ -119,26 +119,26 @@ export default function HomePage() {
         setNearbyCount(all.length);
         setNearby(all.slice(0, 12));
       }).catch(() => {});
-
-      userService.getDiscoverUsers(uid, {
-        gender: profile.interestedIn || 'both',
-        minAge: 18, maxAge: 60, maxDistance: 200,
-      }).then((docs: any[]) => {
-        const RECENT_MS = 30 * 24 * 60 * 60 * 1000;
-        const all = Array.isArray(docs) ? docs : [];
-        const sortDesc = (a: any, b: any) => {
-          const ta = a.lastActive ? new Date(a.lastActive).getTime() : 0;
-          const tb = b.lastActive ? new Date(b.lastActive).getTime() : 0;
-          return tb - ta;
-        };
-        const everActive = all.filter((p: any) => !!p.lastActive).sort(sortDesc);
-        const recent = everActive.filter((p: any) => {
-          const la = new Date(p.lastActive).getTime();
-          return la > 0 && Date.now() - la <= RECENT_MS;
-        });
-        setActiveMembers((recent.length >= 6 ? recent : everActive).slice(0, 6));
-      }).catch(() => {});
     }
+
+    userService.getDiscoverUsers(uid, {
+      gender: 'both',
+      minAge: 18, maxAge: 60, maxDistance: 0,
+    }).then((docs: any[]) => {
+      const RECENT_MS = 30 * 24 * 60 * 60 * 1000;
+      const all = Array.isArray(docs) ? docs : [];
+      const sortDesc = (a: any, b: any) => {
+        const ta = a.lastActive ? new Date(a.lastActive).getTime() : 0;
+        const tb = b.lastActive ? new Date(b.lastActive).getTime() : 0;
+        return tb - ta;
+      };
+      const everActive = all.filter((p: any) => !!p.lastActive).sort(sortDesc);
+      const recent = everActive.filter((p: any) => {
+        const la = new Date(p.lastActive).getTime();
+        return la > 0 && Date.now() - la <= RECENT_MS;
+      });
+      setActiveMembers((recent.length >= 6 ? recent : everActive).slice(0, 6));
+    }).catch(() => {});
 
     feedService.getFeed(profile?.interests || []).then((d: any) => {
       const posts = d?.documents || d?.posts || (Array.isArray(d) ? d : []);
