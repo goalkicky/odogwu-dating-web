@@ -61,25 +61,25 @@ export default function ActivePage() {
     if (profile?.interestedIn) {
       userService
         .getDiscoverUsers(uid, {
-          gender: profile.interestedIn === 'both' ? 'male' : profile.interestedIn,
+          gender: profile.interestedIn || 'both',
           minAge: 18,
           maxAge: 60,
           maxDistance: 200,
         })
         .then((docs: any[]) => {
-          const RECENT_MS = 7 * 24 * 60 * 60 * 1000;
-          const sorted = [...docs]
-            .filter((p: any) => {
-              if (!p.lastActive) return false;
-              const la = new Date(p.lastActive).getTime();
-              return la > 0 && Date.now() - la <= RECENT_MS;
-            })
-            .sort((a: any, b: any) => {
-              const ta = a.lastActive ? new Date(a.lastActive).getTime() : 0;
-              const tb = b.lastActive ? new Date(b.lastActive).getTime() : 0;
-              return tb - ta;
-            });
-          setProfiles(sorted);
+          const RECENT_MS = 30 * 24 * 60 * 60 * 1000;
+          const all = Array.isArray(docs) ? docs : [];
+          const sortDesc = (a: any, b: any) => {
+            const ta = a.lastActive ? new Date(a.lastActive).getTime() : 0;
+            const tb = b.lastActive ? new Date(b.lastActive).getTime() : 0;
+            return tb - ta;
+          };
+          const everActive = all.filter((p: any) => !!p.lastActive).sort(sortDesc);
+          const recent = everActive.filter((p: any) => {
+            const la = new Date(p.lastActive).getTime();
+            return la > 0 && Date.now() - la <= RECENT_MS;
+          });
+          setProfiles(recent.length >= 9 ? recent : everActive);
         })
         .catch(() => {})
         .finally(() => setLoadingProfiles(false));
@@ -316,7 +316,7 @@ export default function ActivePage() {
 
             <section className="av-heading">
               <h1>All Recently Active</h1>
-              <p>Members active on the app within the last 7 days</p>
+              <p>Members on the app, sorted by newest activity</p>
             </section>
 
             <section className="av-grid" aria-live="polite">
