@@ -118,13 +118,21 @@ export default function HomePage() {
         const all = Array.isArray(docs) ? docs : [];
         setNearbyCount(all.length);
         setNearby(all.slice(0, 12));
+      }).catch(() => {});
+
+      userService.getDiscoverUsers(uid, {
+        gender: profile.interestedIn === 'both' ? 'male' : profile.interestedIn,
+        minAge: 18, maxAge: 60, maxDistance: 200,
+      }).then((docs: any[]) => {
+        const RECENT_MS = 7 * 24 * 60 * 60 * 1000;
         setActiveMembers(
-          [...all]
-            .sort((a: any, b: any) => {
-              const ta = a.lastActive ? new Date(a.lastActive).getTime() : 0;
-              const tb = b.lastActive ? new Date(b.lastActive).getTime() : 0;
-              return tb - ta;
+          (Array.isArray(docs) ? docs : [])
+            .filter((p: any) => {
+              if (!p.lastActive) return false;
+              const la = new Date(p.lastActive).getTime();
+              return la > 0 && Date.now() - la <= RECENT_MS;
             })
+            .sort((a: any, b: any) => new Date(b.lastActive).getTime() - new Date(a.lastActive).getTime())
             .slice(0, 6)
         );
       }).catch(() => {});
