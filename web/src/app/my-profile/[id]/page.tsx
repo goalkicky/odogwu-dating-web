@@ -112,9 +112,9 @@ export default function MyProfilePage() {
         .mp-page .photos.single{grid-template-columns:1fr}
         .mp-page .photos.single .mainpic{width:100%}
         .mp-page .photos img{width:100%;object-fit:cover;border-radius:16px;display:block}
-        .mp-page .mainpic{height:460px}
-        .mp-page .side{display:grid;grid-auto-rows:225px;gap:9px}
-        .mp-page .side img{height:225px}
+        .mp-page .mainpic{height:340px}
+        .mp-page .side{display:grid;grid-auto-rows:165px;gap:9px}
+        .mp-page .side img{height:165px}
         .mp-page .profile{padding:31px 26px 28px}
         .mp-page h1{font-size:37px;margin:0;letter-spacing:-1px;font-weight:800}
         .mp-page h1 b{vertical-align:5px}
