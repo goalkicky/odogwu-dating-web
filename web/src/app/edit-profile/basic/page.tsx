@@ -141,13 +141,12 @@ export default function BasicInfoPage() {
   }, [profile]);
 
   const age = calcAge(dob);
-  const education = [courseOfStudy, institution].filter(Boolean).join(', ');
-  const basics = [
+  const basics: { field: string; value: string; sub: string; twoLine: boolean; onEdit: () => void; display?: React.ReactNode }[] = [
     { field: 'Name', value: name || '—', sub: 'This is how it will appear on your profile.', twoLine: false, onEdit: () => setTextSheet({ label: 'Name', value: name, placeholder: 'Your name', onSave: (v: string) => { setName(v); showToast('Name updated'); } }) },
     { field: 'Age', value: age ? String(age) : '—', sub: "Your age won't be shown on your profile.", twoLine: false, onEdit: () => setTextSheet({ label: 'Date of Birth', value: dob, type: 'date', onSave: (v: string) => { setDob(v); showToast('Age updated'); } }) },
     { field: 'Gender', value: gender ? (gender.charAt(0).toUpperCase() + gender.slice(1)) : '—', sub: 'This helps us show you better matches.', twoLine: false, onEdit: () => setShowGender(true) },
     { field: 'Location', value: city || '—', sub: 'Your location helps us find matches near you.', twoLine: false, onEdit: () => { window.location.href = '/location.html?return=/edit-profile/basic'; } },
-    { field: 'Education', value: education || '—', sub: 'Your course of study and institution.', twoLine: false, onEdit: () => setEduSheet(true) },
+    { field: 'Education', value: [courseOfStudy, institution].filter(Boolean).join(', ') || '—', sub: 'Your course of study and institution.', twoLine: true, display: <>{courseOfStudy ? <b>{courseOfStudy}</b> : <b>—</b>}{institution && <small>{institution}</small>}</>, onEdit: () => setEduSheet(true) },
     { field: 'Occupation', value: occupation || '—', sub: 'What do you do?', twoLine: false, onEdit: () => setTextSheet({ label: 'Occupation', value: occupation, placeholder: 'e.g. Software Developer', onSave: (v: string) => { setOccupation(v); showToast('Occupation updated'); } }) },
   ];
   const basicsFilled = basics.filter(b => b.value !== '—').length;
@@ -214,7 +213,7 @@ export default function BasicInfoPage() {
               <button className="info-row" type="button" key={b.field} data-field={b.field} onClick={b.onEdit}>
                 <div className="icon-box">{iconFor(b.field)}</div>
                 <div className="labels"><strong>{b.field}</strong><small>{b.sub}</small></div>
-                <div className={`value${b.twoLine ? ' two-line' : ''}`}><b>{b.value}</b></div>
+                <div className={`value${b.twoLine ? ' two-line' : ''}`}>{b.display ?? <b>{b.value}</b>}</div>
                 <span className="edit" aria-label={`Edit ${b.field}`}><svg viewBox="0 0 24 24"><path d="m4 20 4.1-.9L19.5 7.7a2.1 2.1 0 0 0-3-3L5.1 16.1z" /><path d="m14.5 6.5 3 3" /></svg></span>
               </button>
             ))}
