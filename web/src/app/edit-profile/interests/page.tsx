@@ -7,6 +7,7 @@ import { userService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
 import { INTEREST_CATEGORIES, interestCategory } from '@/lib/interests';
 import type { InterestCategory } from '@/lib/interests';
+import { interestIcon } from '@/lib/interestIcons';
 import { INTERESTS_TEMPLATE_CSS } from '@/lib/interestsTemplateStyles';
 
 const MAX_INTERESTS = 10;
@@ -79,7 +80,7 @@ export default function InterestsPage() {
                   const sel = selected.includes(item);
                   return (
                     <button className={`lang${sel ? ' selected' : ''}`} key={item} onClick={() => toggle(cat, item)}>
-                      <span>{item}</span>
+                      <span className="lbl"><span className="iemoji">{interestIcon(item)}</span>{item}</span>
                       <span className="plus">+</span>
                     </button>
                   );
@@ -100,7 +101,7 @@ export default function InterestsPage() {
               <div className="selchips" id="chips">
                 {selected.map(item => (
                   <div className="chip" key={item}>
-                    <span>{item}</span>
+                    <span><span className="iemoji">{interestIcon(item)}</span>{item}</span>
                     <button className="x" aria-label={`Remove ${item}`} onClick={() => toggle(interestCategory(item), item)}>×</button>
                   </div>
                 ))}
