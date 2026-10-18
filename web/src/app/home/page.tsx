@@ -376,15 +376,6 @@ export default function HomePage() {
             <div className="tmpl-wordmark">
               <img className="tmpl-wordmark-img" src="/h-logo.png" alt="Odogwu" decoding="async" />
             </div>
-            <button className="tmpl-messages-top tmpl-icon-btn" aria-label="Messages" onClick={() => go('/matches')}>
-              <svg viewBox="0 0 48 48" aria-hidden="true">
-                <path d="M10 35l2-7a14 14 0 1 1 5 5l-7 2Z" fill="none" stroke="currentColor" strokeWidth="3"/>
-                <circle cx="20" cy="22" r="1.7" fill="currentColor"/>
-                <circle cx="26" cy="22" r="1.7" fill="currentColor"/>
-                <circle cx="32" cy="22" r="1.7" fill="currentColor"/>
-              </svg>
-              <em>{messagesCount || 0}</em>
-            </button>
           </header>
 
           <section className="tmpl-premium">
