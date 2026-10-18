@@ -212,9 +212,9 @@ export default function HomePage() {
         .tmpl-round-photo:not(.location):not(.story) { background: conic-gradient(#E67A00 0 50%, #D90540 50% 100%); }
         .tmpl-quick:nth-child(3) .tmpl-round-photo:not(.location):not(.story) { background: conic-gradient(#D90540 0 55%, #FF5A3C 55% 100%); }
         .tmpl-round-photo.story { border: 1px dashed #E77A99; background: conic-gradient(#D90540 0 calc(var(--pct, 0) * 1%), transparent 0); }
-        .tmpl-round-photo > img, .tmpl-round-photo > div { inset: 2px !important; width: calc(100% - 4px) !important; height: calc(100% - 4px) !important; border-radius: 50%; object-fit: cover; display: block; filter: brightness(0.85); }
+        .tmpl-round-photo > img, .tmpl-round-photo > div { inset: 4px !important; width: calc(100% - 8px) !important; height: calc(100% - 8px) !important; border-radius: 50%; object-fit: cover; display: block; filter: brightness(0.85); box-shadow: 0 0 0 2px #fff; }
         .tmpl-round-photo.location { display: block; background: conic-gradient(#D90540 0 180deg, #B9CE1A 180deg 360deg); }
-        .tmpl-round-photo.location svg { position: absolute; inset: 2px; width: calc(100% - 4px); height: calc(100% - 4px); background: #F1F0EE; border-radius: 50%; padding: 17%; box-sizing: border-box; fill: #D90540; }
+        .tmpl-round-photo.location svg { position: absolute; inset: 4px; width: calc(100% - 8px); height: calc(100% - 8px); background: #F1F0EE; border-radius: 50%; padding: 17%; box-sizing: border-box; fill: #D90540; box-shadow: 0 0 0 2px #fff; }
         .tmpl-quick label { font-size: 10.5px; font-weight: 500; margin-top: 7px; color: #111; text-align: center; line-height: 13px; }
         .tmpl-badge, .tmpl-plus { position: absolute; right: -3px; bottom: -3px; background: #D90540; color: #fff; border-radius: 50%; width: 19px; height: 19px; display: grid; place-items: center; font-size: 10px; font-weight: 600; z-index: 3; border: 2px solid #fff; line-height: 1; padding: 0; box-sizing: border-box; }
         .tmpl-plus { font-size: 15px; font-weight: 500; }
