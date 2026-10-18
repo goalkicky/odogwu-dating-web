@@ -6,6 +6,7 @@ import { useAuth } from '@/store/AuthContext';
 import { authService, userService, storageService, matchService } from '@/lib/cloudflare/services';
 import { account } from '@/lib/cloudflare/config';
 import { interestCategory } from '@/lib/interests';
+import { interestIcon } from '@/lib/interestIcons';
 import { profileCompletion, profileCompletionMissing } from '@/lib/profileCompletion';
 import { PROFILE_TEMPLATE_CSS } from '@/lib/profileTemplateStyles';
 
@@ -403,7 +404,7 @@ export default function EditProfilePage() {
                   const cat = interestCategory(it);
                   return (
                     <div className="interest" key={it}>
-                      <span>{cat ? cat.emoji : '✦'}</span>
+                      <span>{interestIcon(it)}</span>
                       <div className="itxt">
                         <i className="icat">{cat ? cat.label : 'Other'}</i>
                         <b>{it}</b>
