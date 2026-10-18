@@ -1,6 +1,6 @@
 'use client';
 import React, { useRef, useState, useCallback } from 'react';
-import { interestCategory } from '@/lib/interests';
+import { interestIcon } from '@/lib/interestIcons';
 
 interface UserCard {
   id: string;
@@ -269,15 +269,12 @@ export default function AnimatedCard({
           <>
             <h3 className="dc-int-h">My Interests ({user.interests.length})</h3>
             <div className="dc-interests">
-              {user.interests.map(it => {
-                const cat = interestCategory(it);
-                return (
+              {user.interests.map(it => (
                   <span key={it} className="dc-chip">
-                    <i>{cat ? cat.emoji : '✦'}</i>
+                    <i>{interestIcon(it)}</i>
                     {it}
                   </span>
-                );
-              })}
+                ))}
             </div>
           </>
         )}
