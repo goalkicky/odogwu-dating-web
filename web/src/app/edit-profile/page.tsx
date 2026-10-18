@@ -208,12 +208,12 @@ export default function EditProfilePage() {
   const missingItems = profileCompletionMissing(completionData);
   const progressFilled = Math.round((completionPct / 100) * 5);
 
-  const basics = [
+  const basics: { label: string; value: string; onEdit: () => void; display?: React.ReactNode }[] = [
     { label: 'Name', value: name || '—', onEdit: () => openText('Name', name, setName, { placeholder: 'Your name' }) },
     { label: 'Age', value: age ? String(age) : '—', onEdit: () => openText('Date of Birth', dob, setDob, { type: 'date' }) },
     { label: 'Gender', value: gender || '—', onEdit: () => setShowGender(true) },
     { label: 'Location', value: city || '—', onEdit: () => { window.location.href = '/location.html?return=/edit-profile'; } },
-    { label: 'Education', value: [courseOfStudy, institution].filter(Boolean).join(', ') || '—', onEdit: () => router.push('/edit-profile/basic') },
+    { label: 'Education', value: [courseOfStudy, institution].filter(Boolean).join(', ') || '—', display: <>{courseOfStudy ? <b>{courseOfStudy}</b> : <b>—</b>}{institution && <small>{institution}</small>}</>, onEdit: () => router.push('/edit-profile/basic') },
     { label: 'Occupation', value: occupation || '—', onEdit: () => openText('Occupation', occupation, setOccupation, { placeholder: 'e.g. Software Developer' }) },
   ];
   const basicsFilled = basics.filter(b => b.value !== '—').length;
@@ -343,7 +343,7 @@ export default function EditProfilePage() {
               {basics.map(b => (
                 <div className="info" key={b.label}>
                   <label>{b.label}</label>
-                  <b>{b.value}</b>
+                  {b.display ?? <b>{b.value}</b>}
                   {b.value !== '—' && <span>✓</span>}
                 </div>
               ))}
