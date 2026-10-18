@@ -201,7 +201,7 @@ export default function HomePage() {
         .tmpl-round-photo:not(.location):not(.story) { background: conic-gradient(#E67A00 0 50%, #D90540 50% 100%); }
         .tmpl-quick:nth-child(3) .tmpl-round-photo:not(.location):not(.story) { background: conic-gradient(#D90540 0 55%, #FF5A3C 55% 100%); }
         .tmpl-round-photo.story { border: 0; background: conic-gradient(#D90540 0 calc(var(--pct, 0) * 1%), transparent 0); }
-        .tmpl-round-photo.story::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: repeating-conic-gradient(from calc(var(--pct, 0) * 3.6deg), #E77A99 0 6deg, transparent 6deg 11deg); z-index: 1; pointer-events: none; }
+        .tmpl-round-photo.story::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: repeating-conic-gradient(#E77A99 0 6deg, transparent 6deg 11deg); -webkit-mask: conic-gradient(transparent 0 calc(var(--pct, 0) * 1%), #000 calc(var(--pct, 0) * 1%) 360deg); mask: conic-gradient(transparent 0 calc(var(--pct, 0) * 1%), #000 calc(var(--pct, 0) * 1%) 360deg); z-index: 1; pointer-events: none; }
         .tmpl-round-photo.story > img, .tmpl-round-photo.story > div { z-index: 2; }
         .tmpl-round-photo > img, .tmpl-round-photo > div { inset: 4px !important; width: calc(100% - 8px) !important; height: calc(100% - 8px) !important; border-radius: 50%; object-fit: cover; display: block; filter: brightness(0.85); box-shadow: 0 0 0 2px #fff; }
         .tmpl-round-photo.location { display: block; background: conic-gradient(#D90540 0 180deg, #B9CE1A 180deg 360deg); }
