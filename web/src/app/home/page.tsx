@@ -6,6 +6,7 @@ import { useAuth } from '@/store/AuthContext';
 import { useMobile } from '@/lib/useMediaQuery';
 import { matchService, userService, storageService, feedService } from '@/lib/cloudflare/services';
 import { profileCompletion } from '@/lib/profileCompletion';
+import { pickRecentlyActive, isOnlineNow } from '@/lib/recentlyActive';
 
 function formatAgo(iso: string): string {
   if (!iso) return 'now';
@@ -125,19 +126,7 @@ export default function HomePage() {
       gender: 'both',
       minAge: 18, maxAge: 60, maxDistance: 0,
     }).then((docs: any[]) => {
-      const RECENT_MS = 30 * 24 * 60 * 60 * 1000;
-      const all = Array.isArray(docs) ? docs : [];
-      const sortDesc = (a: any, b: any) => {
-        const ta = a.lastActive ? new Date(a.lastActive).getTime() : 0;
-        const tb = b.lastActive ? new Date(b.lastActive).getTime() : 0;
-        return tb - ta;
-      };
-      const everActive = all.filter((p: any) => !!p.lastActive).sort(sortDesc);
-      const recent = everActive.filter((p: any) => {
-        const la = new Date(p.lastActive).getTime();
-        return la > 0 && Date.now() - la <= RECENT_MS;
-      });
-      setActiveMembers((recent.length >= 6 ? recent : everActive).slice(0, 6));
+      setActiveMembers(pickRecentlyActive(Array.isArray(docs) ? docs : [], 6));
     }).catch(() => {});
 
     feedService.getFeed(profile?.interests || []).then((d: any) => {
@@ -508,7 +497,7 @@ export default function HomePage() {
                 const mid = p.id || p.$id || '';
                 const photo = p.photos?.[0] ? storageService.getFilePreview(p.photos[0]) : '';
                 const name = p.fullName || 'Member';
-                const online = !!p.lastActive && (Date.now() - new Date(p.lastActive).getTime()) < 120000;
+                const online = isOnlineNow(p);
                 const ago = p.lastActive ? formatAgo(p.lastActive) : 'Recently';
                 return (
                   <button key={mid || idx} className="tmpl-profile-card" onClick={() => mid && go(`/my-profile/${mid}`)}>

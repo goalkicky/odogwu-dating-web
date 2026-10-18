@@ -5,6 +5,7 @@ import AppShell from '@/components/AppShell';
 import { PROFILE_TEMPLATE_CSS } from '@/lib/profileTemplateStyles';
 import { useAuth } from '@/store/AuthContext';
 import { userService, storageService, matchService, superlikeService } from '@/lib/cloudflare/services';
+import { pickRecentlyActive, isOnlineNow } from '@/lib/recentlyActive';
 
 function formatAgo(iso: string): string {
   if (!iso) return '';
@@ -66,19 +67,7 @@ export default function ActivePage() {
         maxDistance: 0,
       })
       .then((docs: any[]) => {
-        const RECENT_MS = 30 * 24 * 60 * 60 * 1000;
-        const all = Array.isArray(docs) ? docs : [];
-        const sortDesc = (a: any, b: any) => {
-          const ta = a.lastActive ? new Date(a.lastActive).getTime() : 0;
-          const tb = b.lastActive ? new Date(b.lastActive).getTime() : 0;
-          return tb - ta;
-        };
-        const everActive = all.filter((p: any) => !!p.lastActive).sort(sortDesc);
-        const recent = everActive.filter((p: any) => {
-          const la = new Date(p.lastActive).getTime();
-          return la > 0 && Date.now() - la <= RECENT_MS;
-        });
-        setProfiles(recent.length >= 9 ? recent : everActive);
+        setProfiles(pickRecentlyActive(Array.isArray(docs) ? docs : [], undefined, 9));
       })
       .catch(() => {})
       .finally(() => setLoadingProfiles(false));
@@ -326,7 +315,7 @@ export default function ActivePage() {
                 const name = p.fullName || 'Member';
                 const photo = p.photos?.[0] ? storageService.getFilePreview(p.photos[0]) : '';
                 const pid = p.id || p.$id || idx;
-                const online = !!p.lastActive && (Date.now() - new Date(p.lastActive).getTime()) < 120000;
+                const online = isOnlineNow(p);
                 const ago = p.lastActive ? formatAgo(p.lastActive) : '';
                 return (
                   <article
