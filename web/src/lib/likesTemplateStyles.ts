@@ -14,19 +14,22 @@ export const LIKES_TEMPLATE_CSS = `
 
         /* Quick nav (matches home) */
         .lk .quick-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:2px 10px 4px}
-        .lk .quick{display:flex;flex-direction:column;align-items:center;gap:5px;padding:0;color:#171717;min-width:0}
-        .lk .round-photo{width:54px;max-width:100%;aspect-ratio:1/1;border:2.5px solid #d30e42;border-radius:50%;padding:3px;display:block;position:relative;background:#fff;box-sizing:border-box}
-        .lk .round-photo.story{border:none;padding:3px;background:conic-gradient(#d30e42 calc(var(--pct,0)*1%),#e9e9ec 0)}
-        .lk .round-photo.story img,.lk .round-photo.story .initial,.lk .round-photo.story .fallback{inset:3px;width:calc(100% - 6px);height:calc(100% - 6px)}
-        .lk .round-photo img{position:absolute;inset:2px;width:calc(100% - 4px);height:calc(100% - 4px);border-radius:50%;object-fit:cover;display:block}
-        .lk .round-photo .fallback{position:absolute;inset:2px;width:calc(100% - 4px);height:calc(100% - 4px);border-radius:50%;object-fit:cover;display:grid;place-items:center}
+        .lk .quick{display:flex;flex-direction:column;align-items:center;padding:0;color:#171717;min-width:0}
+        .lk .round-photo{width:54px;max-width:100%;aspect-ratio:1/1;border-radius:50%;padding:2px;display:block;position:relative;background:#fff;box-sizing:border-box}
+        .lk .round-photo:not(.location):not(.story){background:conic-gradient(#E67A00 0 50%,#D90540 50% 100%)}
+        .lk .quick:nth-child(3) .round-photo:not(.location):not(.story){background:conic-gradient(#D90540 0 55%,#FF5A3C 55% 100%)}
+        .lk .round-photo.story{border:none;background:conic-gradient(#D90540 0 calc(var(--pct,0)*1%),transparent 0)}
+        .lk .round-photo.story::after{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(#E77A99 0 6deg,transparent 6deg 11deg);-webkit-mask:conic-gradient(transparent 0 calc(var(--pct,0)*1%),#000 calc(var(--pct,0)*1%) 360deg);mask:conic-gradient(transparent 0 calc(var(--pct,0)*1%),#000 calc(var(--pct,0)*1%) 360deg);z-index:1;pointer-events:none}
+        .lk .round-photo.story img,.lk .round-photo.story .initial,.lk .round-photo.story .fallback{z-index:2}
+        .lk .round-photo img,.lk .round-photo .initial,.lk .round-photo .fallback{position:absolute;inset:4px;width:calc(100% - 8px);height:calc(100% - 8px);border-radius:50%;object-fit:cover;display:block;filter:brightness(0.85);box-shadow:0 0 0 2px #fff}
+        .lk .round-photo .fallback{background:#fff;display:grid;place-items:center}
         .lk .round-photo .fallback svg{width:38%;height:38%;fill:#FF2E5F;display:block}
-        .lk .round-photo .initial{position:absolute;inset:2px;width:calc(100% - 4px);height:calc(100% - 4px);border-radius:50%;display:grid;place-items:center;font-size:15px;font-weight:800;color:#fff;background:linear-gradient(135deg,#FF2E5F,#B44CFF)}
-        .lk .round-photo.location{border-color:#c7a523;display:grid;place-items:center}
-        .lk .round-photo.location svg{width:46%;height:46%;fill:#df164b;display:block}
-        .lk .badge-count,.lk .plus{position:absolute;right:-3px;bottom:-3px;background:#d9184b;color:#fff;border-radius:50%;width:21px;height:21px;display:grid;place-items:center;font-size:11px;font-weight:700;z-index:3;border:2px solid #fff;line-height:1}
-        .lk .plus{font-size:16px;font-weight:400}
-        .lk .quick label{font-size:13px;font-weight:500;margin-top:0;color:#171717;text-align:center;line-height:1.2;cursor:pointer}
+        .lk .round-photo .initial{display:grid;place-items:center;font-size:15px;font-weight:800;color:#fff;background:linear-gradient(135deg,#FF2E5F,#B44CFF)}
+        .lk .round-photo.location{display:block;background:conic-gradient(#D90540 0 180deg,#B9CE1A 180deg 360deg)}
+        .lk .round-photo.location svg{position:absolute;inset:4px;width:calc(100% - 8px);height:calc(100% - 8px);background:#F1F0EE;border-radius:50%;padding:17%;box-sizing:border-box;fill:#D90540;box-shadow:0 0 0 2px #fff}
+        .lk .badge-count,.lk .plus{position:absolute;right:-3px;bottom:-3px;background:#D90540;color:#fff;border-radius:50%;width:19px;height:19px;display:grid;place-items:center;font-size:10px;font-weight:600;z-index:3;border:2px solid #fff;line-height:1;padding:0;box-sizing:border-box}
+        .lk .plus{font-size:15px;font-weight:500}
+        .lk .quick label{font-size:10.5px;font-weight:500;margin-top:7px;color:#111;text-align:center;line-height:13px;cursor:pointer}
         .lk .quick.active label{color:var(--red);font-weight:700}
 
         /* Section title */
@@ -78,14 +81,9 @@ export const LIKES_TEMPLATE_CSS = `
           .lk .messages svg{width:34px;height:34px}
           .lk .messages em{width:21px;height:21px;font-size:12px;right:-2px}
           .lk .quick-nav{gap:6px;padding:2px 6px 4px}
-          .lk .round-photo{width:64%;border-width:2.5px;padding:3px}
-          .lk .round-photo.story{padding:3px}
-          .lk .round-photo.story img,.lk .round-photo.story .initial,.lk .round-photo.story .fallback{inset:3px;width:calc(100% - 6px);height:calc(100% - 6px)}
           .lk .round-photo .initial{font-size:12px}
           .lk .badge-count,.lk .plus{width:18px;height:18px;font-size:9px;right:-2px;bottom:-2px}
           .lk .plus{font-size:13px}
-          .lk .quick{gap:4px}
-          .lk .quick label{font-size:10px;margin-top:0}
           .lk .section-head{padding:2px 6px 4px}
           .lk .section-title{font-size:13.5px}
           .lk .sort{font-size:12px}
@@ -102,10 +100,8 @@ export const LIKES_TEMPLATE_CSS = `
           .lk .messages{width:38px;height:38px}
           .lk .messages svg{width:30px;height:30px}
           .lk .topbar{padding:4px 6px 10px}
-          .lk .round-photo{width:60%}
           .lk .badge-count,.lk .plus{width:16px;height:16px;font-size:8px;right:-2px;bottom:-2px}
           .lk .plus{font-size:12px}
-          .lk .quick label{font-size:9px}
           .lk .card{height:150px}
           .lk .card-btn{width:30px;height:30px;font-size:14px}
           .lk .card-actions{gap:12px;bottom:5px}
